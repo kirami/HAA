@@ -27,6 +27,8 @@ class Migration(SchemaMigration):
         db.create_table(u'audio_item', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('min_bid', self.gf('django.db.models.fields.DecimalField')(max_digits=19, decimal_places=2)),
+            ('lot_id', self.gf('django.db.models.fields.IntegerField')()),
+            #'lot_id': ('django.db.models.fields.IntegerField', [], {}),
             ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Category'])),
         ))
         db.send_create_signal(u'audio', ['Item'])

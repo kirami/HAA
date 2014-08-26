@@ -20,6 +20,8 @@ class Item(models.Model):
 	lot_id = models.IntegerField()
 	category = models.ForeignKey(Category)
 	#condition = models.CharField(max_length=100)
+	def __unicode__(self):
+		return unicode(self.lot_id)
 
 class Bid(models.Model):
 	user = models.ForeignKey(User)
