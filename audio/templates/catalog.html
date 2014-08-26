@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+Our current catalog:<br>
+Lot:<br>
+
+{%for item in catItems%}
+	<div id="{{item}}" class="catalogItem">{{item}}</div>  {{item.category.name}}
+	<br>
+{%endfor%}
+
+{% endblock %}

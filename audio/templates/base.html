@@ -1,0 +1,25 @@
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}audio/css/main.css" />
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}audio/js/main.js" type="text/javascript"></script>
+<input type="hidden" id="auctionId" name="auctionId" value="{{auctionId}}">
+<div id="header">
+	<h1>Hawthorn's Antique Audio</h1>
+	<div>
+		{% if user.is_authenticated %}
+			<button onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
+			<button onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
+		{% else %}
+		  <p><button onclick="javascript:window.location.href = '/audio/accounts/login'">log in</button></p>
+		  <p><button onclick="javascript:window.location.href = '/audio/accounts/register'">register</button></p>
+		{% endif %}
+	</div>
+</div>
+<div style="clear:both"></div>
+
+{% block content %}
+
+
+
+
+{% endblock %}
