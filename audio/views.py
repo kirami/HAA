@@ -1,5 +1,6 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -7,9 +8,14 @@ from django.template import RequestContext, loader
 
 from audio.forms import ContactForm, BidSubmitForm
 
-from audio.models import Address, Item
+from audio.models import Address, Item, Bid
+
+from datetime import datetime  
 
 import logging
+import json
+
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -84,10 +90,17 @@ def catalog(request):
 	items = ""
 	try:
 		items = Item.objects.all()	
+		bids = Bid.objects.filter(auction_id = 1)
+		bidDict = {}
+		for bid in bids:
+			bidDict[str(bid.item.id)] = str(bid.amount)
+
+		logger.error(bidDict.get("1"))
+		
 	except Exception as e:
 		logger.error("error in catalog")
 		logger.error(e)
-	return render_to_response('catalog.html', {"catItems":items, "auctionId":"1"}, context_instance=RequestContext(request))
+	return render_to_response('catalog.html', {"catItems":items, "auctionId":"1", "bids": bidDict}, context_instance=RequestContext(request))
 
 '''
 def showItem(request, auctionId, lotId):
@@ -102,6 +115,21 @@ def showItem(request, auctionId, lotId):
 	return render_to_response('item.html', {"item":item, "auctionId":"1"}, context_instance=RequestContext(request))
 '''
 
+def submitBid(request):
+	if(request.user.is_authenticated()):
+		data = request.POST
+		bidAmount = data.get("bidAmount")
+		itemId = data.get("itemId")
+		logger.error(data)
+		logger.error(itemId)
+		if(bidAmount == None or bidAmount == ""):
+			logger.error("no bid")
+		else:
+			#todo get auctionId from...db?
+			Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=1, item_id=itemId)
+
+	return redirect("catalog")
+
 def showItem(request, auctionId, lotId):
 	"""
     form = ""
@@ -115,5 +143,11 @@ def showItem(request, auctionId, lotId):
     	else:
 			return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
 	"""
-	form = BidSubmitForm()
+	if request.method == 'POST':
+		form = BidSubmitForm(request.POST)
+
+		if form.is_valid():
+			bid = form.save()	
+	else:
+		form = BidSubmitForm()
 	return render_to_response('item.html', {"form":form, "auctionId":"1"}, context_instance=RequestContext(request))

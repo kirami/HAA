@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^accounts/bids/$', views.bids, name='bids'),
     
     url(r'^catalog/(?P<auctionId>\d+)/(?P<lotId>\d+)$', views.showItem, name='showItem'),
+    url(r'^catalog/submitBid', views.submitBid, name='submitBid'),
     url(r'^catalog/$', views.catalog, name='catalog'),
  	#url(r'^bidSubmit/$', views.bidSubmit, name='bidSubmit'),
        

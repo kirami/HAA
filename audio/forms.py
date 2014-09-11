@@ -13,4 +13,5 @@ class BidSubmitForm(ModelForm):
 
 	class Meta:
 		model = Bid
+		exclude = ('user', 'date',)
 		#fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]

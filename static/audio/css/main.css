@@ -1,0 +1,41 @@
+
+.clear{
+	clear: both;
+}
+
+#header h1{
+	color:red;
+	float: left;
+}
+
+#header div{
+	float:right;
+	clear:right;
+}
+
+.simpleSuccess{
+	color:green;
+}
+
+.catalogItem, .catalogItemInfo{
+	cursor: pointer;
+	color: blue;
+	float: left;
+	margin-right: 10px;
+}
+
+.bidSubmitButton{
+	cursor: pointer;
+	padding: 10px 30px;
+	background-color: red;
+	float: left;
+}
+
+.category{
+	float: left;
+	width: 50px;
+}
+
+.catalogBox{
+	margin-bottom: 20px;
+}

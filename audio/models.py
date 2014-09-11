@@ -30,6 +30,9 @@ class Bid(models.Model):
 	item = models.ForeignKey(Item)
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 
+	def __unicode__(self):
+		return unicode(self.user)
+
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)
 	pdf_list = models.BooleanField(default = False)
