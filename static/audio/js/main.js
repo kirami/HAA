@@ -7,6 +7,41 @@ function catalogClick(e){
 
 }
 
+function endAuction(e){
+	
+
+	$( "#dialog-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		buttons: {
+			"Delete all items": function() {
+				console.log("hit yes");
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	$.ajax({
+		type: "POST",
+		url: "/audio/auction/endAuction",
+		data: "",
+		success: function(data) {
+			//googleConversion();
+			onSuccess(true);
+
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+        	//alert(xhr.status);
+        	//alert(thrownError);
+        	return false;
+      	}
+	});
+}
+
 
 
 

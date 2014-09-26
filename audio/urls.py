@@ -3,6 +3,7 @@ from django.contrib.auth.views import login, logout
 
 from django.contrib import admin
 from audio import views
+from audio import admin_views
 admin.autodiscover()
 
 
@@ -23,7 +24,8 @@ urlpatterns = patterns('',
     url(r'^catalog/deleteBid', views.deleteBid, name='deleteBid'),
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
-       
+
+    url(r'^auction/endAuction', admin_views.endAuction, name='endAuction'),   
 )
 
 
