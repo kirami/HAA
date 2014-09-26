@@ -3350,3 +3350,1876 @@ TemplateSyntaxError: Invalid filter: 'get_item'
 [11/Sep/2014 00:56:00] ERROR [audio.views:98] 5.00
 [11/Sep/2014 00:56:18] ERROR [audio.views:98] 5.00
 [11/Sep/2014 00:56:53] ERROR [audio.views:98] 5.00
+[17/Sep/2014 22:05:06] ERROR [audio.views:91] request:
+[17/Sep/2014 22:05:06] ERROR [audio.views:92] <WSGIRequest
+path:/audio/catalog/,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CACHE_CONTROL': 'max-age=0',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64083',
+ 'REQUEST_METHOD': 'GET',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410991506339169',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f516a4b8d70>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f516a485738>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f516a6065b0>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:05:06] ERROR [audio.views:101] 2.00
+[17/Sep/2014 22:08:03] ERROR [django.request:224] Internal Server Error: /audio/catalog/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 12, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 139
+    if(request.PATH_INFO == "/audio/catalog")
+                                            ^
+SyntaxError: invalid syntax
+[17/Sep/2014 22:09:39] ERROR [django.request:224] Internal Server Error: /audio/catalog/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 12, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 141
+    else
+       ^
+SyntaxError: invalid syntax
+[17/Sep/2014 22:13:12] ERROR [audio.views:91] request:
+[17/Sep/2014 22:13:12] ERROR [audio.views:92] <WSGIRequest
+path:/audio/catalog/,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CACHE_CONTROL': 'max-age=0',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64095',
+ 'REQUEST_METHOD': 'GET',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410991992219278',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f516a4b8d70>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f516a485738>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f516a6065b0>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:13:12] ERROR [audio.views:101] 2.00
+[17/Sep/2014 22:13:15] ERROR [audio.views:126] request:
+[17/Sep/2014 22:13:15] ERROR [audio.views:127] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'itemId': [u'1'], u'csrfmiddlewaretoken': [u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3'], u'isUpdate': [u'True'], u'bidAmount': [u'']}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTENT_LENGTH': '86',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded',
+ 'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64095',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410991995483127',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f516974baf0>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f5169805eb8>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f516992e070>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:13:15] ERROR [audio.views:134] no bid
+[17/Sep/2014 22:13:15] ERROR [django.request:224] Internal Server Error: /audio/catalog/submitBid
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 139, in submitBid
+    if(request.PATH_INFO == "/audio/catalog"):
+AttributeError: 'WSGIRequest' object has no attribute 'PATH_INFO'
+[17/Sep/2014 22:14:29] ERROR [audio.views:91] request:
+[17/Sep/2014 22:14:29] ERROR [django.request:224] Internal Server Error: /audio/catalog/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 92, in catalog
+    logger.error(request.Meta.get('PATH_INFO'))
+AttributeError: 'WSGIRequest' object has no attribute 'Meta'
+[17/Sep/2014 22:14:32] ERROR [audio.views:91] request:
+[17/Sep/2014 22:14:32] ERROR [django.request:224] Internal Server Error: /audio/catalog/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 92, in catalog
+    logger.error(request.Meta.get('PATH_INFO'))
+AttributeError: 'WSGIRequest' object has no attribute 'Meta'
+[17/Sep/2014 22:15:02] ERROR [audio.views:91] request:
+[17/Sep/2014 22:15:02] ERROR [audio.views:92] /audio/catalog/
+[17/Sep/2014 22:15:02] ERROR [audio.views:101] 2.00
+[17/Sep/2014 22:15:54] ERROR [audio.views:99] 2.00
+[17/Sep/2014 22:15:57] ERROR [audio.views:124] request:
+[17/Sep/2014 22:15:57] ERROR [audio.views:125] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'itemId': [u'1'], u'csrfmiddlewaretoken': [u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3'], u'isUpdate': [u'True'], u'bidAmount': [u'3']}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTENT_LENGTH': '87',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded',
+ 'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64108',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410992157995596',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f516974bab0>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f5169805eb8>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f516992f030>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:16:05] ERROR [audio.views:99] 3.00
+[17/Sep/2014 22:16:09] ERROR [audio.views:124] request:
+[17/Sep/2014 22:16:09] ERROR [audio.views:125] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'itemId': [u'1'], u'csrfmiddlewaretoken': [u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3'], u'isUpdate': [u'True'], u'bidAmount': [u'']}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTENT_LENGTH': '86',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded',
+ 'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64110',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410992169477026',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f51698602f0>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f5168cd48a0>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f5169860330>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:16:09] ERROR [audio.views:132] no bid
+[17/Sep/2014 22:16:45] ERROR [audio.views:99] 3.00
+[17/Sep/2014 22:17:10] ERROR [audio.views:124] request:
+[17/Sep/2014 22:17:10] ERROR [audio.views:125] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'itemId': [u'1'], u'csrfmiddlewaretoken': [u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3'], u'isUpdate': [u'True'], u'bidAmount': [u'']}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTENT_LENGTH': '86',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded',
+ 'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64116',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410992230014919',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f516974bab0>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f5169805eb8>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f516992f030>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:17:10] ERROR [audio.views:132] no bid
+[17/Sep/2014 22:17:47] ERROR [audio.views:124] request:
+[17/Sep/2014 22:17:47] ERROR [audio.views:125] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'itemId': [u'1'], u'csrfmiddlewaretoken': [u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3'], u'bidAmount': [u'']}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTENT_LENGTH': '72',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded',
+ 'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/accounts/bids/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64117',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410992267948293',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f5169761cf0>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f5168ca9dc8>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f5169761c30>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:17:47] ERROR [audio.views:132] no bid
+[17/Sep/2014 22:17:47] ERROR [audio.views:137] /audio/catalog/submitBid
+[17/Sep/2014 22:17:49] ERROR [audio.views:99] 3.00
+[17/Sep/2014 22:17:51] ERROR [audio.views:124] request:
+[17/Sep/2014 22:17:51] ERROR [audio.views:125] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'itemId': [u'1'], u'csrfmiddlewaretoken': [u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3'], u'isUpdate': [u'True'], u'bidAmount': [u'']}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTENT_LENGTH': '86',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded',
+ 'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64117',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410992271106890',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f51697252f0>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f5168cc7918>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f51697256f0>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:17:51] ERROR [audio.views:132] no bid
+[17/Sep/2014 22:17:51] ERROR [audio.views:137] /audio/catalog/submitBid
+[17/Sep/2014 22:18:41] ERROR [audio.views:99] 3.00
+[17/Sep/2014 22:18:42] ERROR [audio.views:124] request:
+[17/Sep/2014 22:18:42] ERROR [audio.views:125] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'itemId': [u'1'], u'csrfmiddlewaretoken': [u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3'], u'isUpdate': [u'True'], u'bidAmount': [u'']}>,
+COOKIES:{'csrftoken': 'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'sessionid': 'emom4bqsfsb0lf6ubaywf751aezjlshy'},
+META:{'CONTENT_LENGTH': '86',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded',
+ 'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=FuYNxIOGYSPqtXT6U2LnPSQ5o01BYQZ3; sessionid=emom4bqsfsb0lf6ubaywf751aezjlshy',
+ 'HTTP_HOST': 'haa',
+ 'HTTP_REFERER': 'http://haa/audio/catalog/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '64122',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'haa',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at haa Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1410992322555884',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7f5169761d30>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7f5168c9f990>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7f5169761af0>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[17/Sep/2014 22:18:42] ERROR [audio.views:132] no bid
+[17/Sep/2014 22:18:42] ERROR [audio.views:99] 3.00
+[17/Sep/2014 22:38:43] ERROR [django.request:224] Internal Server Error: /audio/test
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 26, in test
+    ['kirajmd@gmail.com'], fail_silently=False)
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/__init__.py", line 50, in send_mail
+    connection=connection).send()
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/message.py", line 255, in send
+    return self.get_connection(fail_silently).send_messages([self])
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/backends/smtp.py", line 88, in send_messages
+    new_conn_created = self.open()
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/backends/smtp.py", line 49, in open
+    local_hostname=DNS_NAME.get_fqdn())
+  File "/usr/lib/python2.7/smtplib.py", line 251, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/lib/python2.7/smtplib.py", line 311, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/lib/python2.7/smtplib.py", line 286, in _get_socket
+    return socket.create_connection((host, port), timeout)
+  File "/usr/lib/python2.7/socket.py", line 571, in create_connection
+    raise err
+error: [Errno 111] Connection refused
+[17/Sep/2014 22:38:48] ERROR [django.request:224] Internal Server Error: /audio/test
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 26, in test
+    ['kirajmd@gmail.com'], fail_silently=False)
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/__init__.py", line 50, in send_mail
+    connection=connection).send()
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/message.py", line 255, in send
+    return self.get_connection(fail_silently).send_messages([self])
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/backends/smtp.py", line 88, in send_messages
+    new_conn_created = self.open()
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/backends/smtp.py", line 49, in open
+    local_hostname=DNS_NAME.get_fqdn())
+  File "/usr/lib/python2.7/smtplib.py", line 251, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/lib/python2.7/smtplib.py", line 311, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/lib/python2.7/smtplib.py", line 286, in _get_socket
+    return socket.create_connection((host, port), timeout)
+  File "/usr/lib/python2.7/socket.py", line 571, in create_connection
+    raise err
+error: [Errno 111] Connection refused
+[17/Sep/2014 22:43:50] ERROR [django.request:224] Internal Server Error: /audio/test
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 26, in test
+    ['kirajmd@gmail.com'], fail_silently=False)
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/__init__.py", line 50, in send_mail
+    connection=connection).send()
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/message.py", line 255, in send
+    return self.get_connection(fail_silently).send_messages([self])
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/backends/smtp.py", line 88, in send_messages
+    new_conn_created = self.open()
+  File "/usr/lib/python2.7/dist-packages/django/core/mail/backends/smtp.py", line 49, in open
+    local_hostname=DNS_NAME.get_fqdn())
+  File "/usr/lib/python2.7/smtplib.py", line 251, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/lib/python2.7/smtplib.py", line 311, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/lib/python2.7/smtplib.py", line 286, in _get_socket
+    return socket.create_connection((host, port), timeout)
+  File "/usr/lib/python2.7/socket.py", line 571, in create_connection
+    raise err
+error: [Errno 111] Connection refused
+[17/Sep/2014 22:45:07] ERROR [django.request:224] Internal Server Error: /audio/test
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 27, in test
+    return render_to_response('contact.html', {"data":data}, context_instance=RequestContext(request))
+NameError: global name 'data' is not defined
+[17/Sep/2014 23:03:47] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1122, in build_filter
+    lookup_type, value)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1121, in get_lookup_constraint
+    raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
+TypeError: Related Field got invalid lookup: icontains
+[17/Sep/2014 23:05:31] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1122, in build_filter
+    lookup_type, value)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1121, in get_lookup_constraint
+    raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
+TypeError: Related Field got invalid lookup: icontains
+[18/Sep/2014 21:41:52] ERROR [audio.views:107] 3.00
+[18/Sep/2014 21:48:33] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1122, in build_filter
+    lookup_type, value)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1121, in get_lookup_constraint
+    raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
+TypeError: Related Field got invalid lookup: icontains
+[18/Sep/2014 21:49:04] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1122, in build_filter
+    lookup_type, value)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1121, in get_lookup_constraint
+    raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
+TypeError: Related Field got invalid lookup: icontains
+[18/Sep/2014 21:51:32] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1122, in build_filter
+    lookup_type, value)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1121, in get_lookup_constraint
+    raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
+TypeError: Related Field got invalid lookup: icontains
+[18/Sep/2014 21:51:46] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1122, in build_filter
+    lookup_type, value)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1121, in get_lookup_constraint
+    raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
+TypeError: Related Field got invalid lookup: icontains
+[18/Sep/2014 21:51:51] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1122, in build_filter
+    lookup_type, value)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1121, in get_lookup_constraint
+    raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
+TypeError: Related Field got invalid lookup: icontains
+[18/Sep/2014 22:46:44] WARNING [django.request:143] Not Found: /
+[18/Sep/2014 22:46:46] WARNING [django.request:143] Not Found: /
+[18/Sep/2014 22:46:48] WARNING [django.request:143] Not Found: /
+[18/Sep/2014 22:46:55] WARNING [django.request:143] Not Found: /
+[25/Sep/2014 22:22:07] WARNING [django.request:143] Not Found: /
+[25/Sep/2014 22:22:20] WARNING [django.request:143] Not Found: /audio/login
+[25/Sep/2014 22:22:30] ERROR [audio.views:107] 3.00
+[25/Sep/2014 22:23:42] ERROR [audio.views:107] 3.00
+[25/Sep/2014 22:23:54] ERROR [audio.views:107] 3.00
+[25/Sep/2014 22:46:42] ERROR [django.request:224] Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 3, in <module>
+    from django.conf.urls.defaults import patterns
+ImportError: No module named defaults
+[25/Sep/2014 22:51:34] ERROR [django.request:224] Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 12, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 29, in <module>
+    (r'^admin/', include('django.contrib.admin.urls')),
+NameError: name 'include' is not defined
+[25/Sep/2014 22:52:37] ERROR [django.request:224] Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 215, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 358, in index
+    model_dict['admin_url'] = reverse('admin:%s_%s_changelist' % info, current_app=self.name)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 503, in reverse
+    app_list = resolver.app_dict[ns]
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 329, in app_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 290, in _populate
+    for name in pattern.reverse_dict:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 315, in reverse_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 303, in _populate
+    lookups.appendlist(pattern.callback, (bits, p_pattern, pattern.default_args))
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/usr/lib/python2.7/dist-packages/django/utils/functional.py", line 32, in wrapper
+    result = func(*args)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 104, in get_callable
+    (lookup_view, mod_name))
+ViewDoesNotExist: Could not import audio.admin_views.report. Parent module audio.admin_views does not exist.
+[25/Sep/2014 22:54:19] WARNING [django.request:143] Not Found: /admin/audio/report
+[25/Sep/2014 22:54:36] WARNING [django.request:143] Not Found: /admin/audio/report/1
+[25/Sep/2014 22:58:50] ERROR [django.request:224] Internal Server Error: /admin/audio/report/1
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 14, in <module>
+    (r'^admin/audio/report/$', views.bids),
+NameError: name 'views' is not defined
+[26/Sep/2014 19:13:30] ERROR [django.request:224] Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 14, in <module>
+    (r'^admin/audio/report/$', views.bids),
+NameError: name 'views' is not defined
+[26/Sep/2014 19:28:21] ERROR [django.request:224] Internal Server Error: /admin/audio/report/1
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 14, in <module>
+    (r'^admin/audio/report/$', views.bids),
+NameError: name 'views' is not defined
+[26/Sep/2014 19:31:19] ERROR [django.request:224] Internal Server Error: /admin/audio/report/1
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 12, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 31, in <module>
+    (r'^admin/', include('django.contrib.admin.urls')),
+NameError: name 'include' is not defined
+[26/Sep/2014 19:31:46] ERROR [django.request:224] Internal Server Error: /admin/audio/report/1
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 12, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 31, in <module>
+    (r'^admin/', include('django.contrib.admin.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named urls
+[26/Sep/2014 19:32:32] WARNING [django.request:143] Not Found: /admin/audio/report/1
+[26/Sep/2014 19:32:41] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 82, in rendered_content
+    content = template.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 305, in render
+    return nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 433, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=context.current_app)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 503, in reverse
+    app_list = resolver.app_dict[ns]
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 329, in app_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 290, in _populate
+    for name in pattern.reverse_dict:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 315, in reverse_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 303, in _populate
+    lookups.appendlist(pattern.callback, (bits, p_pattern, pattern.default_args))
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/usr/lib/python2.7/dist-packages/django/utils/functional.py", line 32, in wrapper
+    result = func(*args)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 101, in get_callable
+    not module_has_submodule(import_module(parentmod), submod)):
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named bookstore
+[26/Sep/2014 19:38:00] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 82, in rendered_content
+    content = template.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 305, in render
+    return nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 433, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=context.current_app)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 503, in reverse
+    app_list = resolver.app_dict[ns]
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 329, in app_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 290, in _populate
+    for name in pattern.reverse_dict:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 315, in reverse_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 303, in _populate
+    lookups.appendlist(pattern.callback, (bits, p_pattern, pattern.default_args))
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/usr/lib/python2.7/dist-packages/django/utils/functional.py", line 32, in wrapper
+    result = func(*args)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 101, in get_callable
+    not module_has_submodule(import_module(parentmod), submod)):
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named bookstore
+[26/Sep/2014 19:38:22] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 82, in rendered_content
+    content = template.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 305, in render
+    return nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 433, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=context.current_app)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 503, in reverse
+    app_list = resolver.app_dict[ns]
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 329, in app_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 290, in _populate
+    for name in pattern.reverse_dict:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 315, in reverse_dict
+    self._populate()
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 303, in _populate
+    lookups.appendlist(pattern.callback, (bits, p_pattern, pattern.default_args))
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/usr/lib/python2.7/dist-packages/django/utils/functional.py", line 32, in wrapper
+    result = func(*args)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 101, in get_callable
+    not module_has_submodule(import_module(parentmod), submod)):
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named admin
+[26/Sep/2014 19:39:09] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 339, in resolve
+    sub_match = pattern.resolve(new_path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 223, in resolve
+    return ResolverMatch(self.callback, args, kwargs, self.name)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/usr/lib/python2.7/dist-packages/django/utils/functional.py", line 32, in wrapper
+    result = func(*args)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 101, in get_callable
+    not module_has_submodule(import_module(parentmod), submod)):
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named admin
+[26/Sep/2014 19:39:41] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 339, in resolve
+    sub_match = pattern.resolve(new_path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 223, in resolve
+    return ResolverMatch(self.callback, args, kwargs, self.name)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/usr/lib/python2.7/dist-packages/django/utils/functional.py", line 32, in wrapper
+    result = func(*args)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 97, in get_callable
+    mod = import_module(mod_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named admin_views
+[26/Sep/2014 19:40:48] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 339, in resolve
+    sub_match = pattern.resolve(new_path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 223, in resolve
+    return ResolverMatch(self.callback, args, kwargs, self.name)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/usr/lib/python2.7/dist-packages/django/utils/functional.py", line 32, in wrapper
+    result = func(*args)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 97, in get_callable
+    mod = import_module(mod_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named admin_views
+[26/Sep/2014 19:41:27] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 10
+    (r'^admin/audio/auction/$',  views.register, name='register'),
+                                                     ^
+SyntaxError: invalid syntax
+[26/Sep/2014 19:41:54] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 10
+    (r'^admin/audio/auction/$',  views.register, name='register'),
+                                                     ^
+SyntaxError: invalid syntax
+[26/Sep/2014 19:42:56] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 11, in <module>
+    url(r'^admin/audio/auction/$', views.register, name='register'),
+NameError: name 'views' is not defined
+[26/Sep/2014 19:44:17] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    from admin import admin_views
+ImportError: No module named admin
+[26/Sep/2014 19:44:38] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    admin.autodiscover()
+NameError: name 'admin' is not defined
+[26/Sep/2014 19:44:47] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    admin.autodiscover()
+NameError: name 'admin' is not defined
+[26/Sep/2014 19:45:07] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 13, in <module>
+    url(r'^admin/audio/auction/$', admin_views.report),
+NameError: name 'admin_views' is not defined
+[26/Sep/2014 19:45:25] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 13, in <module>
+    url(r'^admin/audio/auction/$', report),
+NameError: name 'report' is not defined
+[26/Sep/2014 19:50:50] WARNING [django.request:143] Not Found: /admin/bookstore/report/
+[26/Sep/2014 19:51:24] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 15, in <module>
+    url(r'^admin/', include('admin.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named admin.urls
+[26/Sep/2014 19:56:55] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 23, in <module>
+    url(r'^admin/', include(admin.site.urls)),
+NameError: name 'admin' is not defined
+[26/Sep/2014 19:57:34] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 15, in <module>
+    url(r'^admin/', include('admin.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named admin.urls
+[26/Sep/2014 19:57:58] WARNING [django.request:143] Not Found: /admin/bookstore/report/
+[26/Sep/2014 20:01:38] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 22
+    (r'^admin/bookstore/report/$', views.contact_info, name='contact_info'),
+                                                           ^
+SyntaxError: invalid syntax
+[26/Sep/2014 20:02:17] WARNING [django.request:143] Not Found: /admin/bookstore/report/
+[26/Sep/2014 20:02:45] WARNING [django.request:143] Not Found: /admin/bookstore/report/1
+[26/Sep/2014 20:02:49] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:05:52] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 24, in <module>
+    url(r'^admin/', include(admin.site.urls)),
+NameError: name 'admin' is not defined
+[26/Sep/2014 20:06:57] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 24, in <module>
+    url(r'^admin/', include(admin.site.urls)),
+NameError: name 'admin' is not defined
+[26/Sep/2014 20:07:43] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 24, in <module>
+    url(r'^admin/', include('django.contrib.admin.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named urls
+[26/Sep/2014 20:08:22] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:10:25] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:11:32] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 24, in <module>
+    url(r'^admin/', include('django.contrib.admin.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named urls
+[26/Sep/2014 20:12:41] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 24
+    url(r'^admin/', include('django.contrib.admin.site.urls')),
+      ^
+SyntaxError: invalid syntax
+[26/Sep/2014 20:12:55] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 24, in <module>
+    url(r'^admin/', include('django.contrib.admin.site.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named site.urls
+[26/Sep/2014 20:13:27] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^audio/', include('audio.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/urls.py", line 28, in <module>
+    url(r'^admin/', include('django.contrib.admin.site.urls')),
+  File "/usr/lib/python2.7/dist-packages/django/conf/urls/__init__.py", line 26, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+ImportError: No module named site.urls
+[26/Sep/2014 20:13:55] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:14:50] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:15:29] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:15:32] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:15:56] WARNING [django.request:143] Not Found: /admin/bookstore/report
+[26/Sep/2014 20:16:13] ERROR [django.request:224] Internal Server Error: /admin/bookstore/report
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
+    url(r'^admin/bookstore/report/$', views.contact_info, name='contact_info'),
+NameError: name 'views' is not defined

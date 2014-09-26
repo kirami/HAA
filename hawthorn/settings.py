@@ -91,6 +91,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/srv/hawthorn/static/'
 
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 8000
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

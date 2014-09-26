@@ -4,14 +4,18 @@
 <script src="{{ STATIC_URL }}audio/js/main.js" type="text/javascript"></script>
 <input type="hidden" id="auctionId" name="auctionId" value="{{auctionId}}">
 <div id="header">
-	<h1>Hawthorn's Antique Audio</h1>
+	<img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">
+	<br>
+	<h1>Anaplan Test Page</h1>
 	<div>
 		{% if user.is_authenticated %}
 			<button onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
 			<button onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
+			<button onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
 		{% else %}
 		  <p><button onclick="javascript:window.location.href = '/audio/accounts/login'">log in</button></p>
 		  <p><button onclick="javascript:window.location.href = '/audio/accounts/register'">register</button></p>
+		  <button onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
 		{% endif %}
 	</div>
 </div>

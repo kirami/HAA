@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
+from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm
 
@@ -19,6 +20,13 @@ import json
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+def test(request):
+	data = {}
+	send_mail('Subject here', 'Here is the message.', 'from@example.com',
+    ['kirajmd@gmail.com'], fail_silently=False)
+	return render_to_response('contact.html', {"data":data}, context_instance=RequestContext(request))
+
 
 def index(request):
 	t = loader.get_template('home.html')
@@ -78,8 +86,9 @@ def register(request):
 
 
 def bids(request):
-
-	return render_to_response('bids.html', {}, context_instance=RequestContext(request))
+	bids = Bid.objects.filter(auction_id = 1)
+	Item.objects.filter()
+	return render_to_response('bids.html', {"bids":bids}, context_instance=RequestContext(request))
 
 def profile(request):
 
@@ -120,15 +129,34 @@ def submitBid(request):
 		data = request.POST
 		bidAmount = data.get("bidAmount")
 		itemId = data.get("itemId")
-		logger.error(data)
-		logger.error(itemId)
-		if(bidAmount == None or bidAmount == ""):
-			logger.error("no bid")
-		else:
-			#todo get auctionId from...db?
-			Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=1, item_id=itemId)
+		logger.error("request:")
+		logger.error(request)
+		try:
+			instance = Bid.objects.get(user=request.user, item_id=itemId)
+			instance.amount = bidAmount
+			instance.save()
+		except:	
+			if(bidAmount == None or bidAmount == ""):
+				logger.error("no bid")
+			else:
+				#todo get auctionId from...db?
+				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=1, item_id=itemId)
 
-	return redirect("catalog")
+	#logger.error(request.META.get('PATH_INFO'))			
+	if(request.META.get('PATH_INFO') == "/audio/catalog/submitBid"):
+		return redirect("catalog")
+	else:
+		return redirect("bids")
+
+def deleteBid(request):
+	if(request.user.is_authenticated()):
+		data = request.POST
+		itemId = data.get("itemId")
+		instance = Bid.objects.get(user=request.user, item_id=itemId)
+		instance.delete()
+
+	return redirect("bids")
+		
 
 def showItem(request, auctionId, lotId):
 	"""

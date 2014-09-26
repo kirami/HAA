@@ -3,6 +3,14 @@
 	clear: both;
 }
 
+.left{
+	float: left;
+}
+
+.right{
+	float: right;
+}
+
 #header h1{
 	color:red;
 	float: left;

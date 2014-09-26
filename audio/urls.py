@@ -1,7 +1,11 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from django.contrib.auth.views import login, logout
 
+from django.contrib import admin
 from audio import views
+admin.autodiscover()
+
+
 
 urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
@@ -16,7 +20,13 @@ urlpatterns = patterns('',
     
     url(r'^catalog/(?P<auctionId>\d+)/(?P<lotId>\d+)$', views.showItem, name='showItem'),
     url(r'^catalog/submitBid', views.submitBid, name='submitBid'),
+    url(r'^catalog/deleteBid', views.deleteBid, name='deleteBid'),
     url(r'^catalog/$', views.catalog, name='catalog'),
- 	#url(r'^bidSubmit/$', views.bidSubmit, name='bidSubmit'),
+    url(r'^test', views.test, name='test'),
        
 )
+
+
+
+
+

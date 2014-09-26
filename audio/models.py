@@ -14,12 +14,25 @@ class Category(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Categories"
+
+class Label(models.Model):
+	name = models.CharField(max_length=100)
+	abbreviation = models.CharField(max_length=100)
+	parent = models.CharField(max_length=100)
+
+	def __unicode__(self):
+		return self.name
+
         
 class Item(models.Model):
+	label = models.ForeignKey(Label, null = True)
+	name = models.CharField(max_length=200, default="")
+	record_number = models.CharField(max_length=100, null = True)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
 	lot_id = models.IntegerField()
 	category = models.ForeignKey(Category)
-	#condition = models.CharField(max_length=100)
+	condition = models.CharField(max_length=100, default="")
+	
 	def __unicode__(self):
 		return unicode(self.lot_id)
 
@@ -32,6 +45,9 @@ class Bid(models.Model):
 
 	def __unicode__(self):
 		return unicode(self.user)
+	
+	class Meta:
+		unique_together = (("user", "item"),)
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)

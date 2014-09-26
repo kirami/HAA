@@ -9,19 +9,17 @@ Lot:<br>
 
 {%for item in catItems%}
 <div class="catalogBox">
-	
-{{ bids|get_item:item }}
-
 	<div id="{{item}}" class="catalogItem">{{item}}</div> 
 	<div class="category">{{item.category.name}}</div>
-	<form method="POST" action="/audio/catalog/submitBid">
+	<form class="left" method="POST" action="/audio/catalog/submitBid">
 	 {% csrf_token %}
 		<input type="text" name="bidAmount">
 		<input type ="hidden" name="itemId" value="{{item}}">
 		<input type="submit" class="bidSubmitButton" value="Submit Bid">
+		<input type="hidden" name="isUpdate" value="True">
 	</form>
-{%if bids.item != None%}
-	${{bids.amount}}
+{%if bids|get_item:item %}
+	<div class="left">{{ bids|get_item:item }}</div>
 	{%endif%}
 	<div class="clear"></div>	
 </div>

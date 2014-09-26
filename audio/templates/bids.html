@@ -3,6 +3,23 @@
 
 {% block content %}
 
-Your current bids:
+<div>Your current bids:</div>
+
+{% for bid in bids %}
+	<div class="left">{{bid.item.category}}</div>
+	<div>${{bid.amount}}</div>
+	<form class="left" method="POST" action="/audio/catalog/submitBid">
+	 {% csrf_token %}
+		<input type="text" name="bidAmount">
+		<input type ="hidden" name="itemId" value="{{bid.item}}">
+		<input type="submit" class="bidSubmitButton" value="Update Bid">
+	</form>
+	<form class="left" method="POST" action="/audio/catalog/deleteBid">
+	 {% csrf_token %}
+		<input type ="hidden" name="itemId" value="{{bid.item}}">
+		<input type="submit" class="bidSubmitButton" value="Delete Bid">
+	</form>
+	<div class="clear"></div>
+{% endfor %}
 
 {% endblock %}
