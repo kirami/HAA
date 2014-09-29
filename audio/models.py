@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 class Auction(models.Model):
 	start_date = models.DateField()
 	end_date = models.DateField()
+	second_chance_end_date = models.DateField(null = True)
+	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
@@ -32,6 +34,7 @@ class Item(models.Model):
 	lot_id = models.IntegerField()
 	category = models.ForeignKey(Category)
 	condition = models.CharField(max_length=100, default="")
+
 	
 	def __unicode__(self):
 		return unicode(self.lot_id)
@@ -42,6 +45,7 @@ class Bid(models.Model):
 	auction = models.ForeignKey(Auction)
 	item = models.ForeignKey(Item)
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
+	second_chance_bid = models.BooleanField(default = False) 
 
 	def __unicode__(self):
 		return unicode(self.user)

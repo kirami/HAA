@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^catalog/(?P<auctionId>\d+)/(?P<lotId>\d+)$', views.showItem, name='showItem'),
     url(r'^catalog/submitBid', views.submitBid, name='submitBid'),
     url(r'^catalog/deleteBid', views.deleteBid, name='deleteBid'),
+    url(r'^catalog/flat', views.flatFeeCatalog, name='flatFeeCatalog'),
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
 

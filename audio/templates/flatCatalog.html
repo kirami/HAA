@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load audio_extras %}
+
+{% block content %}
+
+Aucton has ended!  Second chance flat catalog:<br>
+Lot:<br>
+
+
+{%for item in catItems%}
+<div class="catalogBox">
+	<div id="{{item}}" class="catalogItem">{{item}}</div> 
+	<div class="category">{{item.category.name}}</div>
+	<form class="left" method="POST" action="/audio/catalog/submitBid">
+	 {% csrf_token %}
+		<input type ="hidden" name="itemId" value="{{item}}">
+		<input type="submit" class="bidSubmitButton" value="Buy Now">
+		<input type="hidden" name="isUpdate" value="True">
+	</form>
+
+	<div class="clear"></div>	
+</div>
+
+{%endfor%}
+
+{% endblock %}

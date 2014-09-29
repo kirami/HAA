@@ -9,9 +9,9 @@ from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm
 
-from audio.models import Address, Item, Bid
+from audio.models import Address, Item, Bid, Auction
 
-from datetime import datetime  
+from datetime import datetime, date  
 
 import logging
 import json
@@ -86,20 +86,59 @@ def register(request):
 
 
 def bids(request):
-	bids = Bid.objects.filter(auction_id = 1)
-	Item.objects.filter()
-	return render_to_response('bids.html', {"bids":bids}, context_instance=RequestContext(request))
+	currentAuctionId = 1
+	bids = Bid.objects.filter(auction_id = currentAuctionId)
+
+	if isSecondChance():
+		bids = Bid.objects.filter(auction_id = currentAuctionId, second_chance_bid = isSecondChance())
+		return render_to_response('flatBids.html', {"bids":bids}, context_instance=RequestContext(request))
+	else:
+		return render_to_response('bids.html', {"bids":bids}, context_instance=RequestContext(request))
+
+
+
 
 def profile(request):
 
 	return render_to_response('profile.html', {}, context_instance=RequestContext(request))
 
 
+def flatFeeCatalog(request):
+	try:
+		items = Item.objects.filter(bid=None)
+	except Exception as e:
+		logger.error("error in catalog")
+		logger.error(e)
+	
+	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":"1"}, context_instance=RequestContext(request))
+
+def isSecondChance():
+	now =  date.today()
+	currentAuctionId = 1
+	auction = Auction.objects.get(id = currentAuctionId)
+	if auction.end_date < now and auction.second_chance_end_date > now:
+		return True
+	return False
+
 def catalog(request):
+	
+	now =  date.today()
+	logger.error(now)
+	#TODO get real data
+	currentAuctionId = 1
+	try:
+		#if after close but in 2nd chance
+		if isSecondChance():
+			return redirect("flatFeeCatalog")
+	except Exception as e:
+		logger.error("error in catalog")
+		logger.error(e)
+		
+
 	items = ""
 	try:
 		items = Item.objects.all()	
-		bids = Bid.objects.filter(auction_id = 1)
+		bids = Bid.objects.filter(auction_id = currentAuctionId)
 		bidDict = {}
 		for bid in bids:
 			bidDict[str(bid.item.id)] = str(bid.amount)
@@ -111,23 +150,19 @@ def catalog(request):
 		logger.error(e)
 	return render_to_response('catalog.html', {"catItems":items, "auctionId":"1", "bids": bidDict}, context_instance=RequestContext(request))
 
-'''
-def showItem(request, auctionId, lotId):
-	item = ""
-	logger.error("in catalog")
-	try:
-		item = Item.objects.get(lot_id=lotId)
-		
-	except Exception as e:
-		logger.error("error in catalog")
-		logger.error(e)
-	return render_to_response('item.html', {"item":item, "auctionId":"1"}, context_instance=RequestContext(request))
-'''
 
 def submitBid(request):
 	if(request.user.is_authenticated()):
+		currentAuctionId = 1
+		auction = Auction.objects.get(id = currentAuctionId)
+		now = date.today()
 		data = request.POST
 		bidAmount = data.get("bidAmount")
+		
+
+		if isSecondChance():
+			bidAmount = auction.flat_bid_amount
+
 		itemId = data.get("itemId")
 		logger.error("request:")
 		logger.error(request)
@@ -140,7 +175,7 @@ def submitBid(request):
 				logger.error("no bid")
 			else:
 				#todo get auctionId from...db?
-				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=1, item_id=itemId)
+				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuctionId, item_id = itemId, second_chance_bid = isSecondChance())
 
 	#logger.error(request.META.get('PATH_INFO'))			
 	if(request.META.get('PATH_INFO') == "/audio/catalog/submitBid"):
