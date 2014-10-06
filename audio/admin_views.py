@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import user_passes_test
+
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -24,10 +24,17 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return render_to_response('endAuction.html', {"form":""}, context_instance=RequestContext(request))
 
-
-@user_passes_test(lambda u: u.is_superuser)
 def endAuction(request):
-	 
-	 #TODO autoend
-
+	#TODO only super admins can do this
 	return HttpResponse({"test":"success"}, content_type="application/json")
+
+def runReport(request):
+ 	''' get all items with bids, 
+ 		get winners
+ 		print on screen
+ 		option to print invoices
+ 		option to email invoices
+ 	'''
+	return HttpResponse({"test":"success"}, content_type="application/json")
+
+#view for marking entire bidder paid

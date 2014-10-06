@@ -34,7 +34,6 @@ class Item(models.Model):
 	lot_id = models.IntegerField()
 	category = models.ForeignKey(Category)
 	condition = models.CharField(max_length=100, default="")
-
 	
 	def __unicode__(self):
 		return unicode(self.lot_id)
@@ -45,7 +44,13 @@ class Bid(models.Model):
 	auction = models.ForeignKey(Auction)
 	item = models.ForeignKey(Item)
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
-	second_chance_bid = models.BooleanField(default = False) 
+	winner = models.BooleanField(default = False)
+	paid_date = models.DateField(null = True)
+	invoice_date = models.DateField(null = True)
+	
+	#won bid?
+	#pay date
+	#invoice sent
 
 	def __unicode__(self):
 		return unicode(self.user)
