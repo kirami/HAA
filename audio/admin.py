@@ -4,7 +4,7 @@ from audio.models import Auction, Category, Item, Bid, Address, Label
 
 class BidAdmin(admin.ModelAdmin):
 
-    list_display = ('user', 'item', 'amount', 'second_chance_bid',)
+    list_display = ('user', 'item', 'amount',)
     search_fields = ['user__email', 'item__id']
 
 admin.site.register(Auction)

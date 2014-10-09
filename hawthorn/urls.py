@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     #url(r'^admin/', include(admin.site.urls)),
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/bookstore/report/$', admin_views.test, name='test'),
+    url(r'^admin/report/$', admin_views.runReport, name='runReport'),
+    url(r'^admin/markWinners/$', admin_views.markWinners, name='markWinners'),
     
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^audio/', include('audio.urls')),

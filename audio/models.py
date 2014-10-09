@@ -45,8 +45,8 @@ class Bid(models.Model):
 	item = models.ForeignKey(Item)
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	winner = models.BooleanField(default = False)
-	paid_date = models.DateField(null = True)
-	invoice_date = models.DateField(null = True)
+	paid_date = models.DateField(null = True, blank=True)
+	invoice_date = models.DateField(null = True, blank=True)
 	
 	#won bid?
 	#pay date
