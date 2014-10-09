@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from audio.forms import ContactForm, BidSubmitForm
 
 from audio.models import Address, Item, Bid
-from audio.utils import getNoBidItems, getMaxBids, getWinners
+from audio.utils import getNoBidItems, getMaxBids, getWinners, getLosers, getBidItems
 
 from datetime import datetime  
 
@@ -40,12 +40,11 @@ def markWinners(request):
  	for bid in maxBids:
  		bid.winner = True
  		bid.save()
-	
-
 
 	return HttpResponse({"test":"success"}, content_type="application/json")
 
 def runReport(request):
+ 	data = {}
  	''' get all items with bids, 
  		get winners
  		mark winning bids
@@ -53,11 +52,23 @@ def runReport(request):
  		option to print invoices
  		option to email invoices
  		users with no winning bids 
- 		items with no bids  --  mysql> select * from audio_item where id not in (select item_id from audio_bid);
+ 		items with no bids
 
  	'''
  	winners = getWinners()
+ 	maxBids = getMaxBids()
+ 	noBids = getNoBidItems()
+ 	losers = getLosers()
 
-	return render_to_response('report.html', {"x":winners}, context_instance=RequestContext(request))
+ 	data["auctionId"] = 1
+ 	data["winners"] = winners
+ 	data["maxBids"] = maxBids
+ 	data["losers"] = losers
+ 	data["loserCount"] = len(losers)
+ 	data["wonItems"] = getBidItems()
+ 	data["noBidItems"] = len(noBids)
+ 	data["total"] = "100"
+
+	return render_to_response('report.html', {"data":data}, context_instance=RequestContext(request))
 
 #view for marking entire bidder paid, not just per item
