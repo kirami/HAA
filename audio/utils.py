@@ -2,7 +2,7 @@ from audio.models import Address, Item, Bid
 
 
 def getNoBidItems():
-	return Item.objects.raw('SELECT * from audio_item where id not in (select item_id from audio_bid)')
+	return list(Item.objects.raw('SELECT * from audio_item where id not in (select item_id from audio_bid)'))
 
 def getBidItems():
 	return Bid.objects.values('item').distinct()
@@ -13,11 +13,12 @@ def getWinners():
 	return winners
 
 def getLosers():
-	return Bid.objects.raw('SELECT * FROM audio_bid group by user_id HAVING COUNT(CASE WHEN winner=1 THEN 1 ELSE NULL END) <1')
+	return list(Bid.objects.raw('SELECT * FROM audio_bid group by user_id '+
+							'HAVING COUNT(CASE WHEN winner=1 THEN 1 ELSE NULL END) <1'))
 
 def getMaxBids():
 	#tooo auction id
-	return Bid.objects.raw('SELECT tt.* FROM audio_bid tt INNER JOIN'    +
-	 '(SELECT item_id, MAX(amount) AS MaxDateTime ' +
-	 	'FROM audio_bid   where auction_id =1  GROUP BY item_id) groupedtt' +
-	'  ON tt.item_id = groupedtt.item_id  AND tt.amount = groupedtt.MaxDateTime')
+	return list(Bid.objects.raw('select yt.* from audio_bid yt inner join( '+
+		'select id, max(amount) amount,item_id '+
+		'from audio_bid group by item_id ) '+
+		'ss on yt.item_id= ss.item_id and yt.amount = ss.amount;'))
