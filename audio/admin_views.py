@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from audio.forms import ContactForm, BidSubmitForm
 
 from audio.models import Address, Item, Bid
-from audio.utils import getNoBidItems, getMaxBids, getWinners, getLosers, getBidItems
+from audio.utils import getNoBidItems, getMaxBids, getWinners, getLosers, getBidItems, getDuplicateItems, getAlphaWinners
 
 from datetime import datetime  
 
@@ -30,18 +30,44 @@ def endAuction(request):
 	return HttpResponse({"test":"success"}, content_type="application/json")
 
 def markWinners(request):
-	#only if not already marked
-	#get each bid per item
-	#get max bid
-	# tie?
-	#select max(a.amount), i.id from audio_bid a, audio_item i where i.id = a.item_id group by id;
+	#get all dups, do those first:
+
+	dupes = getDuplicateItems()
+
+	for dupe in dupes:
+		dupeBids = getTopDupeBids(dupe.id, dupe.quantity)
+		for dupeBid in dupeBids:
+ 			dupeBid.winner = True
+ 			dupeBid.save()
 
 	maxBids = maxBids = getMaxBids()
  	for bid in maxBids:
- 		bid.winner = True
- 		bid.save()
+ 		if bid.winner != True:
+ 			bid.winner = True
+ 			bid.save()
 
 	return HttpResponse({"test":"success"}, content_type="application/json")
+
+
+def winners(request):
+	data = {}
+	data["winningBids"] = getAlphaWinners()
+	return render_to_response('winners.html', {"data":data}, context_instance=RequestContext(request))
+
+def losers(request):
+	data = {}
+	data["losingBids"] = getLosers()
+	return render_to_response('losers.html', {"data":data}, context_instance=RequestContext(request))
+
+def wonItems(request):
+	data = {}
+	data["wonItems"] = getBidItems()
+	return render_to_response('wonItems.html', {"data":data}, context_instance=RequestContext(request))
+
+def unsoldItems(request):
+	data = {}
+	data["unsoldItems"] = getNoBidItems()
+	return render_to_response('unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
 
 def runReport(request):
  	data = {}

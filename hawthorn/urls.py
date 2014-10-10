@@ -8,19 +8,18 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'hawthorn.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
-	#url(r'^admin/audio/auction/$', report),
-    #url(r'^admin/', include(admin.site.urls)),
+    #url(r'^blog/', include('blog.urls')),
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/bookstore/report/$', admin_views.test, name='test'),
     url(r'^admin/report/$', admin_views.runReport, name='runReport'),
     url(r'^admin/markWinners/$', admin_views.markWinners, name='markWinners'),
-    
+    url(r'^admin/winners/$', admin_views.winners, name='winners'),
+    url(r'^admin/losers/$', admin_views.losers, name='losers'),
+    url(r'^admin/wonItems/$', admin_views.wonItems, name='wonItems'),
+    url(r'^admin/unsoldItems/$', admin_views.unsoldItems, name='unsoldItems'),    
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^audio/', include('audio.urls')),
-    #(r'^audio/', include('audio.urls')),
+
 )
 
