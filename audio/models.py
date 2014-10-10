@@ -8,6 +8,23 @@ class Auction(models.Model):
 	second_chance_end_date = models.DateField(null = True)
 	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 
+
+class Invoices(models.Model):
+	user = models.ForeignKey(User)
+	auction = models.ForeignKey(Auction)
+	invoiced_amount = models.DecimalField(max_digits=19, decimal_places=2)
+	invoice_date = models.DateField()
+	reminder_invoice_date = models.DateField()
+	second_chance_invoice_amount = models.DateField()
+	second_chance_invoice_date= models.DateField()
+	
+
+class Payments(models.Model):
+	amount = models.DecimalField(max_digits=19, decimal_places=2)
+	payment_type = models.CharField(max_length=100)
+	user = models.ForeignKey(User)
+	invoice = models.ForeignKey(Invoices)
+
 class Category(models.Model):
 	name = models.CharField(max_length=100)
 
@@ -34,6 +51,7 @@ class Item(models.Model):
 	lot_id = models.IntegerField()
 	category = models.ForeignKey(Category)
 	condition = models.CharField(max_length=100, default="")
+	quantity = models.IntegerField(default = 1)
 	
 	def __unicode__(self):
 		return unicode(self.lot_id)
@@ -71,7 +89,7 @@ class Address(models.Model):
 	address_two = models.CharField(max_length=100, null = True)
 	city = models.CharField(max_length=100)
 	state = models.CharField(max_length=100)
-	zipcode = models.PositiveIntegerField()
+	zipcode = models.CharField(max_length=100, default="")
 	postal_code = models.CharField(max_length=100, null=True)
 	country = models.CharField(max_length=100, default="")
 	telephone = models.CharField(max_length=100, null=True)

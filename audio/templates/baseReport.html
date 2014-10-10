@@ -15,12 +15,12 @@
 {%block content%}
 
 <div>Report for auction {{data.auctionId}}:</div>
-
+<div><a href="/admin/report">Summary: </a></div>
 <div>Total on bids: ${{data.total}}</div>
-<div># of items sold: {{data.wonItems.count}}</div>
-<div># of items with no bids: {{data.noBidItemsCount}}</div>
-<div><a href=""># of winners: {{data.winners.count}}</a></div>
-<div><a href=""># of nonWinners: {{data.loserCount}}</a></div>
+<div><a href="/admin/wonItems"># of items sold: {{data.wonItems.count}}</a></div>
+<div><a href="/admin/unsoldItems"># of items with no bids: {{data.noBidItemsCount}}</a></div>
+<div><a href="/admin/winners"># of winners: {{data.winners.count}}</a></div>
+<div><a href="/admin/losers"># of nonWinners: {{data.loserCount}}</a></div>
 
 
 

@@ -86,6 +86,12 @@ USE_L10N = True
 USE_TZ = True
 
 
+SHELL_PLUS_POST_IMPORTS = (
+
+    ('audio.utils', '*'),
+)
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
