@@ -1,0 +1,26 @@
+{% extends "baseReport.html" %}
+ 
+
+{%block info%}
+<div>These items have no bids:</div>
+
+
+<div id="reportDiv" class="reportTable">
+	<div class="maxBidItem">Lot ID:</div>
+	<div class="maxBidItem">Label:</div>
+	<div class="maxBidItem">Name:</div>
+
+	<div class="clear"></div>
+	
+
+	<br><br>	
+	{%for item in data.unsoldItems%}
+		<div class="maxBidItem">{{item.lot_id}}</div>
+		<div class="maxBidItem">{{item.label.name}}</div>
+		<div class="maxBidItem">{{item.name}}</div>
+		<div class="clear"></div>
+	{%endfor%}
+
+</div>
+
+{%endblock%}
