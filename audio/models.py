@@ -44,11 +44,12 @@ class Label(models.Model):
 
         
 class Item(models.Model):
+	#TODO fix requireds
 	label = models.ForeignKey(Label, null = True)
 	name = models.CharField(max_length=200, default="")
-	record_number = models.CharField(max_length=100, null = True)
+	record_number = models.CharField(max_length=100, null = True, blank = True)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
-	lot_id = models.IntegerField()
+	lot_id = models.IntegerField(null = True)
 	category = models.ForeignKey(Category)
 	condition = models.CharField(max_length=100, default="")
 	quantity = models.IntegerField(default = 1)

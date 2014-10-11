@@ -10,7 +10,8 @@ from django.core.mail import send_mail
 from audio.forms import ContactForm, BidSubmitForm
 
 from audio.models import Address, Item, Bid
-from audio.utils import getNoBidItems, getMaxBids, getWinners, getLosers, getBidItems, getDuplicateItems, getAlphaWinners
+from audio.utils import getNoBidItems, getMaxBids, getWinners, getLosers, getWinBidsByUser
+from audio.utils import getBidItems, getDuplicateItems, getAlphaWinners, getSumWinners
 
 from datetime import datetime  
 
@@ -24,6 +25,11 @@ logger = logging.getLogger(__name__)
 
 def test(request):
 	return render_to_response('endAuction.html', {"form":""}, context_instance=RequestContext(request))
+
+def reportByUser(request):
+	data = {}
+	data["winningBids"] = getWinBidsByUser(1)
+	return render_to_response('winners.html', {"data":data}, context_instance=RequestContext(request))	
 
 def endAuction(request):
 	#TODO only super admins can do this
@@ -61,7 +67,7 @@ def losers(request):
 
 def wonItems(request):
 	data = {}
-	data["wonItems"] = getBidItems()
+	data["soldItems"] = getWinners()
 	return render_to_response('wonItems.html', {"data":data}, context_instance=RequestContext(request))
 
 def unsoldItems(request):
@@ -93,7 +99,7 @@ def runReport(request):
  	data["loserCount"] = len(losers)
  	data["wonItems"] = getBidItems()
  	data["noBidItems"] = len(noBids)
- 	data["total"] = "100"
+ 	data["total"] = getSumWinners()
 
 	return render_to_response('report.html', {"data":data}, context_instance=RequestContext(request))
 

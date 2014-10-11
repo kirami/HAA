@@ -1,8 +1,12 @@
 from audio.models import Address, Item, Bid
 from django.db import connection
+from django.db.models import Sum
+
 
 
 def getNoBidItems():
+	auctionId = 1
+	#todo auctionid
 	return list(Item.objects.raw('SELECT * from audio_item where id not in (select item_id from audio_bid)'))
 
 def getBidItems():
@@ -10,7 +14,8 @@ def getBidItems():
 
 def getWinners():
 	#todo auction id
-	winners = Bid.objects.filter(winner = True)
+	auctionId = 1
+	winners = Bid.objects.filter(winner = True, auction_id = auctionId)
 	return winners
 
 def getAlphaWinners():
@@ -21,8 +26,13 @@ def getAlphaWinners():
 	row = dictfetchall(cursor)
 	return row
 
+def getWinBidsByUser(userId):
+	auctionId = 1
+	return Bid.objects.filter(auction_id = auctionId, user_id = userId, winner = True)
 
 def getLosers():
+	#add auctoinId
+	auctionId = 1
 	return list(Bid.objects.raw('SELECT * FROM audio_bid group by user_id '+
 							'HAVING COUNT(CASE WHEN winner=1 THEN 1 ELSE NULL END) <1'))
 
@@ -33,8 +43,12 @@ def getMaxBids():
 		'from audio_bid group by item_id ) '+
 		'ss on yt.item_id= ss.item_id and yt.amount = ss.amount;'))
 
+def getSumWinners():
+	return getWinners().aggregate(Sum('amount'))["amount__sum"] 
+
 def getDuplicateItems():
-	return Item.objects.filter(quantity__gte=2)
+	auctionId = 1
+	return Item.objects.filter(quantity__gte=2, auction_id = auctionId)
 
 def getTopDupeBids(itemId, quantity):
 	#tooo auction id
