@@ -4,25 +4,33 @@
 {%block info%}
 <div>These people bid on items but did not win:</div>
 
+<div>All emails:<br>
+{%for lostBid in data.losingBids%}
+	{%if lostBid.user.email != "" %}
+		{{lostBid.user.email}},
+	{%endif%}
+{%endfor%}
+</div>	
+<br><br>	
+
 <div id="reportDiv" class="reportTable">
 	<div class="maxBidItem">ID:</div>
 	<div class="maxBidItem">Last Name:</div>
 	<div class="maxBidItem">First Name:</div>
 	<div class="maxBidItem">Email:</div>
 	<div class="clear"></div>
-	<br><br>
 	
-{%for winner in data.winners%}
-	<div class="maxBidItem">{{winningBids.user.id}}</div>
-	<div class="maxBidItem">{{winningBids.user.last_name}}</div>	
-	<div class="maxBidItem">{{winningBids.user.first_name}}</div>
-	<div class="maxBidItem">{{winningBids.user.email}}</div>	
-	<div class="clear"></div>
-{%endfor%}
+
+	<br><br>	
+	{%for lostBid in data.losingBids%}
+		<div class="maxBidItem">{{lostBid.user.id}}</div>
+		<div class="maxBidItem">{{lostBid.user.last_name}}</div>
+		<div class="maxBidItem">{{lostBid.user.first_name}}</div>
+		<div class="maxBidItem">{{lostBid.user.email}}</div>
+
+		<div class="clear"></div>
+	{%endfor%}
 
 </div>
-
-
-
 
 {%endblock%}
