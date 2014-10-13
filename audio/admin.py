@@ -1,5 +1,5 @@
 from django.contrib import admin
-from audio.models import Auction, Category, Item, Bid, Address, Label, UserProfile
+from audio.models import Auction, Category, Item, Bid, Address, Label, UserProfile, Payment, Invoice
 
 
 class BidAdmin(admin.ModelAdmin):
@@ -14,5 +14,7 @@ admin.site.register(Bid, BidAdmin)
 admin.site.register(Address)
 admin.site.register(Label)
 admin.site.register(UserProfile)
+admin.site.register(Payment)
+admin.site.register(Invoice)
 
 
