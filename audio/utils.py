@@ -1,4 +1,4 @@
-from audio.models import Address, Item, Bid
+from audio.models import Address, Item, Bid, Invoice, Payment
 from django.db import connection
 from django.db.models import Sum
 
@@ -44,7 +44,56 @@ def getMaxBids():
 		'ss on yt.item_id= ss.item_id and yt.amount = ss.amount;'))
 
 def getSumWinners():
-	return getWinners().aggregate(Sum('amount'))["amount__sum"] 
+	winners = getWinners()
+	if len(winners) > 0:
+		return winners.aggregate(Sum('amount'))["amount__sum"] 
+	else:
+		return 0
+
+def getInvoicesByAuction():
+	auctionId = 1
+	return Invoice.objects.filter(auction_id = auctionId)
+
+def getInvoicesByUser(userId):
+	auctionId = 1
+	return Invoice.objects.filter(user_id = userId)	
+	
+def getTotalInvoiceAmountByAuction():
+	invoices = getInvoicesByAuction()
+	if len(invoices) > 0:
+		return invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] 
+	else:
+		return 0
+
+def getTotalInvoiceAmountByUser(userId):
+	invoices = getInvoicesByUser(userId)
+	if len(invoices) > 0:
+		return invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] 
+	else:
+		return 0
+
+def getPayments():
+	auctionId = 1
+	return Payment.objects.filter()
+
+def getPaymentsByUser(userId):
+	auctionId = 1
+	return Payment.objects.filter(user_id = userId)	
+	
+def getTotalPaymentAmountByAuction():
+	Payments = getPaymentsByAuction()
+	if len(Payments) > 0:
+		return Payments.aggregate(Sum('amount'))["amount__sum"] 
+	else:
+		return 0
+
+def getTotalPaymentAmountByUser(userId):
+	Payments = getPaymentsByUser(userId)
+	if len(Payments) > 0:
+		return Payments.aggregate(Sum('amount'))["amount__sum"] 
+	else:
+		return 0
+
 
 def getDuplicateItems():
 	auctionId = 1

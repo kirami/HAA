@@ -9,9 +9,8 @@ from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm
 
-from audio.models import Address, Item, Bid
-from audio.utils import getNoBidItems, getMaxBids, getWinners, getLosers, getWinBidsByUser
-from audio.utils import getBidItems, getDuplicateItems, getAlphaWinners, getSumWinners
+from audio.models import Address, Item, Bid, Invoice, Payment
+from audio.utils import *
 
 from datetime import datetime  
 
@@ -25,6 +24,17 @@ logger = logging.getLogger(__name__)
 
 def test(request):
 	return render_to_response('endAuction.html', {"form":""}, context_instance=RequestContext(request))
+
+def calculateBalances(request):
+	#get invoices for this auction?  
+	#get unpaid invoices?
+	#invoices amount total - paid amount total?
+	#
+	data = {}
+	data["totalPayments"] = getPayments()
+	data["totalInvoices"] = getTotalInvoiceAmountByAuction()
+	data["remaining"] = data["totalPayments"] - data["totalInvoices"]
+	return HttpResponse({"data":data}, content_type="application/json")
 
 def reportByUser(request):
 	data = {}

@@ -9,7 +9,7 @@ class Auction(models.Model):
 	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 
 
-class Invoices(models.Model):
+class Invoice(models.Model):
 	user = models.ForeignKey(User)
 	auction = models.ForeignKey(Auction)
 	invoiced_amount = models.DecimalField(max_digits=19, decimal_places=2)
@@ -19,11 +19,12 @@ class Invoices(models.Model):
 	second_chance_invoice_date= models.DateField()
 	
 
-class Payments(models.Model):
+class Payment(models.Model):
 	amount = models.DecimalField(max_digits=19, decimal_places=2)
+	#auction?
 	payment_type = models.CharField(max_length=100)
 	user = models.ForeignKey(User)
-	invoice = models.ForeignKey(Invoices)
+	invoice = models.ForeignKey(Invoice)
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
@@ -49,7 +50,7 @@ class Item(models.Model):
 	name = models.CharField(max_length=200, default="")
 	record_number = models.CharField(max_length=100, null = True, blank = True)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
-	lot_id = models.IntegerField(null = True)
+	lot_id = models.IntegerField(null = True, blank=True, default=" ")
 	category = models.ForeignKey(Category)
 	condition = models.CharField(max_length=100, default="")
 	quantity = models.IntegerField(default = 1)
