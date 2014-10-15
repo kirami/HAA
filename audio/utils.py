@@ -9,6 +9,16 @@ def getNoBidItems():
 	#todo auctionid
 	return list(Item.objects.raw('SELECT * from audio_item where id not in (select item_id from audio_bid)'))
 
+def getUnbalancedUsers():
+	auctionId = 1
+	cursor = connection.cursor()
+	cursor.execute("select user_id, coalesce(payments,0), invoiced, invoiced - coalesce(payments,0) as balance from(select sum(amount) as payments, it.user_id, invoiced from audio_payment p right join (select sum(invoiced_amount) as invoiced, user_id from audio_invoice group by user_id) as it on it.user_id = p.user_id group by user_id) as joined where joined.payments != joined.invoiced or joined.payments is NULL")
+	row = dictfetchall(cursor)
+	return row
+
+def resetWinners():
+	return Bid.objects.filter(auction_id = 1).update(winner=False)
+
 def getBidItems():
 	return Bid.objects.values('item').distinct()
 
@@ -72,7 +82,7 @@ def getTotalInvoiceAmountByUser(userId):
 	else:
 		return 0
 
-def getPayments():
+def getPaymentsByAuction():
 	auctionId = 1
 	return Payment.objects.filter()
 

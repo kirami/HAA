@@ -31,10 +31,13 @@ def calculateBalances(request):
 	#invoices amount total - paid amount total?
 	#
 	data = {}
-	data["totalPayments"] = getPayments()
+	data["totalPayments"] = getTotalPaymentAmountByAuction()
 	data["totalInvoices"] = getTotalInvoiceAmountByAuction()
 	data["remaining"] = data["totalPayments"] - data["totalInvoices"]
-	return HttpResponse({"data":data}, content_type="application/json")
+
+	#per user
+	data["unbalancedUsers"] = getUnbalancedUsers()
+	return render_to_response('balances.html', {"data":data}, context_instance=RequestContext(request))	
 
 def reportByUser(request):
 	data = {}
@@ -47,6 +50,10 @@ def endAuction(request):
 
 def markWinners(request):
 	#get all dups, do those first:
+
+	#set all winners for this auction to 0
+
+	resetWinners()
 
 	dupes = getDuplicateItems()
 
