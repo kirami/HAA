@@ -1,0 +1,38 @@
+{% extends "baseReport.html" %}
+ 
+
+{%block info%}
+<h1>User balance</h1>
+<div>User: </div>
+<div>ID: {{data.user.id}}</div>
+<div>Email: {{data.user.email}}</div>
+<div>Name: {{data.user.first_name}} {{data.user.last_name}}</div>
+
+
+<div id="reportDiv" class="reportTable">
+
+	<div>We've received payments totaling ${{data.payments.sum}}</div>
+	<div>We've sent invoices totaling ${{data.invoices.sum}}</div>
+	<div>Leaving a total balance of ${{data.remaining}}</div>
+	<br><br>
+	<div>Payments received:</div>	
+	{%for payment in data.payments.payments%} 
+		<div class="maxBidItem">{{payment.payment_type}}</div>
+		<div class="maxBidItem">{{payment.amount}}</div>
+		<div class="maxBidItem">{{payment.received_date}}</div>
+		<div class="clear"></div>
+	{%endfor%}
+	<br>
+	<div>Invoices sent:</div>	
+	{%for invoice in data.invoices.invoices%} 
+		<div class="maxBidItem">{{invoice.id}}</div>
+		<div class="maxBidItem">{{invoice.invoice_date}}</div>
+		<div class="maxBidItem">{{invoice.reminder_invoice_date}}</div>
+		<div class="maxBidItem">{{invoice.invoiced_amount}}</div>
+		<div class="clear"></div>
+	{%endfor%}
+
+
+</div>
+
+{%endblock%}

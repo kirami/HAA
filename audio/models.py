@@ -17,7 +17,6 @@ class Invoice(models.Model):
 	reminder_invoice_date = models.DateField()
 	second_chance_invoice_amount = models.DateField()
 	second_chance_invoice_date= models.DateField()
-	
 
 class Payment(models.Model):
 	amount = models.DecimalField(max_digits=19, decimal_places=2)
@@ -25,6 +24,7 @@ class Payment(models.Model):
 	payment_type = models.CharField(max_length=100)
 	user = models.ForeignKey(User)
 	invoice = models.ForeignKey(Invoice)
+	received_date = models.DateField()
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
@@ -104,5 +104,14 @@ class Address(models.Model):
 	def __unicode__(self):
 		return self.user.email
 
+class Consignor(models.Model):
+	first_name = models.CharField(max_length=100)
+	last_name = models.CharField(max_length=100)
+	email = models.CharField(max_length=100)
+	address = models.ForeignKey(Address)
 
+class Consignment(models.Model):
+	item = models.ForeignKey(Item)
+	cosignor = models.ForeignKey(Consignor)
+	percentage = models.DecimalField(max_digits=19, decimal_places=2)
 

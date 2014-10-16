@@ -12,7 +12,7 @@ def getNoBidItems():
 def getUnbalancedUsers():
 	auctionId = 1
 	cursor = connection.cursor()
-	cursor.execute("select user_id, coalesce(payments,0), invoiced, invoiced - coalesce(payments,0) as balance from(select sum(amount) as payments, it.user_id, invoiced from audio_payment p right join (select sum(invoiced_amount) as invoiced, user_id from audio_invoice group by user_id) as it on it.user_id = p.user_id group by user_id) as joined where joined.payments != joined.invoiced or joined.payments is NULL")
+	cursor.execute("select user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance from(select sum(amount) as payments, it.user_id, invoiced from audio_payment p right join (select sum(invoiced_amount) as invoiced, user_id from audio_invoice group by user_id) as it on it.user_id = p.user_id group by user_id) as joined where joined.payments != joined.invoiced or joined.payments is NULL")
 	row = dictfetchall(cursor)
 	return row
 
@@ -63,10 +63,6 @@ def getSumWinners():
 def getInvoicesByAuction():
 	auctionId = 1
 	return Invoice.objects.filter(auction_id = auctionId)
-
-def getInvoicesByUser(userId):
-	auctionId = 1
-	return Invoice.objects.filter(user_id = userId)	
 	
 def getTotalInvoiceAmountByAuction():
 	invoices = getInvoicesByAuction()
@@ -75,30 +71,27 @@ def getTotalInvoiceAmountByAuction():
 	else:
 		return 0
 
-def getTotalInvoiceAmountByUser(userId):
-	invoices = getInvoicesByUser(userId)
+def getInvoiceInfoByUser(userId):
+	invoices = Invoice.objects.filter(user_id = userId)
 	if len(invoices) > 0:
-		return invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] 
+		return { "sum": invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"], "invoices":invoices} 
 	else:
-		return 0
+		return { "sum": 0, "invoices":None} 
+
+def getPaymentInfoByUser(userId):
+	payments = Payment.objects.filter(user_id = userId)
+	if len(payments) > 0:
+		return { "sum": payments.aggregate(Sum('amount'))["amount__sum"], "payments":payments} 
+	else:
+		return { "sum": 0, "payments":None} 
 
 def getPaymentsByAuction():
 	auctionId = 1
 	return Payment.objects.filter()
 
-def getPaymentsByUser(userId):
-	auctionId = 1
-	return Payment.objects.filter(user_id = userId)	
 	
 def getTotalPaymentAmountByAuction():
 	Payments = getPaymentsByAuction()
-	if len(Payments) > 0:
-		return Payments.aggregate(Sum('amount'))["amount__sum"] 
-	else:
-		return 0
-
-def getTotalPaymentAmountByUser(userId):
-	Payments = getPaymentsByUser(userId)
 	if len(Payments) > 0:
 		return Payments.aggregate(Sum('amount'))["amount__sum"] 
 	else:

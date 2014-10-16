@@ -1,5 +1,6 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.models import User
 
 
 from django import forms
@@ -25,12 +26,26 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return render_to_response('endAuction.html', {"form":""}, context_instance=RequestContext(request))
 
+
+def userBalanceInfo(request, userId):
+	data = {}
+
+	invoices = getInvoiceInfoByUser(userId)
+	data["invoices"] = invoices
+	data["payments"] = getPaymentInfoByUser(userId)
+	data["remaining"] = invoices["sum"] - data["payments"]["sum"]
+	data["user"] = User.objects.get(id=userId)
+	return render_to_response('userBalance.html', {"data":data}, context_instance=RequestContext(request))	
+
+
 def calculateBalances(request):
+	data = {}
+	
 	#get invoices for this auction?  
 	#get unpaid invoices?
 	#invoices amount total - paid amount total?
 	#
-	data = {}
+
 	data["totalPayments"] = getTotalPaymentAmountByAuction()
 	data["totalInvoices"] = getTotalInvoiceAmountByAuction()
 	data["remaining"] = data["totalPayments"] - data["totalInvoices"]

@@ -15,7 +15,7 @@
 	<br><br>
 	<div>These users are not balanced:</div>	
 	{%for user in data.unbalancedUsers%} 
-		<div class="maxBidItem">{{user.user_id}}</div>
+		<div class="maxBidItem"><a href="admin/blances/{{user.user_id}}">{{user.user_id}}</a></div>
 		<div class="maxBidItem">{{user.payments}}</div>
 		<div class="maxBidItem">{{user.invoiced}}</div>
 		<div class="maxBidItem">{{user.balance}}</div>
