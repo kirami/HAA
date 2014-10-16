@@ -3,18 +3,12 @@ from django.db import connection
 from django.db.models import Sum
 
 
+#Bid utils
 
 def getNoBidItems():
 	auctionId = 1
 	#todo auctionid
 	return list(Item.objects.raw('SELECT * from audio_item where id not in (select item_id from audio_bid)'))
-
-def getUnbalancedUsers():
-	auctionId = 1
-	cursor = connection.cursor()
-	cursor.execute("select user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance from(select sum(amount) as payments, it.user_id, invoiced from audio_payment p right join (select sum(invoiced_amount) as invoiced, user_id from audio_invoice group by user_id) as it on it.user_id = p.user_id group by user_id) as joined where joined.payments != joined.invoiced or joined.payments is NULL")
-	row = dictfetchall(cursor)
-	return row
 
 def resetWinners():
 	return Bid.objects.filter(auction_id = 1).update(winner=False)
@@ -28,14 +22,6 @@ def getWinners():
 	winners = Bid.objects.filter(winner = True, auction_id = auctionId)
 	return winners
 
-def getAlphaWinners():
-	auctionId = 1
-	cursor = connection.cursor()
-	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name, a.zipcode from audio_bid b, audio_address a, auth_user au "+
-		"WHERE b.winner = true and b.user_id = a.user_id and au.id = a.user_id and b.auction_id = "+str(auctionId)+" order by last_name")
-	row = dictfetchall(cursor)
-	return row
-
 def getWinBidsByUser(userId):
 	auctionId = 1
 	return Bid.objects.filter(auction_id = auctionId, user_id = userId, winner = True)
@@ -48,10 +34,7 @@ def getLosers():
 
 def getMaxBids():
 	#tooo auction id
-	return list(Bid.objects.raw('select yt.* from audio_bid yt inner join( '+
-		'select id, max(amount) amount,item_id '+
-		'from audio_bid group by item_id ) '+
-		'ss on yt.item_id= ss.item_id and yt.amount = ss.amount;'))
+	return list(Bid.objects.raw('select * from audio_bid where id in (select a.id from(select yt.id, yt.date, yt.item_id,  yt.amount from audio_bid yt inner join( select id, max(amount) amount,item_id  from audio_bid group by item_id ) ss on yt.item_id= ss.item_id and yt.amount = ss.amount order by date) as a group by item_id)'))
 
 def getSumWinners():
 	winners = getWinners()
@@ -59,6 +42,52 @@ def getSumWinners():
 		return winners.aggregate(Sum('amount'))["amount__sum"] 
 	else:
 		return 0
+
+def getDuplicateItems():
+	auctionId = 1
+	return Item.objects.filter(quantity__gte=2)
+
+def getTopDupeBids(itemId, quantity):
+	#tooo auction id
+	auctionId = 1
+	return list(Bid.objects.raw('select *  from audio_bid  where auction_id='+str(auctionId)+' and item_id = '+str(itemId)+
+		'  order by amount desc limit ' + str(quantity)))
+
+def getDuplicateTopBids():
+	return ""
+
+def getCosignedWinners():
+	auctionId = 1
+	return list(Bid.objects.raw('select * from audio_bid b, audio_consignment c where b.winner = true and b.item_id = c.item_id;'))
+
+def getConsignedItemsByConsignor():
+	return "select * from audio_item b, audio_consignment c where b.id = c.item_id;"
+
+#--------------------------
+
+
+def getUnbalancedUsers():
+	auctionId = 1
+	cursor = connection.cursor()
+	cursor.execute("select user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance "+
+		"from(select sum(amount) as payments, it.user_id, invoiced from audio_payment p "+
+		"right join (select sum(invoiced_amount) as invoiced, user_id from audio_invoice group by user_id) "+
+		"as it on it.user_id = p.user_id group by user_id) as joined "+
+		"where joined.payments != joined.invoiced or joined.payments is NULL")
+	row = dictfetchall(cursor)
+	return row
+
+
+
+def getAlphaWinners():
+	auctionId = 1
+	cursor = connection.cursor()
+	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name, a.zipcode from audio_bid b, audio_address a, auth_user au "+
+		"WHERE b.winner = true and b.user_id = a.user_id and au.id = a.user_id and b.auction_id = "+str(auctionId)+" order by last_name")
+	row = dictfetchall(cursor)
+	return row
+
+
 
 def getInvoicesByAuction():
 	auctionId = 1
@@ -97,15 +126,6 @@ def getTotalPaymentAmountByAuction():
 	else:
 		return 0
 
-
-def getDuplicateItems():
-	auctionId = 1
-	return Item.objects.filter(quantity__gte=2, auction_id = auctionId)
-
-def getTopDupeBids(itemId, quantity):
-	#tooo auction id
-	return list(Bid.objects.raw('select *  from audio_bid  where item_id = '+str(itemId)+
-		'  order by amount desc limit ' + str(quantity)))
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
