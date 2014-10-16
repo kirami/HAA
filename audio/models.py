@@ -108,10 +108,10 @@ class Consignor(models.Model):
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	email = models.CharField(max_length=100)
-	address = models.ForeignKey(Address)
+	address = models.ForeignKey(Address, blank=True, null=True)
 
 class Consignment(models.Model):
 	item = models.ForeignKey(Item)
-	cosignor = models.ForeignKey(Consignor)
+	consignor = models.ForeignKey(Consignor)
 	percentage = models.DecimalField(max_digits=19, decimal_places=2)
 

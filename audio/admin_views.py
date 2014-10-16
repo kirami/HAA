@@ -26,6 +26,15 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return render_to_response('endAuction.html', {"form":""}, context_instance=RequestContext(request))
 
+def consignorReport(request):
+	data = {}
+	#Gross auction total
+	data["total"] = getSumWinners()
+	#Name / Gross / Commission % / Amount due
+	
+	return render_to_response('consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
+
+
 
 def userBalanceInfo(request, userId):
 	data = {}
