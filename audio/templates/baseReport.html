@@ -12,9 +12,10 @@
 {% endblock %}
 
 
+
 {%block content%}
 
-<div>Report for auction {{data.auctionId}}:</div>
+<div>Report for auction {{data.auctionId}}:</div>  <A HREF="javascript:window.print()">Click to Print This Page</A>
 <div><a href="/admin/report">Summary: </a></div>
 <div>Total on bids: ${{data.total}}</div>
 <div><a href="/admin/wonItems"># of items sold: {{data.wonItems.count}}</a></div>
