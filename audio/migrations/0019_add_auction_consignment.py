@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
             ('first_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('last_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('email', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('address', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Address'])),
+            ('address', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Address'], null=True, blank=True)),
         ))
         db.send_create_signal(u'audio', ['Consignor'])
 
@@ -22,7 +22,8 @@ class Migration(SchemaMigration):
         db.create_table(u'audio_consignment', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Item'])),
-            ('cosignor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Consignor'])),
+            ('auction', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Auction'])),
+            ('consignor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Consignor'])),
             ('percentage', self.gf('django.db.models.fields.DecimalField')(max_digits=19, decimal_places=2)),
         ))
         db.send_create_signal(u'audio', ['Consignment'])
@@ -79,14 +80,15 @@ class Migration(SchemaMigration):
         },
         u'audio.consignment': {
             'Meta': {'object_name': 'Consignment'},
-            'cosignor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Consignor']"}),
+            'auction': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Auction']"}),
+            'consignor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Consignor']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Item']"}),
             'percentage': ('django.db.models.fields.DecimalField', [], {'max_digits': '19', 'decimal_places': '2'})
         },
         u'audio.consignor': {
             'Meta': {'object_name': 'Consignor'},
-            'address': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Address']"}),
+            'address': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Address']", 'null': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),

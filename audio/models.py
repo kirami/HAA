@@ -110,8 +110,15 @@ class Consignor(models.Model):
 	email = models.CharField(max_length=100)
 	address = models.ForeignKey(Address, blank=True, null=True)
 
+	def __unicode__(self):
+		return self.first_name + " " + self.last_name
+
 class Consignment(models.Model):
 	item = models.ForeignKey(Item)
+	auction = models.ForeignKey(Auction)
 	consignor = models.ForeignKey(Consignor)
 	percentage = models.DecimalField(max_digits=19, decimal_places=2)
+
+	def __unicode__(self):
+		return self.item.name
 

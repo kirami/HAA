@@ -5,13 +5,15 @@ from django.db.models import Sum
 
 #Bid utils
 
+#returns ALL items in db with no bids ever.
 def getNoBidItems():
 	auctionId = 1
 	#todo auctionid
 	return list(Item.objects.raw('SELECT * from audio_item where id not in (select item_id from audio_bid)'))
 
 def resetWinners():
-	return Bid.objects.filter(auction_id = 1).update(winner=False)
+	auctionId
+	return Bid.objects.filter(auction_id = auctionId).update(winner=False)
 
 def getBidItems():
 	return Bid.objects.values('item').distinct()
@@ -56,12 +58,35 @@ def getTopDupeBids(itemId, quantity):
 def getDuplicateTopBids():
 	return ""
 
-def getCosignedWinners():
+#get consigned items won in certain auction
+def getConsignmentWinners():
 	auctionId = 1
-	return list(Bid.objects.raw('select * from audio_bid b, audio_consignment c where b.winner = true and b.item_id = c.item_id;'))
+	cursor = connection.cursor()
+	cursor.execute("select * from audio_bid b, audio_consignment c where b.auction_id = "+str(auctionId)+
+		" and b.winner = true and b.item_id = c.item_id;")
+	row = dictfetchall(cursor)
+	return row
 
-def getConsignedItemsByConsignor():
-	return "select * from audio_item b, audio_consignment c where b.id = c.item_id;"
+#all consigment & item objects in x auction
+def getAllConsignments():
+	auctionId = 1
+	return "select * from audio_item b, audio_consignment c where b.id = c.item_id and c.auction_id = " +str(auctionId)+ " order by c.id"
+
+
+def getConsignorWinners():
+	auctionId = 1
+	return ("select distinct consignor_id from audio_bid b, audio_consignment c where b.winner = true "+
+	"and b.item_id = c.item_id and b.auction_id = " + str(auctionId))
+
+#get consigment which was not won in this auction
+def getConsignedLosers():
+	auctionId = 1
+	return ("select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id "+
+	"from audio_bid b where b.winner = true) and c.item_id = i.id")
+
+def getOrderedBids():
+	auctionId = 1
+	return list(Bid.objects.raw('SELECT * FROM audio_bid WHERE auction_id = '+ str(auctionId)+' ORDER BY item_id ASC, amount DESC, date ASC'))
 
 #--------------------------
 
