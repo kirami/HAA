@@ -30,6 +30,27 @@ def consignorReport(request):
 	data = {}
 	#Gross auction total
 	data["total"] = getSumWinners()
+	consignedItems = getConsignedWinners()
+	consignTotal = 0
+	haaTotal = 0
+	for item in consignedItems:
+		amount = item["amount"] * (item["percentage"] / 100)
+		item["consignedAmount"] = amount
+		#get correct HAA consignor id
+		if item["consignor_id"] == 1:
+			item["HAA"] = True
+			haaTotal+=amount
+		else: 
+			consignTotal+=amount
+
+
+	data["totalHAA"] =  haaTotal
+	data["consignedTotal"] = consignTotal		
+	data["consignedItems"] = consignedItems
+
+	#if data["total"] != haaTotal + consignTotal:
+	#	logger.error("Total for this auction consignment is not right.")
+
 	#Name / Gross / Commission % / Amount due
 	
 	return render_to_response('consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
@@ -73,25 +94,32 @@ def endAuction(request):
 	return HttpResponse({"test":"success"}, content_type="application/json")
 
 def markWinners(request):
-	#get all dups, do those first:
+	#TODO - is this after invoice run?  are you sure?
 
 	#set all winners for this auction to 0
-
 	resetWinners()
 
 	dupes = getDuplicateItems()
+	bids = getOrderedBids()
+	currentItemId = 0
+	index = 0
+ 	for bid in bids:
+ 		if currentItemId != bid.item_id:
+ 			#reset
+ 			item = Item.objects.filter(id = bid.item_id)
+ 			if len(item) > 0:
+ 				quantity = int(item[0].quantity)
+ 			else:
+ 				quantity = 0
 
-	for dupe in dupes:
-		dupeBids = getTopDupeBids(dupe.id, dupe.quantity)
-		for dupeBid in dupeBids:
- 			dupeBid.winner = True
- 			dupeBid.save()
+ 			currentItemId = bid.item_id
+ 			index = 0 			
 
-	maxBids = maxBids = getMaxBids()
- 	for bid in maxBids:
- 		if bid.winner != True:
+ 		if bid.winner != True and index < quantity:
  			bid.winner = True
  			bid.save()
+ 		
+ 		index = index + 1	
 
 	return HttpResponse({"test":"success"}, content_type="application/json")
 

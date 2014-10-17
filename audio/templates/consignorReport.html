@@ -6,15 +6,23 @@
 <h1>Consignor report for auction: {{auctionId}}</h1>
 
 <div>Gross auction total:  ${{data.total}}</div>
+<div>Gross consignor total:  ${{data.consignedTotal}}</div>
+<div>Gross HAA total:  ${{data.totalHAA}}</div>
 Name / Gross / Commission % / Amount due
 
 <div id="reportDiv" class="reportTable">
 
-	<div>Payments received:</div>	
-	{%for payment in data.payments.payments%} 
-		<div class="maxBidItem">{{payment.payment_type}}</div>
-		<div class="maxBidItem">{{payment.amount}}</div>
-		<div class="maxBidItem">{{payment.received_date}}</div>
+	<div>Consignment info by item</div>	
+	{%for item in data.consignedItems%} 
+		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
+			<div class="maxBidItem">{{item.item_id}}</div>
+			<div class="maxBidItem">{{item.amount}}</div>
+			<div class="maxBidItem">{{item.cosignor_id}}</div>
+			<div class="maxBidItem">{{item.percentage}}</div>
+			<div class="maxBidItem">{{item.consignedAmount}}</div>
+			<div class="clear"></div>
+		</div>
+
 		<div class="clear"></div>
 	{%endfor%}
 
