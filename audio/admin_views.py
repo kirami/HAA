@@ -26,11 +26,43 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return render_to_response('endAuction.html', {"form":""}, context_instance=RequestContext(request))
 
+
+def consignorReportById(request, consignorId):
+	data = {}
+	#get all consigned won items with 
+	#get all consigned lost items
+	#description / bidder/ win amount/ consign amount / haa amount
+
+
+	notWon = getConsignedLosersById(consignorId)
+	consignedItems = getConsignmentWinnersById(consignorId)
+	
+	consignTotal = 0
+	haaTotal = 0
+	total = 0
+	for item in consignedItems:
+		total += item["amount"]
+		amount = item["amount"] * (item["percentage"] / 100)
+		item["consignedAmount"] = amount
+		consignTotal += amount
+		item["HAA_amount"] = item["amount"] - amount
+		haaTotal += item["HAA_amount"]
+
+	data["consignedItems"] = consignedItems
+	data["haaTotal"] = haaTotal
+	data["consignorTotal"] = consignTotal
+	data["total"] = total
+	#data["consignorInfo"] = 
+	data["unsoldItems"] = notWon
+
+	return render_to_response('consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
+
+
 def consignorReport(request):
 	data = {}
 	#Gross auction total
 	data["total"] = getSumWinners()
-	consignedItems = getConsignedWinners()
+	consignedItems = getConsignmentWinners()
 	consignTotal = 0
 	haaTotal = 0
 	for item in consignedItems:
@@ -45,6 +77,8 @@ def consignorReport(request):
 
 
 	data["totalHAA"] =  haaTotal
+	#consignorBidSums = getConsignorBidSums
+	data["consignorBidSums"] =	1
 	data["consignedTotal"] = consignTotal		
 	data["consignedItems"] = consignedItems
 

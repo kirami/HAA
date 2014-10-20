@@ -6,7 +6,9 @@
 <h1>Consignor report for auction: {{auctionId}}</h1>
 
 <div>Gross auction total:  ${{data.total}}</div>
-<div>Gross consignor total:  ${{data.consignedTotal}}</div>
+
+<div>Total gross of consigned items: ${{data.consignedTotal}}</div>
+<div>Gross consignor total:  ${{data.consignorTotal}}</div>
 <div>Gross HAA total:  ${{data.totalHAA}}</div>
 Name / Gross / Commission % / Amount due
 
@@ -17,7 +19,7 @@ Name / Gross / Commission % / Amount due
 		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
 			<div class="maxBidItem">{{item.item_id}}</div>
 			<div class="maxBidItem">{{item.amount}}</div>
-			<div class="maxBidItem">{{item.cosignor_id}}</div>
+			<div class="maxBidItem"><a href="/admin/consignorReport/{{item.consignor_id}}">{{item.consignor_id}}</a></div>
 			<div class="maxBidItem">{{item.percentage}}</div>
 			<div class="maxBidItem">{{item.consignedAmount}}</div>
 			<div class="clear"></div>

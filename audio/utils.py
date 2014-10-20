@@ -58,6 +58,11 @@ def getTopDupeBids(itemId, quantity):
 def getDuplicateTopBids():
 	return ""
 
+def getOrderedBids():
+	auctionId = 1
+	return list(Bid.objects.raw('SELECT * FROM audio_bid WHERE auction_id = '+ str(auctionId)+' ORDER BY item_id ASC, amount DESC, date ASC'))
+
+
 #get consigned items won in certain auction
 def getConsignmentWinners():
 	auctionId = 1
@@ -67,16 +72,19 @@ def getConsignmentWinners():
 	row = dictfetchall(cursor)
 	return row
 
-#all consigment & item objects in x auction
+#all consigment & item objects in x auction (won or not)
 def getAllConsignments():
 	auctionId = 1
 	return "select * from audio_item b, audio_consignment c where b.id = c.item_id and c.auction_id = " +str(auctionId)+ " order by c.id"
 
-
-def getConsignorWinners():
+#get consignors with winning items
+def getConsignorBidSums():
+	cursor = connection.cursor()
 	auctionId = 1
-	return ("select distinct consignor_id from audio_bid b, audio_consignment c where b.winner = true "+
-	"and b.item_id = c.item_id and b.auction_id = " + str(auctionId))
+	cursor.execute("select consignor_id, sum(b.amount) from audio_bid b, audio_consignment c where "+
+		"b.winner = true and b.item_id = c.item_id and b.auction_id = "+ str(auctionId)+" group by consignor_id;") 
+	row = dictfetchall(cursor)
+	return row
 
 #get consigment which was not won in this auction
 def getConsignedLosers():
@@ -84,9 +92,25 @@ def getConsignedLosers():
 	return ("select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id "+
 	"from audio_bid b where b.winner = true) and c.item_id = i.id")
 
-def getOrderedBids():
+#def getConsignedInfoById(userId):
+
+
+def getConsignedLosersById(consignorId):
 	auctionId = 1
-	return list(Bid.objects.raw('SELECT * FROM audio_bid WHERE auction_id = '+ str(auctionId)+' ORDER BY item_id ASC, amount DESC, date ASC'))
+	
+	return list(Item.objects.raw("select i.* from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+
+		" and item_id not in(select distinct b.item_id "+
+		"from audio_bid b where b.winner = true) and c.item_id = i.id and c.consignor_id=" + str(consignorId)))
+
+
+#get consigned items won in certain auction by consignor
+def getConsignmentWinnersById(consignorId):
+	auctionId = 1
+	cursor = connection.cursor()
+	cursor.execute("select * from audio_bid b, audio_consignment c, audio_item i where b.auction_id = "+str(auctionId)+
+		" and b.winner = true and b.item_id = c.item_id and c.item_id = i.id and c.consignor_id = "+str(consignorId)+";")
+	row = dictfetchall(cursor)
+	return row
 
 #--------------------------
 
