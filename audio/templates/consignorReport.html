@@ -3,14 +3,18 @@
 
 {%block info%}
 
-<h1>Consignor report for auction: {{auctionId}}</h1>
+<h1>Consignor report for auction: {{auctionId}}</h1>{{ data.totalsByConsignor}}
 
 <div>Gross auction total:  ${{data.total}}</div>
 
 <div>Total gross of consigned items: ${{data.consignedTotal}}</div>
 <div>Gross consignor total:  ${{data.consignorTotal}}</div>
 <div>Gross HAA total:  ${{data.totalHAA}}</div>
+
 Name / Gross / Commission % / Amount due
+{%for key,value in data.totalsByConsignor%}
+<div>{{key}} {{value}}</div>
+{%endfor%}
 
 <div id="reportDiv" class="reportTable">
 
@@ -27,8 +31,6 @@ Name / Gross / Commission % / Amount due
 
 		<div class="clear"></div>
 	{%endfor%}
-
-
 
 </div>
 

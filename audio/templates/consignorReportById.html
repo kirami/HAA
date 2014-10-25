@@ -14,21 +14,27 @@ description / bidder/ win amount/ consign amount / haa amount
 	<div class="maxBidItem">Item number:</div>
 	<div class="maxBidItem">Bidder:</div>
 	<div class="maxBidItem">Total amount:</div>
-	<div class="maxBidItem">Percentage:</div>
-	<div class="maxBidItem">Consigned amount:</div>
-	<div class="maxBidItem">HAA amount:</div>
+	<div class="maxBidItem">Range amount:</div>
+	<div class="maxBidItem">Range Min:</div>
+	<div class="maxBidItem">Range Max:</div>
+	<div class="maxBidItem">Percent:</div>
+	<div class="maxBidItem">Range amount:</div>
+	
 
 	
 	<div class="clear"></div>
 	<br><br>
 	{%for item in data.consignedItems%} 
 		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
-			<div class="maxBidItem">{{item.label.name}} {{item.name}}</div>
+			<div class="maxBidItem">{{item.id}} {{item.label.name}} {{item.name}}</div>
 			<div class="maxBidItem">{{item.user_id}}</div>
 			<div class="maxBidItem">${{item.amount}}</div>
+			<div class="maxBidItem">${{item.inRange}}</div>
+			<div class="maxBidItem">${{item.minimum}}</div>
+			<div class="maxBidItem">${{item.maximum}}</div>
 			<div class="maxBidItem">{{item.percentage}}</div>
-			<div class="maxBidItem">${{item.consignedAmount|floatformat:2 }}</div>
-			<div class="maxBidItem">${{item.HAA_amount|floatformat:2 }}</div>
+			<div class="maxBidItem">{{item.rangeAmount|floatformat:2}}</div>
+			
 			<div class="clear"></div>
 		</div>
 
@@ -36,7 +42,7 @@ description / bidder/ win amount/ consign amount / haa amount
 	{%endfor%}
 
 	<hr>
-	<div>Total: ${{data.total|floatformat:2}}   ${{data.consignorTotal|floatformat:2}}   ${{data.haaTotal|floatformat:2}}</div>
+	<div>Total: ${{data.consignorTotal|floatformat:2}} </div>
 
 
 	<div>Unsold items:

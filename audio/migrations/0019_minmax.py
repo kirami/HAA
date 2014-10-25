@@ -25,6 +25,8 @@ class Migration(SchemaMigration):
             ('auction', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Auction'])),
             ('consignor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['audio.Consignor'])),
             ('percentage', self.gf('django.db.models.fields.DecimalField')(max_digits=19, decimal_places=2)),
+            ('minimum', self.gf('django.db.models.fields.DecimalField')(max_digits=19, decimal_places=2)),
+            ('maximum', self.gf('django.db.models.fields.DecimalField')(max_digits=19, decimal_places=2)),
         ))
         db.send_create_signal(u'audio', ['Consignment'])
 
@@ -84,6 +86,8 @@ class Migration(SchemaMigration):
             'consignor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Consignor']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['audio.Item']"}),
+            'maximum': ('django.db.models.fields.DecimalField', [], {'max_digits': '19', 'decimal_places': '2'}),
+            'minimum': ('django.db.models.fields.DecimalField', [], {'max_digits': '19', 'decimal_places': '2'}),
             'percentage': ('django.db.models.fields.DecimalField', [], {'max_digits': '19', 'decimal_places': '2'})
         },
         u'audio.consignor': {

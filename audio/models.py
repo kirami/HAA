@@ -118,6 +118,8 @@ class Consignment(models.Model):
 	auction = models.ForeignKey(Auction)
 	consignor = models.ForeignKey(Consignor)
 	percentage = models.DecimalField(max_digits=19, decimal_places=2)
+	minimum = models.DecimalField(max_digits=19, decimal_places=2)
+	maximum  = models.DecimalField(max_digits=19, decimal_places=2)
 
 	def __unicode__(self):
 		return self.item.name
