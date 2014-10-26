@@ -1,0 +1,26 @@
+{% extends "admin/audio/baseReport.html" %}
+ 
+
+{%block info%}
+
+
+<div id="reportDiv" class="reportTable">
+	<div class="maxBidItem">Item number:</div>
+	<div class="maxBidItem">Winner email:</div>
+	<div class="maxBidItem">Amount bid:</div>
+	<div class="clear"></div>
+	<br><br>
+	
+{%for maxBid in data.maxBids%}
+	<div class="maxBidItem">Item number: <span>{{maxBid.item_id}}</span></div>
+	<div class="maxBidItem">Winner email: <span>{{maxBid.user.email}}</span></div>
+	<div class="maxBidItem">Amount bid: <span>{{maxBid.amount}}</span></div>
+	<div class="clear"></div>
+{%endfor%}
+
+</div>
+
+
+
+
+{%endblock%}

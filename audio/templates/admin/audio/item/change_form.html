@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+
+
+{% load i18n admin_urls %}
+
+
+{% block after_related_objects %}
+<input type="hidden" name="test" value="1">
+{% endblock %}

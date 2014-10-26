@@ -1,0 +1,37 @@
+{% extends "admin/audio/baseReport.html" %}
+ 
+
+{%block info%}
+
+<h1>Consignor report for auction: {{auctionId}}</h1>{{ data.totalsByConsignor}}
+
+<div>Gross auction total:  ${{data.total}}</div>
+
+<div>Total gross of consigned items: ${{data.consignedTotal}}</div>
+<div>Gross consignor total:  ${{data.consignorTotal}}</div>
+<div>Gross HAA total:  ${{data.totalHAA}}</div>
+
+Name / Gross / Commission % / Amount due
+{%for key,value in data.totalsByConsignor%}
+<div>{{key}} {{value}}</div>
+{%endfor%}
+
+<div id="reportDiv" class="reportTable">
+
+	<div>Consignment info by item</div>	
+	{%for item in data.consignedItems%} 
+		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
+			<div class="maxBidItem">{{item.item_id}}</div>
+			<div class="maxBidItem">{{item.amount}}</div>
+			<div class="maxBidItem"><a href="/admin/consignorReport/{{item.consignor_id}}">{{item.consignor_id}}</a></div>
+			<div class="maxBidItem">{{item.percentage}}</div>
+			<div class="maxBidItem">{{item.consignedAmount}}</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+	{%endfor%}
+
+</div>
+
+{%endblock%}

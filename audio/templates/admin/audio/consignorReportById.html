@@ -1,0 +1,58 @@
+{% extends "admin/audio/baseReport.html" %}
+ 
+
+{%block info%}
+
+<h1>Consignor report for auction: {{auctionId}}</h1>
+
+
+description / bidder/ win amount/ consign amount / haa amount
+
+<div id="reportDiv" class="reportTable">
+
+	<div>Consignment info by item</div>	
+	<div class="maxBidItem">Item number:</div>
+	<div class="maxBidItem">Bidder:</div>
+	<div class="maxBidItem">Total amount:</div>
+	<div class="maxBidItem">Range amount:</div>
+	<div class="maxBidItem">Range Min:</div>
+	<div class="maxBidItem">Range Max:</div>
+	<div class="maxBidItem">Percent:</div>
+	<div class="maxBidItem">Range amount:</div>
+	
+
+	
+	<div class="clear"></div>
+	<br><br>
+	{%for item in data.consignedItems%} 
+		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
+			<div class="maxBidItem">{{item.id}} {{item.label.name}} {{item.name}}</div>
+			<div class="maxBidItem">{{item.user_id}}</div>
+			<div class="maxBidItem">${{item.amount}}</div>
+			<div class="maxBidItem">${{item.inRange}}</div>
+			<div class="maxBidItem">${{item.minimum}}</div>
+			<div class="maxBidItem">${{item.maximum}}</div>
+			<div class="maxBidItem">{{item.percentage}}</div>
+			<div class="maxBidItem">{{item.rangeAmount|floatformat:2}}</div>
+			
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+	{%endfor%}
+
+	<hr>
+	<div>Total: ${{data.consignorTotal|floatformat:2}} </div>
+
+
+	<div>Unsold items:
+
+	{%for unsoldItem in data.unsoldItems%}
+	<div>{{unsoldItem.id}} {{unsoldItem.label.name}} {{unsoldItem.name}}</div>
+	{%endfor%}
+
+	</div>
+
+</div>
+
+{%endblock%}
