@@ -88,12 +88,6 @@ def consignorReport(request):
 	haaTotal = 0
 	totalsByConsignor = {}
 
-	'''
-	get all won items 
-	for each item, get consignors, group by consignor id.
-	'''
-
-
 	for item in consignedItems:
 		amount = item["amount"] * (item["percentage"] / 100)
 		item["consignedAmount"] = amount
@@ -122,7 +116,7 @@ def consignorReport(request):
 
 	#Name / Gross / Commission % / Amount due
 	
-	return render_to_response('consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
+	return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
 
 
 
