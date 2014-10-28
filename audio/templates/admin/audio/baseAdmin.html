@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+ 
+
+{% block extrahead %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="{{ STATIC_URL }}audio/js/main.js" type="text/javascript"></script>
+
+
+{% endblock %}
+
+{% block content %}
+<div>To end the current auction, <strong>Auction {{auctionNumber}}</strong>, click here  <a onclick="endAuction()">END AUCTION</a>  </div>
+
+
+<div id="dialog-confirm" title="Empty the recycle bin?" style="display:none;">
+<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+</div>
+
+
+{%endblock%}
+

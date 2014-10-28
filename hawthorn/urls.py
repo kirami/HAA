@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^admin/losers/$', admin_views.losers, name='losers'),
     url(r'^admin/wonItems/$', admin_views.wonItems, name='wonItems'),
     url(r'^admin/unsoldItems/$', admin_views.unsoldItems, name='unsoldItems'), 
+    url(r'^admin/bulkConsignment/$', admin_views.bulkConsignment, name='bulkConsignment'),
     url(r'^admin/balances/(?P<userId>\d+)', admin_views.userBalanceInfo, name='userBalanceInfo'),     
     url(r'^admin/balances/$', admin_views.calculateBalances, name='calculateBalances'),
 

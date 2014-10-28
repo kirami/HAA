@@ -26,7 +26,6 @@ urlpatterns = patterns('',
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
 
-    url(r'^auction/endAuction', admin_views.endAuction, name='endAuction'),   
 )
 
 

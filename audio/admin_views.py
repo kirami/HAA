@@ -24,8 +24,7 @@ import json
 logger = logging.getLogger(__name__)
 
 def test(request):
-	return render_to_response('endAuction.html', {"form":""}, context_instance=RequestContext(request))
-
+	return "test"
 
 def consignorReportById(request, consignorId):
 	data = {}
@@ -76,7 +75,7 @@ def consignorReportById(request, consignorId):
 	data["consignorTotal"] = total
 	data["unsoldItems"] = notWon
 
-	return render_to_response('consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
 
 
 def consignorReport(request):
@@ -128,7 +127,7 @@ def userBalanceInfo(request, userId):
 	data["payments"] = getPaymentInfoByUser(userId)
 	data["remaining"] = invoices["sum"] - data["payments"]["sum"]
 	data["user"] = User.objects.get(id=userId)
-	return render_to_response('userBalance.html', {"data":data}, context_instance=RequestContext(request))	
+	return render_to_response('admin/audio/userBalance.html', {"data":data}, context_instance=RequestContext(request))	
 
 
 def calculateBalances(request):
@@ -145,16 +144,14 @@ def calculateBalances(request):
 
 	#per user
 	data["unbalancedUsers"] = getUnbalancedUsers()
-	return render_to_response('balances.html', {"data":data}, context_instance=RequestContext(request))	
+	return render_to_response('admin/audio/balances.html', {"data":data}, context_instance=RequestContext(request))	
 
 def reportByUser(request):
 	data = {}
 	data["winningBids"] = getWinBidsByUser(1)
-	return render_to_response('winners.html', {"data":data}, context_instance=RequestContext(request))	
+	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))	
 
-def endAuction(request):
-	#TODO only super admins can do this
-	return HttpResponse({"test":"success"}, content_type="application/json")
+
 
 def markWinners(request):
 	#TODO - is this after invoice run?  are you sure?
@@ -190,22 +187,27 @@ def markWinners(request):
 def winners(request):
 	data = {}
 	data["winningBids"] = getAlphaWinners()
-	return render_to_response('winners.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))
 
 def losers(request):
 	data = {}
 	data["losingBids"] = getLosers()
-	return render_to_response('losers.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/losers.html', {"data":data}, context_instance=RequestContext(request))
 
 def wonItems(request):
 	data = {}
 	data["soldItems"] = getWinners()
-	return render_to_response('wonItems.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/wonItems.html', {"data":data}, context_instance=RequestContext(request))
 
 def unsoldItems(request):
 	data = {}
 	data["unsoldItems"] = getNoBidItems()
-	return render_to_response('unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
+
+def bulkConsignment(request):
+	data = {}
+	return render_to_response('admin/audio/bulkConsignment.html', {"data":data}, context_instance=RequestContext(request))
+
 
 def runReport(request):
  	data = {}
@@ -233,6 +235,6 @@ def runReport(request):
  	data["noBidItems"] = len(noBids)
  	data["total"] = getSumWinners()
 
-	return render_to_response('report.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/report.html', {"data":data}, context_instance=RequestContext(request))
 
 #view for marking entire bidder paid, not just per item
