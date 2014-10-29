@@ -84,8 +84,8 @@ def getAllConsignments():
 def getConsignorBidSums():
 	cursor = connection.cursor()
 	auctionId = 1
-	cursor.execute("select consignor_id, sum(b.amount) from audio_bid b, audio_consignment c where "+
-		"b.winner = true and b.item_id = c.item_id and b.auction_id = "+ str(auctionId)+" group by consignor_id;") 
+	cursor.execute("select consignor_id, cc.first_name, cc.last_name, sum(b.amount) from audio_bid b, audio_consignment c, audio_consignor cc where "+
+		"b.winner = true and b.item_id = c.item_id and cc.id = c.consignor_id and b.auction_id = "+ str(auctionId)+" group by consignor_id;") 
 	row = dictfetchall(cursor)
 	return row
 
@@ -186,3 +186,56 @@ def dictfetchall(cursor):
         dict(zip([col[0] for col in desc], row))
         for row in cursor.fetchall()
     ]
+
+def getAllConsignmentInfo(consignorId):
+	data = {}
+	#get all consigned won items with 
+	#get all consigned lost items
+	#description / bidder/ win amount/ consign amount / haa amount
+
+	'''
+	get all won items 
+	for each item, get consignors, group by consignor id.
+	'''
+
+	notWon = getConsignedLosersById(consignorId)
+	consignedItems = getConsignmentWinnersById(consignorId)
+	
+	consignTotal = 0
+	haaTotal = 0
+	total = 0
+	gross = 0
+
+	for item in consignedItems:
+		money = 0
+		itemCost = item["amount"]
+		min = item["minimum"]
+		max = item["maximum"]
+		percent = item["percentage"]
+		item["inRange"] = 0
+		
+		if max == None and itemCost >= min:
+			money = (itemCost - min) * (percent/100)
+			item["inRange"] = (itemCost - min)
+
+		if itemCost >= max:
+			money = (max - min) * (percent/100)
+			item["inRange"] = (max - min)
+		if itemCost <= max and itemCost >= min:
+			money = (itemCost - min) * (percent/100)
+			item["inRange"] = (itemCost - min)
+
+		if "consignorItemTotal" in item:
+			item["consignorItemTotal"] += money
+		else:
+			item["consignorItemTotal"] = money;
+
+		item["rangeAmount"] = money
+		total += money
+		gross += itemCost
+
+	data["consignedItems"] = consignedItems
+	data["consignorTotal"] = total
+	data["unsoldItems"] = notWon
+	data["gross"] = gross
+	return data

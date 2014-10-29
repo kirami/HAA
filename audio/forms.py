@@ -25,41 +25,36 @@ class BidSubmitForm(ModelForm):
 		#fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]
 
 
-class BulkConsignmentForm():
-	percentage = DecimalField(max_digits=19, decimal_places=2)
-	minimum = DecimalField(max_digits=19, decimal_places=2)
-	maximum  = DecimalField(max_digits=19, decimal_places=2, required = False) 
-
 class BulkConsignment(Form):
     choice = [(xt.id, xt.name) for xt in getNoBidItems(True) ]
-    consignors = ModelChoiceField(Consignor.objects.all())
+    consignor = ModelChoiceField(Consignor.objects.all())
     bcItemsAvailable = MultipleChoiceField(choices=choice)	
     bcItemsSelected = MultipleChoiceField()
-    
-    data = {"percentage":25,"minimum":0,"maximum":10.00}
-    range1 = BulkConsignmentForm()
-
-    data = {"percentage":35,"minimum":10.01,"maximum":20}
-    range2 = BulkConsignmentForm()
-
-    data = {"percentage":45,"minimum":20.01,"maximum":None}
-    range3 = BulkConsignmentForm()
-
+     
 
     def save(self):
     	#todo get auction id
     	auctionId = 1
-    	#logger.error(self.data)
-    	percentage = self.data["percentage"]
-    	
-    	logger.error("perc: "+percentage.encode('utf-8'))
-    	min = self.data["minimum"]
-    	max = self.data["maximum"]
-    	
+    	consignor = self.data["consignor"]
+    	total = int(self.data["totalConsignments"])
+    	index = 1
 
     	for selected in self.data["bcItemsSelected"]:
-    		item = Item.objects.get(id=selected)
-    		Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+    		while index<=total:
+	    		min = self.data["min" + str(index)]
+	    		max = self.data["max" + str(index)]
+    	
+	    		if index == 1:
+	    			min = 0
+	    		
+	    		if index == 3:
+	    			max = None
+
+	    		percent = self.data["percent"+ str(index)]
+	    		
+	    		item = Item.objects.get(id=selected)
+	    		Consignment.objects.create(item = item, auction_id = auctionId, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
+	    		index = index + 1
 
     def clean_bcItemsSelected(self):
     	logger.error("cleaning selected")

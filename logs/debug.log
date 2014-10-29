@@ -5987,3 +5987,697 @@ Traceback (most recent call last):
   File "/srv/hawthorn/audio/forms.py", line 40, in BulkConsignment
     range1 = BulkConsignmentForm(data)
 TypeError: this constructor takes no arguments
+[29/Oct/2014 02:05:42] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:05:42] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:05:42] ERROR [audio.forms:65] cleaning selected
+[29/Oct/2014 02:05:42] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:05:42] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 53, in save
+    percentage = self.data["percentage1"]
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'percentage1'"
+[29/Oct/2014 02:06:31] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:06:31] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:06:31] ERROR [audio.forms:65] cleaning selected
+[29/Oct/2014 02:06:31] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:06:31] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 53, in save
+    percentage = self.data["percentage1"]
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'percentage1'"
+[29/Oct/2014 02:07:14] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:07:14] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:07:14] ERROR [audio.forms:65] cleaning selected
+[29/Oct/2014 02:07:14] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:07:14] ERROR [audio.forms:55] perc: 25
+[29/Oct/2014 02:07:14] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 62, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 157, in create
+    return self.get_queryset().create(**kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 319, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 545, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 573, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 654, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 687, in _do_insert
+    using=using, raw=raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 232, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 1511, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 898, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 69, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 53, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 129, in execute
+    six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/cursors.py", line 174, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1048, "Column 'consignor_id' cannot be null")
+[29/Oct/2014 02:08:19] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:08:19] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:08:19] ERROR [audio.forms:66] cleaning selected
+[29/Oct/2014 02:08:19] ERROR [audio.admin_views:222] <ul class="errorlist"><li>consignor<ul class="errorlist"><li>This field is required.</li></ul></li></ul>
+[29/Oct/2014 02:09:26] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:09:26] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:09:26] ERROR [audio.forms:66] cleaning selected
+[29/Oct/2014 02:09:26] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:09:26] ERROR [audio.forms:55] perc: 25
+[29/Oct/2014 02:09:26] WARNING [django.request:143] Not Found: /admin/profile/
+[29/Oct/2014 02:10:40] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:10:40] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:10:40] ERROR [audio.forms:66] cleaning selected
+[29/Oct/2014 02:10:40] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:10:40] ERROR [audio.forms:55] perc: 25
+[29/Oct/2014 02:10:40] WARNING [django.request:143] Not Found: /admin/profile/
+[29/Oct/2014 02:12:05] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:12:05] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:12:05] ERROR [audio.forms:67] cleaning selected
+[29/Oct/2014 02:12:05] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:12:05] ERROR [audio.forms:55] perc: 25
+[29/Oct/2014 02:12:05] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 57, in save
+    logger.error("max " + max)
+UnboundLocalError: local variable 'max' referenced before assignment
+[29/Oct/2014 02:12:35] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:12:35] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:12:35] ERROR [audio.forms:68] cleaning selected
+[29/Oct/2014 02:12:35] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:12:35] ERROR [audio.forms:55] perc: 25
+[29/Oct/2014 02:12:35] ERROR [audio.forms:59] max 10.00
+[29/Oct/2014 02:12:35] WARNING [django.request:143] Not Found: /admin/profile/
+[29/Oct/2014 02:15:37] ERROR [django.request:224] Internal Server Error: /admin/audio/consignment/3/delete/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 40
+    min1 = DecimalField(max_digits=19, decimal_places=2)
+    ^
+IndentationError: unexpected indent
+[29/Oct/2014 02:16:40] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:16:40] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:16:40] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:16:40] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:16:40] ERROR [audio.forms:59] perc: 25
+[29/Oct/2014 02:16:40] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 62, in save
+    max = Decimal(self.data["max1"])
+NameError: global name 'Decimal' is not defined
+[29/Oct/2014 02:17:33] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:17:33] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:17:33] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:17:33] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:17:33] ERROR [audio.forms:59] perc: 25
+[29/Oct/2014 02:17:33] ERROR [audio.forms:63] max 15.00
+[29/Oct/2014 02:17:33] WARNING [django.request:143] Not Found: /admin/profile/
+[29/Oct/2014 02:19:17] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:19:17] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:19:17] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:19:17] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:19:17] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 59, in save
+    logger.error("perc: "+ percentage)
+TypeError: cannot concatenate 'str' and 'Decimal' objects
+[29/Oct/2014 02:19:58] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:19:58] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:19:58] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:19:58] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:19:58] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 69, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0], consignor_id = consignor)
+TypeError: 'Decimal' object does not support indexing
+[29/Oct/2014 02:20:56] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:20:56] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:20:56] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:20:56] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:20:56] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 69, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
+NameError: global name 'percent' is not defined
+[29/Oct/2014 02:22:06] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:22:06] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:22:06] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:22:06] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:22:06] WARNING [django.request:143] Not Found: /admin/profile/
+[29/Oct/2014 02:22:47] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:22:47] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:22:47] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:22:47] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:22:48] WARNING [django.request:143] Not Found: /admin/profile/
+[29/Oct/2014 02:25:08] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:25:08] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:25:08] ERROR [audio.forms:72] cleaning selected
+[29/Oct/2014 02:25:08] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:26:46] WARNING [django.request:143] Not Found: /admin/bulkConsignments/
+[29/Oct/2014 02:26:55] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:26:55] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:26:55] ERROR [audio.forms:56] cleaning selected
+[29/Oct/2014 02:26:55] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 213, in bulkConsignment
+    if form.is_valid():
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 129, in is_valid
+    return self.is_bound and not bool(self.errors)
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 121, in errors
+    self.full_clean()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 274, in full_clean
+    self._clean_form()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 300, in _clean_form
+    self.cleaned_data = self.clean()
+  File "/srv/hawthorn/audio/forms.py", line 65, in clean
+    self.clean_bcItemsSelected()
+  File "/srv/hawthorn/audio/forms.py", line 57, in clean_bcItemsSelected
+    data = self.data['bcItemsSelected']
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'bcItemsSelected'"
+[29/Oct/2014 02:27:07] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:27:07] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:27:07] ERROR [audio.forms:56] cleaning selected
+[29/Oct/2014 02:27:07] ERROR [audio.admin_views:222] <ul class="errorlist"><li>min2<ul class="errorlist"><li>This field is required.</li></ul></li><li>percent2<ul class="errorlist"><li>This field is required.</li></ul></li></ul>
+[29/Oct/2014 02:28:16] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:28:16] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:28:16] ERROR [audio.forms:56] cleaning selected
+[29/Oct/2014 02:28:16] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:28:16] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 41, in save
+    percent = self.cleaned_data["percent2"]
+KeyError: 'percent2'
+[29/Oct/2014 02:29:05] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:29:05] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:29:05] ERROR [audio.forms:56] cleaning selected
+[29/Oct/2014 02:29:05] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:29:05] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 41, in save
+    percent = self.cleaned_data["percent2"]
+KeyError: 'percent2'
+[29/Oct/2014 02:29:57] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:29:57] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:29:57] ERROR [audio.forms:56] cleaning selected
+[29/Oct/2014 02:29:57] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:35:27] WARNING [django.request:143] Not Found: /admin/bulkConsignments/
+[29/Oct/2014 02:35:59] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:35:59] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:35:59] ERROR [audio.forms:56] cleaning selected
+[29/Oct/2014 02:35:59] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:36:47] ERROR [django.request:224] Internal Server Error: /admin/audio/consignment/11/delete/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 50
+    index++
+          ^
+SyntaxError: invalid syntax
+[29/Oct/2014 02:38:54] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:38:54] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:38:54] ERROR [audio.forms:53] cleaning selected
+[29/Oct/2014 02:38:54] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:38:54] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 44, in save
+    percent = self.data["percent2"+ str(index)]
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'percent21'"
+[29/Oct/2014 02:39:16] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:39:16] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:39:16] ERROR [audio.forms:53] cleaning selected
+[29/Oct/2014 02:39:16] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:41:57] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:41:57] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:41:57] ERROR [audio.forms:60] cleaning selected
+[29/Oct/2014 02:41:57] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:41:57] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 56, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 157, in create
+    return self.get_queryset().create(**kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 319, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 545, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 573, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 654, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 687, in _do_insert
+    using=using, raw=raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 232, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 1511, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 898, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 69, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 53, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 129, in execute
+    six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/cursors.py", line 174, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1048, "Column 'maximum' cannot be null")
+[29/Oct/2014 02:43:23] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:43:23] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:43:23] ERROR [audio.forms:60] cleaning selected
+[29/Oct/2014 02:43:23] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:43:23] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 56, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 157, in create
+    return self.get_queryset().create(**kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 319, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 545, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 573, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 654, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 687, in _do_insert
+    using=using, raw=raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 232, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 1511, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 898, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 69, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 53, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 129, in execute
+    six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/cursors.py", line 174, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1048, "Column 'maximum' cannot be null")
+[29/Oct/2014 02:43:46] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:43:46] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:43:46] ERROR [audio.forms:60] cleaning selected
+[29/Oct/2014 02:43:46] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:43:47] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 56, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 157, in create
+    return self.get_queryset().create(**kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 319, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 545, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 573, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 654, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 687, in _do_insert
+    using=using, raw=raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 232, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 1511, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 898, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 69, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 53, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 129, in execute
+    six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/cursors.py", line 174, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1048, "Column 'maximum' cannot be null")
+[29/Oct/2014 02:44:46] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:44:46] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:44:46] ERROR [audio.forms:60] cleaning selected
+[29/Oct/2014 02:44:46] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:45:27] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 02:45:27] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 02:45:27] ERROR [audio.forms:60] cleaning selected
+[29/Oct/2014 02:45:27] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 02:59:36] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 41, in consignorReport
+    data[consignor[id]] = consignorReportById(consignor[id])
+KeyError: <built-in function id>
+[29/Oct/2014 03:01:34] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:01:34] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 42, in consignorReport
+    data[consignor["onsignor_id"]] = consignorReportById(consignor["onsignor_id"])
+KeyError: 'onsignor_id'
+[29/Oct/2014 03:01:49] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:01:49] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 42, in consignorReport
+    data[consignor["consignor_id"]] = consignorReportById(consignor["consignor_id"])
+TypeError: consignorReportById() takes exactly 2 arguments (1 given)
+[29/Oct/2014 03:02:33] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:06:07] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:06:31] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:07:21] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:07:35] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:09:18] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:09:44] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:10:13] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:11:41] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:12:23] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:12:23] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 46, in consignorReport
+    return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))
+  File "/usr/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 29, in render_to_response
+    return HttpResponse(loader.render_to_string(*args, **kwargs), **httpresponse_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 162, in render_to_string
+    t = get_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 138, in get_template
+    template, origin = find_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 127, in find_template
+    source, display_name = loader(name, dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 43, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 49, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 149, in get_template_from_string
+    return Template(source, origin, name)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 215, in do_extends
+    nodelist = parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 190, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 254, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 360, in compile_filter
+    return FilterExpression(token, self)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 577, in __init__
+    "from '%s'" % (token[upto:], token))
+TemplateSyntaxError: Could not parse the remainder: '["1"]' from 'data["1"]'
+[29/Oct/2014 03:13:48] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:13:48] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 46, in consignorReport
+    return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))
+  File "/usr/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 29, in render_to_response
+    return HttpResponse(loader.render_to_string(*args, **kwargs), **httpresponse_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 162, in render_to_string
+    t = get_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 138, in get_template
+    template, origin = find_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 127, in find_template
+    source, display_name = loader(name, dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 43, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 49, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 149, in get_template_from_string
+    return Template(source, origin, name)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 215, in do_extends
+    nodelist = parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 190, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 254, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 360, in compile_filter
+    return FilterExpression(token, self)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 577, in __init__
+    "from '%s'" % (token[upto:], token))
+TemplateSyntaxError: Could not parse the remainder: '[1]' from 'data[1]'
+[29/Oct/2014 03:18:09] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:18:09] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 46, in consignorReport
+    return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))
+  File "/usr/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 29, in render_to_response
+    return HttpResponse(loader.render_to_string(*args, **kwargs), **httpresponse_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 162, in render_to_string
+    t = get_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 138, in get_template
+    template, origin = find_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 127, in find_template
+    source, display_name = loader(name, dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 43, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 49, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 149, in get_template_from_string
+    return Template(source, origin, name)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 215, in do_extends
+    nodelist = parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 190, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 254, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 360, in compile_filter
+    return FilterExpression(token, self)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 577, in __init__
+    "from '%s'" % (token[upto:], token))
+TemplateSyntaxError: Could not parse the remainder: '[1]' from 'data[1]'
+[29/Oct/2014 03:18:22] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:18:53] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:18:53] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 46, in consignorReport
+    return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))
+  File "/usr/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 29, in render_to_response
+    return HttpResponse(loader.render_to_string(*args, **kwargs), **httpresponse_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 162, in render_to_string
+    t = get_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 138, in get_template
+    template, origin = find_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 127, in find_template
+    source, display_name = loader(name, dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 43, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 49, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 149, in get_template_from_string
+    return Template(source, origin, name)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 215, in do_extends
+    nodelist = parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 190, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 276, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 331, in invalid_block_tag
+    (command, get_text_list(["'%s'" % p for p in parse_until])))
+TemplateSyntaxError: Invalid block tag: 'endfor', expected 'endblock'
+[29/Oct/2014 03:19:07] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:28:27] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:30:34] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:32:24] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[29/Oct/2014 03:32:24] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 46, in consignorReport
+    return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))
+  File "/usr/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 29, in render_to_response
+    return HttpResponse(loader.render_to_string(*args, **kwargs), **httpresponse_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 162, in render_to_string
+    t = get_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 138, in get_template
+    template, origin = find_template(template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 127, in find_template
+    source, display_name = loader(name, dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 43, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 49, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader.py", line 149, in get_template_from_string
+    return Template(source, origin, name)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 215, in do_extends
+    nodelist = parser.parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 190, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 806, in do_for
+    nodelist_loop = parser.parse(('empty', 'endfor',))
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 278, in parse
+    compiled_result = compile_func(self, token)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 941, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 874, in __init__
+    super(TemplateIfParser, self).__init__(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/template/smartif.py", line 163, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "/usr/lib/python2.7/dist-packages/django/template/smartif.py", line 174, in translate_token
+    return self.create_var(token)
+  File "/usr/lib/python2.7/dist-packages/django/template/defaulttags.py", line 877, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 360, in compile_filter
+    return FilterExpression(token, self)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 577, in __init__
+    "from '%s'" % (token[upto:], token))
+TemplateSyntaxError: Could not parse the remainder: '!="total"' from 'key!="total"'
+[29/Oct/2014 03:32:47] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
