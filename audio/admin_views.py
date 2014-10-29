@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
-from audio.forms import ContactForm, BidSubmitForm
+from audio.forms import ContactForm, BidSubmitForm, BulkConsignment
 
 from audio.models import Address, Item, Bid, Invoice, Payment
 from audio.utils import *
@@ -205,8 +205,27 @@ def unsoldItems(request):
 	return render_to_response('admin/audio/unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
 
 def bulkConsignment(request):
-	data = {}
-	return render_to_response('admin/audio/bulkConsignment.html', {"data":data}, context_instance=RequestContext(request))
+	
+	if request.method == 'POST':
+		logger.error("in post")
+		form = BulkConsignment(request.POST)
+		logger.error("form made")
+		if form.is_valid():
+			logger.error("form is valid")
+			new_user = form.save()
+			return HttpResponseRedirect("../profile")
+		else:
+			'''
+			for field in form.errors.keys():
+				print "ValidationError: %s[%s] <- \"%s\" %s" % (type(form),field,form.data[field],form.errors[field].as_text() )  
+			'''
+			logger.error(form.errors)
+			return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
+
+	else:
+		form = BulkConsignment()
+
+	return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
 
 
 def runReport(request):

@@ -5223,3 +5223,767 @@ Traceback (most recent call last):
   File "/srv/hawthorn/hawthorn/urls.py", line 16, in <module>
     url(r'^admin/bookstore/report/$', views.contact_info, name='contact_info'),
 NameError: name 'views' is not defined
+[28/Oct/2014 22:29:46] ERROR [audio.admin_views:208] method: POST
+[28/Oct/2014 22:29:46] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:30:59] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:30:59] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:30:59] ERROR [audio.admin_views:218] error in form
+[28/Oct/2014 22:31:32] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:31:32] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:31:32] ERROR [audio.admin_views:218] error in form
+[28/Oct/2014 22:35:21] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:35:21] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:35:21] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 218, in bulkConsignment
+    for field in self.errors.keys():
+NameError: global name 'self' is not defined
+[28/Oct/2014 22:35:51] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:35:51] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:35:51] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 219, in bulkConsignment
+    print "ValidationError: %s[%s] <- \"%s\" %s" % (type(self),field,self.data[field],self.errors[field].as_text() )
+NameError: global name 'self' is not defined
+[28/Oct/2014 22:36:26] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:36:26] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:36:26] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 219, in bulkConsignment
+    print "ValidationError: %s[%s] <- \"%s\" %s" % (type(form),field,form.data[field],form.errors[field].as_text() )
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'bcItemsAvailable'"
+[28/Oct/2014 22:41:18] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:41:18] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:41:18] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 219, in bulkConsignment
+    print "ValidationError: %s[%s] <- \"%s\" %s" % (type(form),field,form.data[field],form.errors[field].as_text() )
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'bcItemsAvailable'"
+[28/Oct/2014 22:43:30] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:43:30] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:43:30] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:46:33] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:46:33] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:46:33] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:49:14] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:49:14] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:49:14] ERROR [audio.forms:49] in clean
+[28/Oct/2014 22:49:14] ERROR [audio.forms:51] after super
+[28/Oct/2014 22:49:14] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:50:42] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:50:42] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:50:42] ERROR [audio.forms:49] in clean
+[28/Oct/2014 22:50:42] ERROR [audio.forms:51] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:50:42] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:55:03] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 50
+    return data
+    ^
+IndentationError: unexpected indent
+[28/Oct/2014 22:55:42] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 48
+    def clean_bcItemsAvailable(self):
+    ^
+IndentationError: unexpected indent
+[28/Oct/2014 22:57:06] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 48
+    def clean_bcItemsAvailable(self):
+    ^
+IndentationError: unexpected indent
+[28/Oct/2014 22:57:53] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:57:53] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:57:53] ERROR [audio.forms:53] in clean
+[28/Oct/2014 22:57:53] ERROR [audio.forms:55] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:57:53] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:58:39] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 22:58:39] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 22:58:39] ERROR [audio.forms:53] in clean
+[28/Oct/2014 22:58:39] ERROR [audio.forms:55] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 22:58:39] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:02:20] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:02:20] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:02:20] ERROR [audio.forms:53] in clean
+[28/Oct/2014 23:02:20] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 213, in bulkConsignment
+    if form.is_valid():
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 129, in is_valid
+    return self.is_bound and not bool(self.errors)
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 121, in errors
+    self.full_clean()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 274, in full_clean
+    self._clean_form()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 300, in _clean_form
+    self.cleaned_data = self.clean()
+  File "/srv/hawthorn/audio/forms.py", line 54, in clean
+    form.data["bcItemsAvailable"] = None
+NameError: global name 'form' is not defined
+[28/Oct/2014 23:02:45] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:02:45] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:02:45] ERROR [audio.forms:53] in clean
+[28/Oct/2014 23:02:45] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 213, in bulkConsignment
+    if form.is_valid():
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 129, in is_valid
+    return self.is_bound and not bool(self.errors)
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 121, in errors
+    self.full_clean()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 274, in full_clean
+    self._clean_form()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 300, in _clean_form
+    self.cleaned_data = self.clean()
+  File "/srv/hawthorn/audio/forms.py", line 54, in clean
+    self.data["bcItemsAvailable"] = None
+  File "/usr/lib/python2.7/dist-packages/django/http/request.py", line 318, in __setitem__
+    self._assert_mutable()
+  File "/usr/lib/python2.7/dist-packages/django/http/request.py", line 315, in _assert_mutable
+    raise AttributeError("This QueryDict instance is immutable")
+AttributeError: This QueryDict instance is immutable
+[28/Oct/2014 23:03:28] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:03:28] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:03:28] ERROR [audio.forms:54] in clean
+[28/Oct/2014 23:03:28] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 213, in bulkConsignment
+    if form.is_valid():
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 129, in is_valid
+    return self.is_bound and not bool(self.errors)
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 121, in errors
+    self.full_clean()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 274, in full_clean
+    self._clean_form()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 300, in _clean_form
+    self.cleaned_data = self.clean()
+  File "/srv/hawthorn/audio/forms.py", line 55, in clean
+    self.data["bcItemsAvailable"] = None
+  File "/usr/lib/python2.7/dist-packages/django/http/request.py", line 318, in __setitem__
+    self._assert_mutable()
+  File "/usr/lib/python2.7/dist-packages/django/http/request.py", line 315, in _assert_mutable
+    raise AttributeError("This QueryDict instance is immutable")
+AttributeError: This QueryDict instance is immutable
+[28/Oct/2014 23:03:49] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:03:49] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:03:49] ERROR [audio.forms:54] in clean
+[28/Oct/2014 23:03:49] ERROR [audio.forms:56] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:03:49] ERROR [audio.forms:58] bc in errors
+[28/Oct/2014 23:03:49] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:04:51] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 53
+    self.cleaned_data['bcItemsAvailable'] = None
+    ^
+IndentationError: unexpected indent
+[28/Oct/2014 23:05:08] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 52
+    self.cleaned_data['bcItemsAvailable'] = None
+    ^
+IndentationError: unexpected indent
+[28/Oct/2014 23:05:51] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:05:51] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:05:51] ERROR [audio.forms:51] in clean
+[28/Oct/2014 23:05:51] ERROR [audio.forms:54] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:05:51] ERROR [audio.forms:56] bc in errors
+[28/Oct/2014 23:05:51] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:06:55] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:06:55] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:06:55] ERROR [audio.forms:51] in clean
+[28/Oct/2014 23:06:55] ERROR [audio.forms:54] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:06:55] ERROR [audio.forms:56] bc in errors
+[28/Oct/2014 23:06:55] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:07:33] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:07:33] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:07:33] ERROR [audio.forms:51] in clean
+[28/Oct/2014 23:07:33] ERROR [audio.forms:54] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:07:33] ERROR [audio.forms:56] bc in errors
+[28/Oct/2014 23:07:33] ERROR [audio.forms:61] not in errors anymore
+[28/Oct/2014 23:07:33] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:08:07] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:08:07] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:08:07] ERROR [audio.forms:51] in clean
+[28/Oct/2014 23:08:07] ERROR [audio.forms:54] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:08:07] ERROR [audio.forms:56] bc in errors
+[28/Oct/2014 23:08:07] ERROR [audio.forms:57] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:08:07] ERROR [audio.forms:63] not in errors anymore
+[28/Oct/2014 23:08:07] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:09:43] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:09:43] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:09:43] ERROR [audio.forms:51] in clean
+[28/Oct/2014 23:09:43] ERROR [audio.forms:54] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:09:43] ERROR [audio.forms:56] bc in errors
+[28/Oct/2014 23:09:43] ERROR [audio.forms:57] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:09:43] ERROR [audio.forms:63] not in errors anymore
+[28/Oct/2014 23:09:43] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:12:29] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:12:29] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:12:29] ERROR [audio.forms:52] in clean
+[28/Oct/2014 23:12:29] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:13:06] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:13:06] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:13:06] ERROR [audio.forms:53] in clean
+[28/Oct/2014 23:13:06] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 4 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:16:08] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:16:08] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:16:08] ERROR [audio.forms:53] in clean
+[28/Oct/2014 23:16:08] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:17:00] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:17:00] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:17:00] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsAvailable<ul class="errorlist"><li>This field is required.</li></ul></li><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:18:06] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:18:06] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:18:06] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:18:06] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:21:35] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:21:35] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:21:35] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:21:35] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:21:58] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:21:58] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:21:58] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:21:58] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:22:40] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:22:40] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:22:40] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:22:40] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:26:54] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:26:54] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:26:54] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:26:54] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 213, in bulkConsignment
+    if form.is_valid():
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 129, in is_valid
+    return self.is_bound and not bool(self.errors)
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 121, in errors
+    self.full_clean()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 274, in full_clean
+    self._clean_form()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 300, in _clean_form
+    self.cleaned_data = self.clean()
+  File "/srv/hawthorn/audio/forms.py", line 56, in clean
+    clean_bcItemsSelected(self)
+NameError: global name 'clean_bcItemsSelected' is not defined
+[28/Oct/2014 23:27:17] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:27:17] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:27:17] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:27:17] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 213, in bulkConsignment
+    if form.is_valid():
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 129, in is_valid
+    return self.is_bound and not bool(self.errors)
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 121, in errors
+    self.full_clean()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 274, in full_clean
+    self._clean_form()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 300, in _clean_form
+    self.cleaned_data = self.clean()
+  File "/srv/hawthorn/audio/forms.py", line 56, in clean
+    self.clean_bcItemsSelected(self)
+TypeError: clean_bcItemsSelected() takes exactly 1 argument (2 given)
+[28/Oct/2014 23:27:36] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:27:36] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:27:36] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:27:36] ERROR [audio.forms:49] cleaning selected
+[28/Oct/2014 23:27:36] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 213, in bulkConsignment
+    if form.is_valid():
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 129, in is_valid
+    return self.is_bound and not bool(self.errors)
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 121, in errors
+    self.full_clean()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 274, in full_clean
+    self._clean_form()
+  File "/usr/lib/python2.7/dist-packages/django/forms/forms.py", line 300, in _clean_form
+    self.cleaned_data = self.clean()
+  File "/srv/hawthorn/audio/forms.py", line 56, in clean
+    self.clean_bcItemsSelected()
+  File "/srv/hawthorn/audio/forms.py", line 50, in clean_bcItemsSelected
+    data = self.cleaned_data['bcItemsSelected']
+KeyError: 'bcItemsSelected'
+[28/Oct/2014 23:28:39] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:28:39] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:28:39] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:28:39] ERROR [audio.forms:49] cleaning selected
+[28/Oct/2014 23:28:39] ERROR [audio.forms:51] 6
+[28/Oct/2014 23:28:39] ERROR [audio.admin_views:222] <ul class="errorlist"><li>bcItemsSelected<ul class="errorlist"><li>Select a valid choice. 6 is not one of the available choices.</li></ul></li></ul>
+[28/Oct/2014 23:29:34] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:29:34] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:29:34] ERROR [audio.forms:55] in clean
+[28/Oct/2014 23:29:34] ERROR [audio.forms:49] cleaning selected
+[28/Oct/2014 23:29:34] ERROR [audio.forms:51] 6
+[28/Oct/2014 23:29:34] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:29:34] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+AttributeError: 'BulkConsignment' object has no attribute 'save'
+[28/Oct/2014 23:30:22] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:30:22] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:30:22] ERROR [audio.forms:59] in clean
+[28/Oct/2014 23:30:22] ERROR [audio.forms:53] cleaning selected
+[28/Oct/2014 23:30:22] ERROR [audio.forms:55] 6
+[28/Oct/2014 23:30:22] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:30:22] ERROR [audio.forms:50] save
+[28/Oct/2014 23:30:22] WARNING [django.request:143] Not Found: /admin/profile/
+[28/Oct/2014 23:33:56] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:33:56] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:33:56] ERROR [audio.forms:63] in clean
+[28/Oct/2014 23:33:56] ERROR [audio.forms:54] cleaning selected
+[28/Oct/2014 23:33:56] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:33:56] WARNING [django.request:143] Not Found: /admin/profile/
+[28/Oct/2014 23:36:26] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:36:26] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:36:26] ERROR [audio.forms:55] cleaning selected
+[28/Oct/2014 23:36:26] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:36:26] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 52, in save
+    consignment = Consignment.objects.create(item = item)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 157, in create
+    return self.get_queryset().create(**kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 319, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 545, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 573, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 654, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 687, in _do_insert
+    using=using, raw=raw)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 232, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 1511, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 898, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 69, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 53, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 129, in execute
+    six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/cursors.py", line 174, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1048, "Column 'auction_id' cannot be null")
+[28/Oct/2014 23:39:10] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:39:10] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:39:10] ERROR [audio.forms:61] cleaning selected
+[28/Oct/2014 23:39:10] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:39:10] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 52, in save
+    newRange1 = self.cleaned_data["range1"]
+KeyError: 'range1'
+[28/Oct/2014 23:39:50] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:39:50] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:39:50] ERROR [audio.forms:61] cleaning selected
+[28/Oct/2014 23:39:50] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:39:50] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 52, in save
+    newRange1 = self.data["range1"]
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'range1'"
+[28/Oct/2014 23:40:25] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:40:25] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:40:25] ERROR [audio.forms:61] cleaning selected
+[28/Oct/2014 23:40:25] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:40:25] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 52, in save
+    newRange1 = self.data["range1"]
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'range1'"
+[28/Oct/2014 23:41:23] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:41:23] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:41:23] ERROR [audio.forms:62] cleaning selected
+[28/Oct/2014 23:41:23] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:41:23] ERROR [audio.forms:52] <QueryDict: {u'maximum': [u'10.0', u'20', u''], u'consignors': [u'1'], u'minimum': [u'0', u'10.01', u'20.01'], u'csrfmiddlewaretoken': [u'R1l1ZeXq1n94HeZDKH4DZGfnRuTl4vI0'], u'percentage': [u'25', u'35', u'45'], u'bcItemsSelected': [u'6']}>
+[28/Oct/2014 23:41:23] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 53, in save
+    newRange1 = self.data["range1"]
+  File "/usr/lib/python2.7/dist-packages/django/utils/datastructures.py", line 301, in __getitem__
+    raise MultiValueDictKeyError(repr(key))
+MultiValueDictKeyError: "'range1'"
+[28/Oct/2014 23:42:55] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:42:55] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:42:55] ERROR [audio.forms:63] cleaning selected
+[28/Oct/2014 23:42:55] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:42:55] ERROR [audio.forms:54] 4
+[28/Oct/2014 23:42:55] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 60, in save
+    consignment = Consignment.objects.create(item = item, auctionId = auctionId, percentage = newRange1.percentage)
+AttributeError: 'unicode' object has no attribute 'percentage'
+[28/Oct/2014 23:44:10] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:44:10] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:44:10] ERROR [audio.forms:65] cleaning selected
+[28/Oct/2014 23:44:10] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:44:10] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 56, in save
+    logger.error(newRange1)
+NameError: global name 'newRange1' is not defined
+[28/Oct/2014 23:44:43] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:44:43] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:44:43] ERROR [audio.forms:63] cleaning selected
+[28/Oct/2014 23:44:43] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:44:43] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 60, in save
+    consignment = Consignment.objects.create(item = item, auctionId = auctionId, percentage = percentage[0])
+  File "/usr/lib/python2.7/dist-packages/django/db/models/manager.py", line 157, in create
+    return self.get_queryset().create(**kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 317, in create
+    obj = self.model(**kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 417, in __init__
+    raise TypeError("'%s' is an invalid keyword argument for this function" % list(kwargs)[0])
+TypeError: 'auctionId' is an invalid keyword argument for this function
+[28/Oct/2014 23:45:35] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:45:35] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:45:35] ERROR [audio.forms:63] cleaning selected
+[28/Oct/2014 23:45:35] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:45:35] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 60, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[28/Oct/2014 23:46:18] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:46:18] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:46:18] ERROR [audio.forms:63] cleaning selected
+[28/Oct/2014 23:46:18] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:46:18] ERROR [audio.forms:52] <QueryDict: {u'maximum': [u'10.0', u'20', u''], u'consignors': [u'1'], u'minimum': [u'0', u'10.01', u'20.01'], u'csrfmiddlewaretoken': [u'R1l1ZeXq1n94HeZDKH4DZGfnRuTl4vI0'], u'percentage': [u'25', u'35', u'45'], u'bcItemsSelected': [u'6']}>
+[28/Oct/2014 23:46:18] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 60, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[28/Oct/2014 23:47:18] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:47:18] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:47:18] ERROR [audio.forms:64] cleaning selected
+[28/Oct/2014 23:47:18] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:47:18] ERROR [audio.forms:54] 4
+[28/Oct/2014 23:47:18] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 61, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[28/Oct/2014 23:48:08] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:48:08] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:48:08] ERROR [audio.forms:64] cleaning selected
+[28/Oct/2014 23:48:08] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:48:08] ERROR [audio.forms:54] perc: 4
+[28/Oct/2014 23:48:08] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 61, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[28/Oct/2014 23:48:16] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:48:16] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:48:16] ERROR [audio.forms:64] cleaning selected
+[28/Oct/2014 23:48:16] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:48:16] ERROR [audio.forms:54] perc: 4
+[28/Oct/2014 23:48:16] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 61, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[28/Oct/2014 23:49:13] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:49:13] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:49:13] ERROR [audio.forms:64] cleaning selected
+[28/Oct/2014 23:49:13] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:49:13] ERROR [audio.forms:54] perc: 45
+[28/Oct/2014 23:49:13] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 61, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[28/Oct/2014 23:50:38] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:50:38] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:50:38] ERROR [audio.forms:66] cleaning selected
+[28/Oct/2014 23:50:38] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:50:38] ERROR [audio.forms:55] each per: 4
+[28/Oct/2014 23:50:38] ERROR [audio.forms:55] each per: 5
+[28/Oct/2014 23:50:38] ERROR [audio.forms:56] perc: 45
+[28/Oct/2014 23:50:38] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 63, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[28/Oct/2014 23:52:50] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:52:50] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:52:50] ERROR [audio.forms:66] cleaning selected
+[28/Oct/2014 23:52:50] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:52:50] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 53, in save
+    percentage = self.cleaned_data["percentage"]
+KeyError: 'percentage'
+[28/Oct/2014 23:53:40] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 55
+    logger.error("perc: "+percentage.0)
+                                     ^
+SyntaxError: invalid syntax
+[28/Oct/2014 23:55:17] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:55:17] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:55:17] ERROR [audio.forms:65] cleaning selected
+[28/Oct/2014 23:55:17] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:55:17] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 53, in save
+    percentage = self.cl["percentage"]
+AttributeError: 'BulkConsignment' object has no attribute 'cl'
+[28/Oct/2014 23:55:43] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:55:43] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:55:43] ERROR [audio.forms:65] cleaning selected
+[28/Oct/2014 23:55:43] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:55:43] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 55, in save
+    logger.error("perc: "+percentage.pop[0])
+AttributeError: 'unicode' object has no attribute 'pop'
+[28/Oct/2014 23:58:39] ERROR [audio.admin_views:210] in post
+[28/Oct/2014 23:58:39] ERROR [audio.admin_views:212] form made
+[28/Oct/2014 23:58:39] ERROR [audio.forms:65] cleaning selected
+[28/Oct/2014 23:58:39] ERROR [audio.admin_views:214] form is valid
+[28/Oct/2014 23:58:39] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 55, in save
+    logger.error("perc: "+percentage.values())
+AttributeError: 'unicode' object has no attribute 'values'
+[29/Oct/2014 00:00:29] ERROR [audio.admin_views:210] in post
+[29/Oct/2014 00:00:29] ERROR [audio.admin_views:212] form made
+[29/Oct/2014 00:00:29] ERROR [audio.forms:65] cleaning selected
+[29/Oct/2014 00:00:29] ERROR [audio.admin_views:214] form is valid
+[29/Oct/2014 00:00:29] ERROR [audio.forms:55] perc: 45
+[29/Oct/2014 00:00:29] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 215, in bulkConsignment
+    new_user = form.save()
+  File "/srv/hawthorn/audio/forms.py", line 62, in save
+    Consignment.objects.create(item = item, auction_id = auctionId, percentage = percentage[0], minimum = min[0], maximum = max[0])
+IndexError: string index out of range
+[29/Oct/2014 00:08:16] ERROR [django.request:224] Internal Server Error: /admin/bulkConsignment/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 33, in <module>
+    class BulkConsignment(Form):
+  File "/srv/hawthorn/audio/forms.py", line 40, in BulkConsignment
+    range1 = BulkConsignmentForm(data)
+TypeError: this constructor takes no arguments

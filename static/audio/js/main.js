@@ -91,5 +91,15 @@ $( document ).ready(function() {
 		$("#bidSubmitForm").submit();
 	});
 
+	$("#btnLeft").click(function () {
+	    var selectedItem = $("#id_bcItemsSelected option:selected");
+	    $("#id_bcItemsAvailable").append(selectedItem);
+	});
+
+	$("#btnRight").click(function () {
+	    var selectedItem = $("#id_bcItemsAvailable option:selected");
+	    $("#id_bcItemsSelected").append(selectedItem);
+	});
+
 
 });
