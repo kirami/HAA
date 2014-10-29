@@ -27,92 +27,21 @@ def test(request):
 	return "test"
 
 def consignorReportById(request, consignorId):
-	data = {}
-	#get all consigned won items with 
-	#get all consigned lost items
-	#description / bidder/ win amount/ consign amount / haa amount
-
-	'''
-	get all won items 
-	for each item, get consignors, group by consignor id.
-	'''
-
-	notWon = getConsignedLosersById(consignorId)
-	consignedItems = getConsignmentWinnersById(consignorId)
-	
-	consignTotal = 0
-	haaTotal = 0
-	total = 0
-
-	for item in consignedItems:
-		money = 0
-		itemCost = item["amount"]
-		min = item["minimum"]
-		max = item["maximum"]
-		percent = item["percentage"]
-		item["inRange"] = 0
-		
-		if max == None and itemCost >= min:
-			money = (itemCost - min) * (percent/100)
-			item["inRange"] = (itemCost - min)
-
-		if itemCost >= max:
-			money = (max - min) * (percent/100)
-			item["inRange"] = (max - min)
-		if itemCost <= max and itemCost >= min:
-			money = (itemCost - min) * (percent/100)
-			item["inRange"] = (itemCost - min)
-
-		if "consignorItemTotal" in item:
-			item["consignorItemTotal"] += money
-		else:
-			item["consignorItemTotal"] = money;
-
-		item["rangeAmount"] = money
-		total += money
-
-	data["consignedItems"] = consignedItems
-	data["consignorTotal"] = total
-	data["unsoldItems"] = notWon
-
+	data = getAllConsignmentInfo(consignorId)	
 	return render_to_response('admin/audio/consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
 
 
 def consignorReport(request):
 	data = {}
-	#Gross auction total
+	#all consignors, consignor total money
 	data["total"] = getSumWinners()
-	consignedItems = getConsignmentWinners()
-	consignTotal = 0
-	haaTotal = 0
-	totalsByConsignor = {}
-
-	for item in consignedItems:
-		amount = item["amount"] * (item["percentage"] / 100)
-		item["consignedAmount"] = amount
-		#get correct HAA consignor id
-		if item["consignor_id"] == 1:
-			item["HAA"] = True
-			haaTotal+=amount
-		else: 
-			consignTotal+=amount
-			if str(item["consignor_id"]) in totalsByConsignor:
-				totalsByConsignor[str(item["consignor_id"])] += amount
-			else:
-				totalsByConsignor[str(item["consignor_id"])] = amount
-
 	
-
-	data["totalHAA"] =  haaTotal
-	#consignorBidSums = getConsignorBidSums
-	data["consignorBidSums"] =	1
-	data["consignedTotal"] = consignTotal		
-	data["consignedItems"] = consignedItems
-	data["totalsByConsignor"] = totalsByConsignor
-
-	#if data["total"] != haaTotal + consignTotal:
-	#	logger.error("Total for this auction consignment is not right.")
-
+	consignors = getConsignorBidSums()
+	for consignor in consignors:
+		consignInfo = consignor["consignor_id"]
+		data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"])
+		data[consignInfo]["firstName"] = consignor["first_name"]
+		data[consignInfo]["lastName"] = consignor["last_name"]
 	#Name / Gross / Commission % / Amount due
 	
 	return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
@@ -213,7 +142,7 @@ def bulkConsignment(request):
 		if form.is_valid():
 			logger.error("form is valid")
 			new_user = form.save()
-			return HttpResponseRedirect("../profile")
+			return HttpResponseRedirect("/admin/audio/consignment/")
 		else:
 			'''
 			for field in form.errors.keys():
