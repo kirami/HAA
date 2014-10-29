@@ -6,10 +6,13 @@ from django.db.models import Sum
 #Bid utils
 
 #returns ALL items in db with no bids ever.
-def getNoBidItems():
+def getNoBidItems(orderByName = False):
 	auctionId = 1
 	#todo auctionid
-	return list(Item.objects.raw('SELECT * from audio_item where id not in (select item_id from audio_bid)'))
+	query = 'SELECT * from audio_item where id not in (select item_id from audio_bid)'
+	if orderByName:
+		query+= " order by name"
+	return list(Item.objects.raw(query))
 
 def resetWinners():
 	auctionId
