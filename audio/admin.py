@@ -1,11 +1,17 @@
 from django.contrib import admin
 from audio.models import Auction, Category, Item, Bid, Address, Label, UserProfile, Payment, Invoice
 from audio.models import Consignor, Consignment
+from django.conf.urls import patterns, url
 
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+from django.contrib import admin
+from django.http import HttpResponse
+
+
 
 class BidAdmin(admin.ModelAdmin):
 
@@ -14,16 +20,16 @@ class BidAdmin(admin.ModelAdmin):
     list_filter = ('item__auction',)
 
     raw_id_fields = ("item",)
+    """
+    def view_link(self, obj):
+      return u"<a href='view/%d/'>View</a>" % obj.id
+    view_link.short_description = ''
+    view_link.allow_tags = True
+    list_display = ('id', view_link(self, "1"))
+    """
 
-    '''
-    def __init__(self, *args, **kwargs):
-        super(BidAdmin, self).__init__(*args, **kwargs)
-        logger.error("kwargs")
-        logger.error(self.fields['user'])
-        #self.fields['item'].queryset = Item.objects.filter(auction=1)
-        #logger.error("kwargs")
-        #logger.error(self.fields['item'])
-    '''
+    
+
 
 
 class ItemAdmin(admin.ModelAdmin):

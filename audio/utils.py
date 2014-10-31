@@ -14,9 +14,8 @@ def getNoBidItems(orderByName = False):
 		query+= " order by name"
 	return list(Item.objects.raw(query))
 
-def resetWinners():
-	auctionId
-	return Bid.objects.filter(auction_id = auctionId).update(winner=False)
+def resetWinners(auctionId):
+	return Bid.objects.filter(item__auction = auctionId).update(winner=False)
 
 def getBidItems(orderByName = False):
 	auctionId = 1
@@ -26,26 +25,21 @@ def getBidItems(orderByName = False):
 		query+= " order by name"
 	return list(Item.objects.raw(query))
 
-def getWinningBids(userId = None):
+def getWinningBids(auctionId, userId = None):
 	#todo auction id
-	auctionId = 1
-	query = 'select b.* from audio_bid b, audio_item i where b.winner = true and i.id = b.item_id and auction_id =' + str(auctionId)
-	if userId:
-		query+= " and b.user_id =" + str(userId)
-	return list(Bid.objects.raw(query))
+	if userId == None:
+		return Bid.objects.filter(winner=True, item__auction=auctionId)
+	else:
+		return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId)
 
 
-def getLosingBids(userId = None):
-	#add auctoinId
-	auctionId = 1
-	query = 'select b.* from audio_bid b, audio_item i where b.winner = false and i.id = b.item_id and auction_id =' + str(auctionId)
-	if userId:
-		query+= " and b.user_id =" + str(userId)
-	return list(Bid.objects.raw(query))
+def getLosingBids(auctionId, userId = None):
+	#todo auction id
+	if userId == None:
+		return Bid.objects.filter(winner=False, item__auction=auctionId)
+	else:
+		return Bid.objects.filter(winner=False, item__auction=auctionId, user=userId)
 
-def getMaxBids():
-	#tooo auction id
-	return list(Bid.objects.raw('select * from audio_bid where id in (select a.id from(select yt.id, yt.date, yt.item_id,  yt.amount from audio_bid yt inner join( select id, max(amount) amount,item_id  from audio_bid group by item_id ) ss on yt.item_id= ss.item_id and yt.amount = ss.amount order by date) as a group by item_id)'))
 
 def getSumWinners():
 	winners = getWinners()
@@ -54,32 +48,26 @@ def getSumWinners():
 	else:
 		return 0
 
-def getDuplicateItems():
+def getDuplicateItems(auctionId):
 	auctionId = 1
-	return Item.objects.filter(quantity__gte=2)
+	return Item.objects.filter(quantity__gte=2, auction_id = auctionId)
 
 
-def getOrderedBids():
-	auctionId = 1
+def getOrderedBids(auctionId):
 	return list(Bid.objects.raw('SELECT b.* FROM audio_bid b, audio_item i WHERE b.item_id = i.id and i.auction_id = '+str(auctionId)+'  ORDER BY item_id ASC, amount DESC, date ASC;'))
 
 
 #get consigned items won in certain auction
-def getConsignmentWinners():
-	auctionId = 1
+def getConsignmentWinners(auctionId):
 	cursor = connection.cursor()
 	cursor.execute("select * from audio_bid b, audio_consignment c where b.auction_id = "+str(auctionId)+
 		" and b.winner = true and b.item_id = c.item_id;")
 	row = dictfetchall(cursor)
 	return row
 
-#all consigment & item objects in x auction (won or not)
-def getAllConsignments():
-	auctionId = 1
-	return "select * from audio_item b, audio_consignment c where b.id = c.item_id and c.auction_id = " +str(auctionId)+ " order by c.id"
 
 #get consignors with winning items
-def getConsignorBidSums():
+def getConsignorBidSums(auctionId):
 	cursor = connection.cursor()
 	auctionId = 1
 	cursor.execute("select consignor_id, cc.first_name, cc.last_name, sum(b.amount) from audio_bid b, audio_consignment c, audio_consignor cc where "+
@@ -88,25 +76,13 @@ def getConsignorBidSums():
 	return row
 
 #get consigment which was not won in this auction
-def getConsignedLosers():
+def getConsignedLosers(auctionId):
 	auctionId = 1
 	return ("select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id "+
 	"from audio_bid b where b.winner = true) and c.item_id = i.id")
 
-#def getConsignedInfoById(userId):
-
-
-def getConsignedLosersById(consignorId):
-	auctionId = 1
-	
-	return list(Item.objects.raw("select i.* from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+
-		" and item_id not in(select distinct b.item_id "+
-		"from audio_bid b where b.winner = true) and c.item_id = i.id and c.consignor_id=" + str(consignorId)))
-
-
 #get consigned items won in certain auction by consignor
-def getConsignmentWinnersById(consignorId):
-	auctionId = 1
+def getConsignmentWinnersById(consignorId, auctionId):
 	cursor = connection.cursor()
 	cursor.execute("select * from audio_bid b, audio_consignment c, audio_item i where b.auction_id = "+str(auctionId)+
 		" and b.winner = true and b.item_id = c.item_id and c.item_id = i.id and c.consignor_id = "+str(consignorId)+";")
@@ -115,9 +91,7 @@ def getConsignmentWinnersById(consignorId):
 
 #--------------------------
 
-
 def getUnbalancedUsers():
-	auctionId = 1
 	cursor = connection.cursor()
 	cursor.execute("select user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance "+
 		"from(select sum(amount) as payments, it.user_id, invoiced from audio_payment p "+
@@ -127,10 +101,7 @@ def getUnbalancedUsers():
 	row = dictfetchall(cursor)
 	return row
 
-
-
-def getAlphaWinners():
-	auctionId = 1
+def getAlphaWinners(auctionId):
 	cursor = connection.cursor()
 	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name, a.zipcode from audio_bid b, audio_address a, auth_user au "+
 		"WHERE b.winner = true and b.user_id = a.user_id and au.id = a.user_id and b.auction_id = "+str(auctionId)+" order by last_name")
@@ -139,19 +110,18 @@ def getAlphaWinners():
 
 
 
-def getInvoicesByAuction():
-	auctionId = 1
+def getInvoicesByAuction(auctionId):
 	return Invoice.objects.filter(auction_id = auctionId)
 	
-def getTotalInvoiceAmountByAuction():
-	invoices = getInvoicesByAuction()
+def getTotalInvoiceAmountByAuction(auctionId):
+	invoices = getInvoicesByAuction(auctionId)
 	if len(invoices) > 0:
 		return invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] 
 	else:
 		return 0
 
 def getInvoiceInfoByUser(userId):
-	invoices = Invoice.objects.filter(user_id = userId)
+	invoices = Invoice.objects.filter(user_id = userId, auction_id = auctionId)
 	if len(invoices) > 0:
 		return { "sum": invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"], "invoices":invoices} 
 	else:
@@ -185,7 +155,7 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-def getAllConsignmentInfo(consignorId):
+def getAllConsignmentInfo(consignorId, auctionId):
 	data = {}
 	#get all consigned won items with 
 	#get all consigned lost items
@@ -196,8 +166,8 @@ def getAllConsignmentInfo(consignorId):
 	for each item, get consignors, group by consignor id.
 	'''
 
-	notWon = getConsignedLosersById(consignorId)
-	consignedItems = getConsignmentWinnersById(consignorId)
+	notWon = getConsignedLosersById(consignorId, auctionId)
+	consignedItems = getConsignmentWinnersById(consignorId, auctionId)
 	
 	consignTotal = 0
 	haaTotal = 0

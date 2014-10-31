@@ -77,18 +77,16 @@ def calculateBalances(request):
 
 def reportByUser(request):
 	data = {}
-	data["winningBids"] = getWinningBids(userId = 1)
+	auctionId = 1
+	data["winningBids"] = getWinningBids(auctionId, userId = 1)
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))	
 
 
-
-def markWinners(request):
+def markWinners(request, auctionId):
 	#TODO - is this after invoice run?  are you sure?
-
 	#set all winners for this auction to 0
-	resetWinners()
+	resetWinners(auctionId)
 
-	auctionId = 1
 	dupes = getDuplicateItems(auctionId)
 	bids = getOrderedBids(auctionId)
 	currentItemId = 0
