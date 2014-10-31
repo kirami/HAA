@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField
+from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField
 from audio.models import Address, Bid, Item, Consignment, Consignor
 from audio.utils import *
 import logging
@@ -18,12 +18,14 @@ class ContactForm(ModelForm):
 		#fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]
 
 class BidSubmitForm(ModelForm):
-
-	class Meta:
+    lotId = CharField(label = "Lot ID:")
+    class Meta:
 		model = Bid
-		exclude = ('user', 'date',)
-		#fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]
-
+		exclude = ('user', 'date', 'winner', 'auction', 'item')
+		
+class SimpleBidForm(Form):
+    lotId = CharField(label = "Lot ID:")
+    
 
 class BulkConsignment(Form):
     choice = [(xt.id, xt.name) for xt in getNoBidItems(True) ]

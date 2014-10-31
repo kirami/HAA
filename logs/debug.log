@@ -6681,3 +6681,1050 @@ Traceback (most recent call last):
     "from '%s'" % (token[upto:], token))
 TemplateSyntaxError: Could not parse the remainder: '!="total"' from 'key!="total"'
 [29/Oct/2014 03:32:47] ERROR [audio.admin_views:41] {'consignor_id': 1L, 'sum(b.amount)': Decimal('4.00')}
+[30/Oct/2014 02:09:08] WARNING [django.request:143] Not Found: /catalog
+[30/Oct/2014 02:09:33] WARNING [django.request:143] Not Found: /audio/submitBid
+[30/Oct/2014 02:09:55] ERROR [django.request:224] Internal Server Error: /audio/catalog/submitBid
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 163, in submitBid
+    if isSecondChance():
+  File "/srv/hawthorn/audio/views.py", line 119, in isSecondChance
+    if auction.end_date < now and auction.second_chance_end_date > now:
+TypeError: can't compare datetime.date to NoneType
+[30/Oct/2014 02:12:13] ERROR [audio.views:167] request:
+[30/Oct/2014 02:12:13] ERROR [audio.views:168] <WSGIRequest
+path:/audio/catalog/submitBid,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {}>,
+COOKIES:{'csrftoken': 'R1l1ZeXq1n94HeZDKH4DZGfnRuTl4vI0',
+ 'sessionid': 'd4tpy3dvv597u0hv461spmkifbgf0bea'},
+META:{'CONTEXT_DOCUMENT_ROOT': '/srv/hawthorn',
+ 'CONTEXT_PREFIX': '',
+ u'CSRF_COOKIE': u'R1l1ZeXq1n94HeZDKH4DZGfnRuTl4vI0',
+ 'DOCUMENT_ROOT': '/srv/hawthorn',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
+ 'HTTP_CACHE_CONTROL': 'max-age=0',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': 'csrftoken=R1l1ZeXq1n94HeZDKH4DZGfnRuTl4vI0; sessionid=d4tpy3dvv597u0hv461spmkifbgf0bea',
+ 'HTTP_HOST': 'anaplan-test',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',
+ 'PATH_INFO': u'/audio/catalog/submitBid',
+ 'PATH_TRANSLATED': '/srv/hawthorn/hawthorn/wsgi.py/audio/catalog/submitBid',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '50.136.134.7',
+ 'REMOTE_PORT': '55889',
+ 'REQUEST_METHOD': 'GET',
+ 'REQUEST_SCHEME': 'http',
+ 'REQUEST_URI': '/audio/catalog/submitBid',
+ 'SCRIPT_FILENAME': '/srv/hawthorn/hawthorn/wsgi.py',
+ 'SCRIPT_NAME': u'',
+ 'SERVER_ADDR': '172.31.41.68',
+ 'SERVER_ADMIN': 'kirajmd@gmail.com',
+ 'SERVER_NAME': 'anaplan-test',
+ 'SERVER_PORT': '80',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SIGNATURE': '<address>Apache/2.4.7 (Ubuntu) Server at anaplan-test Port 80</address>\n',
+ 'SERVER_SOFTWARE': 'Apache/2.4.7 (Ubuntu)',
+ 'mod_wsgi.application_group': 'www.ec2-54-191-200-165.us-west-2.compute.amazonaws.com|',
+ 'mod_wsgi.callable_object': 'application',
+ 'mod_wsgi.enable_sendfile': '0',
+ 'mod_wsgi.handler_script': '',
+ 'mod_wsgi.input_chunked': '0',
+ 'mod_wsgi.listener_host': '',
+ 'mod_wsgi.listener_port': '80',
+ 'mod_wsgi.process_group': 'hawthorn',
+ 'mod_wsgi.queue_start': '1414635133740163',
+ 'mod_wsgi.request_handler': 'wsgi-script',
+ 'mod_wsgi.script_reloading': '1',
+ 'mod_wsgi.version': (3, 4),
+ 'wsgi.errors': <mod_wsgi.Log object at 0x7faf3f7cdeb0>,
+ 'wsgi.file_wrapper': <built-in method file_wrapper of mod_wsgi.Adapter object at 0x7faf3f793c60>,
+ 'wsgi.input': <mod_wsgi.Input object at 0x7faf3f7cde30>,
+ 'wsgi.multiprocess': False,
+ 'wsgi.multithread': True,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'http',
+ 'wsgi.version': (1, 0)}>
+[30/Oct/2014 02:12:13] ERROR [audio.views:175] no bid
+[30/Oct/2014 02:12:13] ERROR [audio.views:126] 2014-10-30
+[30/Oct/2014 02:12:13] ERROR [audio.views:146] 2.00
+[30/Oct/2014 02:18:56] WARNING [django.request:143] Not Found: /audio/showItem
+[30/Oct/2014 02:20:18] WARNING [django.request:143] Not Found: /audio/catalog/1/
+[30/Oct/2014 02:20:22] ERROR [audio.views:126] 2014-10-30
+[30/Oct/2014 02:20:22] ERROR [audio.views:146] 2.00
+[30/Oct/2014 02:21:59] WARNING [django.request:143] Not Found: /audio/simpleForm
+[30/Oct/2014 02:29:49] ERROR [django.request:224] Internal Server Error: /audio/catalog/simpleForm
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 22
+    class Meta:
+    ^
+IndentationError: unexpected indent
+[30/Oct/2014 02:30:17] ERROR [django.request:224] Internal Server Error: /audio/catalog/simpleForm
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 20, in <module>
+    class BidSubmitForm(ModelForm):
+  File "/srv/hawthorn/audio/forms.py", line 21, in BidSubmitForm
+    lotId = TextField()
+NameError: name 'TextField' is not defined
+[30/Oct/2014 02:31:42] ERROR [django.request:224] Internal Server Error: /audio/catalog/simpleForm
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 20, in <module>
+    class BidSubmitForm(ModelForm):
+  File "/srv/hawthorn/audio/forms.py", line 21, in BidSubmitForm
+    lotId = forms.IntegerField(label='Lot ID:')
+NameError: name 'forms' is not defined
+[30/Oct/2014 02:31:56] ERROR [django.request:224] Internal Server Error: /audio/catalog/simpleForm
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 88, in get_response
+    response = middleware_method(request)
+  File "/usr/lib/python2.7/dist-packages/django/middleware/common.py", line 71, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 596, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 476, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 20, in <module>
+    class BidSubmitForm(ModelForm):
+  File "/srv/hawthorn/audio/forms.py", line 21, in BidSubmitForm
+    lotId = IntegerField(label='Lot ID:')
+NameError: name 'IntegerField' is not defined
+[30/Oct/2014 02:37:52] ERROR [audio.views:70] no bid
+[30/Oct/2014 02:37:52] ERROR [django.request:224] Internal Server Error: /audio/catalog/simpleForm
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/views.py", line 77, in simpleForm
+    return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
+UnboundLocalError: local variable 'form' referenced before assignment
+[30/Oct/2014 02:38:57] ERROR [audio.views:71] no bid
+[30/Oct/2014 05:16:39] WARNING [django.request:143] Not Found: /
+[30/Oct/2014 21:16:54] ERROR [django.request:224] Internal Server Error: /admin/audio/auction/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 82, in rendered_content
+    content = template.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 1196, in render
+    _dict = func(*resolved_args, **resolved_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 288, in result_list
+    'results': list(results(cl))}
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 266, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 258, in __init__
+    super(ResultList, self).__init__(*items)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 185, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/util.py", line 258, in lookup_field
+    value = attr()
+  File "/usr/lib/python2.7/dist-packages/django/db/models/base.py", line 430, in __str__
+    return force_text(self).encode('utf-8')
+AttributeError: 'long' object has no attribute 'encode'
+[30/Oct/2014 21:25:03] ERROR [django.request:224] Internal Server Error: /admin/audio/item/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 17, in <module>
+    admin.site.register(Item, ItemAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 251, in validate_list_display
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: ItemAdmin.list_display[2], 'auction_id' is not a callable or an attribute of 'ItemAdmin' or found in the model 'Item'.
+[31/Oct/2014 00:03:24] WARNING [django.request:143] Not Found: /manager/html
+[31/Oct/2014 00:12:14] WARNING [django.request:143] Not Found: /
+[31/Oct/2014 00:24:14] WARNING [django.request:143] Not Found: /
+[31/Oct/2014 00:37:30] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 5, in <module>
+    from audio import admin_views
+  File "/srv/hawthorn/audio/admin_views.py", line 178
+    data["auctionId"] = 1auctionId
+                                 ^
+SyntaxError: invalid syntax
+[31/Oct/2014 00:46:27] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 18, in <module>
+    admin.site.register(Item, ItemAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 278, in validate_list_filter
+    check_isseq(cls, 'list_filter', cls.list_filter)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 407, in check_isseq
+    raise ImproperlyConfigured("'%s.%s' must be a list or tuple." % (cls.__name__, label))
+ImproperlyConfigured: 'ItemAdmin.list_filter' must be a list or tuple.
+[31/Oct/2014 00:50:37] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 19, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 251, in validate_list_display
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: BidAdmin.list_display[3], 'auction__id' is not a callable or an attribute of 'BidAdmin' or found in the model 'Bid'.
+[31/Oct/2014 00:51:13] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 19, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 251, in validate_list_display
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: BidAdmin.list_display[3], 'item__auction' is not a callable or an attribute of 'BidAdmin' or found in the model 'Bid'.
+[31/Oct/2014 00:51:49] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 19, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 251, in validate_list_display
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: BidAdmin.list_display[4], 'item__auction' is not a callable or an attribute of 'BidAdmin' or found in the model 'Bid'.
+[31/Oct/2014 00:55:19] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 19, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 251, in validate_list_display
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: BidAdmin.list_display[3], 'item__name' is not a callable or an attribute of 'BidAdmin' or found in the model 'Bid'.
+[31/Oct/2014 00:57:43] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 82, in rendered_content
+    content = template.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 1196, in render
+    _dict = func(*resolved_args, **resolved_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 288, in result_list
+    'results': list(results(cl))}
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 266, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 258, in __init__
+    super(ResultList, self).__init__(*items)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 214, in items_for_result
+    if force_text(result_repr) == '':
+  File "/usr/lib/python2.7/dist-packages/django/utils/encoding.py", line 100, in force_text
+    s = s.__unicode__()
+  File "/srv/hawthorn/audio/models.py", line 66, in __unicode__
+    return u"%s %s" % lot_id, name
+NameError: global name 'lot_id' is not defined
+[31/Oct/2014 00:58:12] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 82, in rendered_content
+    content = template.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 1196, in render
+    _dict = func(*resolved_args, **resolved_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 288, in result_list
+    'results': list(results(cl))}
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 266, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 258, in __init__
+    super(ResultList, self).__init__(*items)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 214, in items_for_result
+    if force_text(result_repr) == '':
+  File "/usr/lib/python2.7/dist-packages/django/utils/encoding.py", line 100, in force_text
+    s = s.__unicode__()
+  File "/srv/hawthorn/audio/models.py", line 66, in __unicode__
+    return u"%s %s" % self.lot_id, self.name
+TypeError: not enough arguments for format string
+[31/Oct/2014 00:58:52] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 2, in <module>
+    from audio.models import Address, Bid, Item, Consignment, Consignor
+  File "/srv/hawthorn/audio/models.py", line 66
+    return u"%s %s" % self.lot_id self.name
+                                     ^
+SyntaxError: invalid syntax
+[31/Oct/2014 01:02:28] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/usr/lib/python2.7/dist-packages/django/template/response.py", line 82, in rendered_content
+    content = template.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 840, in render
+    bit = self.render_node(node, context)
+  File "/usr/lib/python2.7/dist-packages/django/template/debug.py", line 78, in render_node
+    return node.render(context)
+  File "/usr/lib/python2.7/dist-packages/django/template/base.py", line 1196, in render
+    _dict = func(*resolved_args, **resolved_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 288, in result_list
+    'results': list(results(cl))}
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 266, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 258, in __init__
+    super(ResultList, self).__init__(*items)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 214, in items_for_result
+    if force_text(result_repr) == '':
+  File "/usr/lib/python2.7/dist-packages/django/utils/encoding.py", line 100, in force_text
+    s = s.__unicode__()
+  File "/srv/hawthorn/audio/models.py", line 66, in __unicode__
+    return self.lot_id + " " + self.name
+TypeError: unsupported operand type(s) for +: 'long' and 'str'
+[31/Oct/2014 01:04:09] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 20, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 309, in validate_list_filter
+    % (cls.__name__, idx, field))
+ImproperlyConfigured: 'BidAdmin.list_filter[0]' refers to 'auction' which does not refer to a Field.
+[31/Oct/2014 01:05:33] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 432, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 52, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 198, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 29, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 99, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1306, in changelist_view
+    self)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 105, in __init__
+    self.queryset = self.get_queryset(request)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/views/main.py", line 391, in get_queryset
+    request, qs, self.query)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 771, in get_search_results
+    queryset = queryset.filter(reduce(operator.or_, or_queries))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 590, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/query.py", line 608, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1198, in add_q
+    clause = self._add_q(where_part, used_aliases)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1228, in _add_q
+    current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1232, in _add_q
+    current_negated=current_negated)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1100, in build_filter
+    allow_explicit_fk=True)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1351, in setup_joins
+    names, opts, allow_many, allow_explicit_fk)
+  File "/usr/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1274, in names_to_path
+    "Choices are: %s" % (name, ", ".join(available)))
+FieldError: Cannot resolve keyword 'lot' into field. Choices are: amount, date, id, item, user, winner
+[31/Oct/2014 01:35:03] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 2, in <module>
+    from audio.models import Address, Bid, Item, Consignment, Consignor
+  File "/srv/hawthorn/audio/models.py", line 14, in <module>
+    from django.contrib.admin.filterspecs import FilterSpec, RelatedFilterSpec
+ImportError: No module named filterspecs
+[31/Oct/2014 01:37:07] ERROR [django.request:224] Internal Server Error: /admin/audio/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 2, in <module>
+    from audio.models import Address, Bid, Item, Consignment, Consignor
+  File "/srv/hawthorn/audio/models.py", line 14, in <module>
+    from django.contrib.admin.filterspecs import FilterSpec, RelatedFilterSpec
+ImportError: No module named filterspecs
+[31/Oct/2014 01:37:55] ERROR [django.request:224] Internal Server Error: /admin/audio/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 4, in <module>
+    from audio import views
+  File "/srv/hawthorn/audio/views.py", line 10, in <module>
+    from audio.forms import ContactForm, BidSubmitForm
+  File "/srv/hawthorn/audio/forms.py", line 2, in <module>
+    from audio.models import Address, Bid, Item, Consignment, Consignor
+  File "/srv/hawthorn/audio/models.py", line 14, in <module>
+    from django.contrib.admin.filterspecs import FilterSpec, RelatedFilterSpec
+ImportError: No module named filterspecs
+[31/Oct/2014 02:01:35] ERROR [audio.admin:18] {}
+[31/Oct/2014 02:03:03] ERROR [audio.admin:18] args
+[31/Oct/2014 02:03:03] ERROR [audio.admin:19] (<class 'audio.models.Bid'>, <django.contrib.admin.sites.AdminSite object at 0x7f7c1fa8c450>)
+[31/Oct/2014 02:04:17] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 19
+    self.fields['item'].queryset = Item.objects.filter(auction=my_category)
+    ^
+IndentationError: unexpected indent
+[31/Oct/2014 02:04:44] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 33, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 18, in __init__
+    self.fields['item'].queryset = Item.objects.filter(auction=my_category)
+NameError: global name 'my_category' is not defined
+[31/Oct/2014 02:05:11] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 33, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 18, in __init__
+    self.fields['item'].queryset = Item.objects.filter(auction=1)
+TypeError: 'NoneType' object has no attribute '__getitem__'
+[31/Oct/2014 02:07:28] ERROR [audio.admin:19] kwargs
+[31/Oct/2014 02:07:28] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 33, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 20, in __init__
+    logger.error(self.fields['item'])
+TypeError: 'NoneType' object has no attribute '__getitem__'
+[31/Oct/2014 02:16:59] ERROR [audio.admin:18] kwargs
+[31/Oct/2014 02:16:59] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 34, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 19, in __init__
+    self.fields['item'].queryset = Item.objects.filter(auction=1)
+TypeError: 'NoneType' object has no attribute '__getitem__'
+[31/Oct/2014 02:18:02] ERROR [audio.admin:18] kwargs
+[31/Oct/2014 02:18:02] ERROR [audio.admin:19] None
+[31/Oct/2014 02:23:18] ERROR [audio.admin:18] kwargs
+[31/Oct/2014 02:23:18] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 36, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 19, in __init__
+    logger.error(self.fields['item'])
+TypeError: 'NoneType' object has no attribute '__getitem__'
+[31/Oct/2014 02:23:35] ERROR [audio.admin:18] kwargs
+[31/Oct/2014 02:23:35] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 36, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 19, in __init__
+    logger.error(self.fields['user'])
+TypeError: 'NoneType' object has no attribute '__getitem__'
+[31/Oct/2014 02:23:39] ERROR [audio.admin:18] kwargs
+[31/Oct/2014 02:23:39] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 36, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 19, in __init__
+    logger.error(self.fields['user'])
+TypeError: 'NoneType' object has no attribute '__getitem__'
+[31/Oct/2014 02:24:22] ERROR [audio.admin:18] kwargs
+[31/Oct/2014 02:24:22] ERROR [django.request:224] Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 36, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 95, in register
+    self._registry[model] = admin_class(model, self)
+  File "/srv/hawthorn/audio/admin.py", line 19, in __init__
+    logger.error(self.fields['user'])
+TypeError: 'NoneType' object has no attribute '__getitem__'
+[31/Oct/2014 02:26:55] ERROR [django.request:224] Internal Server Error: /admin/audio/bid/add/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/hawthorn/urls.py", line 6, in <module>
+    admin.autodiscover()
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/lib/python2.7/dist-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/srv/hawthorn/audio/admin.py", line 39, in <module>
+    admin.site.register(Bid, BidAdmin)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    admin_class.validate(model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 106, in validate
+    validator.validate(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 25, in validate
+    getattr(self, m)(cls, model)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 64, in validate_raw_id_fields
+    f = get_field(cls, model, 'raw_id_fields', field)
+  File "/usr/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 418, in get_field
+    % (cls.__name__, label, field, model._meta.app_label, model.__name__))
+ImproperlyConfigured: 'BidAdmin.raw_id_fields' refers to field 'item__auction' that is missing from model 'audio.Bid'.
