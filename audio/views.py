@@ -47,6 +47,36 @@ def login_view(request):
         return HttpResponseRedirect("/account/invalid/")
 '''
 
+def simpleForm(request):
+	form = ''
+	if request.method == "POST":
+		if(request.user.is_authenticated()):
+			currentAuctionId = 1
+			auction = Auction.objects.get(id = currentAuctionId)
+			now = date.today()
+			data = request.POST
+			bidAmount = data.get("bidAmount")
+
+			if isSecondChance():
+				bidAmount = auction.flat_bid_amount
+
+			itemId = Item.objects.get(log_id = data.get("lotId"))
+			try:
+				instance = Bid.objects.get(user=request.user, item_id=itemId)
+				instance.amount = bidAmount
+				instance.save()
+			except:	
+				if(bidAmount == None or bidAmount == ""):
+					logger.error("no bid")
+				else:
+					#todo get auctionId from...db?
+					Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuctionId, item_id = itemId, second_chance_bid = isSecondChance())
+	else:
+		form = BidSubmitForm()
+
+	return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
+	#logger.error(request.META.get('PATH_INFO'))			
+	
 def contact_info(request):
 	if request.method == 'POST':
 		try:

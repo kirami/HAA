@@ -18,24 +18,30 @@ def resetWinners():
 	auctionId
 	return Bid.objects.filter(auction_id = auctionId).update(winner=False)
 
-def getBidItems():
-	return Bid.objects.values('item').distinct()
+def getBidItems(orderByName = False):
+	auctionId = 1
+	#todo auctionid
+	query = 'SELECT * from audio_item where id in (select item_id from audio_bid) and auction_id =' + str(auctionId)
+	if orderByName:
+		query+= " order by name"
+	return list(Item.objects.raw(query))
 
-def getWinners():
+def getWinningBids(userId = None):
 	#todo auction id
 	auctionId = 1
-	winners = Bid.objects.filter(winner = True, auction_id = auctionId)
-	return winners
+	query = 'select b.* from audio_bid b, audio_item i where b.winner = true and i.id = b.item_id and auction_id =' + str(auctionId)
+	if userId:
+		query+= " and b.user_id =" + str(userId)
+	return list(Bid.objects.raw(query))
 
-def getWinBidsByUser(userId):
-	auctionId = 1
-	return Bid.objects.filter(auction_id = auctionId, user_id = userId, winner = True)
 
-def getLosers():
+def getLosingBids(userId = None):
 	#add auctoinId
 	auctionId = 1
-	return list(Bid.objects.raw('SELECT * FROM audio_bid group by user_id '+
-							'HAVING COUNT(CASE WHEN winner=1 THEN 1 ELSE NULL END) <1'))
+	query = 'select b.* from audio_bid b, audio_item i where b.winner = false and i.id = b.item_id and auction_id =' + str(auctionId)
+	if userId:
+		query+= " and b.user_id =" + str(userId)
+	return list(Bid.objects.raw(query))
 
 def getMaxBids():
 	#tooo auction id
@@ -52,18 +58,10 @@ def getDuplicateItems():
 	auctionId = 1
 	return Item.objects.filter(quantity__gte=2)
 
-def getTopDupeBids(itemId, quantity):
-	#tooo auction id
-	auctionId = 1
-	return list(Bid.objects.raw('select *  from audio_bid  where auction_id='+str(auctionId)+' and item_id = '+str(itemId)+
-		'  order by amount desc limit ' + str(quantity)))
-
-def getDuplicateTopBids():
-	return ""
 
 def getOrderedBids():
 	auctionId = 1
-	return list(Bid.objects.raw('SELECT * FROM audio_bid WHERE auction_id = '+ str(auctionId)+' ORDER BY item_id ASC, amount DESC, date ASC'))
+	return list(Bid.objects.raw('SELECT b.* FROM audio_bid b, audio_item i WHERE b.item_id = i.id and i.auction_id = '+str(auctionId)+'  ORDER BY item_id ASC, amount DESC, date ASC;'))
 
 
 #get consigned items won in certain auction

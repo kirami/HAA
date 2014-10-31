@@ -8,6 +8,19 @@ class Auction(models.Model):
 	second_chance_end_date = models.DateField(null = True)
 	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 
+	def __unicode__(self):
+		return u"%s" % self.id
+'''
+from django.contrib.admin.filterspecs import FilterSpec, RelatedFilterSpec
+ 
+
+class CustomFilterSpec(RelatedFilterSpec):
+    def __init__(self, *args, **kwargs):
+        super(CustomFilterSpec, self).__init__(*args, **kwargs)       
+        self.lookup_choices = Item.objects.filter(auction=1) #this method returns the dynamic list
+ 
+FilterSpec.filter_specs.insert(0, (lambda f: bool(f.rel and hasattr(f, 'custom_filter_spec')), CustomFilterSpec))
+''' 
 
 class Invoice(models.Model):
 	user = models.ForeignKey(User)
@@ -54,19 +67,21 @@ class Item(models.Model):
 	category = models.ForeignKey(Category)
 	condition = models.CharField(max_length=100, default="")
 	quantity = models.IntegerField(default = 1)
+	auction = models.ForeignKey(Auction)
 	
+	class Meta:
+		unique_together = (("auction", "lot_id"),)
+
 	def __unicode__(self):
-		return unicode(self.lot_id)
+		return str(self.lot_id) + " " + self.name
 
 class Bid(models.Model):
 	user = models.ForeignKey(User)
 	date = models.DateField()
-	auction = models.ForeignKey(Auction)
 	item = models.ForeignKey(Item)
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	winner = models.BooleanField(default = False)
-	paid_date = models.DateField(null = True, blank=True)
-	invoice_date = models.DateField(null = True, blank=True)
+	#item.custom_filter_spec = True
 	
 	#won bid?
 	#pay date
@@ -115,7 +130,6 @@ class Consignor(models.Model):
 
 class Consignment(models.Model):
 	item = models.ForeignKey(Item)
-	auction = models.ForeignKey(Auction)
 	consignor = models.ForeignKey(Consignor)
 	percentage = models.DecimalField(max_digits=19, decimal_places=2)
 	minimum = models.DecimalField(max_digits=19, decimal_places=2)

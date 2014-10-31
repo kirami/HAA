@@ -26,17 +26,17 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return "test"
 
-def consignorReportById(request, consignorId):
-	data = getAllConsignmentInfo(consignorId)	
+def consignorReportById(request, consignorId, auctionId):
+	data = getAllConsignmentInfo(consignorId, auctionId)	
 	return render_to_response('admin/audio/consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
 
 
-def consignorReport(request):
+def consignorReport(request, auctionId):
 	data = {}
 	#all consignors, consignor total money
-	data["total"] = getSumWinners()
+	data["total"] = getSumWinners(auctionId)
 	
-	consignors = getConsignorBidSums()
+	consignors = getConsignorBidSums(auctionId)
 	for consignor in consignors:
 		consignInfo = consignor["consignor_id"]
 		data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"])
@@ -77,7 +77,7 @@ def calculateBalances(request):
 
 def reportByUser(request):
 	data = {}
-	data["winningBids"] = getWinBidsByUser(1)
+	data["winningBids"] = getWinningBids(userId = 1)
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))	
 
 
@@ -88,8 +88,9 @@ def markWinners(request):
 	#set all winners for this auction to 0
 	resetWinners()
 
-	dupes = getDuplicateItems()
-	bids = getOrderedBids()
+	auctionId = 1
+	dupes = getDuplicateItems(auctionId)
+	bids = getOrderedBids(auctionId)
 	currentItemId = 0
 	index = 0
  	for bid in bids:
@@ -115,22 +116,26 @@ def markWinners(request):
 
 def winners(request):
 	data = {}
-	data["winningBids"] = getAlphaWinners()
+	auctionId = 1
+	data["winningBids"] = getAlphaWinners(auctionId)
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))
 
 def losers(request):
 	data = {}
-	data["losingBids"] = getLosers()
+	auctionId = 1
+	data["losingBids"] = getLosingBids(auctionId)
 	return render_to_response('admin/audio/losers.html', {"data":data}, context_instance=RequestContext(request))
 
 def wonItems(request):
 	data = {}
-	data["soldItems"] = getWinners()
+	auctionId = 1
+	data["soldItems"] = getWinningBids(auctionId)
 	return render_to_response('admin/audio/wonItems.html', {"data":data}, context_instance=RequestContext(request))
 
 def unsoldItems(request):
 	data = {}
-	data["unsoldItems"] = getNoBidItems()
+	auctionId = 1
+	data["unsoldItems"] = getNoBidItems(auctionId)
 	return render_to_response('admin/audio/unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
 
 def bulkConsignment(request):
@@ -169,19 +174,18 @@ def runReport(request):
  		items with no bids
 
  	'''
- 	winners = getWinners()
- 	maxBids = getMaxBids()
- 	noBids = getNoBidItems()
- 	losers = getLosers()
+ 	auctionId = 1
+ 	winners = getWinningBids(auctionId)
+ 	noBids = getNoBidItems(auctionId)
+ 	losers = getLosingBids(auctionId)
 
- 	data["auctionId"] = 1
+ 	data["auctionId"] = auctionId
  	data["winners"] = winners
- 	data["maxBids"] = maxBids
  	data["losers"] = losers
  	data["loserCount"] = len(losers)
- 	data["wonItems"] = getBidItems()
+ 	data["wonItems"] = getBidItems(auctionId)
  	data["noBidItems"] = len(noBids)
- 	data["total"] = getSumWinners()
+ 	data["total"] = getSumWinners(auctionId)
 
 	return render_to_response('admin/audio/report.html', {"data":data}, context_instance=RequestContext(request))
 
