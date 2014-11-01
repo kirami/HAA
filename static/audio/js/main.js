@@ -10,7 +10,9 @@ function catalogClick(e){
 function endAuction(e){
 	
 
-	$( "#dialog-confirm" ).dialog({
+
+
+	$( "#dialog-confirm1" ).dialog({
 		resizable: false,
 		height:140,
 		modal: true,
@@ -100,6 +102,29 @@ $( document ).ready(function() {
 	    var selectedItem = $("#id_bcItemsAvailable option:selected");
 	    $("#id_bcItemsSelected").append(selectedItem);
 	});
+
+
+	$( "#dialog-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false, 
+		buttons: {
+			"Mark Winners": function() {
+				$("#markWinnersForm").submit()
+				$( this ).dialog( "close" );
+			},
+		Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	
+	$( "#opener" ).click(function() {
+    	$( "#dialog-confirm" ).dialog( "open" );
+    });
+
 
 
 });

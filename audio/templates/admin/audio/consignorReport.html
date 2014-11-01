@@ -23,8 +23,8 @@
 	{%for key,value in data.items%} 
 		{%if key != "total" %}
 		<div class="maxBidItem"><a href="/admin/consignorReport/{{key}}" target="_blank">{{value.firstName}} {{value.lastName}}</a></div>
-		<div class="maxBidItem">{{value.gross}}</div>
-		<div class="maxBidItem">{{value.consignorTotal}}</div>
+		<div class="maxBidItem">{{value.gross|floatformat:2}}</div>
+		<div class="maxBidItem">{{value.consignorTotal|floatformat:2}}</div>
 		<div class="clear"></div>
 		{%endif%}
 	{%endfor%}
