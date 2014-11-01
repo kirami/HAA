@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+ 
+
+{% block extrahead %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+ <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+<script src="{{ STATIC_URL }}audio/js/main.js" type="text/javascript"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}audio/css/admin.css" />
+
+
+{% endblock %}
+
+
+
+{%block content%}
+
+{%if data.success%}Success!{%endif%}
+
+<div>Chose an auction:</div>
+<form action="" method="post" id="markWinnersForm">
+    {% csrf_token %} 
+</form>
+
+<div id="dialog-confirm" title="Please Confirm">Are you sure you want to mark winners?  This will reset all existing win/lose information for this auction.</div>
+<button id="opener">Run mark winners</button>
+
+
+{%block info%}
+{%endblock%}
+
+{% endblock %}
+
+
+
+
+<!--
+
+{%for winner in data.winners%}
+	{{winner.user}}
+{%endfor%}
+-->
+
+
+
+

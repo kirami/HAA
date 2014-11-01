@@ -41,8 +41,8 @@ def getLosingBids(auctionId, userId = None):
 		return Bid.objects.filter(winner=False, item__auction=auctionId, user=userId)
 
 
-def getSumWinners():
-	winners = getWinners()
+def getSumWinners(auctionId):
+	winners = getWinningBids(auctionId)
 	if len(winners) > 0:
 		return winners.aggregate(Sum('amount'))["amount__sum"] 
 	else:
@@ -57,37 +57,36 @@ def getOrderedBids(auctionId):
 	return list(Bid.objects.raw('SELECT b.* FROM audio_bid b, audio_item i WHERE b.item_id = i.id and i.auction_id = '+str(auctionId)+'  ORDER BY item_id ASC, amount DESC, date ASC;'))
 
 
-#get consigned items won in certain auction
-def getConsignmentWinners(auctionId):
+
+
+#get consigned items won in certain auction by consignor
+def getConsignmentWinners(consignorId = None, auctionId = None):
 	cursor = connection.cursor()
-	cursor.execute("select * from audio_bid b, audio_consignment c where b.auction_id = "+str(auctionId)+
-		" and b.winner = true and b.item_id = c.item_id;")
+	sql = "select * from audio_bid b, audio_consignment c, audio_item i where b.winner = true and b.item_id = c.item_id and c.item_id = i.id"
+	if auctionId != None:
+		sql +=" and i.auction_id = "+str(auctionId)
+
+	if consignorId != None:
+		sql += " and c.consignor_id = "+str(consignorId)
+
+	cursor.execute(sql)
 	row = dictfetchall(cursor)
 	return row
-
 
 #get consignors with winning items
 def getConsignorBidSums(auctionId):
 	cursor = connection.cursor()
-	auctionId = 1
-	cursor.execute("select consignor_id, cc.first_name, cc.last_name, sum(b.amount) from audio_bid b, audio_consignment c, audio_consignor cc where "+
-		"b.winner = true and b.item_id = c.item_id and cc.id = c.consignor_id and b.auction_id = "+ str(auctionId)+" group by consignor_id;") 
+	cursor.execute("select consignor_id, cc.first_name, cc.last_name, sum(b.amount) from audio_bid b, audio_consignment c, audio_consignor cc, audio_item i where b.winner = true and b.item_id = c.item_id and cc.id = c.consignor_id and i.auction_id = "+str(auctionId)+" and i.id = b.item_id group by consignor_id;") 
 	row = dictfetchall(cursor)
 	return row
 
 #get consigment which was not won in this auction
-def getConsignedLosers(auctionId):
+def getConsignedLosers(auctionId, consignorId):
 	auctionId = 1
 	return ("select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id "+
 	"from audio_bid b where b.winner = true) and c.item_id = i.id")
 
-#get consigned items won in certain auction by consignor
-def getConsignmentWinnersById(consignorId, auctionId):
-	cursor = connection.cursor()
-	cursor.execute("select * from audio_bid b, audio_consignment c, audio_item i where b.auction_id = "+str(auctionId)+
-		" and b.winner = true and b.item_id = c.item_id and c.item_id = i.id and c.consignor_id = "+str(consignorId)+";")
-	row = dictfetchall(cursor)
-	return row
+
 
 #--------------------------
 
@@ -110,37 +109,48 @@ def getAlphaWinners(auctionId):
 
 
 
-def getInvoicesByAuction(auctionId):
-	return Invoice.objects.filter(auction_id = auctionId)
+def getInvoices(auctionId = None):
+	if auctionId == None:
+		return Invoice.objects.all() 
+	else:
+		return Invoice.objects.filter(auction_id = auctionId)
 	
-def getTotalInvoiceAmountByAuction(auctionId):
-	invoices = getInvoicesByAuction(auctionId)
+def getTotalInvoiceAmount(auctionId = None):
+	invoices = getInvoices(auctionId)
 	if len(invoices) > 0:
 		return invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] 
 	else:
 		return 0
 
-def getInvoiceInfoByUser(userId):
-	invoices = Invoice.objects.filter(user_id = userId, auction_id = auctionId)
+def getInvoiceInfoByUser(userId, auctionId = None):
+	if auctionId == None:
+		invoices = Invoice.objects.filter(user_id = userId)
+	else:
+		invoices = Invoice.objects.filter(user_id = userId, auction_id = auctionId)
+	
 	if len(invoices) > 0:
 		return { "sum": invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"], "invoices":invoices} 
 	else:
 		return { "sum": 0, "invoices":None} 
 
-def getPaymentInfoByUser(userId):
-	payments = Payment.objects.filter(user_id = userId)
+def getPaymentInfoByUser(userId, auctionId = None):
+	
+	if auctionId == None:
+		payments = Payment.objects.filter(user_id = userId)
+	else:
+		payments = Payment.objects.filter(user_id = userId, auction_id = auctionId)
+	
 	if len(payments) > 0:
 		return { "sum": payments.aggregate(Sum('amount'))["amount__sum"], "payments":payments} 
 	else:
 		return { "sum": 0, "payments":None} 
 
-def getPaymentsByAuction():
-	auctionId = 1
+def getPayments(auctionId = None, userId = None):
 	return Payment.objects.filter()
 
 	
-def getTotalPaymentAmountByAuction():
-	Payments = getPaymentsByAuction()
+def getTotalPaymentAmount(auctionId = None):
+	Payments = getPayments(auctionId)
 	if len(Payments) > 0:
 		return Payments.aggregate(Sum('amount'))["amount__sum"] 
 	else:
@@ -166,8 +176,8 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	for each item, get consignors, group by consignor id.
 	'''
 
-	notWon = getConsignedLosersById(consignorId, auctionId)
-	consignedItems = getConsignmentWinnersById(consignorId, auctionId)
+	notWon = getConsignedLosers(consignorId, auctionId)
+	consignedItems = getConsignmentWinners(consignorId, auctionId)
 	
 	consignTotal = 0
 	haaTotal = 0

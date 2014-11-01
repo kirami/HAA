@@ -8719,3 +8719,121 @@ Traceback (most recent call last):
     return render_to_response('catalog.html', {"catItems":items, "auctionId":"1", "bids": bidDict}, context_instance=RequestContext(request))
 UnboundLocalError: local variable 'bidDict' referenced before assignment
 [31/Oct/2014 07:11:25] WARNING [django.request:143] Not Found: /audio/bids
+[31/Oct/2014 22:43:08] WARNING [django.request:143] Not Found: /admin/admin/consignorReport/
+[31/Oct/2014 22:44:47] WARNING [django.request:143] Not Found: /admin/admin/consignorReport/
+[31/Oct/2014 22:55:52] WARNING [django.request:143] Not Found: /admin/admin/consignorReport/1
+[31/Oct/2014 22:56:04] WARNING [django.request:143] Not Found: /admin/admin/consignorReport/1
+[31/Oct/2014 22:56:14] WARNING [django.request:143] Not Found: /admin/admin/consignorReport/1
+[31/Oct/2014 22:56:26] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/1/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 37, in consignorReport
+    data["total"] = getSumWinners(auctionId)
+TypeError: getSumWinners() takes no arguments (1 given)
+[31/Oct/2014 22:57:42] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/1/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 37, in consignorReport
+    data["total"] = getSumWinners(auctionId)
+TypeError: getSumWinners() takes no arguments (1 given)
+[31/Oct/2014 22:59:54] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/1/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 39, in consignorReport
+    consignors = getConsignorBidSums(auctionId)
+  File "/srv/hawthorn/audio/utils.py", line 74, in getConsignorBidSums
+    "b.winner = true and b.item_id = c.item_id and cc.id = c.consignor_id and b.auction_id = "+ str(auctionId)+" group by consignor_id;")
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 69, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 53, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/lib/python2.7/dist-packages/django/db/utils.py", line 99, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/util.py", line 51, in execute
+    return self.cursor.execute(sql)
+  File "/usr/lib/python2.7/dist-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/cursors.py", line 174, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+OperationalError: (1054, "Unknown column 'b.auction_id' in 'where clause'")
+[31/Oct/2014 23:16:50] WARNING [django.request:143] Not Found: /admin/markWinners/
+[31/Oct/2014 23:21:45] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/1/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 42, in consignorReport
+    data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"])
+TypeError: getAllConsignmentInfo() takes exactly 2 arguments (1 given)
+[31/Oct/2014 23:23:23] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/1/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 42, in consignorReport
+    data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"], auctionId)
+  File "/srv/hawthorn/audio/utils.py", line 167, in getAllConsignmentInfo
+    notWon = getConsignedLosersById(consignorId, auctionId)
+NameError: global name 'getConsignedLosersById' is not defined
+[31/Oct/2014 23:35:02] ERROR [django.request:224] Internal Server Error: /admin/consignorReport/1/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 42, in consignorReport
+    data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"], auctionId)
+  File "/srv/hawthorn/audio/utils.py", line 168, in getAllConsignmentInfo
+    notWon = getConsignedLosersById(consignorId, auctionId)
+NameError: global name 'getConsignedLosersById' is not defined
+[31/Oct/2014 23:45:41] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:46:53] WARNING [django.request:143] Not Found: /admin/consignorReport/
+[31/Oct/2014 23:46:53] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:47:06] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:48:02] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:48:26] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:48:36] WARNING [django.request:143] Not Found: /admin/consignorReport/
+[31/Oct/2014 23:48:36] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:49:05] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:50:36] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:50:48] WARNING [django.request:143] Not Found: /admin/consignorReport/
+[31/Oct/2014 23:50:48] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:51:28] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:51:38] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:54:33] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:55:09] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:55:45] WARNING [django.request:143] Not Found: /admin/0/
+[31/Oct/2014 23:55:45] WARNING [django.request:143] Not Found: /admin/consignorReport/
+[01/Nov/2014 00:07:03] ERROR [django.request:224] Internal Server Error: /admin/balances/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 71, in calculateBalances
+    data["totalInvoices"] = getTotalInvoiceAmountByAuction()
+TypeError: getTotalInvoiceAmountByAuction() takes exactly 1 argument (0 given)
+[01/Nov/2014 00:12:09] ERROR [django.request:224] Internal Server Error: /admin/balances/1/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 54, in userBalanceInfo
+    invoices = getInvoiceInfoByUser(userId)
+  File "/srv/hawthorn/audio/utils.py", line 123, in getInvoiceInfoByUser
+    invoices = Invoice.objects.filter(user_id = userId, auction_id = auctionId)
+NameError: global name 'auctionId' is not defined
+[01/Nov/2014 00:12:16] ERROR [django.request:224] Internal Server Error: /admin/balances/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 71, in calculateBalances
+    data["totalInvoices"] = getTotalInvoiceAmountByAuction()
+TypeError: getTotalInvoiceAmountByAuction() takes exactly 1 argument (0 given)
+[01/Nov/2014 00:23:55] ERROR [django.request:224] Internal Server Error: /admin/balances/
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/django/core/handlers/base.py", line 112, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/srv/hawthorn/audio/admin_views.py", line 70, in calculateBalances
+    data["totalPayments"] = getTotalPaymentAmountByAuction()
+NameError: global name 'getTotalPaymentAmountByAuction' is not defined
+[01/Nov/2014 00:36:30] WARNING [django.request:143] Not Found: /admin/markWinners/
+[01/Nov/2014 00:45:54] WARNING [django.request:143] Not Found: /admin/markWinners/

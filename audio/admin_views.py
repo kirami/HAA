@@ -39,7 +39,7 @@ def consignorReport(request, auctionId):
 	consignors = getConsignorBidSums(auctionId)
 	for consignor in consignors:
 		consignInfo = consignor["consignor_id"]
-		data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"])
+		data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"], auctionId)
 		data[consignInfo]["firstName"] = consignor["first_name"]
 		data[consignInfo]["lastName"] = consignor["last_name"]
 	#Name / Gross / Commission % / Amount due
@@ -67,8 +67,8 @@ def calculateBalances(request):
 	#invoices amount total - paid amount total?
 	#
 
-	data["totalPayments"] = getTotalPaymentAmountByAuction()
-	data["totalInvoices"] = getTotalInvoiceAmountByAuction()
+	data["totalPayments"] = getTotalPaymentAmount()
+	data["totalInvoices"] = getTotalInvoiceAmount()
 	data["remaining"] = data["totalPayments"] - data["totalInvoices"]
 
 	#per user
@@ -85,31 +85,37 @@ def reportByUser(request):
 def markWinners(request, auctionId):
 	#TODO - is this after invoice run?  are you sure?
 	#set all winners for this auction to 0
-	resetWinners(auctionId)
+	data = {}
+	data["success"] = False
+	if request.method == "POST":
 
-	dupes = getDuplicateItems(auctionId)
-	bids = getOrderedBids(auctionId)
-	currentItemId = 0
-	index = 0
- 	for bid in bids:
- 		if currentItemId != bid.item_id:
- 			#reset
- 			item = Item.objects.filter(id = bid.item_id)
- 			if len(item) > 0:
- 				quantity = int(item[0].quantity)
- 			else:
- 				quantity = 0
+		resetWinners(auctionId)
 
- 			currentItemId = bid.item_id
- 			index = 0 			
+		dupes = getDuplicateItems(auctionId)
+		bids = getOrderedBids(auctionId)
+		currentItemId = 0
+		index = 0
+	 	for bid in bids:
+	 		if currentItemId != bid.item_id:
+	 			#reset
+	 			item = Item.objects.filter(id = bid.item_id)
+	 			if len(item) > 0:
+	 				quantity = int(item[0].quantity)
+	 			else:
+	 				quantity = 0
 
- 		if bid.winner != True and index < quantity:
- 			bid.winner = True
- 			bid.save()
- 		
- 		index = index + 1	
+	 			currentItemId = bid.item_id
+	 			index = 0 			
 
-	return HttpResponse({"test":"success"}, content_type="application/json")
+	 		if bid.winner != True and index < quantity:
+	 			bid.winner = True
+	 			bid.save()
+	 		
+	 		index = index + 1
+	 	data["success"]=True
+
+	return render_to_response('admin/audio/markWinners.html', {"data":data}, context_instance=RequestContext(request))
+
 
 
 def winners(request):
