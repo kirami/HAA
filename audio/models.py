@@ -7,6 +7,7 @@ class Auction(models.Model):
 	end_date = models.DateField()
 	second_chance_end_date = models.DateField(null = True)
 	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
+	locked = models.BooleanField(default = False)
 
 	def __unicode__(self):
 		return u"%s" % self.id
@@ -103,21 +104,21 @@ class UserProfile(models.Model):
 class Address(models.Model):
 	user = models.ForeignKey(User)
 	address_one = models.CharField(max_length=100, default="")
-	address_two = models.CharField(max_length=100, null = True)
+	address_two = models.CharField(max_length=100, null = True, blank=True)
 	city = models.CharField(max_length=100)
 	state = models.CharField(max_length=100)
 	zipcode = models.CharField(max_length=100, default="")
-	postal_code = models.CharField(max_length=100, null=True)
+	postal_code = models.CharField(max_length=100, null=True, blank=True)
 	country = models.CharField(max_length=100, default="")
-	telephone = models.CharField(max_length=100, null=True)
-	cell_phone = models.CharField(max_length=100, null=True)
-	fax = models.CharField(max_length=100, null=True)
+	telephone = models.CharField(max_length=100, null=True, blank = True)
+	cell_phone = models.CharField(max_length=100, null=True, blank=True)
+	fax = models.CharField(max_length=100, null=True, blank=True)
 
 	class Meta:
 		verbose_name_plural = "Addresses"
 
 	def __unicode__(self):
-		return self.user.email
+		return self.user.email + " "+self.user.first_name + " " + self.user.last_name
 
 class Consignor(models.Model):
 	first_name = models.CharField(max_length=100)

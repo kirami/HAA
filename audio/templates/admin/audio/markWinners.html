@@ -22,6 +22,16 @@
 <div>Chose an auction:</div>
 <form action="" method="post" id="markWinnersForm">
     {% csrf_token %} 
+
+
+    <select>
+    {%for auction in data.auctions%}
+    	<option value="{{auction}}">{{auction}}</option>
+    {%endfor%}
+    
+
+    </select>
+
 </form>
 
 <div id="dialog-confirm" title="Please Confirm">Are you sure you want to mark winners?  This will reset all existing win/lose information for this auction.</div>

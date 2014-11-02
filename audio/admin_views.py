@@ -10,15 +10,14 @@ from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, BulkConsignment
 
-from audio.models import Address, Item, Bid, Invoice, Payment
+from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor
 from audio.utils import *
 
 from datetime import datetime  
 
-import logging
 import json
 
-
+import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -28,6 +27,12 @@ def test(request):
 
 def consignorReportById(request, consignorId, auctionId):
 	data = getAllConsignmentInfo(consignorId, auctionId)	
+	#sums = getConsignorBidSums(auctionId)
+	getHeaderData(data, auctionId)
+	consignor = Consignor.objects.get(id = consignorId)
+	data["firstName"] = consignor.first_name
+	data["lastName"] =  consignor.last_name
+	#data["gross"] = sums
 	return render_to_response('admin/audio/consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -35,15 +40,19 @@ def consignorReport(request, auctionId):
 	data = {}
 	#all consignors, consignor total money
 	data["total"] = getSumWinners(auctionId)
+	getHeaderData(data, auctionId)
 	
-	consignors = getConsignorBidSums(auctionId)
+	
+	consignors = getConsignmentWinners(auctionId = auctionId)
 	for consignor in consignors:
-		consignInfo = consignor["consignor_id"]
-		data[consignInfo] = getAllConsignmentInfo(consignor["consignor_id"], auctionId)
-		data[consignInfo]["firstName"] = consignor["first_name"]
-		data[consignInfo]["lastName"] = consignor["last_name"]
+		consignorId = consignor["consignor_id"]
+		consignor = Consignor.objects.get(id = consignorId)
+		consignInfo = consignorId
+		data[consignInfo] = getAllConsignmentInfo(consignorId, auctionId)
+		data[consignInfo]["firstName"] = consignor.first_name
+		data[consignInfo]["lastName"] = consignor.last_name
 	#Name / Gross / Commission % / Amount due
-	
+	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
 
 
@@ -114,82 +123,62 @@ def markWinners(request, auctionId):
 	 		index = index + 1
 	 	data["success"]=True
 
+	data["auctions"] = Auction.objects.filter(locked = False)
+
 	return render_to_response('admin/audio/markWinners.html', {"data":data}, context_instance=RequestContext(request))
 
 
 
-def winners(request):
+def winners(request, auctionId):
 	data = {}
-	auctionId = 1
-	data["winningBids"] = getAlphaWinners(auctionId)
+	winners = getAlphaWinners(auctionId)
+	for winner in winners:
+		try:
+			#logger.error("winner: " + winner)
+			address = Address.objects.get(user_id = winner["id"])
+			winner["zipcode"] = address.zipcode
+		except:
+			pass
+	
+	data["winningBids"] = winners
+	getHeaderData(data, auctionId)
+	
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))
 
-def losers(request):
+def losers(request, auctionId):
 	data = {}
-	auctionId = 1
-	data["losingBids"] = getLosingBids(auctionId)
+	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/losers.html', {"data":data}, context_instance=RequestContext(request))
 
-def wonItems(request):
+def wonItems(request, auctionId):
 	data = {}
-	auctionId = 1
-	data["soldItems"] = getWinningBids(auctionId)
+ 	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/wonItems.html', {"data":data}, context_instance=RequestContext(request))
 
-def unsoldItems(request):
+def unsoldItems(request, auctionId):
 	data = {}
-	auctionId = 1
-	data["unsoldItems"] = getNoBidItems(auctionId)
+	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
 
-def bulkConsignment(request):
+def bulkConsignment(request, auctionId):
 	
 	if request.method == 'POST':
-		logger.error("in post")
 		form = BulkConsignment(request.POST)
-		logger.error("form made")
-		if form.is_valid():
-			logger.error("form is valid")
+		if form.is_valid():			
 			new_user = form.save()
 			return HttpResponseRedirect("/admin/audio/consignment/")
 		else:
-			'''
-			for field in form.errors.keys():
-				print "ValidationError: %s[%s] <- \"%s\" %s" % (type(form),field,form.data[field],form.errors[field].as_text() )  
-			'''
-			logger.error(form.errors)
 			return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
 
 	else:
-		form = BulkConsignment()
+		form = BulkConsignment(auctionId = auctionId)
 
 	return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
 
 
-def runReport(request):
+def runReport(request, auctionId):
  	data = {}
- 	''' get all items with bids, 
- 		get winners
- 		mark winning bids
- 		print on screen
- 		option to print invoices
- 		option to email invoices
- 		users with no winning bids 
- 		items with no bids
-
- 	'''
- 	auctionId = 1
- 	winners = getWinningBids(auctionId)
- 	noBids = getNoBidItems(auctionId)
- 	losers = getLosingBids(auctionId)
-
- 	data["auctionId"] = auctionId
- 	data["winners"] = winners
- 	data["losers"] = losers
- 	data["loserCount"] = len(losers)
- 	data["wonItems"] = getBidItems(auctionId)
- 	data["noBidItems"] = len(noBids)
- 	data["total"] = getSumWinners(auctionId)
+ 	getHeaderData(data, auctionId)
 
 	return render_to_response('admin/audio/report.html', {"data":data}, context_instance=RequestContext(request))
 

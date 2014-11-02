@@ -59,13 +59,43 @@
                     </tr>
                 
                    <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goToBalances()" >Balances</a></th>
+                        <th scope="row"><a class="adminLink" onclick="goTo('balances/','balanceUserId')" >Balances</a></th>
                         <td>Auction ID:<input type="text" id="balanceUserId" class="adminInput"></td>  
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
                     </tr>
                     <tr class="model-group">           
                         <th scope="row"><a class="adminLink" href="markWinners" target="_blank" >Mark Winners</a></th>
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>
+                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                    </tr>
+                    <tr class="model-group">           
+                        <th scope="row"><a class="adminLink" onclick="goTo('winners/','winnersAuctionId')" >Winners Report</a></th>
+                        <td>Auction ID:<input type="text" id="winnersAuctionId" class="adminInput"></td> 
+                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                    </tr>
+                    <tr class="model-group">           
+                        <th scope="row"><a class="adminLink" onclick="goTo('losers/','losersAuctionId')" >Losers Report</a></th>
+                        <td>Auction ID:<input type="text" id="losersAuctionId" class="adminInput"></td> 
+                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                    </tr>
+                    <tr class="model-group">           
+                        <th scope="row"><a class="adminLink" onclick="goTo('wonItems/','wonItemsAuctionId')" >Won Items Report</a></th>
+                        <td>Auction ID:<input type="text" id="wonItemsAuctionId" class="adminInput"></td> 
+                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                    </tr>
+                    <tr class="model-group">           
+                        <th scope="row"><a class="adminLink" onclick="goTo('unsoldItems/','unsoldItemsAuctionId')" >Unsold Items Report</a></th>
+                        <td>Auction ID:<input type="text" id="unsoldItemsAuctionId" class="adminInput"></td> 
+                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                    </tr>
+                    <tr class="model-group">           
+                        <th scope="row"><a class="adminLink" onclick="goTo('bulkConsignment/', 'bulkConsignmentAuctionId')" >Bulk Consignment</a></th>                   
+                        <td>Auction ID:<input type="text" id="bulkConsignmentAuctionId" class="adminInput"></td>  
+                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                    </tr>
+                    <tr class="model-group">           
+                        <th scope="row"><a class="adminLink" onclick="goTo('report/', 'reportAuctionId')" >Auction Summary</a></th>                   
+                        <td>Auction ID:<input type="text" id="reportAuctionId" class="adminInput"></td>  
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
                     </tr>
 
@@ -142,13 +172,13 @@ function goToConsignor(){
     return false;
 }
 
-function goToBalances(){
-    locationUrl = "balances/"
-    userId = $('#balanceUserId').val()
-    
-    if(userId != "")
-        locationUrl+= ""+userId + '/'
 
+function goTo(locationStart, elementId){
+    locationUrl = locationStart
+    auctionId = $('#' + elementId).val()
+    
+    if(auctionId && auctionId != "")
+        locationUrl+= ""+auctionId + '/'
 
     window.open( locationUrl)
     return false;
