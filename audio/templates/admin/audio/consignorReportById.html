@@ -3,14 +3,11 @@
 
 {%block info%}
 
-<h1>Consignor report for auction: {{auctionId}}</h1>
-
-
-description / bidder/ win amount/ consign amount / haa amount
+<h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction #{{data.auctionId}}</h1>
 
 <div id="reportDiv" class="reportTable">
 
-	<div>Consignment info by item</div>	
+	<div>Consignment info by item:</div>	
 	<div class="maxBidItem">Item number:</div>
 	<div class="maxBidItem">Bidder:</div>
 	<div class="maxBidItem">Total amount:</div>
@@ -18,7 +15,7 @@ description / bidder/ win amount/ consign amount / haa amount
 	<div class="maxBidItem">Range Min:</div>
 	<div class="maxBidItem">Range Max:</div>
 	<div class="maxBidItem">Percent:</div>
-	<div class="maxBidItem">Range amount:</div>
+	<div class="maxBidItem">Range percentage:</div>
 	
 
 	
@@ -44,13 +41,15 @@ description / bidder/ win amount/ consign amount / haa amount
 	<hr>
 	<div>Total: ${{data.consignorTotal|floatformat:2}} </div>
 
-
+	<br><br>
 	<div>Unsold items:
-
-	{%for unsoldItem in data.unsoldItems%}
-	<div>{{unsoldItem.id}} {{unsoldItem.label.name}} {{unsoldItem.name}}</div>
-	{%endfor%}
-
+	{%if data.unsoldConsignorItemsCount == 0%}
+		<div>All items were sold!</div>
+	{%else%}
+		{%for unsoldItem in data.unsoldConsignorItems%}
+			<div>{{unsoldItem.id}} {{unsoldItem.label.name}} {{unsoldItem.name}}</div>
+		{%endfor%}
+	{%endif%}
 	</div>
 
 </div>

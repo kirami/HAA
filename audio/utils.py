@@ -2,14 +2,16 @@ from audio.models import Address, Item, Bid, Invoice, Payment
 from django.db import connection
 from django.db.models import Sum
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 #Bid utils
 
 #returns ALL items in db with no bids ever.
-def getNoBidItems(orderByName = False):
-	auctionId = 1
-	#todo auctionid
-	query = 'SELECT * from audio_item where id not in (select item_id from audio_bid)'
+def getNoBidItems(auctionId, orderByName = False):
+	query = 'SELECT * from audio_item where id not in (select item_id from audio_bid) and auction_id=' + str(auctionId)
 	if orderByName:
 		query+= " order by name"
 	return list(Item.objects.raw(query))
@@ -17,9 +19,7 @@ def getNoBidItems(orderByName = False):
 def resetWinners(auctionId):
 	return Bid.objects.filter(item__auction = auctionId).update(winner=False)
 
-def getBidItems(orderByName = False):
-	auctionId = 1
-	#todo auctionid
+def getBidItems(auctionId, orderByName = False):
 	query = 'SELECT * from audio_item where id in (select item_id from audio_bid) and auction_id =' + str(auctionId)
 	if orderByName:
 		query+= " order by name"
@@ -72,19 +72,22 @@ def getConsignmentWinners(consignorId = None, auctionId = None):
 	cursor.execute(sql)
 	row = dictfetchall(cursor)
 	return row
-
+'''
 #get consignors with winning items
 def getConsignorBidSums(auctionId):
 	cursor = connection.cursor()
 	cursor.execute("select consignor_id, cc.first_name, cc.last_name, sum(b.amount) from audio_bid b, audio_consignment c, audio_consignor cc, audio_item i where b.winner = true and b.item_id = c.item_id and cc.id = c.consignor_id and i.auction_id = "+str(auctionId)+" and i.id = b.item_id group by consignor_id;") 
 	row = dictfetchall(cursor)
 	return row
+'''
 
 #get consigment which was not won in this auction
 def getConsignedLosers(auctionId, consignorId):
-	auctionId = 1
-	return ("select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id "+
+	cursor = connection.cursor()
+	cursor.execute("select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id "+
 	"from audio_bid b where b.winner = true) and c.item_id = i.id")
+	row = dictfetchall(cursor)
+	return row
 
 
 
@@ -102,8 +105,9 @@ def getUnbalancedUsers():
 
 def getAlphaWinners(auctionId):
 	cursor = connection.cursor()
-	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name, a.zipcode from audio_bid b, audio_address a, auth_user au "+
-		"WHERE b.winner = true and b.user_id = a.user_id and au.id = a.user_id and b.auction_id = "+str(auctionId)+" order by last_name")
+	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name from audio_bid b, "+
+		" auth_user au, audio_item i WHERE b.winner = true and b.item_id = i.id and b.user_id = au.id and i.auction_id="+
+		str(auctionId) + " order by last_name")
 	row = dictfetchall(cursor)
 	return row
 
@@ -183,6 +187,7 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	haaTotal = 0
 	total = 0
 	gross = 0
+	used = []
 
 	for item in consignedItems:
 		money = 0
@@ -192,14 +197,15 @@ def getAllConsignmentInfo(consignorId, auctionId):
 		percent = item["percentage"]
 		item["inRange"] = 0
 		
-		if max == None and itemCost >= min:
+		if max == None and itemCost > min:
 			money = (itemCost - min) * (percent/100)
 			item["inRange"] = (itemCost - min)
 
 		if itemCost >= max:
 			money = (max - min) * (percent/100)
 			item["inRange"] = (max - min)
-		if itemCost <= max and itemCost >= min:
+		
+		if itemCost <= max and itemCost > min:
 			money = (itemCost - min) * (percent/100)
 			item["inRange"] = (itemCost - min)
 
@@ -210,10 +216,33 @@ def getAllConsignmentInfo(consignorId, auctionId):
 
 		item["rangeAmount"] = money
 		total += money
-		gross += itemCost
 
+		if item["item_id"] not in used:
+			gross += itemCost
+			used.append(item["item_id"])
+		
+	data["gross"]=gross		
 	data["consignedItems"] = consignedItems
 	data["consignorTotal"] = total
-	data["unsoldItems"] = notWon
+	data["unsoldConsignorItems"] = notWon
+	data["unsoldConsignorItemsCount"] = len(notWon)
 	data["gross"] = gross
 	return data
+
+
+def getHeaderData(data, auctionId):
+	winners = getWinningBids(auctionId)
+ 	noBids = getNoBidItems(auctionId)
+ 	losers = getLosingBids(auctionId)
+
+ 	data["auctionId"] = auctionId
+ 	data["winners"] = winners
+ 	data["losers"] = losers
+ 	data["loserCount"] = len(losers)
+ 	data["wonItems"] = getBidItems(auctionId)
+
+ 	data["wonItemsCount"] = len(data["wonItems"])
+ 	data["unsoldItems"] = noBids
+ 	data["noBidItemsCount"] = len(noBids)
+ 	data["total"] = getSumWinners(auctionId)	
+ 	return data

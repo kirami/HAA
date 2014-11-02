@@ -28,15 +28,17 @@ class SimpleBidForm(Form):
     
 
 class BulkConsignment(Form):
-    choice = [(xt.id, xt.name) for xt in getNoBidItems(True) ]
     consignor = ModelChoiceField(Consignor.objects.all())
-    bcItemsAvailable = MultipleChoiceField(choices=choice)	
+    bcItemsAvailable = MultipleChoiceField()	
     bcItemsSelected = MultipleChoiceField()
-     
-
+    
+    def __init__(self,*args,**kwargs):
+        auctionId = kwargs.pop("auctionId")     # client is the parameter passed from views.py
+        super(BulkConsignment, self).__init__(*args,**kwargs)
+        choice = [(xt.id, xt.name) for xt in getNoBidItems(auctionId, True) ]
+        self.fields["bcItemsAvailable"] = MultipleChoiceField(choices=choice)
+        
     def save(self):
-    	#todo get auction id
-    	auctionId = 1
     	consignor = self.data["consignor"]
     	total = int(self.data["totalConsignments"])
     	index = 1
@@ -55,7 +57,7 @@ class BulkConsignment(Form):
 	    		percent = self.data["percent"+ str(index)]
 	    		
 	    		item = Item.objects.get(id=selected)
-	    		Consignment.objects.create(item = item, auction_id = auctionId, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
+	    		Consignment.objects.create(item = item, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
 	    		index = index + 1
 
     def clean_bcItemsSelected(self):

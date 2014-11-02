@@ -10,17 +10,18 @@
 
 {% endblock %}
 
-
-
 {%block content%}
 
-<div>Report for auction {{data.auctionId}}:</div>  <A HREF="javascript:window.print()">Click to Print This Page</A>
+<div>Report for auction {{data.auctionId}}:</div>  
+<div><A HREF="javascript:window.print()">Click to Print This Page</A></div>
+<br>
 <div><a href="/admin/report">Summary: </a></div>
+<br>
 <div>Total on bids: ${{data.total}}</div>
-<div><a href="/admin/wonItems"># of items sold: {{data.wonItems.count}}</a></div>
-<div><a href="/admin/unsoldItems"># of items with no bids: {{data.noBidItemsCount}}</a></div>
-<div><a href="/admin/winners"># of winners: {{data.winners.count}}</a></div>
-<div><a href="/admin/losers"># of nonWinners: {{data.loserCount}}</a></div>
+<div><a href="/admin/wonItems/{{data.auctionId}}"># of items sold: {{data.wonItemsCount}}</a></div>
+<div><a href="/admin/unsoldItems/{{data.auctionId}}"># of items with no bids: {{data.noBidItemsCount}}</a></div>
+<div><a href="/admin/winners/{{data.auctionId}}"># of winners: {{data.winners.count}}</a></div>
+<div><a href="/admin/losers/{{data.auctionId}}"># of nonWinners: {{data.loserCount}}</a></div>
 
 
 

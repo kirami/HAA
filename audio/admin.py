@@ -29,14 +29,17 @@ class BidAdmin(admin.ModelAdmin):
     """
 
     
-
-
-
 class ItemAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'lot_id', 'auction',)
     search_fields = ['name', 'lot_id']
     list_filter = ('auction',)
+
+
+class ConsignmentAdmin(admin.ModelAdmin):
+
+    list_display = ('item', 'consignor', 'minimum', 'maximum', 'percentage',)
+    list_filter = ('item__auction',)
 
 
 admin.site.register(Auction)
@@ -49,6 +52,6 @@ admin.site.register(UserProfile)
 admin.site.register(Payment)
 admin.site.register(Invoice)
 admin.site.register(Consignor)
-admin.site.register(Consignment)
+admin.site.register(Consignment, ConsignmentAdmin)
 
 
