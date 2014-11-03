@@ -89,6 +89,7 @@ USE_TZ = True
 SHELL_PLUS_POST_IMPORTS = (
 
     ('audio.utils', '*'),
+    ('audio.mail', '*'),
 )
 
 
@@ -98,8 +99,11 @@ SHELL_PLUS_POST_IMPORTS = (
 STATIC_URL = '/static/'
 STATIC_ROOT = '/srv/hawthorn/static/'
 
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 8000
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'kirajmd@gmail.com'
+EMAIL_HOST_PASSWORD = 'lfn1k1taKD'
 
 LOGGING = {
     'version': 1,
