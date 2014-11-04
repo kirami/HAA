@@ -82,7 +82,27 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function sendEmail (template, auctionId, consignorId) {
+		console.log("sending email")
+		
+		var csrftoken = getCookie('csrftoken');
+		ajaxSetup(csrftoken);
 
+		$.ajax({
+		type: "POST",
+		url: "/admin/sendEmail/",
+		data: {"template":template, "auctionId":auctionId, "consignorId":consignorId},
+		success: function(data) {
+
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+        	//alert(xhr.status);
+        	//alert(thrownError);
+        	return false;
+      	}
+	});
+	
+}
 
 
 $( document ).ready(function() {

@@ -1,11 +1,8 @@
-{% extends "admin/audio/baseReport.html" %}
- 
+{% extends "email/baseEmail.html" %}
 
-{%block info%}
 
+{%block content%}
 <h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction #{{data.auctionId}}</h1>
-
-<button onclick='sendEmail("singleConsignorReport", {{data.auctionId}},{{data.consignor}})'>Email report to {{data.firstName}} {{data.lastName}}</button>
 
 <div id="reportDiv" class="reportTable">
 
@@ -55,5 +52,4 @@
 	</div>
 
 </div>
-
 {%endblock%}

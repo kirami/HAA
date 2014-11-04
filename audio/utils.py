@@ -1,4 +1,4 @@
-from audio.models import Address, Item, Bid, Invoice, Payment
+from audio.models import Address, Item, Bid, Invoice, Payment, Consignor
 from django.db import connection
 from django.db.models import Sum
 
@@ -226,7 +226,11 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	data["consignorTotal"] = total
 	data["unsoldConsignorItems"] = notWon
 	data["unsoldConsignorItemsCount"] = len(notWon)
-	data["gross"] = gross
+	
+	consignor = Consignor.objects.get(id = consignorId)
+	data["firstName"] = consignor.first_name
+	data["lastName"] =  consignor.last_name
+	data["consignor"] = consignor.id
 	return data
 
 
