@@ -12,6 +12,7 @@ from audio.forms import ContactForm, BidSubmitForm, BulkConsignment
 
 from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor
 from audio.utils import *
+from audio.mail import *
 
 from datetime import datetime  
 
@@ -25,34 +26,55 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return "test"
 
-def consignorReportById(request, consignorId, auctionId):
+
+def sendAllConsignorReports(request):
+	auctionId = d.get("auctionId")
+	template = d.get("template")
+	return consignorReport(auctionId, template)
+
+def sendTemplateEmail(request):
+	d = request.POST
+	consignorId = d.get("consignorId")
+	auctionId = d.get("auctionId")
+	template = d.get("template")
+	return consignorReportById(request, consignorId, auctionId, template)
+
+def consignorReportById(request, consignorId, auctionId, template = None):
 	data = getAllConsignmentInfo(consignorId, auctionId)	
-	#sums = getConsignorBidSums(auctionId)
 	getHeaderData(data, auctionId)
-	consignor = Consignor.objects.get(id = consignorId)
-	data["firstName"] = consignor.first_name
-	data["lastName"] =  consignor.last_name
-	#data["gross"] = sums
+	
+	if template:
+		msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":data}, template)
+		sendEmail(msg)
+		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+		
+
 	return render_to_response('admin/audio/consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
 
 
-def consignorReport(request, auctionId):
+def consignorReport(request, auctionId, template = None):
 	data = {}
 	#all consignors, consignor total money
 	data["total"] = getSumWinners(auctionId)
 	getHeaderData(data, auctionId)
-	
+	messages = {}
 	
 	consignors = getConsignmentWinners(auctionId = auctionId)
 	for consignor in consignors:
 		consignorId = consignor["consignor_id"]
 		consignor = Consignor.objects.get(id = consignorId)
 		consignInfo = consignorId
-		data[consignInfo] = getAllConsignmentInfo(consignorId, auctionId)
-		data[consignInfo]["firstName"] = consignor.first_name
-		data[consignInfo]["lastName"] = consignor.last_name
-	#Name / Gross / Commission % / Amount due
-	getHeaderData(data, auctionId)
+		indData = getAllConsignmentInfo(consignorId, auctionId)
+		data[consignInfo] = indData
+
+		if template:
+			msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":indData}, template)
+			messages.append(msg)
+
+	if template:
+		sendBulkEmail(messages)
+		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
 	return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
 
 
