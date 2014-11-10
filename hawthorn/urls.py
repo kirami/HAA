@@ -22,7 +22,12 @@ urlpatterns = patterns('',
     url(r'^admin/balances/(?P<userId>\d+)', admin_views.userBalanceInfo, name='userBalanceInfo'),     
     url(r'^admin/balances/$', admin_views.calculateBalances, name='calculateBalances'),    
     url(r'^admin/sendEmail/$', admin_views.sendTemplateEmail, name='sendTemplateEmail'),
+    url(r'^admin/getInvoices/(?P<auctionId>\d+)/(?P<userId>\d+)', admin_views.getInvoices, name='getInvoices'),
+    url(r'^admin/getInvoices/(?P<auctionId>\d+)', admin_views.getInvoices, name='getInvoices'),
+    url(r'^admin/sendInvoices/(?P<auctionId>\d+)', admin_views.sendInvoices, name='sendInvoices'),
+    
 
+    url(r'^admin/sendConsignorEmails/$', admin_views.sendAllConsignorReports, name='sendAllConsignorReports'),
     url(r'^admin/consignorReport/(?P<auctionId>\d+)/(?P<consignorId>\d+)', admin_views.consignorReportById, name='consignorReportById'),   
     url(r'^admin/consignorReport/(?P<auctionId>\d+)/$', admin_views.consignorReport, name='consignorReport'),   
     url(r'^admin/', include(admin.site.urls)),

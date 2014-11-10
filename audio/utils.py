@@ -41,10 +41,11 @@ def getLosingBids(auctionId, userId = None):
 		return Bid.objects.filter(winner=False, item__auction=auctionId, user=userId)
 
 
-def getSumWinners(auctionId):
+def getSumWinners(auctionId, userId = None):
 	winners = getWinningBids(auctionId)
 	if len(winners) > 0:
-		return winners.aggregate(Sum('amount'))["amount__sum"] 
+		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
+
 	else:
 		return 0
 

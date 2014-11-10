@@ -96,10 +96,12 @@ class Bid(models.Model):
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)
+	#TODO defaults?
 	pdf_list = models.BooleanField(default = False)
 	printed_list = models.BooleanField(default = False)
 	courtesy_list = models.BooleanField(default = False)
-	deadbeat = models.BooleanField(default=True)
+	deadbeat = models.BooleanField(default=False)
+	email_invoice = models.BooleanField(default=True)
 
 class Address(models.Model):
 	user = models.ForeignKey(User)

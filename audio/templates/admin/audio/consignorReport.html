@@ -5,6 +5,13 @@
 
 <h1>Consignor report for auction: {{data.auctionId}}</h1>{{ data.totalsByConsignor}}
 
+ <form action="/admin/sendConsignorEmails/" method="post">
+    {% csrf_token %}
+    <input type="hidden" value="{{data.auctionId}}" name="auctionId">
+
+      <input type="submit" value="Email consignor report to each consignor">
+  </form>
+
 <div>Gross auction total:  ${{data.total}}</div>
 
 <div>Total gross of consigned items: ${{data.consignedTotal}}</div>
