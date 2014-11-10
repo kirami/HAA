@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, BulkConsignment
 
-from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor
+from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile
 from audio.utils import *
 from audio.mail import *
 
@@ -27,10 +27,43 @@ def test(request):
 	return "test"
 
 
+def getInvoices(request, auctionId, userId = None, template=None):
+	data = {}
+	if userId != None:
+		data["invoice"]=getSumWinners(auctionId, userId)
+	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
+
+
+def sendInvoices(request, auctionId):
+	winners = getAlphaWinners(auctionId)
+	messages = []
+	template = "invoice"
+	data = {}
+
+	for winner in winners:
+		profile = UserProfile.objects.get(user_id = winner["id"])
+		if profile and profile.email_invoice:
+			data["invoice"] = getSumWinners(auctionId, winner["id"])
+			msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":data}, template)
+			messages.append(msg)
+
+	if template :
+		sendBulkEmail(messages)
+		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+	
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+		
+
+
+
 def sendAllConsignorReports(request):
+	d = request.POST
 	auctionId = d.get("auctionId")
-	template = d.get("template")
-	return consignorReport(auctionId, template)
+	logger.error("auction:")
+	logger.error(auctionId)
+	template = "singleConsignorReport"
+	return consignorReport(request, auctionId, template)
 
 def sendTemplateEmail(request):
 	d = request.POST
@@ -57,7 +90,7 @@ def consignorReport(request, auctionId, template = None):
 	#all consignors, consignor total money
 	data["total"] = getSumWinners(auctionId)
 	getHeaderData(data, auctionId)
-	messages = {}
+	messages = []
 	
 	consignors = getConsignmentWinners(auctionId = auctionId)
 	for consignor in consignors:
