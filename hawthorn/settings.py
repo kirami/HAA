@@ -86,13 +86,14 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 SHELL_PLUS_POST_IMPORTS = (
 
     ('audio.utils', '*'),
     ('audio.mail', '*'),
+    ('datetime', '*'),
 )
 
 

@@ -1,5 +1,6 @@
-from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField
-from audio.models import Address, Bid, Item, Consignment, Consignor
+from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, EmailField
+from django.contrib.auth.forms import UserCreationForm
+from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User
 from audio.utils import *
 import logging
 
@@ -8,6 +9,21 @@ import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+class UserCreateForm(UserCreationForm):
+    email = EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        new_user = super(UserCreateForm, self).save(commit=False)
+        new_user.email = self.cleaned_data["email"]
+        if commit:
+            new_user.save()
+            profile = UserProfile.objects.create(user = new_user)
+        return new_user
 
 # Create the form class.
 class ContactForm(ModelForm):

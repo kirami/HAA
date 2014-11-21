@@ -1,0 +1,33 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+<div>Invoices:</div>
+
+<div>Chose an auction:</div>
+<form action="" method="post" id="invoicesForm">
+    {% csrf_token %} 
+
+
+    <select>
+    {%for auction in data.auctions%}
+    	<option value="{{auction}}">{{auction}}</option>
+    {%endfor%}
+    </select>
+</form>
+
+
+<div>Print invoices to send (this will add these invoices to our records)</div>
+<div>Print all invoices for auction (this doesn't not save in our records)</div>
+
+
+<div id="dialog-confirm" title="Please Confirm">Are you sure you want email all invoices for auction <span id="auctionIdSpan"></span>?  This will reset all existing win/lose information for this auction.</div>
+<button id="opener">Send emails (this will add these invoices to our records)</button>
+
+
+<script type="text/javascript">
+	
+</script>
+
+{%endblock%}

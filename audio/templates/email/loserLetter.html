@@ -1,29 +1,4 @@
-{% extends "admin/audio/baseAdmin.html" %}
- 
 
-{%block content%}
-<div>Balances!</div>
-
-
-<div id="reportDiv" class="reportTable">
-
-<div>We've received payments totaling ${{data.totalPayments}}</div>
-<div>We've sent invoices totaling ${{data.totalInvoices}}</div>
-<div>Leaving a total balance of ${{data.remaining}}</div>
-	
-
-	<br><br>
-	<div>These users are not balanced:</div>	
-	{%for user in data.unbalancedUsers%} 
-		<div class="maxBidItem"><a href="admin/blances/{{user.user_id}}">{{user.user_id}}</a></div>
-		<div class="maxBidItem">{{user.payments}}</div>
-		<div class="maxBidItem">{{user.invoiced}}</div>
-		<div class="maxBidItem">{{user.balance}}</div>
-
-
-		<div class="clear"></div>
-	{%endfor%}
-
+<div>
+	We're sorry, you didn't win any items in auction: {{data.auctionId}}
 </div>
-
-{%endblock%}

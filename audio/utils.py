@@ -7,7 +7,30 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
+#user utils
+
+def getNewUsers():
+	return ""
+
+
+def getCurrentUsers():
+	return ""
+
+def getActiveUsers():
+	return ""
+
+def getNoneActiveUsers():
+	return ""
+
+def getCourtesyBidders():
+	return ""
+
+
 #Bid utils
+
+def getLosers(auctionId):
+	return list(Bid.objects.raw('select b.* from audio_bid b, audio_item i where i.id = b.item_id and i.auction_id = '+str(auctionId)+' group by user_id HAVING COUNT(CASE WHEN winner=1 THEN 1 ELSE NULL END) <1;'))
 
 #returns ALL items in db with no bids ever.
 def getNoBidItems(auctionId, orderByName = False):
@@ -17,6 +40,7 @@ def getNoBidItems(auctionId, orderByName = False):
 	return list(Item.objects.raw(query))
 
 def resetWinners(auctionId):
+	#todo check lock here?
 	return Bid.objects.filter(item__auction = auctionId).update(winner=False)
 
 def getBidItems(auctionId, orderByName = False):
@@ -25,16 +49,22 @@ def getBidItems(auctionId, orderByName = False):
 		query+= " order by name"
 	return list(Item.objects.raw(query))
 
-def getWinningBids(auctionId, userId = None):
-	#todo auction id
+def getWinningBids(auctionId, userId = None, date = None):
+
 	if userId == None:
-		return Bid.objects.filter(winner=True, item__auction=auctionId)
+		if date == None:
+			return Bid.objects.filter(winner=True, item__auction=auctionId)
+		else:
+			return Bid.objects.filter(winner=True, item__auction=auctionId, date__lte=date)
 	else:
-		return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId)
+		if date == None:
+			return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__lte=date)
+		else:
+			return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId)
 
 
 def getLosingBids(auctionId, userId = None):
-	#todo auction id
+
 	if userId == None:
 		return Bid.objects.filter(winner=False, item__auction=auctionId)
 	else:

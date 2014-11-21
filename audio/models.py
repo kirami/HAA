@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -11,26 +12,22 @@ class Auction(models.Model):
 
 	def __unicode__(self):
 		return u"%s" % self.id
-'''
-from django.contrib.admin.filterspecs import FilterSpec, RelatedFilterSpec
- 
-
-class CustomFilterSpec(RelatedFilterSpec):
-    def __init__(self, *args, **kwargs):
-        super(CustomFilterSpec, self).__init__(*args, **kwargs)       
-        self.lookup_choices = Item.objects.filter(auction=1) #this method returns the dynamic list
- 
-FilterSpec.filter_specs.insert(0, (lambda f: bool(f.rel and hasattr(f, 'custom_filter_spec')), CustomFilterSpec))
-''' 
 
 class Invoice(models.Model):
 	user = models.ForeignKey(User)
 	auction = models.ForeignKey(Auction)
 	invoiced_amount = models.DecimalField(max_digits=19, decimal_places=2)
 	invoice_date = models.DateField()
-	reminder_invoice_date = models.DateField()
-	second_chance_invoice_amount = models.DateField()
-	second_chance_invoice_date= models.DateField()
+	reminder_invoice_date = models.DateField(null = True, blank = True)
+	second_chance_invoice_amount = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
+	second_chance_invoice_date= models.DateField(null = True, blank = True)
+	shipped_date = models.DateField(null = True)
+	on_hold = models.BooleanField(default = False)
+
+	def __unicode__(self):
+		return u"%s" % self.user
+
+	#on hold
 
 class Payment(models.Model):
 	amount = models.DecimalField(max_digits=19, decimal_places=2)
@@ -38,7 +35,7 @@ class Payment(models.Model):
 	payment_type = models.CharField(max_length=100)
 	user = models.ForeignKey(User)
 	invoice = models.ForeignKey(Invoice)
-	received_date = models.DateField()
+	date_received = models.DateField()
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
@@ -70,6 +67,7 @@ class Item(models.Model):
 	quantity = models.IntegerField(default = 1)
 	auction = models.ForeignKey(Auction)
 	
+	
 	class Meta:
 		unique_together = (("auction", "lot_id"),)
 
@@ -78,15 +76,12 @@ class Item(models.Model):
 
 class Bid(models.Model):
 	user = models.ForeignKey(User)
-	date = models.DateField()
+	date = models.DateTimeField(auto_now = True)
 	item = models.ForeignKey(Item)
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	winner = models.BooleanField(default = False)
-	#item.custom_filter_spec = True
-	
-	#won bid?
-	#pay date
-	#invoice sent
+	invoice = models.ForeignKey(Invoice, null = True, blank = True)
+
 
 	def __unicode__(self):
 		return unicode(self.user)
@@ -102,6 +97,9 @@ class UserProfile(models.Model):
 	courtesy_list = models.BooleanField(default = False)
 	deadbeat = models.BooleanField(default=False)
 	email_invoice = models.BooleanField(default=True)
+
+	def __unicode__(self):
+		return unicode(self.user)
 
 class Address(models.Model):
 	user = models.ForeignKey(User)

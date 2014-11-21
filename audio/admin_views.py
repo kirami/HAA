@@ -26,6 +26,82 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return "test"
 
+def endBlindAuction(request, auctionId):
+	invoices = {}
+	logger.error( "here")
+	#make sure to do all manual stuff first
+	auction = Auction.objects.get(id = auctionId)
+	if auction.locked == True:
+		return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
+
+	#mark winners
+
+
+
+	auction.locked = True
+	#auction.save()
+
+	#get all winners & won items before end date
+	winners = getWinningBids(auctionId, date = auction.end_date)
+
+	#figure sums & shipping
+
+	for winner in winners:
+		userId = winner.user_id
+		logger.error("user " + userId)
+		if userId not in invoices:
+			logger.error( "user not in invoices")
+			user = User.objects.get(id = userId)
+			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = 0.00, invoice_date = datetime.now())
+			invoices[userId] = invoice.id
+			winner.invoice = invoice
+			winner.save()
+		else:
+			invoice = Invoice.objects.get(id = invoices[userId])
+			winner.invoice = invoice
+			winner.save()
+
+	#for each 
+		#add invoice, amount & shipping
+		#update item's invoice
+		
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+
+def userBreakdown(request):
+	data = {}
+	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
+
+
+
+def invoices(request):
+	data = {}
+	data["auctions"] = Auction.objects.filter(locked = False)
+	return render_to_response('admin/audio/invoiceAdmin.html', {"data":data}, context_instance=RequestContext(request))
+
+
+def sendLoserLetters(request, auctionId):
+	losers = getLosers(auctionId)
+	messages = []
+	template = "loserLetter"
+	data = {}
+	data["auctionId"] = auctionId
+
+	for loser in losers:
+		profile = UserProfile.objects.get(user_id = loser.user_id)
+		user = User.objects.get(id = loser.user_id )
+		#todo if profile has send emails
+		if profile and profile.email_invoice:
+			msg = getEmailMessage(user.email,"test",{"data":data}, template)
+			messages.append(msg)
+
+	if template :
+		sendBulkEmail(messages)
+		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+	
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
 
 def getInvoices(request, auctionId, userId = None, template=None):
 	data = {}
@@ -35,6 +111,11 @@ def getInvoices(request, auctionId, userId = None, template=None):
 
 
 def sendInvoices(request, auctionId):
+	
+	auction = Auction.objects.get(id = auctionId)
+	if auction.locked == True:
+		return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
+
 	winners = getAlphaWinners(auctionId)
 	messages = []
 	template = "invoice"
@@ -43,9 +124,14 @@ def sendInvoices(request, auctionId):
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner["id"])
 		if profile and profile.email_invoice:
+			user = User.objects.get(id = winner["id"] )
 			data["invoice"] = getSumWinners(auctionId, winner["id"])
-			msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":data}, template)
+			msg = getEmailMessage(user.email,"test",{"data":data}, template)
 			messages.append(msg)
+			
+			#save invoice to db
+			#Invoice.objects.create(user = user, auction = auction, invoiced_amount = "", invoice_date = datetime.now())
+
 
 	if template :
 		sendBulkEmail(messages)
