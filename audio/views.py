@@ -7,9 +7,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
-from audio.forms import ContactForm, BidSubmitForm
+from audio.forms import ContactForm, BidSubmitForm, UserCreateForm
 
-from audio.models import Address, Item, Bid, Auction
+from audio.models import Address, Item, Bid, Auction, UserProfile
 
 from datetime import datetime, date  
 
@@ -104,12 +104,13 @@ def contact_info(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreateForm(request.POST)
         if form.is_valid():
             new_user = form.save()
+           
             return HttpResponseRedirect("../profile")
     else:
-        form = UserCreationForm()
+        form = UserCreateForm()
     return render(request, "registration/register.html", {
         'form': form,
     })
