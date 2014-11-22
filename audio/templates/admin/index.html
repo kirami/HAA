@@ -105,8 +105,8 @@
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
                     </tr>
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" href=""  >Invoices</a></th>                   
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>  
+                        <th scope="row"><a class="adminLink" onclick="goTo('invoiceAdmin/', 'invoicesAdminAuctionId')"  >Invoices</a></th>                   
+                        <td>Auction ID:<input type="text" id="invoicesAdminAuctionId" class="adminInput"></td> 
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
                     </tr>
                     <tr class="model-group">           
@@ -115,7 +115,11 @@
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
                     </tr>
 
-
+                    <tr class="model-group">           
+                        <th scope="row"><a class="adminLink" onclick="goTo('endAuction/', 'endAuctionId')"  >End Auction</a></th>                   
+                        <td>Auction ID:<input type="text" id="endAuctionId" class="adminInput"></td> 
+                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                    </tr>
 
                 </tbody>
             </table>

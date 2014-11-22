@@ -58,13 +58,12 @@ def getCurrentAuction():
 		return None
 
 def simpleForm(request):
-	form = ''
+	form = None
+	data = None
+	now = date.today()
+	currentAuction = getCurrentAuction()
 	if request.method == "POST":
 		if(request.user.is_authenticated()):
-			
-			currentAuction = getCurrentAuction()
-			
-			now = date.today()
 
 			#TODO if not current auction return error
 
@@ -86,7 +85,9 @@ def simpleForm(request):
 					#todo get auctionId from...db?
 					Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuction.id, item_id = itemId, second_chance_bid = isSecondChance())
 	else:
-		#TODO if not on an auction don't allow
+		if currentAuction == None:
+			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
+
 		form = BidSubmitForm()
 
 	return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
@@ -160,6 +161,7 @@ def flatFeeCatalog(request):
 
 def isSecondChance():
 	now =  date.today()
+	#TODO current auction
 	currentAuctionId = 1
 	auction = Auction.objects.get(id = currentAuctionId)
 	if auction.end_date < now and auction.second_chance_end_date > now:
@@ -180,12 +182,12 @@ def catalog(request):
 		logger.error("error in catalog")
 		logger.error(e)
 		
-
+	bidDict = {}
 	items = ""
 	try:
 		items = Item.objects.all()	
 		bids = Bid.objects.filter(auction_id = currentAuctionId)
-		bidDict = {}
+		
 		for bid in bids:
 			bidDict[str(bid.item.id)] = str(bid.amount)
 

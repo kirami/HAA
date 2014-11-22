@@ -8,7 +8,8 @@ class Auction(models.Model):
 	end_date = models.DateTimeField()
 	second_chance_end_date = models.DateTimeField(null = True)
 	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
-	locked = models.BooleanField(default = False)
+	blind_locked = models.BooleanField(default = False)
+	flat_locked = models.BooleanField(default = False)
 
 	def __unicode__(self):
 		return u"%s" % self.id
