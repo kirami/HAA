@@ -61,6 +61,13 @@ class AdminBidForm(ModelForm):
         now = datetime.now()
         invoice = None
         invoices = Invoice.objects.filter(auction = auctionId, user = self.cleaned_data["user"])
+        
+        user = self.cleaned_data["user"]
+        addresses = Address.objects.filter(user = user)
+
+        if len(addresses) < 1:
+            raise ValidationError(('This user has no address')) 
+        
         if invoices:
             invoice = invoices[0]
         auction = Auction.objects.get(id = auctionId)
@@ -69,7 +76,6 @@ class AdminBidForm(ModelForm):
         if self.cleaned_data["amount"] < item.min_bid:
             raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
         
-
         #if is blind
         if now < auction.end_date:
             #TODO if is locked?

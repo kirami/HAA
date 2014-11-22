@@ -27,10 +27,9 @@ def test(request):
 	return "test"
 
 
-def createBid(request):
+def createBid(request, auctionId):
 	data = {}
-	#TODO auctionId
-	auctionId = 2
+	
 	if request.method == "POST":
 		form = AdminBidForm(auctionId, request.POST)
 		if form.is_valid():
@@ -40,7 +39,7 @@ def createBid(request):
 		
 
 	data["form"] = AdminBidForm(auctionId = 2)
-	data["auctions"] = Auction.objects.filter(locked = False)
+	data["auction"] = auctionId
 	return render_to_response('admin/audio/createBid.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -49,16 +48,17 @@ def endBlindAuction(request, auctionId):
 	logger.error( "here")
 	#make sure to do all manual stuff first
 	auction = Auction.objects.get(id = auctionId)
+	now = datetime.now()
 	
-	#TODO ????
-	if auction.locked == True:
+	if auction.blind_locked == True:
 		return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
 
+	if now < auction.end_date:
+		return HttpResponse(json.dumps({"success":False, "msg":"The blind auction time isn't up."}), content_type="application/json")
+
 	#mark winners
-
-	auction.locked = True
-	#auction.save()
-
+	markWinners(auction.id)
+	
 	#get all won items before end date
 	winners = getWinningBids(auctionId, date = auction.end_date)
 	#figure sums & shipping
@@ -78,26 +78,35 @@ def endBlindAuction(request, auctionId):
 			winner.save()
 		else:
 			invoice = Invoice.objects.get(id = invoices[userId])
-			winner.invoice = invoice
+			winner.invoice = invoice	
 			winner.save()
+
+	auction.blind_locked = True
+	auction.save()
+
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 
-def endFlatAuction(request, auctionId, userId):
-
+def endFlatAuction(request, auctionId, userId = None):
+	now = datetime.now()
 	#for all bids in auction not invoiced
 
 	#make sure to do all manual stuff first
 	auction = Auction.objects.get(id = auctionId)
-	#if auction.locked == True:
-	#	return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
+	if auction.flat_locked == True and userId == None:
+		return HttpResponse(json.dumps({"success":False, "msg":"This auction is flat locked"}), content_type="application/json")
+
+	if now < auction.second_chance_end_date:
+		return HttpResponse(json.dumps({"success":False, "msg":"The flat auction time isn't up."}), content_type="application/json")
+
 
 	#DO NOT mark winners - they should already be marked
 
 	#get all won items before end date
 	if userId == None:
 		winners = getWinningBids(auctionId, onlyNonInvoiced = True)
+		#TODO lock 2nd auction
 	else:
 		winners = getWinningBids(auctionId, userId = userId, onlyNonInvoiced = True)
 	#figure sums & shipping
@@ -111,7 +120,7 @@ def endFlatAuction(request, auctionId, userId):
 			sum = getWinnerSum(auctionId, userId, onlyNonInvoiced = True)
 			invoicedAmount = sum["sum"]
 			#TODO shipping amount
-			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = 0, second_chance_invoice_amount = invoicedAmount, second_chance_invoice_date = datetime.now(), )
+			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = 0, second_chance_invoice_amount = invoicedAmount, second_chance_invoice_date = now, )
 			winner.invoice = invoice
 			winner.save()
 		else:
@@ -124,19 +133,32 @@ def endFlatAuction(request, auctionId, userId):
 				#shipping
 				invoice.second_chance_invoice_date = datetime.now()
 				invoice.save()
-				
-
+	if userId == None:			
+		auction.flat_locked = True
+		auction.save()
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 def userBreakdown(request):
 	data = {}
 	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
 
-
-
-def invoices(request):
+def endAuction(request, auctionId):
 	data = {}
-	data["auctions"] = Auction.objects.filter(locked = False)
+	data["auctionId"]=auctionId
+
+	auction = Auction.objects.get(id=auctionId)
+	if auction.flat_locked:
+		data["flat_locked"] = True
+	if auction.blind_locked:
+		data["blind_locked"] = True
+
+
+	return render_to_response('admin/audio/endAuction.html', {"data":data}, context_instance=RequestContext(request))
+
+
+def invoices(request, auctionId):
+	data = {}
+	data["auctionId"]=auctionId
 	return render_to_response('admin/audio/invoiceAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -173,9 +195,7 @@ def getInvoices(request, auctionId, userId = None, template=None):
 def sendInvoices(request, auctionId):
 	
 	auction = Auction.objects.get(id = auctionId)
-	if auction.locked == True:
-		return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
-
+	
 	winners = getAlphaWinners(auctionId)
 	messages = []
 	template = "invoice"
@@ -189,10 +209,6 @@ def sendInvoices(request, auctionId):
 			msg = getEmailMessage(user.email,"test",{"data":data}, template)
 			messages.append(msg)
 			
-			#save invoice to db
-			#Invoice.objects.create(user = user, auction = auction, invoiced_amount = "", invoice_date = datetime.now())
-
-
 	if template :
 		sendBulkEmail(messages)
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
@@ -292,42 +308,34 @@ def reportByUser(request):
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))	
 
 
-def markWinners(request, auctionId):
+def markWinners(auctionId):
 	#TODO - is this after invoice run?  are you sure?
 	#set all winners for this auction to 0
-	data = {}
-	data["success"] = False
-	if request.method == "POST":
+	resetWinners(auctionId)
 
-		resetWinners(auctionId)
+	dupes = getDuplicateItems(auctionId)
+	bids = getOrderedBids(auctionId)
+	currentItemId = 0
+	index = 0
+ 	for bid in bids:
+ 		if currentItemId != bid.item_id:
+ 			#reset
+ 			item = Item.objects.filter(id = bid.item_id)
+ 			if len(item) > 0:
+ 				quantity = int(item[0].quantity)
+ 			else:
+ 				quantity = 0
 
-		dupes = getDuplicateItems(auctionId)
-		bids = getOrderedBids(auctionId)
-		currentItemId = 0
-		index = 0
-	 	for bid in bids:
-	 		if currentItemId != bid.item_id:
-	 			#reset
-	 			item = Item.objects.filter(id = bid.item_id)
-	 			if len(item) > 0:
-	 				quantity = int(item[0].quantity)
-	 			else:
-	 				quantity = 0
+ 			currentItemId = bid.item_id
+ 			index = 0 			
 
-	 			currentItemId = bid.item_id
-	 			index = 0 			
-
-	 		if bid.winner != True and index < quantity:
-	 			bid.winner = True
-	 			bid.save()
-	 		
-	 		index = index + 1
-	 	data["success"]=True
-
-	data["auctions"] = Auction.objects.filter(locked = False)
-
-	return render_to_response('admin/audio/markWinners.html', {"data":data}, context_instance=RequestContext(request))
-
+ 		if bid.winner != True and index < quantity:
+ 			bid.winner = True
+ 			bid.save()
+ 		
+ 		index = index + 1
+ 	
+	return True
 
 
 def winners(request, auctionId):

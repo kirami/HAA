@@ -1,0 +1,35 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+<div>Auction: {{data.auctionId}}</div>
+
+{%if data.flat_locked%}
+<div>This auction is totally locked.</div>
+{%else%}
+
+{%if data.blind_locked%}
+<div>This blind auction has been locked.</div>
+<div>Lock the flat auction? <button id="lockFlat">Lock</button></div>
+{%else%}
+<div>This blind auction is open.</div>
+<div>Lock the blind auction? <button id="lockBlind">Lock</button></div>
+{%endif%}
+
+{%endif%}
+
+<div id="lockFlat-confirm" title="Please Confirm">Are you sure you want to lock the Flat auction for auction #{{data.auctionId}}?</div>
+
+<div id="lockBlind-confirm" title="Please Confirm">Are you sure you want to lock the Blind auction for auction #{{data.auctionId}}?</div>
+
+
+<DIV id="msg" style="margin-top:20px; font-size:20px; color:red"></DIV>
+
+<input type="hidden" id="auctionId" name="auctionId" value="{{data.auctionId}}">
+
+<script type="text/javascript">
+	
+</script>
+
+{%endblock%}

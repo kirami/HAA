@@ -7,47 +7,7 @@ function catalogClick(e){
 
 }
 
-function endAuction(e){
-	
 
-
-
-	$( "#dialog-confirm1" ).dialog({
-		resizable: false,
-		height:140,
-		modal: true,
-		buttons: {
-			"Are you sure you want to end this auction?": function() {
-				
-				var csrftoken = getCookie('csrftoken');
-					ajaxSetup(csrftoken);
-
-
-					$.ajax({
-						type: "POST",
-						url: "/audio/auction/endAuction",
-						data: "",
-						success: function(data) {
-
-						},
-						error: function (xhr, ajaxOptions, thrownError) {
-				        	//alert(xhr.status);
-				        	//alert(thrownError);
-				        	return false;
-				      	}
-					});
-				
-
-				$( this ).dialog( "close" );
-			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
-
-}
-	
 
 function ajaxSetup(csrftoken){
 		$.ajaxSetup({
@@ -140,11 +100,114 @@ $( document ).ready(function() {
 		}
 	});
 
+	$( "#emailInvoices-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false, 
+		buttons: {
+			"Email Invoices": function() {
+				//$("#markWinnersForm").submit()
+				$( this ).dialog( "close" );
+			},
+		Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	$( "#lockFlat-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false, 
+		buttons: {
+			"Lock this flat auction": function() {
+				var csrftoken = getCookie('csrftoken');
+				ajaxSetup(csrftoken);
+
+				$.ajax({
+					type: "POST",
+					url: "/admin/endFlatAuction/"+ $("#auctionId").val() + "/",
+					success: function(data) {
+						if(data.success){
+
+							$("#msg").css("color","green")
+							$("#msg").text("You've successfully locked this flat auction")
+						}else{
+							$("#msg").text("Something went wrong, this flat auction wasn't locked: "  + data.msg)
+			        	
+						}
+
+
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+			        	$("#msg").text("Something went wrong, this flat auction wasn't locked")
+			        	return false;
+			      	}
+				});
+				$( this ).dialog( "close" );
+			},
+		Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	$( "#lockBlind-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false, 
+		buttons: {
+			"Lock this blind auction": function() {
+				var csrftoken = getCookie('csrftoken');
+				ajaxSetup(csrftoken);
+
+				$.ajax({
+					type: "POST",
+					url: "/admin/endBlindAuction/"+ $("#auctionId").val() + "/",
+					success: function(data) {
+
+						if(data.success){
+
+							$("#msg").css("color","green")
+							$("#msg").text("You've successfully locked this blind auction")
+						}else{
+							$("#msg").text("Something went wrong, this blind auction wasn't locked: "  + data.msg)
+			        	
+						}
+
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+			        	$("#msg").text("Something went wrong, this blind auction wasn't locked")
+			        	return false;
+			      	}
+				});
+				$( this ).dialog( "close" );
+			},
+		Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
 	
+	$( "#emailInvoices" ).click(function() {
+    	$( "#emailInvoices-confirm" ).dialog( "open" );
+    });
+
 	$( "#opener" ).click(function() {
     	$( "#dialog-confirm" ).dialog( "open" );
     });
 
+    $( "#lockFlat" ).click(function() {
+    	$( "#lockFlat-confirm" ).dialog( "open" );
+    });
+
+    $( "#lockBlind" ).click(function() {
+    	$( "#lockBlind-confirm" ).dialog( "open" );
+    });
 
 
 });

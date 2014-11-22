@@ -12,7 +12,6 @@ from django.contrib import admin
 from django.http import HttpResponse
 
 
-
 class BidAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'item', 'amount', )
