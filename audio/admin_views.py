@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
-from audio.forms import ContactForm, BidSubmitForm, BulkConsignment
+from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm
 
 from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile
 from audio.utils import *
@@ -26,33 +26,53 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return "test"
 
+
+def createBid(request):
+	data = {}
+	#TODO auctionId
+	auctionId = 2
+	if request.method == "POST":
+		form = AdminBidForm(auctionId, request.POST)
+		if form.is_valid():
+			form.save(auctionId = auctionId)
+			data["form"] = form
+			return render_to_response('admin/audio/createBid.html', {"data":data, "success": True}, context_instance=RequestContext(request))
+		
+
+	data["form"] = AdminBidForm(auctionId = 2)
+	data["auctions"] = Auction.objects.filter(locked = False)
+	return render_to_response('admin/audio/createBid.html', {"data":data}, context_instance=RequestContext(request))
+
+
 def endBlindAuction(request, auctionId):
 	invoices = {}
 	logger.error( "here")
 	#make sure to do all manual stuff first
 	auction = Auction.objects.get(id = auctionId)
+	
+	#TODO ????
 	if auction.locked == True:
 		return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
 
 	#mark winners
 
-
-
 	auction.locked = True
 	#auction.save()
 
-	#get all winners & won items before end date
+	#get all won items before end date
 	winners = getWinningBids(auctionId, date = auction.end_date)
-
 	#figure sums & shipping
 
 	for winner in winners:
 		userId = winner.user_id
-		logger.error("user " + userId)
+
 		if userId not in invoices:
 			logger.error( "user not in invoices")
 			user = User.objects.get(id = userId)
-			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = 0.00, invoice_date = datetime.now())
+			sum = getWinnerSum(auctionId, userId, date = auction.end_date)
+			invoicedAmount = sum["sum"]
+			#TODO shipping amount
+			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now())
 			invoices[userId] = invoice.id
 			winner.invoice = invoice
 			winner.save()
@@ -61,12 +81,52 @@ def endBlindAuction(request, auctionId):
 			winner.invoice = invoice
 			winner.save()
 
-	#for each 
-		#add invoice, amount & shipping
-		#update item's invoice
-		
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
+
+def endFlatAuction(request, auctionId, userId):
+
+	#for all bids in auction not invoiced
+
+	#make sure to do all manual stuff first
+	auction = Auction.objects.get(id = auctionId)
+	#if auction.locked == True:
+	#	return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
+
+	#DO NOT mark winners - they should already be marked
+
+	#get all won items before end date
+	if userId == None:
+		winners = getWinningBids(auctionId, onlyNonInvoiced = True)
+	else:
+		winners = getWinningBids(auctionId, userId = userId, onlyNonInvoiced = True)
+	#figure sums & shipping
+
+	for winner in winners:
+		userId = winner.user_id
+
+		#if no invoice from blind auction, create
+		if winner.invoice == None:
+			user = User.objects.get(id = userId)
+			sum = getWinnerSum(auctionId, userId, onlyNonInvoiced = True)
+			invoicedAmount = sum["sum"]
+			#TODO shipping amount
+			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = 0, second_chance_invoice_amount = invoicedAmount, second_chance_invoice_date = datetime.now(), )
+			winner.invoice = invoice
+			winner.save()
+		else:
+			invoice = winner.invoice
+			
+			if invoice.second_chance_invoice_amount == None:
+				sum = getWinnerSum(auctionId, userId, onlyNonInvoiced = True)
+				invoicedAmount = sum["sum"]
+				invoice.second_chance_invoice_amount = invoicedAmount
+				#shipping
+				invoice.second_chance_invoice_date = datetime.now()
+				invoice.save()
+				
+
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 def userBreakdown(request):
 	data = {}

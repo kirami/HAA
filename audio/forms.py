@@ -1,9 +1,11 @@
-from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, EmailField
+from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, EmailField, DateTimeField
 from django.contrib.auth.forms import UserCreationForm
-from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User
+from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction
 from audio.utils import *
+from django.core.exceptions import ValidationError
 import logging
 
+from datetime import datetime 
 
 
 
@@ -37,11 +39,53 @@ class BidSubmitForm(ModelForm):
     lotId = CharField(label = "Lot ID:")
     class Meta:
 		model = Bid
-		exclude = ('user', 'date', 'winner', 'auction', 'item')
+		exclude = ('user', 'date', 'winner', 'auction', 'item', 'invoice')
 		
-class SimpleBidForm(Form):
-    lotId = CharField(label = "Lot ID:")
+class AdminBidForm(ModelForm):
     
+    def __init__(self, auctionId, *args, **kwargs):
+        super(AdminBidForm, self).__init__(*args, **kwargs)
+        #TODO non deadbeat users etc
+        self.fields['item'].queryset = self.fields['item'].queryset.filter(auction_id=auctionId)
+        self.fields['date'] = DateTimeField(label="Date", initial=datetime.now())
+        self.fields['amount'] = DecimalField(label='amount', initial=0.00)
+        
+    class Meta:
+        model = Bid
+        exclude = ('invoice',)
+
+    def save(self,  auctionId, commit=True):
+        #TODO get auctionId
+        logger.error("saving")
+        new_bid = super(AdminBidForm, self).save(commit=False)
+        now = datetime.now()
+        invoice = None
+        invoices = Invoice.objects.filter(auction = auctionId, user = self.cleaned_data["user"])
+        if invoices:
+            invoice = invoices[0]
+        auction = Auction.objects.get(id = auctionId)
+        item = self.cleaned_data["item"]
+        
+        if self.cleaned_data["amount"] < item.min_bid:
+            raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
+        
+
+        #if is blind
+        if now < auction.end_date:
+            #TODO if is locked?
+            if invoice != None:
+                raise ValidationError(('Trying to add a blind bid but user already has invoice for this auction'))    
+        #if is second chance
+        #TODO auto do min bid?
+        if now > auction.end_date and now < auction.second_chance_end_date:
+            if invoice != None and invoice.second_chance_invoice_date != None:
+                raise ValidationError(('Trying to add a flat bid but user already has second invoice for this auction'))    
+
+
+        new_bid.save()
+        return new_bid
+
+
 
 class BulkConsignment(Form):
     consignor = ModelChoiceField(Consignor.objects.all())

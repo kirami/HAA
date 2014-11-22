@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Auction(models.Model):
-	start_date = models.DateField()
-	end_date = models.DateField()
-	second_chance_end_date = models.DateField(null = True)
+	start_date = models.DateTimeField()
+	end_date = models.DateTimeField()
+	second_chance_end_date = models.DateTimeField(null = True)
 	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	locked = models.BooleanField(default = False)
 
@@ -76,11 +76,11 @@ class Item(models.Model):
 
 class Bid(models.Model):
 	user = models.ForeignKey(User)
-	date = models.DateTimeField(auto_now = True)
+	date = models.DateTimeField()
 	item = models.ForeignKey(Item)
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	winner = models.BooleanField(default = False)
-	invoice = models.ForeignKey(Invoice, null = True, blank = True)
+	invoice = models.ForeignKey(Invoice, null = True, blank = True, on_delete=models.SET_NULL)
 
 
 	def __unicode__(self):
