@@ -49,18 +49,31 @@ def getBidItems(auctionId, orderByName = False):
 		query+= " order by name"
 	return list(Item.objects.raw(query))
 
-def getWinningBids(auctionId, userId = None, date = None):
+def getWinningBids(auctionId, userId = None, date = None, onlyNonInvoiced = False):
 
-	if userId == None:
-		if date == None:
-			return Bid.objects.filter(winner=True, item__auction=auctionId)
+	if onlyNonInvoiced:
+
+		if userId == None:
+			if date == None:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, invoice = None)
+			else:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, date__lte=date , invoice = None)
 		else:
-			return Bid.objects.filter(winner=True, item__auction=auctionId, date__lte=date)
+			if date == None:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__lte=date, invoice = None)
+			else:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, invoice = None)
 	else:
-		if date == None:
-			return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__lte=date)
+		if userId == None:
+			if date == None:
+				return Bid.objects.filter(winner=True, item__auction=auctionId)
+			else:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, date__lte=date)
 		else:
-			return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId)
+			if date == None:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__lte=date)
+			else:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId)
 
 
 def getLosingBids(auctionId, userId = None):
@@ -71,8 +84,17 @@ def getLosingBids(auctionId, userId = None):
 		return Bid.objects.filter(winner=False, item__auction=auctionId, user=userId)
 
 
-def getSumWinners(auctionId, userId = None):
-	winners = getWinningBids(auctionId)
+def getWinnerSum(auctionId, userId, date = None, onlyNonInvoiced = False):
+	winners = getWinningBids(auctionId, userId, date = date, onlyNonInvoiced = onlyNonInvoiced)
+	if len(winners) > 0:
+		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
+
+	else:
+		return 0
+
+
+def getSumWinners(auctionId, userId = None, date = None):
+	winners = getWinningBids(auctionId, date = date)
 	if len(winners) > 0:
 		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
 

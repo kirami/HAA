@@ -47,20 +47,34 @@ def login_view(request):
         return HttpResponseRedirect("/account/invalid/")
 '''
 
+def getCurrentAuction():
+	now = date.today()
+	# where date is after start date and before second_end date
+	auctions = Auction.objects.filter(start_date__lte = now, second_chance_end_date__gte = now)
+	if len(auctions) == 1:
+		return auctions[0]
+	else:
+		#TODO throw error
+		return None
+
 def simpleForm(request):
 	form = ''
 	if request.method == "POST":
 		if(request.user.is_authenticated()):
-			currentAuctionId = 1
-			auction = Auction.objects.get(id = currentAuctionId)
+			
+			currentAuction = getCurrentAuction()
+			
 			now = date.today()
+
+			#TODO if not current auction return error
+
 			data = request.POST
 			bidAmount = data.get("bidAmount")
 
 			if isSecondChance():
 				bidAmount = auction.flat_bid_amount
 
-			itemId = Item.objects.get(log_id = data.get("lotId"))
+			itemId = Item.objects.get(lot_id = data.get("lotId"))
 			try:
 				instance = Bid.objects.get(user=request.user, item_id=itemId)
 				instance.amount = bidAmount
@@ -70,8 +84,9 @@ def simpleForm(request):
 					logger.error("no bid")
 				else:
 					#todo get auctionId from...db?
-					Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuctionId, item_id = itemId, second_chance_bid = isSecondChance())
+					Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuction.id, item_id = itemId, second_chance_bid = isSecondChance())
 	else:
+		#TODO if not on an auction don't allow
 		form = BidSubmitForm()
 
 	return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
