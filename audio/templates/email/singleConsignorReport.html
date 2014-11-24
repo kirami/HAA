@@ -5,36 +5,36 @@
 <h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction #{{data.auctionId}}</h1>
 
 <div id="reportDiv" class="reportTable">
-
+		
 	<div>Consignment info by item:</div>	
-	<div class="maxBidItem">Item number:</div>
-	<div class="maxBidItem">Bidder:</div>
-	<div class="maxBidItem">Total amount:</div>
-	<div class="maxBidItem">Range amount:</div>
-	<div class="maxBidItem">Range Min:</div>
-	<div class="maxBidItem">Range Max:</div>
-	<div class="maxBidItem">Percent:</div>
-	<div class="maxBidItem">Range percentage:</div>
+	<div style="float: left; margin-right: 20px; width: 120px;">Item number:</div>
+	<div style="float: left; margin-right: 20px; width: 75px;">Bidder:</div>
+	<div style="float: left; margin-right: 20px; width: 75px;">Total amount:</div>
+	<div style="float: left; margin-right: 20px; width: 75px;">Range amount:</div>
+	<div style="float: left; margin-right: 20px; width: 75px;">Range Min:</div>
+	<div style="float: left; margin-right: 20px; width: 75px;">Range Max:</div>
+	<div style="float: left; margin-right: 20px; width: 75px;">Percent:</div>
+	<div style="float: left; width: 75px;">Range percentage:</div>
 	
 
 	
-	<div class="clear"></div>
+	<div style="clear:both"></div>
 	<br><br>
 	{%for item in data.consignedItems%} 
 		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
-			<div class="maxBidItem">{{item.id}} {{item.label.name}} {{item.name}}</div>
-			<div class="maxBidItem">{{item.user_id}}</div>
-			<div class="maxBidItem">${{item.amount}}</div>
-			<div class="maxBidItem">${{item.inRange}}</div>
-			<div class="maxBidItem">${{item.minimum}}</div>
-			<div class="maxBidItem">${{item.maximum}}</div>
-			<div class="maxBidItem">{{item.percentage}}</div>
-			<div class="maxBidItem">{{item.rangeAmount|floatformat:2}}</div>
+			<div style="float: left; margin-right: 20px; width: 120px;">{{item.id}} {{item.label.name}} {{item.name}}</div>
+			<div style="float: left; margin-right: 20px; width: 75px;">{{item.user_id}}</div>
+			<div style="float: left; margin-right: 20px; width: 75px;">${{item.amount}}</div>
+			<div style="float: left; margin-right: 20px; width: 75px;">${{item.inRange}}</div>
+			<div style="float: left; margin-right: 20px; width: 75px;">${{item.minimum}}</div>
+			<div style="float: left; margin-right: 20px; width: 75px;">${{item.maximum}}</div>
+			<div style="float: left; margin-right: 20px; width: 75px;">{{item.percentage}}</div>
+			<div style="float: left; width: 75px;">${{item.rangeAmount|floatformat:2}}</div>
 			
-			<div class="clear"></div>
+			<div style="clear:both"></div>
 		</div>
 
-		<div class="clear"></div>
+		<div style="clear:both"></div>
 	{%endfor%}
 
 	<hr>

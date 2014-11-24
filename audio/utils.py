@@ -233,7 +233,7 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	for each item, get consignors, group by consignor id.
 	'''
 
-	notWon = getConsignedLosers(consignorId, auctionId)
+	notWon = getConsignedLosers(consignorId = consignorId, auctionId = auctionId)
 	consignedItems = getConsignmentWinners(consignorId, auctionId)
 	
 	consignTotal = 0
@@ -301,5 +301,9 @@ def getHeaderData(data, auctionId):
  	data["wonItemsCount"] = len(data["wonItems"])
  	data["unsoldItems"] = noBids
  	data["noBidItemsCount"] = len(noBids)
- 	data["total"] = getSumWinners(auctionId)	
+ 	sums = getSumWinners(auctionId)
+ 	if len(sums) > 0:
+ 		data["total"] = sums["sum"]	
+ 	else:
+ 		data["total"] = 0
  	return data

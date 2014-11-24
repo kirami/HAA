@@ -1,14 +1,46 @@
 
 {% block extrahead %}
+
+
+<link rel="stylesheet" type="text/css" href="http://{{ domain }}/static/audio/css/admin.css" />
+{% endblock %}
+
 <style type="text/css">
 	.red{
 		color:red;
 	}
 
+	.reportTable{
+		margin-top: 20px;
+	}
+
+	.reportTable span{
+		margin-left: 10px;
+	}
+
+	.reportTable .maxBidItem{
+		float: left;
+		margin-right: 20px;
+		width: 120px;
+	}
+
+	#id_bcItemsAvailable, #id_bcItemsSelected{
+		width: 400px;
+	}
+
+	.rightBox,.leftBox, .arrowButtons{
+		float:left;
+	}
+
+	.arrowButtons{
+		margin:35px 20px;
+	}
+
+	#id_consignors{
+		margin-bottom: 30px;
+	}
+
 </style>
-{% endblock %}
-
-
 <img src="http://www.thoseoldrecords.com/hmv.gif">
 
 {%block content%}
