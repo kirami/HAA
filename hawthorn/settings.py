@@ -28,7 +28,7 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/srv/messages'
 
 # Application definition
@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'south',
     'audio',
     'django_extensions',
+    'django.contrib.sites',
 )
 
 TEMPLATE_DIRS = (
@@ -62,6 +63,7 @@ ROOT_URLCONF = 'hawthorn.urls'
 
 WSGI_APPLICATION = 'hawthorn.wsgi.application'
 
+SITE_ID = 1
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

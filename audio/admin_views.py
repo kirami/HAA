@@ -239,7 +239,7 @@ def consignorReportById(request, consignorId, auctionId, template = None):
 	getHeaderData(data, auctionId)
 	
 	if template:
-		msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":data}, template)
+		msg = getEmailMessage(request, "fosterthefelines@gmail.com","test",{"data":data}, template)
 		sendEmail(msg)
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 		
@@ -253,22 +253,26 @@ def consignorReport(request, auctionId, template = None):
 	data["total"] = getSumWinners(auctionId)
 	getHeaderData(data, auctionId)
 	messages = []
+	usedConsignors = {}
 	
 	consignors = getConsignmentWinners(auctionId = auctionId)
 	for consignor in consignors:
 		consignorId = consignor["consignor_id"]
-		consignor = Consignor.objects.get(id = consignorId)
-		consignInfo = consignorId
-		indData = getAllConsignmentInfo(consignorId, auctionId)
-		data[consignInfo] = indData
+		if consignorId not in usedConsignors:
+			logger.error("consignor: %s" % consignorId)
+			consignor = Consignor.objects.get(id = consignorId)
+			consignInfo = consignorId
+			indData = getAllConsignmentInfo(consignorId, auctionId)
+			data[consignInfo] = indData
+			usedConsignors[consignorId] = True
 
-		if template:
-			msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":indData}, template)
-			messages.append(msg)
+			if template:
+				msg = getEmailMessage(request, "fosterthefelines@gmail.com","test",{"data":indData}, template)
+				messages.append(msg)
 
 	if template:
 		sendBulkEmail(messages)
-		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+		return HttpResponse(json.dumps({"success":True,"msg":"sent bulk emails"}), content_type="application/json")
 
 	return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
 
