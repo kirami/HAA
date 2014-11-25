@@ -134,7 +134,7 @@ def bids(request):
 	if(request.user.is_authenticated()):
 		currentAuction = getCurrentAuction()
 		currentAuctionId = currentAuction.id
-		bids = Bid.objects.filter(item__auction = currentAuctionId)
+		bids = Bid.objects.filter(item__auction = currentAuctionId, user= request.user)
 		invoices = Invoice.objects.filter(user = request.user, auction = currentAuction.id)
 		invoice = None
 		if len(invoices) > 0:
@@ -144,7 +144,7 @@ def bids(request):
 			if invoice == None or invoice.second_chance_invoice_amount == None:
 				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date)
 				
-				return render_to_response('flatBids.html', {"bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
+				return render_to_response('flatBids.html', {"bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId, "flatAmount":currentAuction.flat_bid_amount}, context_instance=RequestContext(request))
 			else:
 				#TODO return error
 				index()
@@ -162,13 +162,18 @@ def profile(request):
 
 
 def flatFeeCatalog(request):
+	if not isSecondChance():
+		return redirect("catalog")
+
+	auction = getCurrentAuction()
 	try:
+
 		items = Item.objects.filter(bid=None)
 	except Exception as e:
 		logger.error("error in catalog")
 		logger.error(e)
 	
-	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":"1"}, context_instance=RequestContext(request))
+	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id, "flatAmount": auction.flat_bid_amount}, context_instance=RequestContext(request))
 
 def isSecondChance():
 	now =  datetime.now()
@@ -180,46 +185,41 @@ def isSecondChance():
 		return True
 	return False
 
-def catalog(request):
-	
-	now =  date.today()
-	logger.error(now)
-	#TODO get real data
-	
-	currentAuction = getCurrentAuction()
+def catalog(request, msg= None):
+	if(request.user.is_authenticated()):
+		now =  date.today()
+		currentAuction = getCurrentAuction()
 
-	currentAuctionId = currentAuction.id
-	logger.error("auction: %s" % currentAuctionId)
-	try:
-		#if after close but in 2nd chance
-		logger.error("is flat? %s" % isSecondChance())
-		if isSecondChance():
-			return redirect("flatFeeCatalog")
-	except Exception as e:
-		logger.error("error in catalog")
-		logger.error(e)
-		
-	bidDict = {}
-	items = ""
-	try:
-		items = Item.objects.all()	
-		bids = Bid.objects.filter(auction_id = currentAuctionId)
-		
-		for bid in bids:
-			bidDict[str(bid.item.id)] = str(bid.amount)
+		currentAuctionId = currentAuction.id
+		try:
+			#if after close but in 2nd chance
+			if isSecondChance():
+				return redirect("flatFeeCatalog")
+		except Exception as e:
+			logger.error("error in catalog")
+			logger.error(e)
+			
+		bidDict = {}
+		items = ""
+		try:
+			items = Item.objects.all()	
+			bids = Bid.objects.filter(user = request.user, item__auction = currentAuctionId)
+			
+			for bid in bids:
+				bidDict[str(bid.item.id)] = str(bid.amount)
 
-		logger.error(bidDict.get("1"))
-		
-	except Exception as e:
-		logger.error("error in catalog")
-		logger.error(e)
-	return render_to_response('catalog.html', {"catItems":items, "auctionId":"1", "bids": bidDict}, context_instance=RequestContext(request))
+			#logger.error(bidDict.get("1"))
+			
+		except Exception as e:
+			logger.error("error in catalog")
+			logger.error(e)
+	return render_to_response('catalog.html', {"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg}, context_instance=RequestContext(request))
 
 
 def submitBid(request):
 	if(request.user.is_authenticated()):
-		currentAuctionId = 1
-		auction = Auction.objects.get(id = currentAuctionId)
+		auction = getCurrentAuction()
+		currentAuctionId = auction.id
 		now = date.today()
 		data = request.POST
 		bidAmount = data.get("bidAmount")
@@ -229,8 +229,11 @@ def submitBid(request):
 			bidAmount = auction.flat_bid_amount
 
 		itemId = data.get("itemId")
-		logger.error("request:")
-		logger.error(request)
+		item = Item.objects.get(id = itemId)
+
+		if int(bidAmount) < item.min_bid:
+			return catalog(request, "You must meet the minimum bid.")	
+
 		try:
 			instance = Bid.objects.get(user=request.user, item_id=itemId)
 			instance.amount = bidAmount
@@ -240,10 +243,10 @@ def submitBid(request):
 				logger.error("no bid")
 			else:
 				#todo get auctionId from...db?
-				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuctionId, item_id = itemId, second_chance_bid = isSecondChance())
+				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), item_id = itemId)
 
-	#logger.error(request.META.get('PATH_INFO'))			
-	if(request.META.get('PATH_INFO') == "/audio/catalog/submitBid"):
+	#logger.error(" path: %s" % request.META.get('PATH_INFO'))			
+	if(request.META.get('PATH_INFO') == "/audio/catalog/submitBid" ):
 		return redirect("catalog")
 	else:
 		return redirect("bids")
@@ -255,7 +258,10 @@ def deleteBid(request):
 		instance = Bid.objects.get(user=request.user, item_id=itemId)
 		instance.delete()
 
-	return redirect("bids")
+	if(request.META.get('PATH_INFO') == "/audio/catalog/deleteBid"):
+		return redirect("catalog")
+	else:
+		return redirect("bids")
 		
 
 def showItem(request, auctionId, lotId):

@@ -4,10 +4,11 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-  <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+  <p class="header">Welcome, {{ user.username }}. Thanks for logging in.</p>
 
-  <a href="../contact">Contact Info</a>
-  <a href="../bids">Bids</a>
+  <div style="height:50px;"><a href="../contact" class="button">View Contact Info</a></div>
+  <div class="clear"></div>
+  <div style="height:50px;"><a href="../bids" class="button">View Current Bids</a></div>
 
 
 

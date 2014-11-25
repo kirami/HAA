@@ -1,28 +1,35 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}audio/css/main.css" />
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script src="{{ STATIC_URL }}audio/js/main.js" type="text/javascript"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 <input type="hidden" id="auctionId" name="auctionId" value="{{auctionId}}">
 <div id="header">
-	<img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">
-	<br>
-	<h1>Anaplan Test Page</h1>
+	<!--img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">-->
 	<div>
 		{% if user.is_authenticated %}
-			<button onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
-			<button onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
-			<button onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
+			<button class="button" onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
+			<button class="button" onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
+			<button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
 		{% else %}
-		  <p><button onclick="javascript:window.location.href = '/audio/accounts/login'">log in</button></p>
-		  <p><button onclick="javascript:window.location.href = '/audio/accounts/register'">register</button></p>
-		  <button onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
+		  <p><button class="button" onclick="javascript:window.location.href = '/audio/accounts/login'">log in</button></p>
+		  <p><button class="button" onclick="javascript:window.location.href = '/audio/accounts/register'">register</button></p>
+		  <button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
 		{% endif %}
 	</div>
 </div>
 <div style="clear:both"></div>
+<body background="http://thoseoldrecords.com/10ligh04.jpg">
+<center>
+	<nobr>
+		<img src="http://thoseoldrecords.com/phono.gif">
+		<img alt="Hawthorn's Antique Audio" src="http://thoseoldrecords.com/haa.gif">
+		<img src="http://thoseoldrecords.com/record.gif">
+	</nobr>
+</center>
 
-
+<center><img style="margin-bottom:30px" src="http://www.thoseoldrecords.com/hmv.gif"></center>
 
 {% block content %}
 
@@ -30,3 +37,5 @@
 
 
 {% endblock %}
+
+</body>

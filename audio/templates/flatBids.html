@@ -4,28 +4,35 @@
 {% block content %}
 
 {%if endAuctionOption%}
-<div>Click here to close your bidding for this auction and we will start preparing your items to ship.  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
-<div><button onclick="endMyAuction({{auctionId}}, {{user.id}})">End my auction</button></div>
-<div id="endAuctionlMsg"></div>
+<div style="margin-bottom:20px;">
+	<div>Click here to close your bidding for this auction and we will start preparing your items to ship.  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
+	<div><button class="button" onclick="endMyAuction({{auctionId}}, {{user.id}})">End my auction</button></div>
+	<div id="endAuctionlMsg"></div>
+</div>
+
+
 {%endif%}
 
-<div>Your current FLAT bids:</div>
+<div class="header" style="margin-bottom:20px;">Your current FLAT bids (each item is ${{flatAmount}}):</div>
+<div class="tableHeader">	
+	<div class="left">Lot ID:</div>
+	<div class="left">Name:</div>
+	<div class="clear"></div>
+</div>
 
+<div class="tableBody">
 {% for bid in bids %}
-	<div class="left" style="margin-right:20px;">{{bid.item.name}}</div>
-	<div>${{bid.amount}}</div>
-	<form class="left" method="POST" action="/audio/catalog/submitBid">
-	 {% csrf_token %}
-		<input type="text" name="bidAmount">
-		<input type ="hidden" name="itemId" value="{{bid.item}}">
-		<input type="submit" class="bidSubmitButton" value="Update Bid">
-	</form>
+	
+	<div class="left" style="margin-top:7px;">{{bid.item.lot_id}}</div>
+	<div class="left" style="margin-top:7px;">{{bid.item.name}}</div>
+
 	<form class="left" method="POST" action="/audio/catalog/deleteBid">
 	 {% csrf_token %}
-		<input type ="hidden" name="itemId" value="{{bid.item}}">
+		<input type ="hidden" name="itemId" value="{{bid.item.id}}">
 		<input type="submit" class="bidSubmitButton" value="Delete Bid">
 	</form>
 	<div class="clear"></div>
 {% endfor %}
+</div>
 
 {% endblock %}

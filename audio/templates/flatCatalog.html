@@ -2,21 +2,35 @@
 {% load audio_extras %}
 
 {% block content %}
+<div style="margin-bottom:10px;" class="header">
+The blind auction has ended.  These items were not sold.<br>
+</div>
 
-Aucton has ended!  Second chance flat catalog:<br>
-Lot:<br>
+<div style="margin-bottom:20px; color:red; font-size:18px; font-weight:bold;">Each item is ${{flatAmount}}</div>
+
+<div class="tableHeader">	
+	<div class="left">Lot ID:</div>
+	<div class="left">Category:</div>
+	<div class="left">Name:</div>
+	<div class="clear"></div>
+</div>
 
 
 {%for item in catItems%}
 <div class="catalogBox">
-	<div id="{{item}}" class="catalogItem">{{item}}</div> 
-	<div class="category">{{item.category.name}}</div>
-	<form class="left" method="POST" action="/audio/catalog/submitBid">
-	 {% csrf_token %}
-		<input type ="hidden" name="itemId" value="{{item}}">
-		<input type="submit" class="bidSubmitButton" value="Buy Now">
-		<input type="hidden" name="isUpdate" value="True">
-	</form>
+	<div style="margin-top:7px; float:left" class="tableBody">
+		<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
+		<div class="category" style="float:left">{{item.category.name}}</div>
+		<div class="category" style="float:left">{{item.name}}</div>
+	</div>
+	<div style="float:left">
+		<form class="left" method="POST" action="/audio/catalog/submitBid">
+		 {% csrf_token %}
+			<input type ="hidden" name="itemId" value="{{item.id}}">
+			<input type="submit" class="bidSubmitButton" value="Buy Now">
+			<input type="hidden" name="isUpdate" value="True">
+		</form>
+	</div>
 
 	<div class="clear"></div>	
 </div>

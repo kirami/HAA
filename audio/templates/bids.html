@@ -5,21 +5,32 @@
 
 <div>Your current bids:</div>
 
+<div class="tableHeader">	
+	<div class="left">Lot ID:</div>
+	<div class="left">Name:</div>
+	<div class="left">Amount:</div>
+	<div class="clear"></div>
+</div>
+
+<div class="tableBody">
 {% for bid in bids %}
-	<div class="left">{{bid.item.category}}</div>
-	<div>${{bid.amount}}</div>
-	<form class="left" method="POST" action="/audio/catalog/submitBid">
+	
+	<div class="left" style="margin-top:7px;">{{bid.item.lot_id}}</div>
+	<div class="left" style="margin-top:7px;">{{bid.item.name}}</div>
+	<form class="left" method="POST" action="/audio/catalog/submitBid" >
 	 {% csrf_token %}
-		<input type="text" name="bidAmount">
 		<input type ="hidden" name="itemId" value="{{bid.item}}">
-		<input type="submit" class="bidSubmitButton" value="Update Bid">
+		<div class="left" style="width:175px; margin-top:5px;"><div class="left" style="width:10px; margin-top:2px;">$</div><input type="text" name="bidAmount" value="{{bid.amount}}"></div>
+		<div class="left" style="width:100px;"><input type="submit" class="bidSubmitButton" value="Update Bid"></div>
 	</form>
 	<form class="left" method="POST" action="/audio/catalog/deleteBid">
 	 {% csrf_token %}
-		<input type ="hidden" name="itemId" value="{{bid.item}}">
+		<input type ="hidden" name="itemId" value="{{bid.item.id}}">
 		<input type="submit" class="bidSubmitButton" value="Delete Bid">
 	</form>
 	<div class="clear"></div>
 {% endfor %}
+</div>
+
 
 {% endblock %}
