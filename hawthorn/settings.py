@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'south',
     'audio',
     'django_extensions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
 )
 
 TEMPLATE_DIRS = (
@@ -63,7 +63,7 @@ ROOT_URLCONF = 'hawthorn.urls'
 
 WSGI_APPLICATION = 'hawthorn.wsgi.application'
 
-SITE_ID = 1
+#SITE_ID = 1
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

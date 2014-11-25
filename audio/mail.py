@@ -22,11 +22,11 @@ def sendBulkEmail(messages):
 	connection.send_messages(messages)
 
 
-def getEmailMessage(request, to, subject, data, template):
+def getEmailMessage(to, subject, data, template):
 	plaintext = get_template('email/'+template+'.txt')
 	htmly     = get_template('email/'+template+'.html')
-	domain = Site.objects.get_current().domain
-	data["domain"] = domain
+	#domain = Site.objects.get_current().domain
+	#data["domain"] = domain
 	d = Context(data)
 	subject, from_email, to = subject, 'kirajmd@gmail.com', to
 	text_content = plaintext.render(d)

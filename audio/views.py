@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, UserCreateForm
 
-from audio.models import Address, Item, Bid, Auction, UserProfile
+from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice
 
 from datetime import datetime, date  
 
@@ -65,8 +65,6 @@ def simpleForm(request):
 	if request.method == "POST":
 		if(request.user.is_authenticated()):
 
-			#TODO if not current auction return error
-
 			data = request.POST
 			bidAmount = data.get("bidAmount")
 
@@ -83,7 +81,7 @@ def simpleForm(request):
 					logger.error("no bid")
 				else:
 					#todo get auctionId from...db?
-					Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuction.id, item_id = itemId, second_chance_bid = isSecondChance())
+					Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuction.id, item_id = itemId)
 	else:
 		if currentAuction == None:
 			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
@@ -133,14 +131,27 @@ def register(request):
 
 
 def bids(request):
-	currentAuctionId = 1
-	bids = Bid.objects.filter(auction_id = currentAuctionId)
-
-	if isSecondChance():
-		bids = Bid.objects.filter(auction_id = currentAuctionId, second_chance_bid = isSecondChance())
-		return render_to_response('flatBids.html', {"bids":bids}, context_instance=RequestContext(request))
+	if(request.user.is_authenticated()):
+		currentAuction = getCurrentAuction()
+		currentAuctionId = currentAuction.id
+		bids = Bid.objects.filter(item__auction = currentAuctionId)
+		invoices = Invoice.objects.filter(user = request.user, auction = currentAuction.id)
+		invoice = None
+		if len(invoices) > 0:
+			invoice = invoices[0]
+			
+		if isSecondChance():
+			if invoice == None or invoice.second_chance_invoice_amount == None:
+				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date)
+				
+				return render_to_response('flatBids.html', {"bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
+			else:
+				#TODO return error
+				index()
+		else:
+			return render_to_response('bids.html', {"bids":bids}, context_instance=RequestContext(request))
 	else:
-		return render_to_response('bids.html', {"bids":bids}, context_instance=RequestContext(request))
+		index()
 
 
 
@@ -160,9 +171,10 @@ def flatFeeCatalog(request):
 	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":"1"}, context_instance=RequestContext(request))
 
 def isSecondChance():
-	now =  date.today()
+	now =  datetime.now()
 	#TODO current auction
-	currentAuctionId = 1
+	currentAuction = getCurrentAuction()
+	currentAuctionId = currentAuction.id
 	auction = Auction.objects.get(id = currentAuctionId)
 	if auction.end_date < now and auction.second_chance_end_date > now:
 		return True
@@ -173,9 +185,14 @@ def catalog(request):
 	now =  date.today()
 	logger.error(now)
 	#TODO get real data
-	currentAuctionId = 1
+	
+	currentAuction = getCurrentAuction()
+
+	currentAuctionId = currentAuction.id
+	logger.error("auction: %s" % currentAuctionId)
 	try:
 		#if after close but in 2nd chance
+		logger.error("is flat? %s" % isSecondChance())
 		if isSecondChance():
 			return redirect("flatFeeCatalog")
 	except Exception as e:

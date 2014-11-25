@@ -3,10 +3,16 @@
 
 {% block content %}
 
+{%if endAuctionOption%}
+<div>Click here to close your bidding for this auction and we will start preparing your items to ship.  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
+<div><button onclick="endMyAuction({{auctionId}}, {{user.id}})">End my auction</button></div>
+<div id="endAuctionlMsg"></div>
+{%endif%}
+
 <div>Your current FLAT bids:</div>
 
 {% for bid in bids %}
-	<div class="left">{{bid.item.category}}</div>
+	<div class="left" style="margin-right:20px;">{{bid.item.name}}</div>
 	<div>${{bid.amount}}</div>
 	<form class="left" method="POST" action="/audio/catalog/submitBid">
 	 {% csrf_token %}

@@ -53,11 +53,34 @@ function sendEmail (template, auctionId, consignorId) {
 		url: "/admin/sendEmail/",
 		data: {"template":template, "auctionId":auctionId, "consignorId":consignorId},
 		success: function(data) {
-
+			$('#consignorIdEmailMsg').css("color","green")
+			$('#consignorIdEmailMsg').text("Email was successfully sent.")
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
-        	//alert(xhr.status);
-        	//alert(thrownError);
+			$('#consignorIdEmailMsg').css("color","red")
+			$('#consignorIdEmailMsg').text("Something went wrong - email was not.")
+        	return false;
+      	}
+	});
+	
+}
+
+function endMyAuction (auctionId, userId) {
+		
+		var csrftoken = getCookie('csrftoken');
+		ajaxSetup(csrftoken);
+
+		$.ajax({
+		type: "POST",
+		url: "/admin/endFlatAuction/"+auctionId+"/" + userId + "/",
+		data: {},
+		success: function(data) {
+			$('#endAuctionlMsg').css("color","green")
+			$('#endAuctionlMsg').text("Email was successfully sent.")
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			$('#endAuctionlMsg').css("color","red")
+			$('#endAuctionlMsg').text("Something went wrong - email was not.")
         	return false;
       	}
 	});

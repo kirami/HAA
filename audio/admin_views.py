@@ -38,7 +38,7 @@ def createBid(request, auctionId):
 			return render_to_response('admin/audio/createBid.html', {"data":data, "success": True}, context_instance=RequestContext(request))
 		
 
-	data["form"] = AdminBidForm(auctionId = 2)
+	data["form"] = AdminBidForm(auctionId = auctionId)
 	data["auction"] = auctionId
 	return render_to_response('admin/audio/createBid.html', {"data":data}, context_instance=RequestContext(request))
 
@@ -168,8 +168,10 @@ def sendLoserLetters(request, auctionId):
 	template = "loserLetter"
 	data = {}
 	data["auctionId"] = auctionId
-
+	logger.error("losers:")
 	for loser in losers:
+
+		logger.error("loser %s" % loser)
 		profile = UserProfile.objects.get(user_id = loser.user_id)
 		user = User.objects.get(id = loser.user_id )
 		#todo if profile has send emails
@@ -239,7 +241,7 @@ def consignorReportById(request, consignorId, auctionId, template = None):
 	getHeaderData(data, auctionId)
 	
 	if template:
-		msg = getEmailMessage(request, "fosterthefelines@gmail.com","test",{"data":data}, template)
+		msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":data}, template)
 		sendEmail(msg)
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 		
@@ -267,7 +269,7 @@ def consignorReport(request, auctionId, template = None):
 			usedConsignors[consignorId] = True
 
 			if template:
-				msg = getEmailMessage(request, "fosterthefelines@gmail.com","test",{"data":indData}, template)
+				msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":indData}, template)
 				messages.append(msg)
 
 	if template:
@@ -376,7 +378,7 @@ def unsoldItems(request, auctionId):
 def bulkConsignment(request, auctionId):
 	
 	if request.method == 'POST':
-		form = BulkConsignment(request.POST)
+		form = BulkConsignment(request.POST, auctionId = auctionId)
 		if form.is_valid():			
 			new_user = form.save()
 			return HttpResponseRedirect("/admin/audio/consignment/")
