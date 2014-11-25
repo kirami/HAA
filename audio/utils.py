@@ -8,6 +8,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def test():
+	bidDict = {}
+	bids = Bid.objects.filter(user = 1, item__auction = 3)
+			
+	for bid in bids:
+		bidDict[str(bid.item.id)] = str(bid.amount)
+	return bidDict
 #user utils
 
 def getNewUsers():

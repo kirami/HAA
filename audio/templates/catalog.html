@@ -3,27 +3,52 @@
 
 {% block content %}
 
-Our current catalog:<br>
-Lot:<br>
+<div id="msg" style="color:red; font-weight:bold; font-size:18px;">{{msg}}</div>
+
+<div class="header" style="margin-bottom:20px;">Our current catalog:</div>
+<div class="tableHeader">	
+	<div class="left">Lot ID:</div>
+	<div class="left">Category:</div>
+	<div class="left">Name:</div>
+	<div class="clear"></div>
+</div>
 
 
 {%for item in catItems%}
-<div class="catalogBox">
-	<div id="{{item}}" class="catalogItem">{{item}}</div> 
-	<div class="category">{{item.category.name}}</div>
-	<form class="left" method="POST" action="/audio/catalog/submitBid">
-	 {% csrf_token %}
-		<input type="text" name="bidAmount">
-		<input type ="hidden" name="itemId" value="{{item}}">
-		<input type="submit" class="bidSubmitButton" value="Submit Bid">
-		<input type="hidden" name="isUpdate" value="True">
-	</form>
-{%if bids|get_item:item %}
-	<div class="left">{{ bids|get_item:item }}</div>
-	{%endif%}
+<div class="catalogBox" style="{%if True%}{%endif%}">
+	<div style="margin-top:7px; float:left" class="tableBody">
+		<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
+		<div class="category" style="float:left">{{item.category.name}}</div>
+		<div class="category" style="float:left">{{item.name}}</div>
+	</div>
+	<div style="float:left">
+		<form class="left" method="POST" action="/audio/catalog/submitBid">
+		 {% csrf_token %}
+			{%if bids|get_item:item.id == None %}
+			<input type ="hidden" name="itemId" value="{{item.id}}">
+			<div class="left" style="width:175px; margin-top:5px;"><div class="left" style="width:10px; margin-top:2px;">$</div><input type="text" name="bidAmount" value="{{bid.amount}}"></div>
+			<div class="left" style="width:100px;"><input type="submit" class="bidSubmitButton" value="Bid Now"></div>
+
+			{%else%}
+			<form class="left" method="POST" action="/audio/catalog/submitBid" >
+				 {% csrf_token %}
+					<input type ="hidden" name="itemId" value="{{item.id}}">
+					<div class="left" style="width:175px; margin-top:5px;"><div class="left" style="width:10px; margin-top:2px;">$</div><input type="text" name="bidAmount" value="{{ bids|get_item:item.id }}"></div>
+					<div class="left" style="width:100px;"><input type="submit" class="bidSubmitButton" value="Update Bid"></div>
+				</form>
+				<form class="left" method="POST" action="/audio/catalog/deleteBid">
+				 {% csrf_token %}
+					<input type ="hidden" name="itemId" value="{{item.id}}">
+					<input type="submit" class="bidSubmitButton" value="Delete Bid">
+				</form>
+
+			{%endif%}
+		</form>
+	</div>
+
 	<div class="clear"></div>	
 </div>
-
 {%endfor%}
+
 
 {% endblock %}
