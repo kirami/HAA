@@ -137,8 +137,10 @@ def getConsignorBidSums(auctionId):
 #get consigment which was not won in this auction
 def getConsignedLosers(auctionId, consignorId):
 	cursor = connection.cursor()
-	cursor.execute("select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id "+
-	"from audio_bid b where b.winner = true) and c.item_id = i.id")
+	sql = "select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id from audio_bid b where b.winner = true) and c.item_id = i.id"
+	if consignorId != None:
+		sql = sql + " and c.consignor_id = " + str(consignorId)
+	cursor.execute(sql)
 	row = dictfetchall(cursor)
 	return row
 
@@ -245,16 +247,23 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	for item in consignedItems:
 		money = 0
 		itemCost = item["amount"]
+		
 		min = item["minimum"]
-		max = item["maximum"]
+		max = item["maximum"]	
 		percent = item["percentage"]
 		item["inRange"] = 0
+		'''
+		logger.error("cost: %s" % itemCost)
+		logger.error("min: %s" % min)
+		logger.error("max: %s" % max)		
+		logger.error("percent: %s" % percent)
+		'''
 		
 		if max == None and itemCost > min:
 			money = (itemCost - min) * (percent/100)
 			item["inRange"] = (itemCost - min)
 
-		if itemCost >= max:
+		if itemCost >= max and max != None:
 			money = (max - min) * (percent/100)
 			item["inRange"] = (max - min)
 		
