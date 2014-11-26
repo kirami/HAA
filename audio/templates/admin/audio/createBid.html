@@ -3,6 +3,15 @@
 
 {%block content%}
 
+{%if success%}
+	<div style="color:green; font-size:18px">Bid successfully created.</div>
+
+{%endif%}
+
+{%if error%}
+	<div style="color:red; font-size:18px">Something went wrong - bid was not created.</div>
+{%endif%}
+
 <h1>Create a bid for auction: {{data.auction}}</h1>
 
 <form action="" method="post">

@@ -88,6 +88,30 @@ function endMyAuction (auctionId, userId) {
 }
 
 
+function submitBid(itemId){
+
+	var csrftoken = getCookie('csrftoken');
+	ajaxSetup(csrftoken);
+
+	$.ajax({
+		type: "POST",
+		url: "/audio/catalog/submitBid/",
+		data: {"bidAmount": $("#bidAmount_" + itemId).val(), "itemId":itemId},
+		success: function(data) {
+			if(data.success){
+				location.reload(); 
+			}else{
+				$("#msg").text("Something went wrong, we could not save your bid: "  + data.msg)
+        	
+			}
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+        	$("#msg").text("Something went wrong, this flat auction wasn't locked")
+        	return false;
+      	}
+	});
+}
+
 $( document ).ready(function() {
 
 	$('.catalogItem').click(catalogClick);

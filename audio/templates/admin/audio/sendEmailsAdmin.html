@@ -1,0 +1,68 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+<div>Email Admin Auction: {{data.auctionId}}</div>
+<br><br>
+
+<div><button id="sendLoserLetter">Send all loser letters</button></div>
+
+
+<div id="sendLoserLetter-confirm" title="Please Confirm">Are you sure you want email all loser letters auction <span id="auctionIdSpan"></span>?</div>
+
+
+<input type="hidden" id="auctionId" name="auctionId" value="{{data.auctionId}}">
+
+<script type="text/javascript">
+	
+$( document ).ready(function() {
+
+	$( "#sendLoserLetter-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false, 
+		buttons: {
+			"Email Loser Letters": function() {
+				var csrftoken = getCookie('csrftoken');
+				ajaxSetup(csrftoken);
+
+				$.ajax({
+					type: "POST",
+					url: "/admin/sendLoserLetters/"+ $("#auctionId").val() + "/",
+					success: function(data) {
+						if(data.success){
+
+							$("#msg").css("color","green")
+							$("#msg").text("You've successfully emailed all loser letters")
+						}else{
+							$("#msg").text("Something went wrong, loser letters were not sent: "  + data.msg)
+			        	
+						}
+
+
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+			        	$("#msg").text("Something went wrong, this flat auction wasn't locked")
+			        	return false;
+			      	}
+				});
+				$( this ).dialog( "close" );
+			},
+		Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	$( "#sendLoserLetter" ).click(function() {
+    	$( "#sendLoserLetter-confirm" ).dialog( "open" );
+    });
+
+
+});
+
+</script>
+
+{%endblock%}

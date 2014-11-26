@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 
-
+from decimal import Decimal
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
@@ -65,31 +65,32 @@ def simpleForm(request):
 	if request.method == "POST":
 		if(request.user.is_authenticated()):
 
-			data = request.POST
-			bidAmount = data.get("bidAmount")
-
-			if isSecondChance():
-				bidAmount = auction.flat_bid_amount
-
-			itemId = Item.objects.get(lot_id = data.get("lotId"))
 			try:
-				instance = Bid.objects.get(user=request.user, item_id=itemId)
-				instance.amount = bidAmount
-				instance.save()
-			except:	
-				if(bidAmount == None or bidAmount == ""):
-					logger.error("no bid")
-				else:
-					#todo get auctionId from...db?
-					Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), auction_id=currentAuction.id, item_id = itemId)
+				form = BidSubmitForm(currentAuction.id, request.POST)
+			except:
+				return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
+			
+			if form.is_valid():
+				bid = form.save(commit=False)
+				bid.user = request.user
+				bid.date = datetime.now()
+				try:
+					bid.save()
+				except Exception as e:
+					if e[0] == 1062:
+						return render_to_response('item.html', {"form":form, "success": False, "msg":"You've already bid on this item.  Please go to your account to edit/delete"}, context_instance=RequestContext(request))					
+				return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
+			else:
+				return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
+
 	else:
 		if currentAuction == None:
 			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
-		form = BidSubmitForm()
+		form = BidSubmitForm(auctionId = currentAuction.id)
 
 	return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
-	#logger.error(request.META.get('PATH_INFO'))			
+		
 	
 def contact_info(request):
 	if request.method == 'POST':
@@ -231,8 +232,8 @@ def submitBid(request):
 		itemId = data.get("itemId")
 		item = Item.objects.get(id = itemId)
 
-		if int(bidAmount) < item.min_bid:
-			return catalog(request, "You must meet the minimum bid.")	
+		if Decimal(bidAmount) < item.min_bid:
+			return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	
 
 		try:
 			instance = Bid.objects.get(user=request.user, item_id=itemId)
@@ -245,11 +246,15 @@ def submitBid(request):
 				#todo get auctionId from...db?
 				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), item_id = itemId)
 
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")	
+	'''
 	#logger.error(" path: %s" % request.META.get('PATH_INFO'))			
 	if(request.META.get('PATH_INFO') == "/audio/catalog/submitBid" ):
-		return redirect("catalog")
+		return HttpResponse(json.dumps({"success":True, "location":"You must meet the minimum bid."}), content_type="application/json")	
+
 	else:
-		return redirect("bids")
+		return HttpResponse(json.dumps({"success":True, "msg":"You must meet the minimum bid."}), content_type="application/json")	
+	'''
 
 def deleteBid(request):
 	if(request.user.is_authenticated()):

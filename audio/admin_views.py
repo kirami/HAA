@@ -27,6 +27,10 @@ def test(request):
 	return "test"
 
 
+def emailAdmin(request, auctionId):
+	data = {}
+	return render_to_response('admin/audio/sendEmailsAdmin.html', {"data":data}, context_instance=RequestContext(request))
+
 def createBid(request, auctionId):
 	data = {}
 	
@@ -36,7 +40,10 @@ def createBid(request, auctionId):
 			form.save(auctionId = auctionId)
 			data["form"] = form
 			return render_to_response('admin/audio/createBid.html', {"data":data, "success": True}, context_instance=RequestContext(request))
-		
+		else:
+			data["form"] = form
+			return render_to_response('admin/audio/createBid.html', {"data":data, "error": True}, context_instance=RequestContext(request))
+				
 
 	data["form"] = AdminBidForm(auctionId = auctionId)
 	data["auction"] = auctionId
@@ -89,6 +96,7 @@ def endBlindAuction(request, auctionId):
 
 
 def endFlatAuction(request, auctionId, userId = None):
+	#TODO check user is checked in user or admin to do this!
 	now = datetime.now()
 	#for all bids in auction not invoiced
 

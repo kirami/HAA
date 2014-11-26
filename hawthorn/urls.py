@@ -34,7 +34,7 @@ urlpatterns = patterns('',
     url(r'^admin/sendInvoices/(?P<auctionId>\d+)', admin_views.sendInvoices, name='sendInvoices'),
     url(r'^admin/sendLoserLetters/(?P<auctionId>\d+)', admin_views.sendLoserLetters, name='sendLoserLetters'),
     url(r'^admin/endAuction/(?P<auctionId>\d+)/$', admin_views.endAuction, name='endAuction'),
-
+    url(r'^admin/emailAdmin/(?P<auctionId>\d+)', admin_views.emailAdmin, name='emailAdmin'),
     url(r'^admin/sendConsignorEmails/$', admin_views.sendAllConsignorReports, name='sendAllConsignorReports'),
     url(r'^admin/consignorReport/(?P<auctionId>\d+)/(?P<consignorId>\d+)', admin_views.consignorReportById, name='consignorReportById'),   
     url(r'^admin/consignorReport/(?P<auctionId>\d+)/$', admin_views.consignorReport, name='consignorReport'),   

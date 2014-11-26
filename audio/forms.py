@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, EmailField, DateTimeField
+from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, EmailField, DateTimeField, IntegerField
 from django.contrib.auth.forms import UserCreationForm
 from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction
 from audio.utils import *
@@ -6,8 +6,6 @@ from django.core.exceptions import ValidationError
 import logging
 
 from datetime import datetime 
-
-
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -27,36 +25,43 @@ class UserCreateForm(UserCreationForm):
             profile = UserProfile.objects.create(user = new_user)
         return new_user
 
-# Create the form class.
-class ContactForm(ModelForm):
-
-	class Meta:
-		model = Address
-		exclude = ('user',)
-		#fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]
-
+'''
 class BidSubmitForm(ModelForm):
     lotId = CharField(label = "Lot ID:")
     class Meta:
 		model = Bid
 		exclude = ('user', 'date', 'winner', 'auction', 'item', 'invoice')
-		
+'''
+
+
+
 class AdminBidForm(ModelForm):
     
     def __init__(self, auctionId, *args, **kwargs):
         super(AdminBidForm, self).__init__(*args, **kwargs)
         #TODO non deadbeat users etc
-        self.fields['item'].queryset = self.fields['item'].queryset.filter(auction_id=auctionId)
-        self.fields['date'] = DateTimeField(label="Date", initial=datetime.now())
+        if "item" in self.fields:
+            self.fields['item'].queryset = self.fields['item'].queryset.filter(auction_id=auctionId)
+        if "date" in self.fields:
+            self.fields['date'] = DateTimeField(label="Date", initial=datetime.now())
+        
         self.fields['amount'] = DecimalField(label='amount', initial=0.00)
+
         
     class Meta:
         model = Bid
         exclude = ('invoice',)
 
+    def clean_amount(self):
+        amount = self.data['amount']
+        item = self.cleaned_data["item"]
+        
+        if self.cleaned_data["amount"] < item.min_bid:
+            raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
+        return amount
+
     def save(self,  auctionId, commit=True):
-        #TODO get auctionId
-        logger.error("saving")
+
         new_bid = super(AdminBidForm, self).save(commit=False)
         now = datetime.now()
         invoice = None
@@ -71,12 +76,8 @@ class AdminBidForm(ModelForm):
         if invoices:
             invoice = invoices[0]
         auction = Auction.objects.get(id = auctionId)
-        item = self.cleaned_data["item"]
         
-        if self.cleaned_data["amount"] < item.min_bid:
-            raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
-        
-        #if is blind
+            #if is blind
         if now < auction.end_date:
             #TODO if is locked?
             if invoice != None:
@@ -91,6 +92,116 @@ class AdminBidForm(ModelForm):
         new_bid.save()
         return new_bid
 
+class BidSubmitForm(ModelForm):
+    #email = EmailField(required=True)
+    lotId = CharField(label = "Lot ID:")
+    
+    def __init__(self, auctionId, *args, **kwargs):
+        super(BidSubmitForm, self).__init__(*args, **kwargs)
+        self.auction = Auction.objects.get(id = auctionId)
+
+    class Meta:
+        model = Bid
+        exclude = ('user', 'date', 'winner', 'auctionId', 'item', 'invoice')
+
+    def save(self, commit=True):
+        logger.error("1")
+        new_bid = super(BidSubmitForm, self).save(commit=False)
+        lotId = self.cleaned_data["lotId"]
+        items = Item.objects.filter(lot_id = lotId, auction = self.auction)
+         
+        if len(items) < 1:
+            raise ValidationError('There is no item with lot ID %s' % lotId)
+
+        new_bid.item = items[0]
+        
+        if commit:
+            
+            new_bid.save()
+        return new_bid
+
+    def clean_lotId(self):
+        lotId = self.data["lotId"]
+        if lotId is None:
+            raise ValidationError('You must enter a lot ID.')
+            return lotId
+    
+        items = Item.objects.filter(lot_id = lotId, auction = self.auction)
+
+        if len(items) < 1:
+            raise ValidationError('There is no item with lot ID %s' % lotId)
+            return lotId
+
+        return lotId
+
+    def clean_amount(self):
+
+        amount = self.data['amount']
+        
+        if amount == None:
+            raise ValidationError('Invalid bid')
+
+        lotId = self.data["lotId"]
+        if not lotId:
+            return amount
+
+        items = Item.objects.filter(lot_id = lotId, auction = self.auction)
+
+        if len(items) < 1:
+            return amount
+
+        item = items[0]
+
+        if self.cleaned_data["amount"] < item.min_bid:
+            raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
+
+        return amount
+'''
+class BidSubmitForm(AdminBidForm):
+    #email = EmailField(required=True)
+    lotId = CharField(label = "Lot ID:")
+
+    
+    def __init__(self, auctionId, *args, **kwargs):
+        super(BidSubmitForm, self).__init__(auctionId, *args, **kwargs)
+
+    class Meta:
+        model = Bid
+        exclude = ('user', 'date', 'winner', 'auction', 'item', 'invoice')
+
+    def clean_amount(self):
+        logger.error("cleaning amount")
+        data = self.data['amount']
+        
+        if data == None:
+            raise ValidationError(_('Invalid value'))
+
+        return data
+    
+    def is_valid(self):
+        logger.error("self:")
+        logger.error(self)
+        self.clean_amount()
+        logger.error("amount  %s" % self.fields['amount'])
+        return True
+    
+'''
+"""
+    def save(self, commit=True):
+        new_user = super(BidSubmitForm, self).save(commit=False)
+        new_user.email = self.cleaned_data["email"]
+        if commit:
+            new_user.save()
+            profile = UserProfile.objects.create(user = new_user)
+        return new_user
+"""
+
+class ContactForm(ModelForm):
+
+    class Meta:
+        model = Address
+        exclude = ('user',)
+        #fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]
 
 
 class BulkConsignment(Form):
@@ -131,7 +242,7 @@ class BulkConsignment(Form):
     	data = self.data['bcItemsSelected']
     	
     	if data == None:
-    		raise ValidationError(_('Invalid value'))
+    		raise ValidationError('Invalid value')
 
     	return data
 
