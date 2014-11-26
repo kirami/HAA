@@ -11,6 +11,10 @@
 	float: right;
 }
 
+.errorlist{
+   color:red;
+}
+
 .tableHeader div{
 	width:150px;
 }

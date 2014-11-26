@@ -17,12 +17,16 @@
 	
 	<div class="left" style="margin-top:7px;">{{bid.item.lot_id}}</div>
 	<div class="left" style="margin-top:7px;">{{bid.item.name}}</div>
-	<form class="left" method="POST" action="/audio/catalog/submitBid" >
-	 {% csrf_token %}
-		<input type ="hidden" name="itemId" value="{{bid.item}}">
-		<div class="left" style="width:175px; margin-top:5px;"><div class="left" style="width:10px; margin-top:2px;">$</div><input type="text" name="bidAmount" value="{{bid.amount}}"></div>
-		<div class="left" style="width:100px;"><input type="submit" class="bidSubmitButton" value="Update Bid"></div>
-	</form>
+
+
+	<div class="left" style="width:175px; margin-top:5px;">
+		<div class="left" style="width:10px; margin-top:2px;">$</div>
+		<form autocomplete="off">
+		<input type="text" value="{{ bid.amount }}" id="bidAmount_{{item.id}}"></form>
+	</div>
+	<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
+			
+
 	<form class="left" method="POST" action="/audio/catalog/deleteBid">
 	 {% csrf_token %}
 		<input type ="hidden" name="itemId" value="{{bid.item.id}}">

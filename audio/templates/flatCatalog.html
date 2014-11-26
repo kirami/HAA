@@ -2,6 +2,9 @@
 {% load audio_extras %}
 
 {% block content %}
+
+<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
+
 <div style="margin-bottom:10px;" class="header">
 The blind auction has ended.  These items were not sold.<br>
 </div>
@@ -24,11 +27,8 @@ The blind auction has ended.  These items were not sold.<br>
 		<div class="category" style="float:left">{{item.name}}</div>
 	</div>
 	<div style="float:left">
-		<form class="left" method="POST" action="/audio/catalog/submitBid">
-		 {% csrf_token %}
 			<input type ="hidden" name="itemId" value="{{item.id}}">
-			<input type="submit" class="bidSubmitButton" value="Buy Now">
-			<input type="hidden" name="isUpdate" value="True">
+			<button onclick="submitBid({{item.id}})" class="button">Bid Now</button>
 		</form>
 	</div>
 

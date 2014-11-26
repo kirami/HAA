@@ -3,13 +3,14 @@
 
 {% block content %}
 
-<div id="msg" style="color:red; font-weight:bold; font-size:18px;">{{msg}}</div>
+<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
 
 <div class="header" style="margin-bottom:20px;">Our current catalog:</div>
 <div class="tableHeader">	
 	<div class="left">Lot ID:</div>
 	<div class="left">Category:</div>
 	<div class="left">Name:</div>
+	<div class="left">Minimum Bid:</div>
 	<div class="clear"></div>
 </div>
 
@@ -20,30 +21,35 @@
 		<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
 		<div class="category" style="float:left">{{item.category.name}}</div>
 		<div class="category" style="float:left">{{item.name}}</div>
+		<div class="category" style="float:left">${{item.min_bid}}</div>
 	</div>
 	<div style="float:left">
-		<form class="left" method="POST" action="/audio/catalog/submitBid">
-		 {% csrf_token %}
-			{%if bids|get_item:item.id == None %}
-			<input type ="hidden" name="itemId" value="{{item.id}}">
-			<div class="left" style="width:175px; margin-top:5px;"><div class="left" style="width:10px; margin-top:2px;">$</div><input type="text" name="bidAmount" value="{{bid.amount}}"></div>
-			<div class="left" style="width:100px;"><input type="submit" class="bidSubmitButton" value="Bid Now"></div>
+		{%if bids|get_item:item.id == None %}
+			
+			<div class="left" style="width:175px; margin-top:5px;">
+				<div class="left" style="width:10px; margin-top:2px;">$</div>
+				<form autocomplete="off">
+				<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}"></form>
+			</div>
+			<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Bid Now</button></div>
+		
+		{%else%}
+				
+			<div class="left" style="width:175px; margin-top:5px;">
+				<div class="left" style="width:10px; margin-top:2px;">$</div>
+				<form autocomplete="off">
+				<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}"></form>
+			</div>
+			<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
+			
+			<form class="left" method="POST" action="/audio/catalog/deleteBid">
+			 {% csrf_token %}
+				<input type ="hidden" name="itemId" value="{{item.id}}">
+				<input type="submit" class="bidSubmitButton" value="Delete Bid">
+			</form>
 
-			{%else%}
-			<form class="left" method="POST" action="/audio/catalog/submitBid" >
-				 {% csrf_token %}
-					<input type ="hidden" name="itemId" value="{{item.id}}">
-					<div class="left" style="width:175px; margin-top:5px;"><div class="left" style="width:10px; margin-top:2px;">$</div><input type="text" name="bidAmount" value="{{ bids|get_item:item.id }}"></div>
-					<div class="left" style="width:100px;"><input type="submit" class="bidSubmitButton" value="Update Bid"></div>
-				</form>
-				<form class="left" method="POST" action="/audio/catalog/deleteBid">
-				 {% csrf_token %}
-					<input type ="hidden" name="itemId" value="{{item.id}}">
-					<input type="submit" class="bidSubmitButton" value="Delete Bid">
-				</form>
-
-			{%endif%}
-		</form>
+		{%endif%}
+		
 	</div>
 
 	<div class="clear"></div>	
