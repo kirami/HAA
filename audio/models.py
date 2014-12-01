@@ -24,6 +24,8 @@ class Invoice(models.Model):
 	second_chance_invoice_date= models.DateField(null = True, blank = True)
 	shipped_date = models.DateField(null = True)
 	on_hold = models.BooleanField(default = False)
+	shipping = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
+	second_chance_shipping = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
 
 	def __unicode__(self):
 		return u"%s" % self.user

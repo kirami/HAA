@@ -27,6 +27,41 @@ def test(request):
 	return "test"
 
 
+def shippingByInvoice(request, auctionId):
+	data = {}
+	data["auctionId"] = auctionId
+	
+	if request.POST:
+		d = request.POST
+		invoiceId = d.get("invoiceId")
+		shipping = d.get("shippingAmount")
+		logger.error("shipping: %s , invoice: %s" % (shipping, invoiceId))
+		try:
+			invoice = Invoice.objects.get(id = invoiceId)
+			invoice.shipping = shipping
+			invoice.save()
+		except:
+			return HttpResponse(json.dumps({"success":False, "invoiceId":invoiceId}), content_type="application/json")
+
+		return HttpResponse(json.dumps({"success":True, "invoiceId":invoiceId}), content_type="application/json")
+
+
+	data["invoices"] = {}
+	winners = getAlphaWinners(auctionId)
+	firstInvoice = None
+	for winner in winners:
+		invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
+		if len(invoices) > 0:
+			invoice = invoices[0]
+			data["invoices"][str(invoice.id)] = {}
+			data["invoices"][str(invoice.id)]["bids"] = getWinnerSum(auctionId, userId = winner["id"])
+			data["invoices"][str(invoice.id)]["shipping"] = invoice.shipping 
+			if firstInvoice != None:
+				firstInvoice = invoice.id
+	data["firstInvoice"] = firstInvoice
+	return render_to_response('admin/audio/shippingByInvoice.html', {"data":data}, context_instance=RequestContext(request))
+
+
 def emailAdmin(request, auctionId):
 	data = {}
 	return render_to_response('admin/audio/sendEmailsAdmin.html', {"data":data}, context_instance=RequestContext(request))
@@ -148,6 +183,7 @@ def endFlatAuction(request, auctionId, userId = None):
 
 def userBreakdown(request):
 	data = {}
+	data["newUsers"] = User.objects.fil
 	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
 
 def endAuction(request, auctionId):
