@@ -1,4 +1,4 @@
-from audio.models import Address, Item, Bid, Invoice, Payment, Consignor
+from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User
 from django.db import connection
 from django.db.models import Sum
 
@@ -15,14 +15,25 @@ def test():
 	for bid in bids:
 		bidDict[str(bid.item.id)] = str(bid.amount)
 	return bidDict
+
 #user utils
 
+#users with no bids	
 def getNewUsers():
-	return ""
+	return list(User.objects.raw('select a.* from auth_user a where a.id not in (select b.user_id from audio_bid b);'))
 
+#users bid within last 3 auctions
+def getCurrentUsers(auctionId):
+	users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
+	two = list(User.objects.raw('select a.* from auth_user a, audio_userprofile p where a.id = p.user_id and p.printed_list = true'))	
+	return two + users
 
-def getCurrentUsers():
-	return ""
+#users no bid last three auctions & not on keep me on list
+def getNonCurrentUsers(auctionId):
+	users = list(User.objects.raw('select a.* from auth_user a where id not in(select a.id from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+ str(auctionId) +' group by b.user_id)'))
+	two = list(User.objects.raw('select a.* from auth_user a, audio_userprofile p where a.id = p.user_id and p.printed_list = false'))	
+	
+	return list(set(users) & set(two))
 
 def getActiveUsers():
 	return ""
@@ -78,9 +89,10 @@ def getWinningBids(auctionId, userId = None, date = None, onlyNonInvoiced = Fals
 				return Bid.objects.filter(winner=True, item__auction=auctionId, date__lte=date)
 		else:
 			if date == None:
-				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__lte=date)
-			else:
 				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId)
+				
+			else:
+				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__lte=date)
 
 
 def getLosingBids(auctionId, userId = None):

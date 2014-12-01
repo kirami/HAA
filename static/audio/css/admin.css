@@ -27,3 +27,14 @@
 #id_consignors{
 	margin-bottom: 30px;
 }
+
+.successMsg{
+	color:green;
+	font-size:18px;
+}
+
+
+.successError{
+	color:red;
+	font-size:18px;
+}
