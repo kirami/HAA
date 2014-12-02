@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 from django import forms
+from decimal import Decimal
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
@@ -103,7 +104,6 @@ def endBlindAuction(request, auctionId):
 	
 	#get all won items before end date
 	winners = getWinningBids(auctionId, date = auction.end_date)
-	#figure sums & shipping
 
 	for winner in winners:
 		userId = winner.user_id
@@ -111,10 +111,17 @@ def endBlindAuction(request, auctionId):
 		if userId not in invoices:
 			logger.error( "user not in invoices")
 			user = User.objects.get(id = userId)
+			address = Address.objects.get(user_id = userId)
+
 			sum = getWinnerSum(auctionId, userId, date = auction.end_date)
 			invoicedAmount = sum["sum"]
-			#TODO shipping amount
-			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now())
+			#add tax if in CA
+			tax = None
+			if address.state == "CA":
+				tax = float(invoicedAmount) * .0975
+				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now(), tax = tax)
+			else:
+				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now())
 			invoices[userId] = invoice.id
 			winner.invoice = invoice
 			winner.save()
@@ -234,7 +241,19 @@ def sendLoserLetters(request, auctionId):
 def getInvoices(request, auctionId, userId = None, template=None):
 	data = {}
 	if userId != None:
-		data["invoice"]=getSumWinners(auctionId, userId)
+		data["info"]=getSumWinners(auctionId, userId)
+		invoices = Invoice.objects.filter(auction = auctionId, user = userId)
+		if len(invoices) > 0:
+			invoice = invoices[0]
+			data["invoice"] = invoice
+			shipping = 0
+			tax = 0
+			if invoice.tax:
+				tax = invoice.tax
+			if invoice.shipping:
+				shipping = invoice.shipping
+			data["orderTotal"] = invoice.invoiced_amount + tax + shipping
+			
 	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -251,8 +270,11 @@ def sendInvoices(request, auctionId):
 		profile = UserProfile.objects.get(user_id = winner["id"])
 		if profile and profile.email_invoice:
 			user = User.objects.get(id = winner["id"] )
-			data["invoice"] = getSumWinners(auctionId, winner["id"])
-			msg = getEmailMessage(user.email,"test",{"data":data}, template)
+			data["info"] = getSumWinners(auctionId, winner["id"])
+			invoices = Invoice.objects.filter(auction = auctionId, user = userId)
+			if len(invoices) > 0:
+				data["invoice"] = invoices[0]
+			msg = getEmailMessage(user.email,"Invoice for auction " + auctionId, {"data":data}, template)
 			messages.append(msg)
 			
 	if template :
