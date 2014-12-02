@@ -9,9 +9,9 @@
 	<div style="float: left; margin-right: 20px; width: 120px;">Item name:</div>
 	<div style="float: left; margin-right: 20px; width: 120px;">Amount bid:</div>
 	<div style="clear:both"></div>
+	<br>
 	
-	
-{%for winner in data.invoice.wonItems%}
+{%for winner in data.info.wonItems%}
 	<div style="float: left; margin-right: 20px; width: 120px;">{{winner.item.lot_id}}</div>
 	<div style="float: left; margin-right: 20px; width: 120px;">{{winner.item.name}}</div>
 	<div style="float: left; margin-right: 20px; width: 120px;">{{winner.amount}}</div>
@@ -20,10 +20,13 @@
 
 <hr>
 <div>Subtotal:</div>
-<div>${{data.invoice.sum}}</div>
+<div>${{data.info.sum}}</div>
 <hr>
-<div>Shipping: </div>
-<div>total: ${{data.invoice.plusShipping}}</div>
+<div>Shipping: ${{data.invoice.shipping}}</div>
+{%if data.invoice.tax%}
+<div>CA State Tax: </div>
+{%endif%}
+<div>total: ${{data.orderTotal}}</div>
 
 </div>
 

@@ -113,7 +113,7 @@ def getWinnerSum(auctionId, userId, date = None, onlyNonInvoiced = False):
 
 
 def getSumWinners(auctionId, userId = None, date = None):
-	winners = getWinningBids(auctionId, date = date)
+	winners = getWinningBids(auctionId, userId = userId, date = date)
 	if len(winners) > 0:
 		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
 

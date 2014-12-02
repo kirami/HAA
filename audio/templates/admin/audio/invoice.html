@@ -1,6 +1,5 @@
 {% extends "admin/audio/baseReport.html" %}
  
-
 {%block info%}
 
 
@@ -12,7 +11,7 @@
 	<div class="clear"></div>
 	<br><br>
 	
-{%for winner in data.invoice.wonItems%}
+{%for winner in data.info.wonItems%}
 	<div class="maxBidItem">{{winner.item.lot_id}}</div>
 	<div class="maxBidItem">{{winner.item.name}}</div>
 	<div class="maxBidItem">{{winner.amount}}</div>
@@ -21,10 +20,13 @@
 
 <hr>
 <div>Subtotal:</div>
-<div>${{data.invoice.sum}}</div>
+<div>${{data.info.sum}}</div>
 <hr>
-<div>Shipping: </div>
-<div>total: ${{data.invoice.plusShipping}}</div>
+<div>Shipping: ${{data.invoice.shipping}}</div>
+{%if data.invoice.tax%}
+<div>CA State Tax: {{data.invoice.tax}}</div>
+{%endif%}
+<div>total: ${{data.orderTotal}}</div>
 
 </div>
 
