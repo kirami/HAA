@@ -12,6 +12,12 @@ from datetime import datetime
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username']
+
 class UserCreateForm(UserCreationForm):
     email = EmailField(required=True)
 

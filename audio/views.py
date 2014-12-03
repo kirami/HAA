@@ -4,11 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from decimal import Decimal
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import login
 
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
-from audio.forms import ContactForm, BidSubmitForm, UserCreateForm
+from audio.forms import ContactForm, BidSubmitForm, UserCreateForm, UserForm
 
 from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice
 
@@ -169,22 +170,10 @@ def userInfo(request):
 				new_user = form.save()
 				return render(request, "userInfo.html", {'form': form,})
 		else:
-			form = UserCreateForm(instance=request.user)
+			form = UserForm(instance=request.user)
 		return render(request, "userInfo.html", {'form': form,})
 	else:
-		return redirect("login")
-	"""
-	if request.method == 'POST':
-		form = PasswordChangeForm(user=request.user, data=request.POST)
-		if form.is_valid():
-			form.save()
-			update_session_auth_hash(request, form.user)
-	else:
-		form = PasswordChangeForm()
-		return render_to_response('userInfo.html', {"form":form}, context_instance=RequestContext(request))
-	"""
-
-
+		return redirect("profile")
 
 
 
