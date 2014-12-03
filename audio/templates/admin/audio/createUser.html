@@ -1,0 +1,34 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+{%if success%}
+	<div style="color:green; font-size:18px">User successfully created.</div>
+
+{%endif%}
+
+{%if error%}
+	<div style="color:red; font-size:18px">Something went wrong - user was not created. {{data.msg}}</div>
+{%endif%}
+
+
+<form action="" method="post">
+    {% csrf_token %}
+      {{ data.form.as_p }}
+      <div><span style="margin-right:10px;">Send user an email?</span><input type="checkbox" name="sendEmail" checked="true"></div>
+      <div><input type="submit" value="Create User"></div>
+      
+ </form>
+
+<script type="text/javascript">
+
+$( document ).ready(function() {
+	$("#id_password1").parent().hide()
+	$("#id_password2").parent().hide()
+	$("#id_password1").val("111111")
+	$("#id_password2").val("111111")
+})
+</script
+
+{%endblock%}

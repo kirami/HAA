@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
-from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm
+from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, UserCreateForm
 
 from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile
 from audio.utils import *
@@ -27,12 +27,71 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return "test"
 
+def createUser(request):
+	data = {}
+	form = None
+	#logger.error(request)
+	if request.method == 'POST':
+		
+		form = UserCreateForm(request.POST)
+
+		if form.is_valid():
+			user = form.save()
+			#user = User.objects.get(email="")
+			password = User.objects.make_random_password()
+			user.set_password(password)
+			user.save()
+			sendEmailMsg = request.POST.get("sendEmail")
+			if sendEmailMsg:
+				try:
+					emailData={}
+					emailData["user"] = user
+					emailData["password"] = password	
+					msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
+					sendEmail(msg)
+				except Exception as e:
+					logger.error("error sending new user email: %s" % e)
+					return render_to_response('admin/audio/createUser.html', {"data":data, "success": False, "msg":e}, context_instance=RequestContext(request))
+	
+			else:
+				logger.error("no")
+			
+			data["form"] = form
+			return render_to_response('admin/audio/createUser.html', {"data":data, "success": True}, context_instance=RequestContext(request))
+		else:
+			data["form"] = form
+			return render_to_response('admin/audio/createUser.html', {"data":data, "success": False}, context_instance=RequestContext(request))
+	else:
+		logger.error("not post")
+
+	
+	data["form"] = UserCreateForm()
+	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
+
+
+
+'''
+	if request.method == "POST":
+		form = UserCreateForm(request.POST)
+		password = User.objects.make_random_password()
+    	form.user.set_password(password)
+    	if form.is_valid():
+    		form.save()
+    		data["form"] = form
+    		return render_to_response('admin/audio/createUser.html', {"data":data, "success": True}, context_instance=RequestContext(request))
+    	else:
+    		data["form"] = form
+    		return render_to_response('admin/audio/createUser.html', {"data":data, "error": True}, context_instance=RequestContext(request))
+	else:	
+		data["form"] = UserCreateForm()
+		return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
+'''
 
 def shippingByInvoice(request, auctionId):
 	data = {}
 	data["auctionId"] = auctionId
 	
-	if request.POST:
+	if request.method == "POST":
 		d = request.POST
 		invoiceId = d.get("invoiceId")
 		shipping = d.get("shippingAmount")
@@ -253,7 +312,7 @@ def getInvoices(request, auctionId, userId = None, template=None):
 			if invoice.shipping:
 				shipping = invoice.shipping
 			data["orderTotal"] = invoice.invoiced_amount + tax + shipping
-			
+
 	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
 
 

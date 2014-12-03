@@ -1,7 +1,9 @@
-from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, EmailField, DateTimeField, IntegerField
+from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, \
+                 EmailField, DateTimeField, IntegerField, ChoiceField
 from django.contrib.auth.forms import UserCreationForm
 from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction
 from audio.utils import *
+from audio.dropdowns import *
 from django.core.exceptions import ValidationError
 import logging
 
@@ -15,7 +17,7 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = ("username", "email", "first_name", "last_name", "password1", "password2")
 
     def save(self, commit=True):
         new_user = super(UserCreateForm, self).save(commit=False)
@@ -24,15 +26,6 @@ class UserCreateForm(UserCreationForm):
             new_user.save()
             profile = UserProfile.objects.create(user = new_user)
         return new_user
-
-'''
-class BidSubmitForm(ModelForm):
-    lotId = CharField(label = "Lot ID:")
-    class Meta:
-		model = Bid
-		exclude = ('user', 'date', 'winner', 'auction', 'item', 'invoice')
-'''
-
 
 
 class AdminBidForm(ModelForm):
@@ -156,45 +149,6 @@ class BidSubmitForm(ModelForm):
             raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
 
         return amount
-'''
-class BidSubmitForm(AdminBidForm):
-    #email = EmailField(required=True)
-    lotId = CharField(label = "Lot ID:")
-
-    
-    def __init__(self, auctionId, *args, **kwargs):
-        super(BidSubmitForm, self).__init__(auctionId, *args, **kwargs)
-
-    class Meta:
-        model = Bid
-        exclude = ('user', 'date', 'winner', 'auction', 'item', 'invoice')
-
-    def clean_amount(self):
-        logger.error("cleaning amount")
-        data = self.data['amount']
-        
-        if data == None:
-            raise ValidationError(_('Invalid value'))
-
-        return data
-    
-    def is_valid(self):
-        logger.error("self:")
-        logger.error(self)
-        self.clean_amount()
-        logger.error("amount  %s" % self.fields['amount'])
-        return True
-    
-'''
-"""
-    def save(self, commit=True):
-        new_user = super(BidSubmitForm, self).save(commit=False)
-        new_user.email = self.cleaned_data["email"]
-        if commit:
-            new_user.save()
-            profile = UserProfile.objects.create(user = new_user)
-        return new_user
-"""
 
 class ContactForm(ModelForm):
 
@@ -202,7 +156,14 @@ class ContactForm(ModelForm):
         model = Address
         exclude = ('user',)
         #fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]
+    
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.fields['state'] = ChoiceField(
+            choices=getStates(), required=False )
 
+        self.fields['country'] = ChoiceField(
+            choices=getCountries())
 
 class BulkConsignment(Form):
     consignor = ModelChoiceField(Consignor.objects.all())

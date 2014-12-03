@@ -7,7 +7,7 @@ class Auction(models.Model):
 	start_date = models.DateTimeField()
 	end_date = models.DateTimeField()
 	second_chance_end_date = models.DateTimeField(null = True)
-	flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
+	#flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	blind_locked = models.BooleanField(default = False)
 	flat_locked = models.BooleanField(default = False)
 
@@ -63,7 +63,10 @@ class Label(models.Model):
 class Item(models.Model):
 	#TODO fix requireds
 	label = models.ForeignKey(Label, null = True)
+	artist = models.CharField(max_length=200, null = True, blank = True)
 	name = models.CharField(max_length=200, default="")
+	name_two = models.CharField(max_length=200, null = True, blank = True)
+	notes = models.CharField(max_length=200, default="", null = True, blank = True)
 	record_number = models.CharField(max_length=100, null = True, blank = True)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
 	lot_id = models.IntegerField(null = True, blank=True, default=" ")
@@ -111,7 +114,7 @@ class Address(models.Model):
 	address_one = models.CharField(max_length=100, default="")
 	address_two = models.CharField(max_length=100, null = True, blank=True)
 	city = models.CharField(max_length=100)
-	state = models.CharField(max_length=100)
+	state = models.CharField(max_length=100, null=True, blank=True)
 	zipcode = models.CharField(max_length=100, default="")
 	postal_code = models.CharField(max_length=100, null=True, blank=True)
 	country = models.CharField(max_length=100, default="")

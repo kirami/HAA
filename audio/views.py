@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from decimal import Decimal
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
@@ -23,8 +24,6 @@ logger = logging.getLogger(__name__)
 
 def test(request):
 	data = {}
-	send_mail('Subject here', 'Here is the message.', 'from@example.com',
-    ['kirajmd@gmail.com'], fail_silently=False)
 	return render_to_response('contact.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -145,7 +144,7 @@ def bids(request):
 			if invoice == None or invoice.second_chance_invoice_amount == None:
 				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date)
 				
-				return render_to_response('flatBids.html', {"bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId, "flatAmount":currentAuction.flat_bid_amount}, context_instance=RequestContext(request))
+				return render_to_response('flatBids.html', {"bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
 			else:
 				#TODO return error
 				index()
@@ -158,8 +157,35 @@ def bids(request):
 
 
 def profile(request):
-
 	return render_to_response('profile.html', {}, context_instance=RequestContext(request))
+
+def userInfo(request):
+	
+	if request.user.is_authenticated():
+
+		if request.method == 'POST':
+			form = UserForm(request.POST, instance=request.user)
+			if form.is_valid():
+				new_user = form.save()
+				return render(request, "userInfo.html", {'form': form,})
+		else:
+			form = UserCreateForm(instance=request.user)
+		return render(request, "userInfo.html", {'form': form,})
+	else:
+		return redirect("login")
+	"""
+	if request.method == 'POST':
+		form = PasswordChangeForm(user=request.user, data=request.POST)
+		if form.is_valid():
+			form.save()
+			update_session_auth_hash(request, form.user)
+	else:
+		form = PasswordChangeForm()
+		return render_to_response('userInfo.html', {"form":form}, context_instance=RequestContext(request))
+	"""
+
+
+
 
 
 def flatFeeCatalog(request):
@@ -174,7 +200,7 @@ def flatFeeCatalog(request):
 		logger.error("error in catalog")
 		logger.error(e)
 	
-	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id, "flatAmount": auction.flat_bid_amount}, context_instance=RequestContext(request))
+	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id}, context_instance=RequestContext(request))
 
 def isSecondChance():
 	now =  datetime.now()
@@ -226,12 +252,14 @@ def submitBid(request):
 		bidAmount = data.get("bidAmount")
 		
 
-		if isSecondChance():
-			bidAmount = auction.flat_bid_amount
+		
 
 		itemId = data.get("itemId")
 		item = Item.objects.get(id = itemId)
 
+		if isSecondChance():
+			bidAmount = item.min_bid
+		
 		if Decimal(bidAmount) < item.min_bid:
 			return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	
 
@@ -270,18 +298,6 @@ def deleteBid(request):
 		
 
 def showItem(request, auctionId, lotId):
-	"""
-    form = ""
-    logger.error("HELLO")
-    if request.method == 'POST':
-    	
-    	form = BidSubmitForm(request.POST)
-    	if form.is_valid():
-    		bid = form.save()
-    		return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
-    	else:
-			return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
-	"""
 	if request.method == 'POST':
 		form = BidSubmitForm(request.POST)
 

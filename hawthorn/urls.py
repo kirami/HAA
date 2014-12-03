@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url(r'^admin/consignorReport/(?P<auctionId>\d+)/(?P<consignorId>\d+)', admin_views.consignorReportById, name='consignorReportById'),   
     url(r'^admin/consignorReport/(?P<auctionId>\d+)/$', admin_views.consignorReport, name='consignorReport'),   
     url(r'^admin/shippingByInvoice/(?P<auctionId>\d+)/$', admin_views.shippingByInvoice, name='shippingByInvoice'),   
-    
+    url(r'^admin/createUser/', admin_views.createUser, name='createUser'),
 
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^audio/', include('audio.urls')),

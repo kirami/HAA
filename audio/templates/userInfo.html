@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{%if success%}
+<div class="simpleSuccess">You have successfully updated your login information.</div>
+{%endif%}
+
+ <form action="" method="post" autocomplete="off">
+    {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Save your login info">
+  </form>
+
+<div>Change your password <a href="/audio/accounts/changePassword">here</a>.</div>
+
+
+
+{% endblock %}
