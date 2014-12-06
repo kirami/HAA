@@ -95,6 +95,7 @@ SHELL_PLUS_POST_IMPORTS = (
 
     ('audio.utils', '*'),
     ('audio.mail', '*'),
+    ('audio.dropdowns', '*'),
     ('datetime', '*'),
 )
 
@@ -104,12 +105,17 @@ SHELL_PLUS_POST_IMPORTS = (
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/srv/hawthorn/static/'
+IMAGES_ROOT = STATIC_ROOT + "audio/images/"
+IMAGES_URL = STATIC_URL + "audio/images"
+
+MEDIA_ROOT = IMAGES_ROOT
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'kirajmd@gmail.com'
 EMAIL_HOST_PASSWORD = 'lfn1k1taKD'
+
 
 LOGGING = {
     'version': 1,

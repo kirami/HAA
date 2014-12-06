@@ -203,8 +203,12 @@ def isSecondChance():
 
 def catalog(request, msg= None):
 	if(request.user.is_authenticated()):
+		data = {}
 		now =  date.today()
 		currentAuction = getCurrentAuction()
+
+		if not currentAuction:
+			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
 		currentAuctionId = currentAuction.id
 		try:

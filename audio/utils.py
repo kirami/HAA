@@ -1,12 +1,17 @@
 from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User
 from django.db import connection
 from django.db.models import Sum
+from django.conf import settings
 
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+def saveImg(fileData):
+	with open(settings.IMAGES_ROOT +'items/'+fileData.name, 'wb+') as destination:
+		for chunk in fileData.chunks():
+			destination.write(chunk)
 
 def test():
 	bidDict = {}

@@ -18,9 +18,10 @@
 {%for item in catItems%}
 <div class="catalogBox" style="{%if True%}{%endif%}">
 	<div style="margin-top:7px; float:left" class="tableBody">
+		<div class="catalogItem" style="float:left"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></div> 
 		<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
 		<div class="category" style="float:left">{{item.category.name}}</div>
-		<div class="category" style="float:left">{{item.name}}</div>
+		<div class="category" style="float:left">{{item.name}} {%if item.name_two%}{{item.name_two}}{%endif%}</div>
 		<div class="category" style="float:left">${{item.min_bid}}</div>
 	</div>
 	<div style="float:left">
