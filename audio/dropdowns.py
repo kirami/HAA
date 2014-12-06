@@ -158,7 +158,7 @@ def getCountries():
 ("Nauru", "Nauru"),
 ("Nepal", "Nepal"),
 ("Netherland Antilles", "Netherland Antilles"),
-("Netherlands", "Netherlands (Holland, Europe)"),
+("Netherlands", "Netherlands"),
 ("Nevis", "Nevis"),
 ("New Caledonia", "New Caledonia"),
 ("New Zealand", "New Zealand"),

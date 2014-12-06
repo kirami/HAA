@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, \
-                 EmailField, DateTimeField, IntegerField, ChoiceField
+                 EmailField, DateTimeField, IntegerField, ChoiceField, FileField
 from django.contrib.auth.forms import UserCreationForm
 from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction
 from audio.utils import *
@@ -17,6 +17,7 @@ class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username']
+
 
 class UserCreateForm(UserCreationForm):
     email = EmailField(required=True)
@@ -76,7 +77,7 @@ class AdminBidForm(ModelForm):
             invoice = invoices[0]
         auction = Auction.objects.get(id = auctionId)
         
-            #if is blind
+        #if is blind
         if now < auction.end_date:
             #TODO if is locked?
             if invoice != None:
@@ -104,7 +105,6 @@ class BidSubmitForm(ModelForm):
         exclude = ('user', 'date', 'winner', 'auctionId', 'item', 'invoice')
 
     def save(self, commit=True):
-        logger.error("1")
         new_bid = super(BidSubmitForm, self).save(commit=False)
         lotId = self.cleaned_data["lotId"]
         items = Item.objects.filter(lot_id = lotId, auction = self.auction)
@@ -115,7 +115,6 @@ class BidSubmitForm(ModelForm):
         new_bid.item = items[0]
         
         if commit:
-            
             new_bid.save()
         return new_bid
 

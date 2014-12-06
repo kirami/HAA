@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 from django import forms
@@ -15,9 +16,8 @@ from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consigno
 from audio.utils import *
 from audio.mail import *
 
-from datetime import datetime  
-
-import json
+from datetime import datetime 
+import json, csv
 
 import logging
 
@@ -26,6 +26,127 @@ logger = logging.getLogger(__name__)
 
 def test(request):
 	return "test"
+
+def importUserEmail(request):
+	messages = []
+	data = {}
+	emailList = []
+	firstId = 10000000
+	try:
+		users = User.objects.filter(id__gte=firstId)
+		for user in users:
+			profile = UserProfile.objects.get(user = user)
+			if user.is_active and profile.email_invoice:
+				password = User.objects.make_random_password()
+				user.set_password(password)
+				emailData={}
+				emailData["user"] = user
+				emailData["password"] = password	
+				msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
+				messages.append(msg)
+				emailList.append(user.email)
+		logger.error("sending emails to: %s" % emailList)
+		#sendBulkEmail(messages)
+	except Exception as e:
+		logger.error("error sending new user emails: %s" % e)
+		return HttpResponse(json.dumps({"success":False, "data": data}), content_type="application/json")
+
+	return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
+
+def importUserCSV(request):
+	data = {}
+	i=0
+	errors={}
+	with open("/srv/hawthorn/importData.csv") as f:
+		reader = csv.reader(f)
+		for row in reader:
+			if i==7:
+				try:
+					zip = row[0]
+					address1 = row[1]
+					address2=row[2]
+					cell_phone=row[3]
+					city=row[4]
+					country=row[5]
+					courtesy_list=row[6]
+					currentAuction=row[7]
+					deadbeat=row[8]
+					dpf=row[9]
+					email=row[10]
+					fax=row[11]
+					firstAuction=row[12]
+					firstName=row[13]
+					history=row[14]
+					lastName=row[15]
+					notes=row[16]
+					pdf=row[17]
+					pc=row[18]
+					printed_list=row[19]
+					provence=row[20]
+					state=row[21]
+					telephone=row[22]
+			
+					password = User.objects.make_random_password()
+					if i>0:
+						user,success = User.objects.get_or_create(email=email)
+						user.username=email 
+						user.set_password(password)
+						if firstName:
+							user.first_name = firstName
+						if lastName:
+							user.last_name = lastName
+
+						user.save()
+
+						addressObj = Address.objects.create(user = user)
+						profile = UserProfile.objects.create(user = user)
+						
+						if zip:
+							addressObj.zipcode = zip
+						if address1:
+							addressObj.address_one = address1
+						if address2:
+							addressObj.address_two = address2
+						if cell_phone:
+							addressObj.cell_phone = cell_phone
+						if city:
+							addressObj.city = city
+						if state:
+							addressObj.state = state
+						if telephone:
+							addressObj.telephone = telephone
+						if provence:
+							addressObj.provence = provence
+						if fax:
+							addressObj.fax = fax
+						if country == None:
+							country = "USA"
+						else:
+							addressObj.country = country.title()
+						if pc:
+							addressObj.postal_code = pc
+						addressObj.save()
+
+						profile.printed_list = True if printed_list=="T" else False
+						profile.pdf_list = True if pdf=="T" else False
+						profile.courtesy_list = True if courtesy_list=="T" else False
+						profile.deadbeat = True if deadbeat=="T" else False
+						#TODO figure out email_invoice/paperless from info above
+						profile.email_invoice = True
+						if notes:
+							profile.notes = notes
+						profile.save()
+
+
+
+				except Exception as e:
+					logger.error("Error creating user: %s" %e)
+					errors[i]=email
+			i=i+1
+	
+	logger.error("These users were had issues: %s" % errors)
+	return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
+
 
 def createUser(request):
 	data = {}
@@ -65,7 +186,7 @@ def createUser(request):
 		logger.error("not post")
 
 	
-	data["form"] = UserCreateForm()
+	data["form"] = UserCreateForm(instance)
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
 

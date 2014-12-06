@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 class Auction(models.Model):
@@ -74,7 +75,8 @@ class Item(models.Model):
 	condition = models.CharField(max_length=100, default="")
 	quantity = models.IntegerField(default = 1)
 	auction = models.ForeignKey(Auction)
-	
+	thumbnail = models.FileField(upload_to='items/', null = True, blank=True)
+	image = models.FileField(upload_to='items/', null = True, blank=True)
 	
 	class Meta:
 		unique_together = (("auction", "lot_id"),)
@@ -105,6 +107,7 @@ class UserProfile(models.Model):
 	courtesy_list = models.BooleanField(default = False)
 	deadbeat = models.BooleanField(default=False)
 	email_invoice = models.BooleanField(default=True)
+	notes = models.CharField(max_length=200, null = True, blank=True)
 
 	def __unicode__(self):
 		return unicode(self.user)
