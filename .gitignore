@@ -1,3 +1,4 @@
+importData.csv
 *.log
 *.pyc
 /static/audio/images/*

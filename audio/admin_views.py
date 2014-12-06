@@ -368,9 +368,14 @@ def endFlatAuction(request, auctionId, userId = None):
 		auction.save()
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
-def userBreakdown(request):
+def userBreakdown(request, auctionId):
 	data = {}
-	data["newUsers"] = User.objects.fil
+	data["new"] = getNewUsers()
+	data["current"] = getCurrentUsers(auctionId)
+	data["nonCurrent"] = getNonCurrentUsers(auctionId)
+	data["nonActive"] = getNonActiveUsers(auctionId)
+	data["courtesy"] = getCourtesyBidders()
+
 	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
 
 def endAuction(request, auctionId):

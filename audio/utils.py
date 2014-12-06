@@ -1,4 +1,4 @@
-from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User
+from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User, UserProfile
 from django.db import connection
 from django.db.models import Sum
 from django.conf import settings
@@ -31,7 +31,7 @@ def getNewUsers():
 def getCurrentUsers(auctionId):
 	users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
 	two = list(User.objects.raw('select a.* from auth_user a, audio_userprofile p where a.id = p.user_id and p.printed_list = true'))	
-	return two + users
+	return list(set(users) | set(two))
 
 #users no bid last three auctions & not on keep me on list
 def getNonCurrentUsers(auctionId):
@@ -43,11 +43,15 @@ def getNonCurrentUsers(auctionId):
 def getActiveUsers():
 	return ""
 
-def getNoneActiveUsers():
-	return ""
+#bidders are not current but have bid in the past
+def getNonActiveUsers(auctionId):
+	nonCurrent = getNonCurrentUsers(auctionId)
+	pastBidders = list(User.objects.raw('select distinct id from audio_bid'))
+	return list(set(nonCurrent) & set(pastBidders))
 
 def getCourtesyBidders():
-	return ""
+	ids = UserProfile.objects.values_list("user", flat=True).filter(courtesy_list = False)
+	return User.objects.filter(pk__in=set(ids))
 
 
 #Bid utils
