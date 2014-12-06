@@ -6,7 +6,8 @@
 <div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
 
 <div class="header" style="margin-bottom:20px;">Our current catalog:</div>
-<div class="tableHeader">	
+<div class="tableHeader">
+	<div class="left" style="width:50px;">&nbsp;</div>	
 	<div class="left">Lot ID:</div>
 	<div class="left">Category:</div>
 	<div class="left">Name:</div>
@@ -18,7 +19,15 @@
 {%for item in catItems%}
 <div class="catalogBox" style="{%if True%}{%endif%}">
 	<div style="margin-top:7px; float:left" class="tableBody">
-		<div class="catalogItem" style="float:left"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></div> 
+		<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
+		{%if item.image%}
+			{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
+			{%endif%}
+		{%else%}
+			{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
+			{%endif%}
+		{%endif%}
+		</div> 
 		<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
 		<div class="category" style="float:left">{{item.category.name}}</div>
 		<div class="category" style="float:left">{{item.name}} {%if item.name_two%}{{item.name_two}}{%endif%}</div>

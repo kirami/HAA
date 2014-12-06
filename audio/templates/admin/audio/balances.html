@@ -5,12 +5,6 @@
 <div>Balances!</div>
 
 
-<form method="post" action="/admin/uploadFile/" enctype="multipart/form-data" >
-   {% csrf_token %}
-    <input type="file" name="myfile" />
-    <input type="submit" name="submit" value="Upload" />
-</form>
-
 <div id="reportDiv" class="reportTable">
 
 <div>We've received payments totaling ${{data.totalPayments}}</div>

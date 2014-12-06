@@ -114,7 +114,7 @@ function submitBid(itemId){
 
 $( document ).ready(function() {
 
-	$('.catalogItem').click(catalogClick);
+	//$('.catalogItem').click(catalogClick);
 
 	$('#bidSubmit').click(function () {
 		$("#bidSubmitForm").submit();
