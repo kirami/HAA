@@ -23,35 +23,46 @@ def test():
 
 #user utils
 
+def usersWithoutAddress():
+	return User.objects.filter(address=None)
+
+
 #users with no bids	
 def getNewUsers():
-	return list(User.objects.raw('select a.* from auth_user a where a.id not in (select b.user_id from audio_bid b);'))
+	users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
+	return list( users), Address.objects.filter(user__in=set(users))
 
 #users bid within last 3 auctions
 def getCurrentUsers(auctionId):
 	users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
-	two = list(User.objects.raw('select a.* from auth_user a, audio_userprofile p where a.id = p.user_id and p.printed_list = true'))	
-	return list(set(users) | set(two))
+	ids = UserProfile.objects.values_list("user", flat=True).filter(printed_list = True)
+	two = User.objects.filter(pk__in=set(ids))
+	combined = set(users) | set(two)
+	return list(combined), Address.objects.filter(user__in=set(combined))
 
 #users no bid last three auctions & not on keep me on list
 def getNonCurrentUsers(auctionId):
 	users = list(User.objects.raw('select a.* from auth_user a where id not in(select a.id from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+ str(auctionId) +' group by b.user_id)'))
-	two = list(User.objects.raw('select a.* from auth_user a, audio_userprofile p where a.id = p.user_id and p.printed_list = false'))	
-	
-	return list(set(users) & set(two))
+	ids = UserProfile.objects.values_list("user", flat=True).filter(printed_list = False)
+	two = User.objects.filter(pk__in=set(ids))
+	combined = set(users) & set(two)
+	return list(combined), Address.objects.filter(user__in=set(combined))
 
 def getActiveUsers():
 	return ""
 
 #bidders are not current but have bid in the past
 def getNonActiveUsers(auctionId):
-	nonCurrent = getNonCurrentUsers(auctionId)
-	pastBidders = list(User.objects.raw('select distinct id from audio_bid'))
-	return list(set(nonCurrent) & set(pastBidders))
+	nonCurrent = getNonCurrentUsers(auctionId)[0]
+	pastBidders = list(User.objects.raw('select distinct a.id from audio_bid b, auth_user a where a.id=b.user_id'))
+	combined = set(nonCurrent) & set(pastBidders)
+	return list(combined), Address.objects.filter(user__in=set(combined))
+
 
 def getCourtesyBidders():
-	ids = UserProfile.objects.values_list("user", flat=True).filter(courtesy_list = False)
-	return User.objects.filter(pk__in=set(ids))
+	ids = UserProfile.objects.values_list("user", flat=True).filter(courtesy_list = True)
+	users = User.objects.filter(pk__in=set(ids))
+	return users, Address.objects.filter(user__in=set(users))
 
 
 #Bid utils

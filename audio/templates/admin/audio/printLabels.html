@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <link href="labels.css" rel="stylesheet" type="text/css" >
+    <style>
+    body {
+        width: 8.5in;
+        
+        }
+    .label{
+        /* Avery 5160 labels -- CSS and HTML by MM at Boulder Information Services */
+        width: 2.59in; /* plus .6 inches from padding */
+        height: 1.25in; /* plus .125 inches from padding */
+        margin-right:0.14in;
+       
+
+        float: left;
+        padding-left:10px;
+        text-align: left;
+        overflow: hidden;
+        outline: 1px dotted; /* outline doesn't occupy space like border does */
+        margin-top:auto;
+        margin-bottom:auto;
+        }
+    .page-break  {
+        clear: left;
+        display:block;
+        page-break-after:always;
+        }
+    </style>
+
+</head>
+<body>
+{%for address in data.addresses%}
+	{%if address.country == "USA" %}
+	<div class="label">{{address.user.first_name}} {{address.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{{address.city}} {{address.state}}, {{address.zip}}</div>
+	{%else%}
+	<div>Not USA</div>
+	{%endif%}
+{%endfor%}
+
+
+<div class="page-break"></div>
+
+</body>
+</html>
