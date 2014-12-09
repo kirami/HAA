@@ -4,17 +4,81 @@
 {%block content%}
 
 
+<div style="float:left">
+	<div class="bd" id="newDiv">New: {{data.new|length}} <a href="/admin/printLabels/{{data.auctionId}}/New">Print List</a></div>
+	<div class="bd" id="currentDiv">Current: {{data.current|length}} <a href="/admin/printLabels/{{data.auctionId}}/Current">Print List</a></div>
+	<div class="bd" id="nonCurrentDiv">NonCurrent: {{data.nonCurrent|length}} <a href="/admin/printLabels/{{data.auctionId}}/NonCurrent">Print List</a></div>	
+	<div class="bd" id="nonActiveDiv">NonActive: {{data.nonActive|length}} <a href="/admin/printLabels/{{data.auctionId}}/NonActive">Print List</a></div>	
+	<div class="bd" id="courtesyDiv">Courtesy: {{data.courtesy|length}} <a href="/admin/printLabels/{{data.auctionId}}/Courtesy">Print List</a></div>		
+</div>
 
+<div style="float:left; margin-left:50px; margin-top:20px;" id="usersBox">
+	<div style="display:none" id="newList" class="list">
+		{%for user in data.new%}
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+		{%endfor%}
+	</div>
+	<div style="display:none" id="currentList" class="list">
+		{%for user in data.current%}
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+		{%endfor%}
+	</div>
+	<div style="display:none" id="nonCurrentList" class="list">
+		{%for user in data.nonCurrent%}
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+		{%endfor%}
+	</div>
+	<div style="display:none" id="nonActiveList" class="list">
+		{%for user in data.nonActive%}
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+		{%endfor%}
+	</div>
+	<div style="display:none" id="courtesyList" class="list">
+		{%for user in data.courtesy%}
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+		{%endfor%}
+	</div>
+</div>
+<div class="clear"></div>
 
-	<div id="newDiv">New: {{data.new|length}}</div>
-	<div id="currentDiv">Current: {{data.current|length}}</div>
-	<div id="nonCurrentDiv">NoneCurrent: {{data.nonCurrent|length}}</div>
-	<div id="nonActiveDiv">NonActive: {{data.nonActive|length}}</div>
-	<div id="courtesyDiv">Courtesy: {{data.courtesy|length}}</div>
+<style type="text/css">
+	#usersBox a{
+		margin-right:10px;
+	}
 
+	.userLink{
+		width:50px;
+		float: left;
+	}
+	.singleUser{
+		border-bottom: 1px solid black;
+	}
+
+	.bd{
+		cursor: pointer;
+		margin: 10px 0px;
+	}
+</style>
 
 <script type="text/javascript">
 	
+$(document).ready(function(){
+
+	$(".bd").click(function(e){
+		id = e.target.id
+		name = id.substring(0, id.length-3)
+		display =$("#"+name+"List").css("display")
+		$(".list").hide()
+		$(".bd").css("color","black")
+		if (display == "block"){
+			$("#"+name+"List").hide()
+		}else{
+			$("#"+name+"List").show()
+			$("#" + id).css("color","green")
+		}
+	})
+})
+
 </script>
 
 {%endblock%}

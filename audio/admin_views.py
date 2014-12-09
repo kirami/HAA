@@ -27,6 +27,33 @@ logger = logging.getLogger(__name__)
 def test(request):
 	return "test"
 
+def printLabels(request, auctionId, labelType=None):
+	data = {}
+	if labelType:
+		if labelType == "NonActive":
+			users, addresses = getNonActiveUsers(auctionId)
+		if labelType == "Current":
+			users, addresses = getCurrentUsers(auctionId)
+			
+		if labelType == "New":
+			users, addresses = getNewUsers()
+			
+		if labelType == "NonCurrent":
+			users, addresses = getNonCurrentUsers(auctionId)
+
+		if labelType == "Courtesy":
+			users, addresses = getCourtesyBidders()
+		
+		data["addresses"] = addresses	
+	else:
+		users, addresses = getNonActiveUsers(auctionId)
+		data["addresses"] = addresses
+
+	data["auctionId"]=auctionId
+		
+	return render_to_response('admin/audio/printLabels.html', {"data":data, "success": False}, context_instance=RequestContext(request))
+
+
 def importUserEmail(request):
 	messages = []
 	data = {}
@@ -370,11 +397,13 @@ def endFlatAuction(request, auctionId, userId = None):
 
 def userBreakdown(request, auctionId):
 	data = {}
-	data["new"] = getNewUsers()
-	data["current"] = getCurrentUsers(auctionId)
-	data["nonCurrent"] = getNonCurrentUsers(auctionId)
-	data["nonActive"] = getNonActiveUsers(auctionId)
-	data["courtesy"] = getCourtesyBidders()
+	data["new"] = getNewUsers()[0]
+	data["current"] = getCurrentUsers(auctionId)[0]
+	data["nonCurrent"] = getNonCurrentUsers(auctionId)[0]
+	data["nonActive"] = getNonActiveUsers(auctionId)[0]
+	data["courtesy"] = getCourtesyBidders()[0]
+
+	data["auctionId"]=auctionId
 
 	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
 
