@@ -1,0 +1,33 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+{{data.path}}
+{%if success%}
+	<div style="color:green; font-size:18px">Item successfully created.</div>
+
+{%endif%}
+
+{%if error%}
+	<div style="color:red; font-size:18px">Something went wrong - bid was not created.</div>
+{%endif%}
+
+<h1>Create an item</h1>
+
+<form action="" method="post" id="item_form">
+    {% csrf_token %}
+      {{ data.form.as_p }}
+      <input type="submit" value="Create Item">
+
+      {%if lastLotId%}<div style="color:red; font-size:18px" id="lotMessage">Last lot id saved was: {{lastLotId}}, prepopulating next to: {{nextLotId}}</div>{%else%}<div>No lot</div>{%endif%}
+  </form>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+	console.log($("#id_lot_id"))
+   $("#id_lot_id").parent().prepend($("#lotMessage"))
+})
+
+</script>
+
+{%endblock%}

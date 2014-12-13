@@ -1,0 +1,58 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+<h1>Open add item page with these values:</h1>
+
+<form action="" method="post" id="addItemURL">
+    {% csrf_token %}
+      {{ data.form.as_p }}
+      <input type="submit" value="Start creating items">
+  </form>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+
+	$("#addItemURL").submit(function(e){
+		first = true
+		url = "/admin/addItem/?"
+		if ($("#id_auction").val()){
+			if(first)
+				first = false
+			else 
+				url+='&'
+			url+="auction=" + $("#id_auction").val()
+		}	
+		if ($("#id_category").val()){
+			if(first)
+				first = false
+			else 
+				url+='&'
+			url+="category=" + $("#id_category").val()
+		}
+		if ($("#id_label").val()){
+			if(first)
+				first = false
+			else 
+				url+='&'
+			url+="label=" + $("#id_label").val()
+		}
+		if ($("#id_min_bid").val()){
+			if(first)
+				first = false
+			else 
+				url+='&'
+			url+="min_bid=" + $("#id_min_bid").val()	
+		}
+
+		
+		window.open(url)
+		return false;
+
+	})
+
+})
+
+</script>
+
+{%endblock%}

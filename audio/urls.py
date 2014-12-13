@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^accounts/contact/$', views.contact_info, name='contact_info'), 
     url(r'^accounts/bids/$', views.bids, name='bids'),
     url(r'^accounts/userInfo/$', views.userInfo, name='userInfo'),
+    url(r'^catalog/comingAuction/$', views.noAuction, name='noAuction'),
     
     url(r'^catalog/(?P<auctionId>\d+)/(?P<lotId>\d+)$', views.showItem, name='showItem'),
     url(r'^catalog/submitBid', views.submitBid, name='submitBid'),

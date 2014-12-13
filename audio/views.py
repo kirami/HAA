@@ -201,6 +201,10 @@ def isSecondChance():
 		return True
 	return False
 
+def noAuction(request):
+	data = {}
+	return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
+
 def catalog(request, msg= None):
 	if(request.user.is_authenticated()):
 		data = {}
@@ -208,12 +212,15 @@ def catalog(request, msg= None):
 		currentAuction = getCurrentAuction()
 
 		if not currentAuction:
-			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
+			return redirect("noAuction")
 
 		currentAuctionId = currentAuction.id
 		try:
 			#if after close but in 2nd chance
 			if isSecondChance():
+				bids = Bid.objects.filter(user=request.user, item__auction=auction)
+				if len(bids) < 1:
+					return redirect("noAuction")
 				return redirect("flatFeeCatalog")
 		except Exception as e:
 			logger.error("error in catalog")
