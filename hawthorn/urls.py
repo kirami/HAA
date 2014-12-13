@@ -43,6 +43,9 @@ urlpatterns = patterns('',
     url(r'^admin/importUsers/', admin_views.importUserCSV, name='importUserCSV'),
     url(r'^admin/printLabels/(?P<auctionId>\d+)/(?P<labelType>\w+)/$', admin_views.printLabels, name='printLabels'),
     url(r'^admin/printLabels/(?P<auctionId>\d+)/$', admin_views.printLabels, name='printLabels'),
+    url(r'^admin/addItem/$', admin_views.addItem, name='addItem'),  
+    url(r'^admin/addItemUrl/$', admin_views.addItemPrepop, name='addItemPrepop'),  
+   
    
 
 

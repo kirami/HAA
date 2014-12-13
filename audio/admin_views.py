@@ -10,9 +10,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
-from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, UserCreateForm
+from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, UserCreateForm, ItemForm, ItemPrePopulateForm
 
-from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile
+from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile, Category, Label
 from audio.utils import *
 from audio.mail import *
 
@@ -26,6 +26,55 @@ logger = logging.getLogger(__name__)
 
 def test(request):
 	return "test"
+
+def addItemPrepop(request):
+	data = {}
+	data["form"] = ItemPrePopulateForm()
+	return render_to_response('admin/audio/addItemEntry.html', {"data":data}, context_instance=RequestContext(request))
+
+
+def addItem(request):
+	data = {}
+	initData = {}
+	success = request.GET.get('success', False)
+	auction = request.GET.get('auction', None)
+	label = request.GET.get('label', None)
+	min_bid = request.GET.get('min_bid', None)
+	artist = request.GET.get('artist', None)
+	category = request.GET.get('category', None)
+	lotId = None
+	lastLotId = None
+
+	lotIds = (Item.objects.filter(auction=auction).order_by('-lot_id').values_list('lot_id', flat=True).distinct())
+	if len(lotIds)>0:
+		lotId = lotIds[0]
+		lastLotId = lotId
+		lotId = lotId + 1
+	initData = {"auction":auction, "label":label, "min_bid": min_bid, "category": category, "artist": artist, "lot_id" : lotId}
+	form = ItemForm(initial = initData)
+
+	if request.method == 'POST':
+		try:
+			form = ItemForm(request.POST)
+
+			if form.is_valid():
+				item = form.save()
+			else:
+				data["form"] = form
+				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False}, context_instance=RequestContext(request))
+			
+			
+			data["form"] = ItemForm(initial = initData)
+			return render_to_response('admin/audio/addItem.html', {"data":data, "success": True, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
+			
+		except:
+			return render_to_response('admin/audio/addItem.html', {"data":data, "success": False}, context_instance=RequestContext(request))
+			
+
+	data["form"] = form
+	return render_to_response('admin/audio/addItem.html', {"data":data, "success": success, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
+
+
 
 def printLabels(request, auctionId, labelType=None):
 	data = {}

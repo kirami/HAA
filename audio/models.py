@@ -11,6 +11,7 @@ class Auction(models.Model):
 	#flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	blind_locked = models.BooleanField(default = False)
 	flat_locked = models.BooleanField(default = False)
+	name = models.CharField(max_length=200, blank=True, null=True)
 
 	def __unicode__(self):
 		return u"%s" % self.id
