@@ -284,10 +284,37 @@ def createUser(request):
 		return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 '''
 
-def shippingByInvoice(request, auctionId):
+def shippingByInvoiceFlat(request, auctionId):
 	data = {}
 	data["auctionId"] = auctionId
+	auction = getCurrentAuction()
+	data["invoices"] = {}
+	winners = getAlphaWinners(auctionId)
 	
+	for winner in winners:
+		
+		winnersSum = getWinnerFlatSum(auctionId, userId = winner["id"], date=auction.end_date)
+		logger.error(winnersSum)
+		if winnersSum != 0:
+	
+			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
+			logger.error(invoices)
+			if len(invoices) > 0:
+				invoice = invoices[0]
+				
+				data["invoices"][str(invoice.id)] = {}
+				data["invoices"][str(invoice.id)]["bids"] = winnersSum
+				data["invoices"][str(invoice.id)]["shipping"] = invoice.shipping 
+				data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
+
+	return render_to_response('admin/audio/shippingByInvoice.html', {"data":data}, context_instance=RequestContext(request))
+
+
+def shippingByInvoice(request, auctionId):
+	
+	data = {}
+	data["auctionId"] = auctionId
+	auction = getCurrentAuction()
 	if request.method == "POST":
 		d = request.POST
 		invoiceId = d.get("invoiceId")
@@ -305,14 +332,19 @@ def shippingByInvoice(request, auctionId):
 
 	data["invoices"] = {}
 	winners = getAlphaWinners(auctionId)
+	
+
 	firstInvoice = None
 	for winner in winners:
 		invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
 		if len(invoices) > 0:
 			invoice = invoices[0]
+			
+			winnersSum = getWinnerSum(auctionId, userId = winner["id"])
 			data["invoices"][str(invoice.id)] = {}
-			data["invoices"][str(invoice.id)]["bids"] = getWinnerSum(auctionId, userId = winner["id"])
+			data["invoices"][str(invoice.id)]["bids"] = winnersSum
 			data["invoices"][str(invoice.id)]["shipping"] = invoice.shipping 
+			data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
 			if firstInvoice != None:
 				firstInvoice = invoice.id
 	data["firstInvoice"] = firstInvoice
@@ -344,11 +376,11 @@ def createBid(request, auctionId):
 
 def endBlindAuction(request, auctionId):
 	invoices = {}
-	logger.error( "here")
+	
 	#make sure to do all manual stuff first
 	auction = Auction.objects.get(id = auctionId)
 	now = datetime.now()
-	
+
 	if auction.blind_locked == True:
 		return HttpResponse(json.dumps({"success":False, "msg":"This auction is locked"}), content_type="application/json")
 
@@ -360,12 +392,12 @@ def endBlindAuction(request, auctionId):
 	
 	#get all won items before end date
 	winners = getWinningBids(auctionId, date = auction.end_date)
-
+	
 	for winner in winners:
 		userId = winner.user_id
-
+		#logger.error("winner: %s" % winner)
 		if userId not in invoices:
-			logger.error( "user not in invoices")
+			#logger.error( "user not in invoices")
 			user = User.objects.get(id = userId)
 			address = Address.objects.get(user_id = userId)
 

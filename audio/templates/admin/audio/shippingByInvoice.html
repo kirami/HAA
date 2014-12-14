@@ -9,6 +9,7 @@
 <input type="hidden" value="{{data.auctionId}}" name="auctionId" id="auctionId"> 
 <div id="invoices">
 {%for key,value in data.invoices.items%} 
+
 	<div id="invoiceDiv_{{key}}" class="invoiceDivs" style="display:none">
 		<div>Invoice for user: {{value.bids.wonItems.0.user}}</div>
 		<div id="reportDiv" class="reportTable">
@@ -84,8 +85,6 @@ $( document ).ready(function() {
 		$(invoiceDivs[index]).css("display","block");
 		$("#indexNum").text(index+1)
 
-		
-
 	})
 
 	$("#btnRight").click(function(){
@@ -101,9 +100,6 @@ $( document ).ready(function() {
 		$(invoiceDivs[index]).css("display","block");		
 		$("#btnLeft").attr("disabled",false)
 		$("#indexNum").text(index+1)
-
-
-
 
 	})
 

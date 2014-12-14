@@ -29,6 +29,12 @@ class BidAdmin(admin.ModelAdmin):
     list_display = ('id', view_link(self, "1"))
     """
 
+
+class InvoiceAdmin(admin.ModelAdmin):
+
+    list_display = ('user', 'auction',)
+    search_fields = ['user']
+    list_filter = ('auction',)
     
 class ItemAdmin(admin.ModelAdmin):
 
@@ -51,7 +57,7 @@ admin.site.register(Address)
 admin.site.register(Label)
 admin.site.register(UserProfile)
 admin.site.register(Payment)
-admin.site.register(Invoice)
+admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(Consignor)
 admin.site.register(Consignment, ConsignmentAdmin)
 
