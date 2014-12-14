@@ -14,7 +14,7 @@ class Auction(models.Model):
 	name = models.CharField(max_length=200, blank=True, null=True)
 
 	def __unicode__(self):
-		return u"%s" % self.id
+		return u"%s" % self.name
 
 class Invoice(models.Model):
 	user = models.ForeignKey(User)

@@ -47,15 +47,7 @@ def login_view(request):
         return HttpResponseRedirect("/account/invalid/")
 '''
 
-def getCurrentAuction():
-	now = date.today()
-	# where date is after start date and before second_end date
-	auctions = Auction.objects.filter(start_date__lte = now, second_chance_end_date__gte = now)
-	if len(auctions) == 1:
-		return auctions[0]
-	else:
-		#TODO throw error
-		return None
+
 
 def simpleForm(request):
 	form = None
@@ -191,15 +183,7 @@ def flatFeeCatalog(request):
 	
 	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id}, context_instance=RequestContext(request))
 
-def isSecondChance():
-	now =  datetime.now()
-	#TODO current auction
-	currentAuction = getCurrentAuction()
-	currentAuctionId = currentAuction.id
-	auction = Auction.objects.get(id = currentAuctionId)
-	if auction.end_date < now and auction.second_chance_end_date > now:
-		return True
-	return False
+
 
 def noAuction(request):
 	data = {}
@@ -218,7 +202,8 @@ def catalog(request, msg= None):
 		try:
 			#if after close but in 2nd chance
 			if isSecondChance():
-				bids = Bid.objects.filter(user=request.user, item__auction=auction)
+				#only allow winners to bid (so only add on to won shipments)
+				bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
 				if len(bids) < 1:
 					return redirect("noAuction")
 				return redirect("flatFeeCatalog")

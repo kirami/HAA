@@ -1,7 +1,9 @@
-from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User, UserProfile
+from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User, UserProfile, Auction
 from django.db import connection
 from django.db.models import Sum
 from django.conf import settings
+
+from datetime import datetime, date
 
 import logging
 
@@ -20,6 +22,26 @@ def test():
 	for bid in bids:
 		bidDict[str(bid.item.id)] = str(bid.amount)
 	return bidDict
+
+def getCurrentAuction():
+	now = date.today()
+	# where date is after start date and before second_end date
+	auctions = Auction.objects.filter(start_date__lte = now, second_chance_end_date__gte = now)
+	if len(auctions) == 1:
+		return auctions[0]
+	else:
+		#TODO throw error
+		return None
+
+def isSecondChance():
+	now =  datetime.now()
+	#TODO current auction
+	currentAuction = getCurrentAuction()
+	currentAuctionId = currentAuction.id
+	auction = Auction.objects.get(id = currentAuctionId)
+	if auction.end_date < now and auction.second_chance_end_date > now:
+		return True
+	return False
 
 #user utils
 
@@ -87,6 +109,15 @@ def getBidItems(auctionId, orderByName = False):
 		query+= " order by name"
 	return list(Item.objects.raw(query))
 
+#get winning flat bids after blind auction end date
+def getWinningFlatBids(auctionId, date, userId = None):
+	if userId == None:
+		return Bid.objects.filter(winner=True, item__auction=auctionId, date__gte=date )
+	else:
+		return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__gte=date)
+	
+
+#if date - get bids before said date
 def getWinningBids(auctionId, userId = None, date = None, onlyNonInvoiced = False):
 
 	if onlyNonInvoiced:
@@ -131,6 +162,14 @@ def getWinnerSum(auctionId, userId, date = None, onlyNonInvoiced = False):
 	else:
 		return 0
 
+#date is end of blind auction
+def getWinnerFlatSum(auctionId, userId, date = None):
+	winners = getWinningFlatBids(auctionId, userId=userId, date = date)
+	if len(winners) > 0:
+		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
+
+	else:
+		return 0
 
 def getSumWinners(auctionId, userId = None, date = None):
 	winners = getWinningBids(auctionId, userId = userId, date = date)
@@ -336,12 +375,15 @@ def getAllConsignmentInfo(consignorId, auctionId):
 
 
 def getHeaderData(data, auctionId):
-	winners = getWinningBids(auctionId)
+	winningBids = getWinningBids(auctionId)
  	noBids = getNoBidItems(auctionId)
  	losers = getLosingBids(auctionId)
+ 	winners = getAlphaWinners(auctionId)
 
  	data["auctionId"] = auctionId
- 	data["winners"] = winners
+ 	data["winners"] = winningBids
+
+ 	data["winnersCount"] = len(winners)
  	data["losers"] = losers
  	data["loserCount"] = len(losers)
  	data["wonItems"] = getBidItems(auctionId)
