@@ -291,12 +291,28 @@ def shippingByInvoiceFlat(request, auctionId):
 	data["invoices"] = {}
 	winners = getAlphaWinners(auctionId)
 	
+	if request.method == "POST":
+		d = request.POST
+		invoiceId = d.get("invoiceId")
+		shipping = d.get("shippingAmount")
+		logger.error("shipping: %s , invoice: %s" % (shipping, invoiceId))
+		try:
+			invoice = Invoice.objects.get(id = invoiceId)
+			invoice.second_chance_shipping = shipping
+			invoice.save()
+		except:
+			return HttpResponse(json.dumps({"success":False, "invoiceId":invoiceId}), content_type="application/json")
+
+		return HttpResponse(json.dumps({"success":True, "invoiceId":invoiceId}), content_type="application/json")
+
+
+
 	for winner in winners:
 		
-		winnersSum = getWinnerFlatSum(auctionId, userId = winner["id"], date=auction.end_date)
-		logger.error(winnersSum)
-		if winnersSum != 0:
-	
+		winnersFlatSum = getWinnerFlatSum(auctionId, userId = winner["id"], date=auction.end_date)
+		#if bought flat items
+		if winnersFlatSum != 0:
+			winnersSum = getWinnerSum(auctionId, userId = winner["id"], date=auction.end_date)
 			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
 			logger.error(invoices)
 			if len(invoices) > 0:
@@ -304,17 +320,26 @@ def shippingByInvoiceFlat(request, auctionId):
 				
 				data["invoices"][str(invoice.id)] = {}
 				data["invoices"][str(invoice.id)]["bids"] = winnersSum
+				data["invoices"][str(invoice.id)]["flatBids"] = winnersFlatSum
 				data["invoices"][str(invoice.id)]["shipping"] = invoice.shipping 
 				data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
 
-	return render_to_response('admin/audio/shippingByInvoice.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/shippingByInvoiceFlat.html', {"data":data}, context_instance=RequestContext(request))
 
+def shippingByInvoiceFiltered(request, auctionId):
+	return shippingByInvoice(request, auctionId, True)
+	
 
-def shippingByInvoice(request, auctionId):
+def shippingByInvoice(request, auctionId, filter=None):
 	
 	data = {}
 	data["auctionId"] = auctionId
 	auction = getCurrentAuction()
+	if filter:
+		data["filtered"]=True
+	else:
+		data["filtered"]=False
+	
 	if request.method == "POST":
 		d = request.POST
 		invoiceId = d.get("invoiceId")
@@ -336,7 +361,12 @@ def shippingByInvoice(request, auctionId):
 
 	firstInvoice = None
 	for winner in winners:
-		invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
+		if filter:
+			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"], shipping=None)
+		
+		else:
+			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
+		
 		if len(invoices) > 0:
 			invoice = invoices[0]
 			
@@ -442,34 +472,34 @@ def endFlatAuction(request, auctionId, userId = None):
 	#DO NOT mark winners - they should already be marked
 
 	#get all won items before end date
-	if userId == None:
-		winners = getWinningBids(auctionId, onlyNonInvoiced = True)
-		#TODO lock 2nd auction
-	else:
-		winners = getWinningBids(auctionId, userId = userId, onlyNonInvoiced = True)
-	#figure sums & shipping
+
+	winners = getWinningFlatBids(auctionId, date=auction.end_date, userId = userId)
 
 	for winner in winners:
 		userId = winner.user_id
 
+		invoices = Invoice.objects.filter(auction=auction, user = userId)
 		#if no invoice from blind auction, create
-		if winner.invoice == None:
-			user = User.objects.get(id = userId)
-			sum = getWinnerSum(auctionId, userId, onlyNonInvoiced = True)
-			invoicedAmount = sum["sum"]
-			#TODO shipping amount
-			invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = 0, second_chance_invoice_amount = invoicedAmount, second_chance_invoice_date = now, )
-			winner.invoice = invoice
-			winner.save()
+		if len(invoices)<1:
+			return HttpResponse(json.dumps({"success":False, "msg":"This winner has no invoice, only auction winners should be able to win set sale items."}), content_type="application/json")
+			
 		else:
-			invoice = winner.invoice
+			invoice = invoices[0]
 			
 			if invoice.second_chance_invoice_amount == None:
-				sum = getWinnerSum(auctionId, userId, onlyNonInvoiced = True)
+				
+				sum = getWinnerFlatSum(auctionId, date=auction.end_date, userId = userId)
 				invoicedAmount = sum["sum"]
+				
 				invoice.second_chance_invoice_amount = invoicedAmount
 				#shipping
 				invoice.second_chance_invoice_date = datetime.now()
+				address = Address.objects.get(user_id = userId)
+				tax = None
+				if address.state == "CA":
+					tax = float(invoicedAmount) * .0975
+					invoice.second_chance_tax = tax
+
 				invoice.save()
 	if userId == None:			
 		auction.flat_locked = True
