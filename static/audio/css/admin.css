@@ -12,6 +12,10 @@
 	width: 120px;
 }
 
+.maxBidItemTitle{
+	font-size:16px;
+}
+
 #id_bcItemsAvailable, #id_bcItemsSelected{
 	width: 400px;
 }
