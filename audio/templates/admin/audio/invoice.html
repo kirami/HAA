@@ -21,10 +21,14 @@
 <hr>
 <div>Subtotal:</div>
 <div>${{data.info.sum}}</div>
+{%if data.discount != 0%}
+<div>Discount:</div>
+<div>${{data.discount}}</div>
+{%endif%}
 <hr>
-<div>Shipping: ${{data.invoice.shipping}}</div>
+<div>Shipping: ${{data.shippingTotal}}</div>
 {%if data.invoice.tax%}
-<div>CA State Tax: {{data.invoice.tax}}</div>
+<div>CA State Tax: {{data.taxTotal}}</div>
 {%endif%}
 <div>total: ${{data.orderTotal}}</div>
 

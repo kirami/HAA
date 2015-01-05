@@ -255,7 +255,15 @@ def getInvoices(auctionId = None):
 def getTotalInvoiceAmount(auctionId = None):
 	invoices = getInvoices(auctionId)
 	if len(invoices) > 0:
-		return invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] 
+		sum1 = invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] or 0
+		sum2 = invoices.aggregate(Sum('second_chance_invoice_amount'))["second_chance_invoice_amount__sum"] or 0
+		tax1 = invoices.aggregate(Sum('tax'))["tax__sum"] or 0
+		tax2 = invoices.aggregate(Sum('second_chance_tax'))["second_chance_tax__sum"] or 0
+		shipping1 = invoices.aggregate(Sum('shipping'))["shipping__sum"] or 0
+		shipping2 = invoices.aggregate(Sum('second_chance_shipping'))["second_chance_shipping__sum"] or 0
+		discount = invoices.aggregate(Sum('discount'))["discount__sum"] or 0
+
+		return sum1 + sum2 + tax1 + tax2 + shipping1 + shipping2 - discount
 	else:
 		return 0
 
@@ -266,7 +274,18 @@ def getInvoiceInfoByUser(userId, auctionId = None):
 		invoices = Invoice.objects.filter(user_id = userId, auction_id = auctionId)
 	
 	if len(invoices) > 0:
-		return { "sum": invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"], "invoices":invoices} 
+		
+		sum1 = invoices.aggregate(Sum('invoiced_amount'))["invoiced_amount__sum"] or 0
+		sum2 = invoices.aggregate(Sum('second_chance_invoice_amount'))["second_chance_invoice_amount__sum"] or 0
+		tax1 = invoices.aggregate(Sum('tax'))["tax__sum"] or 0
+		tax2 = invoices.aggregate(Sum('second_chance_tax'))["second_chance_tax__sum"] or 0
+		shipping1 = invoices.aggregate(Sum('shipping'))["shipping__sum"] or 0
+		shipping2 = invoices.aggregate(Sum('second_chance_shipping'))["second_chance_shipping__sum"] or 0
+		discount = invoices.aggregate(Sum('discount'))["discount__sum"] or 0
+
+		sum = sum1 + sum2 + tax1 + tax2 + shipping1 + shipping2 - discount
+
+		return { "sum": sum, "invoices":invoices} 
 	else:
 		return { "sum": 0, "invoices":None} 
 
@@ -372,6 +391,27 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	data["lastName"] =  consignor.last_name
 	data["consignor"] = consignor.id
 	return data
+
+
+def getInvoiceData(auctionId, userId):
+	data = {}
+	data["info"]=getSumWinners(auctionId, userId)
+	invoices = Invoice.objects.filter(auction = auctionId, user = userId)
+	if len(invoices) > 0:
+		invoice = invoices[0]
+		data["invoice"] = invoice
+		shipping = invoice.shipping or 0
+		tax = invoice.tax or 0
+		secondAmount = invoice.second_chance_invoice_amount or 0
+		secondShipping = invoice.second_chance_shipping or 0
+		secondTax = invoice.second_chance_tax or 0
+		discount = invoice.discount or 0
+		data["discount"] = discount
+		data["taxTotal"] = tax + secondTax
+		data["shippingTotal"] = shipping + secondShipping
+		data["orderTotal"] = invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount
+	return data
+
 
 
 def getHeaderData(data, auctionId):
