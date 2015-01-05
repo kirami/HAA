@@ -476,9 +476,9 @@ def endFlatAuction(request, auctionId, userId = None):
 	winners = getWinningFlatBids(auctionId, date=auction.end_date, userId = userId)
 
 	for winner in winners:
-		userId = winner.user_id
+		winnerId = winner.user_id
 
-		invoices = Invoice.objects.filter(auction=auction, user = userId)
+		invoices = Invoice.objects.filter(auction=auction, user = winnerId)
 		#if no invoice from blind auction, create
 		if len(invoices)<1:
 			return HttpResponse(json.dumps({"success":False, "msg":"This winner has no invoice, only auction winners should be able to win set sale items."}), content_type="application/json")
@@ -488,13 +488,13 @@ def endFlatAuction(request, auctionId, userId = None):
 			
 			if invoice.second_chance_invoice_amount == None:
 				
-				sum = getWinnerFlatSum(auctionId, date=auction.end_date, userId = userId)
+				sum = getWinnerFlatSum(auctionId, date=auction.end_date, userId = winnerId)
 				invoicedAmount = sum["sum"]
 				
 				invoice.second_chance_invoice_amount = invoicedAmount
 				#shipping
 				invoice.second_chance_invoice_date = datetime.now()
-				address = Address.objects.get(user_id = userId)
+				address = Address.objects.get(user_id = winnerId)
 				tax = None
 				if address.state == "CA":
 					tax = float(invoicedAmount) * .0975
@@ -566,19 +566,7 @@ def sendLoserLetters(request, auctionId):
 def getInvoices(request, auctionId, userId = None, template=None):
 	data = {}
 	if userId != None:
-		data["info"]=getSumWinners(auctionId, userId)
-		invoices = Invoice.objects.filter(auction = auctionId, user = userId)
-		if len(invoices) > 0:
-			invoice = invoices[0]
-			data["invoice"] = invoice
-			shipping = 0
-			tax = 0
-			if invoice.tax:
-				tax = invoice.tax
-			if invoice.shipping:
-				shipping = invoice.shipping
-			data["orderTotal"] = invoice.invoiced_amount + tax + shipping
-
+		data = getInvoiceData(auctionId, userId)
 	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -595,11 +583,8 @@ def sendInvoices(request, auctionId):
 		profile = UserProfile.objects.get(user_id = winner["id"])
 		if profile and profile.email_invoice:
 			user = User.objects.get(id = winner["id"] )
-			data["info"] = getSumWinners(auctionId, winner["id"])
-			invoices = Invoice.objects.filter(auction = auctionId, user = userId)
-			if len(invoices) > 0:
-				data["invoice"] = invoices[0]
-			msg = getEmailMessage(user.email,"Invoice for auction " + auctionId, {"data":data}, template)
+			data = getInvoiceData(auctionId, userId)
+			msg = getEmailMessage(user.email,"Invoice for Hawthorn's " + auction.name, {"data":data}, template)
 			messages.append(msg)
 			
 	if template :
@@ -609,8 +594,6 @@ def sendInvoices(request, auctionId):
 	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 		
-
-
 
 def sendAllConsignorReports(request):
 	d = request.POST
@@ -630,9 +613,10 @@ def sendTemplateEmail(request):
 def consignorReportById(request, consignorId, auctionId, template = None):
 	data = getAllConsignmentInfo(consignorId, auctionId)	
 	getHeaderData(data, auctionId)
+	consignor = Consignor.objects.get(id=consignorId)
 	
 	if template:
-		msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":data}, template)
+		msg = getEmailMessage(consignorId.email,"test",{"data":data}, template)
 		sendEmail(msg)
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 		
@@ -660,7 +644,7 @@ def consignorReport(request, auctionId, template = None):
 			usedConsignors[consignorId] = True
 
 			if template:
-				msg = getEmailMessage("fosterthefelines@gmail.com","test",{"data":indData}, template)
+				msg = getEmailMessage(consignor.email,"test",{"data":indData}, template)
 				messages.append(msg)
 
 	if template:

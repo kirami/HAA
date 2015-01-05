@@ -13,7 +13,7 @@
 	<br><br>
 	
 {%for winner in data.winningBids%} 
-	<div class="maxBidItem">{{winner.id}}</div>
+	<div class="maxBidItem"><a href="/admin/getInvoices/{{data.auctionId}}/{{winner.id}}/" target="_blank">{{winner.id}}</a></div>
 	<div class="maxBidItem">{{winner.last_name}}</div>	
 	<div class="maxBidItem">{{winner.first_name}}</div>	
 	<div class="maxBidItem">{{winner.zipcode}}</div>

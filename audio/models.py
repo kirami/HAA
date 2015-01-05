@@ -24,12 +24,13 @@ class Invoice(models.Model):
 	reminder_invoice_date = models.DateField(null = True, blank = True)
 	second_chance_invoice_amount = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
 	second_chance_invoice_date= models.DateField(null = True, blank = True)
-	shipped_date = models.DateField(null = True)
+	shipped_date = models.DateField(null = True, blank=True)
 	on_hold = models.BooleanField(default = False)
 	shipping = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
 	second_chance_shipping = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
 	tax = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
 	second_chance_tax = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
+	discount = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
 
 	def __unicode__(self):
 		return u"%s" % self.user
@@ -131,6 +132,12 @@ class Address(models.Model):
 
 	def __unicode__(self):
 		return self.user.email + " "+self.user.first_name + " " + self.user.last_name
+
+class PrintedCatalog(models.Model):
+	user = models.ForeignKey(User)
+	auction = models.IntegerField()
+	
+
 
 class Consignor(models.Model):
 	first_name = models.CharField(max_length=100)
