@@ -18,6 +18,11 @@ class ItemPrePopulateForm(Form):
     label =  ModelChoiceField(Label.objects.all())
     min_bid = DecimalField(label='Minumum Bid', initial=2.00)
 
+class InvoiceForm(ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ['invoiced_amount', 'second_chance_invoice_amount', 'tax', 'second_chance_tax', 'shipping', 'second_chance_shipping', 'discount']
+
 class ItemForm(ModelForm):
     class Meta:
         model = Item

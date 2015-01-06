@@ -1,0 +1,73 @@
+{% extends "admin/audio/baseAdmin.html" %}
+
+
+
+{%block content%}
+
+{%if data.success%}<div class="successMsg">Successfully updated this invoice!</div>{%endif%}
+{%if data.errorMsg%}<div class="successError">There was a problem saving this invoice: {{data.errorMsg}}</div>{%endif%}
+
+<div>Set a discount for {{data.invoice.user.first_name}} {{data.invoice.user.last_name}}, invoice #: {{data.invoice.id}}</div>
+<form action="" method="post" id="setDiscountForm">
+    {% csrf_token %} 
+    {{ data.form.as_p }}
+    <input type="decimal" name="discountPercent" id="discountPercent">
+    <button id="calculateBtn">Calculate discount</button>
+    <button id="saveBtn">Save</button>
+</form>
+
+
+
+
+{%block info%}
+{%endblock%}
+
+
+
+<script type="text/javascript">
+	
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+
+
+	$( document ).ready(function() {
+		
+		$("#calculateBtn").click(function(){
+			percent = $("#discountPercent").val();
+			percentage = (percent/100);
+
+			invoiceElement1 = $("#id_invoiced_amount")
+			invoiceElement2 = $("#id_second_chance_invoice_amount")
+			
+			tax1 = $("#id_tax")
+			tax2 = $("#id_second_chance_tax");
+
+
+			ie1 = invoiceElement1.val()
+			ie2 = invoiceElement2.val()
+
+			discount1 = round(ie1 * percentage,2)
+			discount2 = round(ie2 * percentage,2)
+
+			invoiceElement1.val(ie1 - discount1)
+			invoiceElement2.val(ie2 -discount2)
+			
+
+			$("#id_discount").val(discount2 + discount1)
+
+			if(tax1.val()>0)
+				tax1.val(round(invoiceElement1.val() * .0975,2))
+			if(tax2.val()>0)
+				tax2.val(round(invoiceElement2.val() * .0975, 2))
+
+			return false;
+		})
+
+	});
+
+</script>
+
+{% endblock %}
+
+

@@ -47,6 +47,7 @@ urlpatterns = patterns('',
     url(r'^admin/printLabels/(?P<auctionId>\d+)/$', admin_views.printLabels, name='printLabels'),
     url(r'^admin/addItem/$', admin_views.addItem, name='addItem'),  
     url(r'^admin/addItemUrl/$', admin_views.addItemPrepop, name='addItemPrepop'),  
+    url(r'^admin/setDiscount/(?P<invoiceId>\d+)/$', admin_views.setDiscount, name='setDiscount'),  
    
    
 

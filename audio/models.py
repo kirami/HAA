@@ -22,18 +22,18 @@ class Invoice(models.Model):
 	invoiced_amount = models.DecimalField(max_digits=19, decimal_places=2)
 	invoice_date = models.DateField()
 	reminder_invoice_date = models.DateField(null = True, blank = True)
-	second_chance_invoice_amount = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
+	second_chance_invoice_amount = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 	second_chance_invoice_date= models.DateField(null = True, blank = True)
 	shipped_date = models.DateField(null = True, blank=True)
 	on_hold = models.BooleanField(default = False)
-	shipping = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
-	second_chance_shipping = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
-	tax = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
-	second_chance_tax = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
-	discount = models.DecimalField(max_digits=19, decimal_places=2, null=True, blank= True)
+	shipping = models.DecimalField(max_digits=19, decimal_places=2, default=0)
+	second_chance_shipping = models.DecimalField(max_digits=19, decimal_places=2, default=0)
+	tax = models.DecimalField(max_digits=19, decimal_places=2, default=0)
+	second_chance_tax = models.DecimalField(max_digits=19, decimal_places=2, default=0)
+	discount = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 
 	def __unicode__(self):
-		return u"%s" % self.user
+		return u"%s - %s" % (self.user,  self.auction.name)
 
 	#on hold
 
@@ -44,6 +44,9 @@ class Payment(models.Model):
 	user = models.ForeignKey(User)
 	invoice = models.ForeignKey(Invoice)
 	date_received = models.DateField()
+
+	def __unicode__(self):
+		return u"%s" % (self.invoice) 
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
