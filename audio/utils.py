@@ -228,9 +228,11 @@ def getConsignedLosers(auctionId, consignorId):
 
 def getUnbalancedUsers():
 	cursor = connection.cursor()
-	cursor.execute("select user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance "+
-		"from(select sum(amount) as payments, it.user_id, invoiced from audio_payment p "+
-		"right join (select sum(invoiced_amount) as invoiced, user_id from audio_invoice group by user_id) "+
+	cursor.execute("select user_id, coalesce(payments,0) as payments, invoiced, invoiced + invoiced2 +tax1+tax2+shipping1+shipping2 -discount - coalesce(payments,0) as balance "+
+		"from(select sum(amount) as payments, it.user_id, invoiced, invoiced2, tax1, tax2, shipping1, shipping2, discount from audio_payment p "+
+		"right join (select sum(invoiced_amount) as invoiced, sum(second_chance_invoice_amount) as invoiced2, sum(tax) as tax1, sum(second_chance_tax) as tax2," +
+		"sum(shipping) as shipping1, sum(second_chance_shipping) as shipping2, coalesce(sum(discount),0)  as discount,"+
+			" user_id from audio_invoice group by user_id) "+
 		"as it on it.user_id = p.user_id group by user_id) as joined "+
 		"where joined.payments != joined.invoiced or joined.payments is NULL")
 	row = dictfetchall(cursor)

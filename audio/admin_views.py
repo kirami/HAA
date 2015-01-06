@@ -10,7 +10,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
-from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, UserCreateForm, ItemForm, ItemPrePopulateForm
+from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, \
+UserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm
 
 from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile, Category, Label
 from audio.utils import *
@@ -26,6 +27,30 @@ logger = logging.getLogger(__name__)
 
 def test(request):
 	return "test"
+
+
+def setDiscount(request, invoiceId):
+	data ={}
+	data["invoice"] = Invoice.objects.get(pk=invoiceId)
+	
+	if request.method == 'POST':
+		try:
+			form = InvoiceForm(request.POST, instance = data["invoice"])
+			if form.is_valid():
+				form.save()
+				data["success"]=True
+		except Exception as e:
+			data["success"]=False
+			data["errorMsg"] = e
+			logger.error("error updating invoice %s: %s" % (invoiceId, e))
+			return render_to_response('admin/audio/setDiscount.html', {"data":data}, context_instance=RequestContext(request))
+
+
+	data["form"] = InvoiceForm(instance = data["invoice"])
+
+	
+	return render_to_response('admin/audio/setDiscount.html', {"data":data}, context_instance=RequestContext(request))
+
 
 def addItemPrepop(request):
 	data = {}
@@ -486,7 +511,7 @@ def endFlatAuction(request, auctionId, userId = None):
 		else:
 			invoice = invoices[0]
 			
-			if invoice.second_chance_invoice_amount == None:
+			if invoice.second_chance_invoice_amount == 0:
 				
 				sum = getWinnerFlatSum(auctionId, date=auction.end_date, userId = winnerId)
 				invoicedAmount = sum["sum"]
