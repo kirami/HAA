@@ -48,9 +48,9 @@ urlpatterns = patterns('',
     url(r'^admin/addItem/$', admin_views.addItem, name='addItem'),  
     url(r'^admin/addItemUrl/$', admin_views.addItemPrepop, name='addItemPrepop'),  
     url(r'^admin/setDiscount/(?P<invoiceId>\d+)/$', admin_views.setDiscount, name='setDiscount'),  
+    url(r'^admin/itemPrintOut/(?P<auctionId>\d+)/$', admin_views.itemPrintOut, name='itemPrintOut'),
+    url(r'^admin/adjustLotIds/(?P<auctionId>\d+)/$', admin_views.adjustLotIds, name='adjustLotIds'),
    
-   
-
 
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^audio/', include('audio.urls')),

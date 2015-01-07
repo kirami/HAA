@@ -15,6 +15,20 @@ def saveImg(fileData):
 		for chunk in fileData.chunks():
 			destination.write(chunk)
 
+def adjustLotIdsUtil(auctionId, index, increment = True):
+	if increment:
+		order = "desc"
+		op = "+"
+	else:
+		order = "asc"
+		op = "-"
+
+	cursor = connection.cursor()
+	cursor.execute("update audio_item set lot_id = lot_id "+op+" 1 where auction_id = "+str(auctionId)+" and lot_id >= "+str(index)+" order by lot_id " + order)
+	row = dictfetchall(cursor)
+
+
+
 def test():
 	bidDict = {}
 	bids = Bid.objects.filter(user = 1, item__auction = 3)
@@ -59,6 +73,7 @@ def getCurrentUsers(auctionId):
 	users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
 	ids = UserProfile.objects.values_list("user", flat=True).filter(printed_list = True)
 	two = User.objects.filter(pk__in=set(ids))
+
 	combined = set(users) | set(two)
 	return list(combined), Address.objects.filter(user__in=set(combined))
 

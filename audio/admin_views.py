@@ -26,13 +26,43 @@ import logging
 logger = logging.getLogger(__name__)
 
 def test(request):
+	data={}
 	return "test"
+
+def adjustLotIds(request, auctionId):
+	data={}
+	data["auction"]=Auction.objects.get(pk=auctionId)
+	
+	if request.method == 'POST':
+		try:
+			index = request.POST.get("index")
+			order = request.POST.get("order")
+			if not index or not order:
+				raise Exception("You must specify index and order.")
+			adjustLotIdsUtil(auctionId, index, (order=="up"))
+			data["success"]=True
+		except Exception as e:
+			data["success"]=False
+			data["errorMsg"] = e
+			logger.error("error updating lot ids: %s" % e)
+			return render_to_response('admin/audio/adjustLotIds.html', {"data":data}, context_instance=RequestContext(request))
+
+
+
+	return render_to_response('admin/audio/adjustLotIds.html', {"data":data}, context_instance=RequestContext(request))
+
+
+def itemPrintOut(request, auctionId):
+	data ={}
+	items = Item.objects.filter(auction = auctionId)
+	data["items"]=items
+	return render_to_response('admin/audio/itemPrintOut.html', {"data":data}, context_instance=RequestContext(request))
 
 
 def setDiscount(request, invoiceId):
 	data ={}
 	data["invoice"] = Invoice.objects.get(pk=invoiceId)
-	
+
 	if request.method == 'POST':
 		try:
 			form = InvoiceForm(request.POST, instance = data["invoice"])
