@@ -29,16 +29,18 @@
     {% endfor %}
 {% endif %}
 
-<!--
-<div>Your contact Info:</div>
+<script type="text/javascript">
+  
 
 
-<div>
-<div>Address 1:{{ form.address_one }}</div>
-<div>Address 2:{{ form.address_two }}</div>
-<div>City:{{ form.city }}</div>
-<div>State:{{ form.state }}</div>
-</div>-->
+  $( document ).ready(function() {
+  
+    $('#id_country').val('USA');
+    
+  })
+  
+
+</script>
 
 
 {% endblock %}

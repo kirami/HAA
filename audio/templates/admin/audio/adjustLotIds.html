@@ -1,0 +1,63 @@
+{% extends "admin/audio/baseAdmin.html" %}
+
+
+
+{%block content%}
+{%if data.success%}<div class="successMsg">Successfully updated lot Ids!</div>{%endif%}
+{%if data.errorMsg%}<div class="successError">There was a problem saving this invoice: {{data.errorMsg}}</div>{%endif%}
+
+<h1>Adjust lot IDs for {{data.auction.name}}</h1>
+<form method="post" id="adjustForm">
+	{% csrf_token %}
+	<div>Do you want to adjust lotIds up or down?</div>
+	<select name="order" id="order">
+		<option value="up">up</option>
+		<option value="down">down</option>
+	</select>
+	<div>Enter the first lot Id you want adjusted (everything after and including this will be adjusted up or down)</div>
+	<input name="index" type="text" id="index">
+	<button id="run">Run me!</button>
+</form>
+
+<div id="adjust-confirm" title="Please Confirm">Are you sure you want to adjust lot IDs <span id="orderDiv"></span>  starting with lot ID: <span id="indexId"></span> for auction {{data.auction.name}}?</div>
+
+{%block info%}
+{%endblock%}
+
+<style type="text/css">
+
+</style>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$( "#adjust-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Adjust": function() {
+					$("#adjustForm").submit()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+	$("#run").click(function(){
+		$("#orderDiv").text($("#order").val())
+		
+		$("#indexId").text($("#index").val())
+		$( "#adjust-confirm" ).dialog( "open" );
+		return false;
+	})
+})
+</script>
+
+{% endblock %}
+
+

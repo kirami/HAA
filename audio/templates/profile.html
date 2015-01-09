@@ -5,16 +5,20 @@
 
 {% if user.is_authenticated %}
   <p class="header">Welcome, {{ user.username }}. Thanks for logging in.</p>
-
+{%if data.addressMsg%}<div style="margin-bottom:10px" class="successError">We don't have your address information.  You cannot bid without this, please fill it out <a href="../contact">here</a></div><div class="clear"></div> {%endif%}
+  <div>
   <div style="height:50px;"><a href="../contact" class="button">View Contact Info</a></div>
   <div class="clear"></div>
   <div style="height:50px;"><a href="../bids" class="button">View Current Bids</a></div>
   <div style="height:50px;"><a href="../userInfo" class="button">View Login Info</a></div>
-
+</div>
 
 
 {% else %}
-  <p>Welcome!. Please <a href="/audio/accounts/login">log in</a> or <a href="/audio/accounts/register">register</a> .</p>
+  <p>Welcome! Please <a href="/audio/accounts/login">log in</a> or <a href="/audio/accounts/register">register</a> .</p>
 {% endif %}
+
+
+
 
 {% endblock %}

@@ -12,6 +12,10 @@
 	<div style="color:red; font-size:18px">Something went wrong - bid was not created.</div>
 {%endif%}
 
+{%if data.auctionEnded%}
+	<div class="successError">This auction is locked, you can't add any items unless you unlock it.</div>
+{%endif%}
+
 <h1>Create an item</h1>
 
 <form action="" method="post" id="item_form">
@@ -19,7 +23,7 @@
       {{ data.form.as_p }}
       <input type="submit" value="Create Item">
 
-      {%if lastLotId%}<div style="color:red; font-size:18px" id="lotMessage">Last lot id saved was: {{lastLotId}}, prepopulating next to: {{nextLotId}}</div>{%else%}<div>No lot</div>{%endif%}
+      {%if lastLotId%}<div style="color:red; font-size:18px" id="lotMessage">Last lot id saved was: {{lastLotId}}, prepopulating next to: {{nextLotId}}</div>{%endif%}
   </form>
 
 <script type="text/javascript">

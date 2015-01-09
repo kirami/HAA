@@ -38,7 +38,7 @@ def test():
 	return bidDict
 
 def getCurrentAuction():
-	now = date.today()
+	now = datetime.today()
 	# where date is after start date and before second_end date
 	auctions = Auction.objects.filter(start_date__lte = now, second_chance_end_date__gte = now)
 	if len(auctions) == 1:
