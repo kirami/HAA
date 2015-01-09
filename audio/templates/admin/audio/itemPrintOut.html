@@ -1,0 +1,46 @@
+{% extends "admin/audio/baseAdmin.html" %}
+
+
+
+{%block content%}
+
+{%for item in data.items%}
+<div>
+	<div class="itemLeft">{{item.lot_id}}</div>
+	<div class="itemLeft">{{item.label}}</div> 
+	<div class="itemLeft">{{item.record_number}} </div>
+	<div class="itemLeft" style="width:200px">{{item.name}} 
+		{%if item.name_two%}<br>{{item.name_two}}{%endif%} 
+		{%if item.notes%}<br>{{item.notes}}{%endif%} 
+	</div>
+	<div class="itemLeft">
+		{{item.artist}} 
+		{%if item.name_two%}-{%endif%}
+	</div>
+	<div class="itemLeft">
+		{{item.condition}}
+	</div>
+	<div class="clear"></div>
+</div>
+{%endfor%}
+
+
+
+{%block info%}
+{%endblock%}
+
+<style type="text/css">
+	.itemLeft{
+		float:left;
+		width:50px;
+	}
+</style>
+
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock %}
+
+

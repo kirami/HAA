@@ -5,7 +5,7 @@ from decimal import Decimal
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import login
-
+from django.contrib.auth import authenticate, login
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
@@ -14,6 +14,7 @@ from audio.forms import ContactForm, BidSubmitForm, UserCreateForm, UserForm
 from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice
 
 from datetime import datetime, date  
+from audio.utils import getCurrentAuction, isSecondChance
 
 import logging
 import json
@@ -114,6 +115,9 @@ def register(request):
         form = UserCreateForm(request.POST)
         if form.is_valid():
             new_user = form.save()
+            nu = authenticate(username=request.POST['username'],
+                                    password=request.POST['password1'])
+            login(request, nu)
            
             return HttpResponseRedirect("../profile")
     else:
@@ -150,7 +154,12 @@ def bids(request):
 
 
 def profile(request):
-	return render_to_response('profile.html', {}, context_instance=RequestContext(request))
+	data = {}
+	if request.user.is_authenticated():
+		addresses = Address.objects.filter(user=request.user)
+		if len(addresses) < 1:
+			data["addressMsg"]=True
+	return render_to_response('profile.html', {"data":data}, context_instance=RequestContext(request))
 
 def userInfo(request):
 	
@@ -236,6 +245,10 @@ def submitBid(request):
 		data = request.POST
 		bidAmount = data.get("bidAmount")
 		
+		addresses = Address.objects.filter(user=request.user)
+		
+		if len(addresses) < 1:
+			return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
 
 		
 

@@ -116,6 +116,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'kirajmd@gmail.com'
 EMAIL_HOST_PASSWORD = 'lfn1k1taKD'
 
+CA_TAX = 0.975
+
 
 LOGGING = {
     'version': 1,

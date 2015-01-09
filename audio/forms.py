@@ -30,7 +30,7 @@ class ItemForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username']
+        fields = ['first_name', 'last_name', 'username', 'email']
 
 
 class UserCreateForm(UserCreationForm):

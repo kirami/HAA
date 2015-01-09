@@ -106,7 +106,7 @@ function submitBid(itemId){
 			}
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
-        	$("#msg").text("Something went wrong, this flat auction wasn't locked")
+        	$("#msg").text("Something went wrong, we could not save your bid.")
         	return false;
       	}
 	});

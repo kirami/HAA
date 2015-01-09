@@ -29,6 +29,8 @@ def test(request):
 	data={}
 	return "test"
 
+
+
 def adjustLotIds(request, auctionId):
 	data={}
 	data["auction"]=Auction.objects.get(pk=auctionId)
@@ -97,8 +99,10 @@ def addItem(request):
 	min_bid = request.GET.get('min_bid', None)
 	artist = request.GET.get('artist', None)
 	category = request.GET.get('category', None)
-	lotId = None
-	lastLotId = None
+	lotId = 0
+	lastLotId = 0
+
+
 
 	lotIds = (Item.objects.filter(auction=auction).order_by('-lot_id').values_list('lot_id', flat=True).distinct())
 	if len(lotIds)>0:
@@ -110,15 +114,23 @@ def addItem(request):
 
 	if request.method == 'POST':
 		try:
+			auctionObj = Auction.objects.get(pk=auction)
+			if auctionObj.flat_locked:
+				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False, "lastLotId":lastLotId, "nextLotId":lotId, "auctionEnded":TrueT}, context_instance=RequestContext(request))
+			
+
 			form = ItemForm(request.POST)
 
 			if form.is_valid():
 				item = form.save()
+				lotId = lotId+1
+				lastLotId =  lastLotId+1
 			else:
 				data["form"] = form
-				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False}, context_instance=RequestContext(request))
+				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 			
 			
+
 			data["form"] = ItemForm(initial = initData)
 			return render_to_response('admin/audio/addItem.html', {"data":data, "success": True, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 			
@@ -293,6 +305,9 @@ def createUser(request):
 			password = User.objects.make_random_password()
 			user.set_password(password)
 			user.save()
+			#create address object for them.
+			Address.objects.create(user = user)
+
 			sendEmailMsg = request.POST.get("sendEmail")
 			if sendEmailMsg:
 				try:
@@ -317,7 +332,7 @@ def createUser(request):
 		logger.error("not post")
 
 	
-	data["form"] = UserCreateForm(instance)
+	data["form"] = UserCreateForm()
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -491,7 +506,7 @@ def endBlindAuction(request, auctionId):
 			#add tax if in CA
 			tax = None
 			if address.state == "CA":
-				tax = float(invoicedAmount) * .0975
+				tax = float(invoicedAmount) * settings.CA_TAX
 				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now(), tax = tax)
 			else:
 				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now())
