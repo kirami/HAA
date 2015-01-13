@@ -3,68 +3,92 @@
 
 {% block content %}
 
-<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
+<div style="text-align:center">
+	<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
 
-<div class="header" style="margin-bottom:20px;">Our current catalog:</div>
-<div class="tableHeader">
-	<div class="left" style="width:50px;">&nbsp;</div>	
-	<div class="left">Lot ID:</div>
-	<div class="left">Category:</div>
-	<div class="left">Name:</div>
-	<div class="left">Minimum Bid:</div>
-	<div class="clear"></div>
+	<div class="header" style="">Our current catalog:{%if not loggedIn%}<div class="successError">You must log in to bid.</div>{%endif%}</div>
+
+	<ul id="pagination" class="pagination-sm"></ul>
 </div>
 
-
-{%for item in catItems%}
-<div class="catalogBox" style="{%if True%}{%endif%}">
-	<div style="margin-top:7px; float:left" class="tableBody">
-		<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
-		{%if item.image%}
-			{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
-			{%endif%}
-		{%else%}
-			{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
-			{%endif%}
-		{%endif%}
-		</div> 
-		<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
-		<div class="category" style="float:left">{{item.category.name}}</div>
-		<div class="category" style="float:left">{{item.name}} {%if item.name_two%}{{item.name_two}}{%endif%}</div>
-		<div class="category" style="float:left">${{item.min_bid}}</div>
+<div style="margin-left:auto; margin-right:auto; width:{%if not loggedIn%}675{%else%}950{%endif%}px">
+	<div class="tableHeader">
+		<div class="left" style="width:70px;">&nbsp;</div>	
+		<div class="left">Lot ID:</div>
+		<div class="left">Category:</div>
+		<div class="left">Name:</div>
+		<div class="left">Minimum Bid:</div>
+		<div class="clear"></div>
 	</div>
-	<div style="float:left">
-		{%if bids|get_item:item.id == None %}
+
+
+	{%for item in catItems%}
+	<div class="catalogBox" style="{%if True%}{%endif%}">
+		<div style="margin-top:7px; float:left" class="tableBody">
+			<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
+			{%if item.image%}
+				{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
+				{%endif%}
+			{%else%}
+				{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
+				{%endif%}
+			{%endif%}
+			</div> 
+			<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
+			<div class="category" style="float:left">{{item.category.name}}</div>
+			<div class="category" style="float:left">{{item.name}} {%if item.name_two%}{{item.name_two}}{%endif%}</div>
+			<div class="category" style="float:left">${{item.min_bid}}</div>
+		</div>
+		<div style="float:left">
 			
-			<div class="left" style="width:175px; margin-top:5px;">
-				<div class="left" style="width:10px; margin-top:2px;">$</div>
-				<form autocomplete="off">
-				<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}"></form>
-			</div>
-			<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Bid Now</button></div>
-		
-		{%else%}
+			{%if not loggedIn%}
+			{%else%}
+
+				{%if bids|get_item:item.id == None %}
+					
+					<div class="left" style="width:175px; margin-top:5px;">
+						<div class="left" style="width:10px; margin-top:2px;">$</div>
+						<form autocomplete="off">
+						<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}"></form>
+					</div>
+					<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Bid Now</button></div>
 				
-			<div class="left" style="width:175px; margin-top:5px;">
-				<div class="left" style="width:10px; margin-top:2px;">$</div>
-				<form autocomplete="off">
-				<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}"></form>
-			</div>
-			<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
+				{%else%}
+						
+					<div class="left" style="width:175px; margin-top:5px;">
+						<div class="left" style="width:10px; margin-top:2px;">$</div>
+						<form autocomplete="off">
+						<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}"></form>
+					</div>
+					<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
+					
+					<form class="left" method="POST" action="/audio/catalog/deleteBid">
+					 {% csrf_token %}
+						<input type ="hidden" name="itemId" value="{{item.id}}">
+						<input type="submit" class="bidSubmitButton" value="Delete Bid">
+					</form>
+
+				{%endif%}
+			{%endif%}
+
 			
-			<form class="left" method="POST" action="/audio/catalog/deleteBid">
-			 {% csrf_token %}
-				<input type ="hidden" name="itemId" value="{{item.id}}">
-				<input type="submit" class="bidSubmitButton" value="Delete Bid">
-			</form>
+		</div>
 
-		{%endif%}
-		
+		<div class="clear"></div>	
 	</div>
-
-	<div class="clear"></div>	
+	{%endfor%}
 </div>
-{%endfor%}
 
+<script type="text/javascript">
+	$(document).ready(function(){
+		 $('#pagination').twbsPagination({
+		        totalPages: {{total}},
+		        startPage:{{number}},
+		        onPageClick: function (event, page) {
+		            window.location = "?page=" + page
+		        }
+		    });
+	})
+</script>
 
 {% endblock %}

@@ -11,6 +11,11 @@
 	float: right;
 }
 
+#main{
+   margin-left: 20px;
+   margin-right:20px;
+}
+
 .errorlist{
    color:red;
 }
@@ -26,6 +31,11 @@
 .header{
 	font-size:22px;
 	font-weight: bold;
+}
+
+#header{
+   margin-top:20px;
+   margin-right:20px;
 }
 
 #header h1{
