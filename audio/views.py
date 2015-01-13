@@ -211,11 +211,27 @@ def catalog(request, msg= None):
 	now =  date.today()
 	currentAuction = getCurrentAuction()
 	total = 0
-	perPage = 10
+	perPage = 3
 	categories = None
 
-	page = request.GET.get("page", 1)
+	page = int(request.GET.get("page", 1))
 	category = request.GET.get("category", None)
+	order = request.GET.get("sort", 'lot_id')
+
+	if order == "nameAsc":
+		order = "name"
+
+	elif order == "nameDesc":
+		order = "-name"
+
+	elif order == "artistAsc":
+		order = "artist"
+
+	elif order == "artistDesc":
+		order = "-artist"
+	else:
+		order = "lot_id"
+
 
 
 	if not currentAuction:
@@ -246,11 +262,11 @@ def catalog(request, msg= None):
 
 		if category:	
 			if int(category) not in categories.values_list("id",flat=True):
-				items = Item.objects.filter(auction = currentAuction)
+				items = Item.objects.filter(auction = currentAuction).order_by(order)
 			else:
-				items = Item.objects.filter(auction = currentAuction, category = category)
+				items = Item.objects.filter(auction = currentAuction, category = category).order_by(order)
 		else:
-			items = Item.objects.filter(auction = currentAuction)
+			items = Item.objects.filter(auction = currentAuction).order_by(order)
 		
 		total = math.ceil(float(len(items))/perPage)
 		bids = []
@@ -274,7 +290,7 @@ def catalog(request, msg= None):
 		logger.error("error in catalog")
 		logger.error(e)
 		return redirect("catalog")
-	return render_to_response('catalog.html', {"category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
+	return render_to_response('catalog.html', {"sort":order, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
 
 
 
