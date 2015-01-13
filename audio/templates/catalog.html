@@ -23,9 +23,9 @@
 <div style="margin-left:auto; margin-right:auto; width:{%if not loggedIn%}675{%else%}{%if bids%}1040{%else%}950{%endif%}{%endif%}px" class="right">
 	<div class="tableHeader">
 		<div class="left" style="width:70px;">&nbsp;</div>	
-		<div class="left">Lot ID:</div>
+		<div class='left {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot ID:</div>
 		<div class="left">Category:</div>
-		<div class="left">Name:</div>
+		<div  id="nameHeader" class='left {%if sort == "name"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "name"%}&#9650;{%else%}{%if sort == "-name"%}&#9660;{%endif%}{%endif%} Name:</div>
 		<div class="left">Minimum Bid:</div>
 		<div class="clear"></div>
 	</div>
@@ -95,11 +95,22 @@
 		        totalPages: {{total}},
 		        startPage:{{number}},
 		        onPageClick: function (event, page) {
-		            window.location = "?page=" + page
+		        	window.location="?page="+page+"{%if category%}&category={{category}}&{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
 		        }
 		    });
 
-	
+		$("#lotIdHeader").click(function(){
+			if(!$(this).hasClass("orderAsc"))
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=lot"
+				
+		})
+
+		$("#nameHeader").click(function(){
+			if($(this).hasClass("orderAsc"))
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameDesc"
+			else
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameAsc"
+		})
 
 
 	})
