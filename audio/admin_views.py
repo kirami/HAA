@@ -125,6 +125,7 @@ def addItem(request):
 				item = form.save()
 				lotId = lotId+1
 				lastLotId =  lastLotId+1
+				initData["lot_id"] = lotId
 			else:
 				data["form"] = form
 				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))

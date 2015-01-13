@@ -3,6 +3,9 @@
 
 {% block content %}
 
+
+{%if bids%}
+
 <div>Your current bids:</div>
 
 <div class="tableHeader">	
@@ -35,6 +38,8 @@
 	<div class="clear"></div>
 {% endfor %}
 </div>
-
+{%else%}
+<div>You have no bids currently, visit our <a href="../../catalog">catalog</a> to bid!</div>
+{%endif%}
 
 {% endblock %}

@@ -17,7 +17,7 @@ from datetime import datetime, date
 from audio.utils import getCurrentAuction, isSecondChance
 
 import logging
-import json
+import json, math
 
 
 
@@ -196,45 +196,65 @@ def flatFeeCatalog(request):
 
 def noAuction(request):
 	data = {}
+	currentAuction = getCurrentAuction()
+
+	if currentAuction:
+		return redirect("catalog")
 	return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
 def catalog(request, msg= None):
-	if(request.user.is_authenticated()):
-		data = {}
-		now =  date.today()
-		currentAuction = getCurrentAuction()
+	
+	data = {}
+	now =  date.today()
+	currentAuction = getCurrentAuction()
+	total = 0
+	perPage = 10
 
-		if not currentAuction:
-			return redirect("noAuction")
+	page = 1
+	if request.GET.get("page"):
+		page = int(request.GET.get("page"))
 
-		currentAuctionId = currentAuction.id
-		try:
-			#if after close but in 2nd chance
-			if isSecondChance():
-				#only allow winners to bid (so only add on to won shipments)
-				bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
-				if len(bids) < 1:
-					return redirect("noAuction")
-				return redirect("flatFeeCatalog")
-		except Exception as e:
-			logger.error("error in catalog")
-			logger.error(e)
-			
-		bidDict = {}
-		items = ""
-		try:
-			items = Item.objects.all()	
+	if not currentAuction:
+		return redirect("noAuction")
+
+	currentAuctionId = currentAuction.id
+	try:
+		#if after close but in 2nd chance
+		if isSecondChance():
+			#only allow winners to bid (so only add on to won shipments)
+			bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
+			if len(bids) < 1:
+				return redirect("noAuction")
+			return redirect("flatFeeCatalog")
+	except Exception as e:
+		logger.error("error in catalog")
+		logger.error(e)
+		
+	bidDict = {}
+	
+	try:
+		items = Item.objects.filter(auction = currentAuction)
+		total = math.ceil(float(len(items))/perPage)
+		bids = []
+
+		if page < 1 or page > total:
+			return redirect("catalog")
+
+		#logger.error("%s : %s" % (perPage*(page-1), (perPage*page)))
+		items = items[perPage*(page-1):(perPage*page)]
+		if(request.user.is_authenticated()):
 			bids = Bid.objects.filter(user = request.user, item__auction = currentAuctionId)
-			
-			for bid in bids:
-				bidDict[str(bid.item.id)] = str(bid.amount)
+		
+		for bid in bids:
+			bidDict[str(bid.item.id)] = str(bid.amount)
 
-			#logger.error(bidDict.get("1"))
-			
-		except Exception as e:
-			logger.error("error in catalog")
-			logger.error(e)
-	return render_to_response('catalog.html', {"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg}, context_instance=RequestContext(request))
+		
+		
+	except Exception as e:
+		logger.error("error in catalog")
+		logger.error(e)
+	return render_to_response('catalog.html', {"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated()}, context_instance=RequestContext(request))
+
 
 
 def submitBid(request):
