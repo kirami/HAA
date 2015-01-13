@@ -5,13 +5,22 @@
 
 <div style="text-align:center">
 	<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
+	{%if success%}<div class="successMsg">Your bid has been successfully submitted.</div>{%endif%}
 
-	<div class="header" style="">Our current catalog:{%if not loggedIn%}<div class="successError">You must log in to bid.</div>{%endif%}</div>
+	<div class="header" style="">Our current catalog:{%if not loggedIn%}<div class="successError">You must log in to bid.</div>{%else%}<div>Click <a href="simpleForm">here</a> to enter bids directly.</div>{%endif%}</div>
 
 	<ul id="pagination" class="pagination-sm"></ul>
 </div>
 
-<div style="margin-left:auto; margin-right:auto; width:{%if not loggedIn%}675{%else%}950{%endif%}px">
+<div class="left">
+	<div>Table of contents:</div>
+	{%for cat in categories%}
+
+	<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category == cat.id %}color:black{%endif%}">{{cat}}</a></div>
+	{%endfor%}
+</div>
+
+<div style="margin-left:auto; margin-right:auto; width:{%if not loggedIn%}675{%else%}{%if bids%}1040{%else%}950{%endif%}{%endif%}px" class="right">
 	<div class="tableHeader">
 		<div class="left" style="width:70px;">&nbsp;</div>	
 		<div class="left">Lot ID:</div>
@@ -78,6 +87,7 @@
 	</div>
 	{%endfor%}
 </div>
+<div class="clear"></div>	
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -88,6 +98,10 @@
 		            window.location = "?page=" + page
 		        }
 		    });
+
+	
+
+
 	})
 </script>
 

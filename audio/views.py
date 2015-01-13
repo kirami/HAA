@@ -11,7 +11,7 @@ from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, UserCreateForm, UserForm
 
-from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice
+from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice, Category
 
 from datetime import datetime, date  
 from audio.utils import getCurrentAuction, isSecondChance
@@ -132,6 +132,9 @@ def bids(request):
 		currentAuction = getCurrentAuction()
 		currentAuctionId = currentAuction.id
 		bids = Bid.objects.filter(item__auction = currentAuctionId, user= request.user)
+		success = False
+		if request.GET.get("success"):
+			success = True
 		invoices = Invoice.objects.filter(user = request.user, auction = currentAuction.id)
 		invoice = None
 		if len(invoices) > 0:
@@ -141,12 +144,12 @@ def bids(request):
 			if invoice == None or invoice.second_chance_invoice_amount == None:
 				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date)
 				
-				return render_to_response('flatBids.html', {"bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
+				return render_to_response('flatBids.html', {"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
 			else:
 				#TODO return error
 				index()
 		else:
-			return render_to_response('bids.html', {"bids":bids}, context_instance=RequestContext(request))
+			return render_to_response('bids.html', {"success":success,"bids":bids}, context_instance=RequestContext(request))
 	else:
 		index()
 
@@ -209,13 +212,18 @@ def catalog(request, msg= None):
 	currentAuction = getCurrentAuction()
 	total = 0
 	perPage = 10
+	categories = None
 
-	page = 1
-	if request.GET.get("page"):
-		page = int(request.GET.get("page"))
+	page = request.GET.get("page", 1)
+	category = request.GET.get("category", None)
+
 
 	if not currentAuction:
 		return redirect("noAuction")
+
+	success = False
+	if request.GET.get("success"):
+		success = True
 
 	currentAuctionId = currentAuction.id
 	try:
@@ -233,10 +241,21 @@ def catalog(request, msg= None):
 	bidDict = {}
 	
 	try:
-		items = Item.objects.filter(auction = currentAuction)
+		items = None
+		categories = Category.objects.filter(item__auction=currentAuction).distinct()
+
+		if category:	
+			if int(category) not in categories.values_list("id",flat=True):
+				items = Item.objects.filter(auction = currentAuction)
+			else:
+				items = Item.objects.filter(auction = currentAuction, category = category)
+		else:
+			items = Item.objects.filter(auction = currentAuction)
+		
 		total = math.ceil(float(len(items))/perPage)
 		bids = []
 
+		
 		if page < 1 or page > total:
 			return redirect("catalog")
 
@@ -248,12 +267,14 @@ def catalog(request, msg= None):
 		for bid in bids:
 			bidDict[str(bid.item.id)] = str(bid.amount)
 
-		
+		if category:
+			category = int(category)	
 		
 	except Exception as e:
 		logger.error("error in catalog")
 		logger.error(e)
-	return render_to_response('catalog.html', {"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated()}, context_instance=RequestContext(request))
+		return redirect("catalog")
+	return render_to_response('catalog.html', {"category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
 
 
 
