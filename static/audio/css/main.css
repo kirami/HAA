@@ -11,6 +11,10 @@
 	float: right;
 }
 
+.clickable{
+   cursor: pointer;
+}
+
 #main{
    margin-left: 20px;
    margin-right:20px;

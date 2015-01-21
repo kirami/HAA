@@ -11,7 +11,7 @@
 
 	<ul id="pagination" class="pagination-sm"></ul>
 </div>
-
+{{sort}}
 <div class="left">
 	<div>Table of contents:</div>
 	{%for cat in categories%}
@@ -20,12 +20,14 @@
 	{%endfor%}
 </div>
 
-<div style="margin-left:auto; margin-right:auto; width:{%if not loggedIn%}675{%else%}{%if bids%}1040{%else%}950{%endif%}{%endif%}px" class="right">
+<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="right">
+	<div class="innerRight">
 	<div class="tableHeader">
 		<div class="left" style="width:70px;">&nbsp;</div>	
-		<div class='left {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot ID:</div>
+		<div class='left clickable {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot ID:</div>
 		<div class="left">Category:</div>
-		<div  id="nameHeader" class='left {%if sort == "name"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "name"%}&#9650;{%else%}{%if sort == "-name"%}&#9660;{%endif%}{%endif%} Name:</div>
+		<div  id="nameHeader" class='left clickable {%if sort == "nameAsc"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "nameAsc"%}&#9650;{%else%}{%if sort == "nameDesc"%}&#9660;{%endif%}{%endif%} Name:</div>
+		<div  id="artistHeader" class='left  clickable{%if sort == "artistAsc"%}orderAsc{%else%}{%if sort == "artistDesc"%}orderDesc{%endif%}{%endif%}'>{%if sort == "artistAsc"%}&#9650;{%else%}{%if sort == "artistDesc"%}&#9660;{%endif%}{%endif%} Artist:</div>
 		<div class="left">Minimum Bid:</div>
 		<div class="clear"></div>
 	</div>
@@ -46,6 +48,7 @@
 			<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
 			<div class="category" style="float:left">{{item.category.name}}</div>
 			<div class="category" style="float:left">{{item.name}} {%if item.name_two%}{{item.name_two}}{%endif%}</div>
+			<div class="category" style="float:left">{{item.artist}}</div>
 			<div class="category" style="float:left">${{item.min_bid}}</div>
 		</div>
 		<div style="float:left">
@@ -86,6 +89,7 @@
 		<div class="clear"></div>	
 	</div>
 	{%endfor%}
+	</div>
 </div>
 <div class="clear"></div>	
 
@@ -96,20 +100,29 @@
 		        startPage:{{number}},
 		        onPageClick: function (event, page) {
 		        	window.location="?page="+page+"{%if category%}&category={{category}}&{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+
+		        	console.log("sort: {{sort}}")
 		        }
 		    });
 
 		$("#lotIdHeader").click(function(){
 			if(!$(this).hasClass("orderAsc"))
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=lot"
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=lot{%if page%}&page={{page}}&{%endif%}"
 				
 		})
 
 		$("#nameHeader").click(function(){
 			if($(this).hasClass("orderAsc"))
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameDesc"
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameDesc{%if page%}&page={{page}}{%endif%}"
 			else
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameAsc"
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameAsc{%if page%}&page={{page}}{%endif%}"
+		})
+
+		$("#artistHeader").click(function(){
+			if($(this).hasClass("orderAsc"))
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=artistDesc{%if page%}&page={{page}}{%endif%}"
+			else
+				window.location="?{%if category%}category={{category}}&{%endif%}sort=artistAsc{%if page%}&page={{page}}{%endif%}"
 		})
 
 
