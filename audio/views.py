@@ -217,6 +217,8 @@ def catalog(request, msg= None):
 	page = int(request.GET.get("page", 1))
 	category = request.GET.get("category", None)
 	order = request.GET.get("sort", 'lot_id')
+	sortGet= order
+
 
 	if order == "nameAsc":
 		order = "name"
@@ -231,6 +233,7 @@ def catalog(request, msg= None):
 		order = "-artist"
 	else:
 		order = "lot_id"
+		sortGet = "lot_id"
 
 
 
@@ -290,7 +293,7 @@ def catalog(request, msg= None):
 		logger.error("error in catalog")
 		logger.error(e)
 		return redirect("catalog")
-	return render_to_response('catalog.html', {"sort":order, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
+	return render_to_response('catalog.html', {"sort":sortGet, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
 
 
 
