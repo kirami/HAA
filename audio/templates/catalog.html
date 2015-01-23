@@ -99,7 +99,7 @@
 		        totalPages: {{total}},
 		        startPage:{{number}},
 		        onPageClick: function (event, page) {
-		        	window.location="?page="+page+"{%if category%}&category={{category}}&{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+		        	window.location="?page="+page+"{%if category%}&category={{category}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
 
 		        	console.log("sort: {{sort}}")
 		        }
@@ -107,22 +107,22 @@
 
 		$("#lotIdHeader").click(function(){
 			if(!$(this).hasClass("orderAsc"))
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=lot{%if page%}&page={{page}}&{%endif%}"
+				window.location="?sort=lot_id{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 				
 		})
 
 		$("#nameHeader").click(function(){
 			if($(this).hasClass("orderAsc"))
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameDesc{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=nameDesc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 			else
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=nameAsc{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=nameAsc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 		})
 
 		$("#artistHeader").click(function(){
 			if($(this).hasClass("orderAsc"))
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=artistDesc{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=artistDesc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 			else
-				window.location="?{%if category%}category={{category}}&{%endif%}sort=artistAsc{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=artistAsc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 		})
 
 

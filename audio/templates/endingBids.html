@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{%if endAuctionOption%}
+
+
+
+{%endif%}
+
+<div class="header" style="margin-bottom:20px;text-align:center">Here are the items you won for auction: {{data.auction.name}}</div>
+
+<div style="margin-left:auto;  margin-right:auto; width:690px">
+	<div class="tableHeader">	
+		<div class="left" style="width:70px;">&nbsp;</div>	
+		<div class="left">Lot ID:</div>
+		<div class="left">Name:</div>
+		<div class="left">Artist:</div>
+		<div class="left">Price:</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="tableBody">
+	{% for bid in data.bids %}
+		<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
+			{%if bid.item.image%}
+				{%if bid.item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{bid.item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{bid.item.thumbnail}}" width="50px" height="50px"></a>
+				{%endif%}
+			{%else%}
+				{%if bid.item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{bid.item.thumbnail}}" width="50px" height="50px">
+				{%endif%}
+			{%endif%}
+		</div> 
+		<div class="left" style="margin-top:7px;">{{bid.item.lot_id}}</div>
+		<div class="left" style="margin-top:7px;">{{bid.item.name}}</div>
+		<div class="category" style="float:left">{{bid.item.artist}} {%if not bid.item.artist%}&nbsp;{%endif%}</div>
+		<div class="category" style="float:left">{{bid.item.min_bid}}</div>
+
+		
+		<div class="clear"></div>
+	{% endfor %}
+	</div>
+</div>
+
+{% endblock %}

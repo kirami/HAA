@@ -77,6 +77,12 @@ def simpleForm(request):
 				return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
 
 	else:
+		if isSecondChance():
+			bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
+			if len(bids) < 1:
+				return redirect("noAuction")
+			return redirect("flatFeeCatalog")
+
 		if currentAuction == None:
 			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
@@ -146,12 +152,25 @@ def bids(request):
 				
 				return render_to_response('flatBids.html', {"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
 			else:
-				#TODO return error
-				index()
+				#They've already ended their auction.  Summary?
+				return redirect("auctionSummary")
+
 		else:
 			return render_to_response('bids.html', {"success":success,"bids":bids}, context_instance=RequestContext(request))
 	else:
-		index()
+		return redirect("profile")
+
+
+def auctionSummary(request):
+	data={}
+	if(request.user.is_authenticated()):
+		currentAuction = getCurrentAuction()
+		data["auction"] = currentAuction
+		data["bids"] = Bid.objects.filter(user = request.user, item__auction = currentAuction, winner = True)
+
+		return render_to_response('endingBids.html', {"data":data}, context_instance=RequestContext(request))
+	else:
+		return redirect("catalog")
 
 
 
@@ -182,26 +201,36 @@ def userInfo(request):
 
 
 def flatFeeCatalog(request):
-	if not isSecondChance():
-		return redirect("catalog")
+	items = None
+	if request.user.is_authenticated():
+		if not isSecondChance():
+			return redirect("catalog")
 
-	auction = getCurrentAuction()
-	try:
+		auction = getCurrentAuction()
+		try:
 
-		items = Item.objects.filter(bid=None)
-	except Exception as e:
-		logger.error("error in catalog")
-		logger.error(e)
-	
-	return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id}, context_instance=RequestContext(request))
+			invoices = Invoice.objects.filter(user = request.user, auction = auction)
+			invoice = None
+		
+			if len(invoices) > 0:
+				invoice = invoices[0]
+				if invoice.second_chance_invoice_amount > 0:
+					return redirect("auctionSummary")
 
+			items = Item.objects.filter(bid=None)
+		except Exception as e:
+			logger.error("error in catalog")
+			logger.error(e)
+		
+		return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id}, context_instance=RequestContext(request))
+	return redirect("profile")
 
 
 def noAuction(request):
 	data = {}
 	currentAuction = getCurrentAuction()
 
-	if currentAuction:
+	if currentAuction and not isSecondChance():
 		return redirect("catalog")
 	return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
@@ -248,8 +277,9 @@ def catalog(request, msg= None):
 	try:
 		#if after close but in 2nd chance
 		if isSecondChance():
+		
 			#only allow winners to bid (so only add on to won shipments)
-			bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
+			bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
 			if len(bids) < 1:
 				return redirect("noAuction")
 			return redirect("flatFeeCatalog")
@@ -310,13 +340,15 @@ def submitBid(request):
 		if len(addresses) < 1:
 			return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
 
-		
-
 		itemId = data.get("itemId")
 		item = Item.objects.get(id = itemId)
 
 		if isSecondChance():
 			bidAmount = item.min_bid
+			bids = Bid.objects.filter(user=request.user, item__auction=currentAuctionId, winner=True)
+			if len(bids) < 1:
+				return HttpResponse(json.dumps({"success":False, "msg":"This auction is now closed."}), content_type="application/json")	
+
 		
 		if Decimal(bidAmount) < item.min_bid:
 			return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	

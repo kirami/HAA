@@ -21,6 +21,7 @@ urlpatterns = patterns('',
    	url(r'^accounts/register/$', views.register, name='register'),
     url(r'^accounts/contact/$', views.contact_info, name='contact_info'), 
     url(r'^accounts/bids/$', views.bids, name='bids'),
+    url(r'^accounts/auctionSummary/$', views.auctionSummary, name='auctionSummary'),
     url(r'^accounts/userInfo/$', views.userInfo, name='userInfo'),
     url(r'^catalog/comingAuction/$', views.noAuction, name='noAuction'),
     
@@ -29,7 +30,7 @@ urlpatterns = patterns('',
 
     url(r'^catalog/simpleForm', views.simpleForm, name='simpleForm'),
     url(r'^catalog/deleteBid', views.deleteBid, name='deleteBid'),
-    url(r'^catalog/flat', views.flatFeeCatalog, name='flatFeeCatalog'),
+    url(r'^catalog/setPrice', views.flatFeeCatalog, name='flatFeeCatalog'),
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
 
