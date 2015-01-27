@@ -2,6 +2,10 @@ from django.contrib import admin
 from audio.models import Auction, Category, Item, Bid, Address, Label, UserProfile, Payment, Invoice, Condition
 from audio.models import Consignor, Consignment
 from django.conf.urls import patterns, url
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from django.contrib import admin
+from django.http import HttpResponse
 
 
 
@@ -10,8 +14,10 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-from django.contrib import admin
-from django.http import HttpResponse
+
+UserAdmin.list_display = ('email', 'first_name', 'last_name', 'is_active', 'date_joined', 'is_staff')
+
+
 
 class ConditionAdmin(admin.ModelAdmin):
     list_filter = ("auction",)
@@ -64,5 +70,7 @@ admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(Consignor)
 admin.site.register(Consignment, ConsignmentAdmin)
 admin.site.register(Condition, ConditionAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 

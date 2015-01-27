@@ -33,22 +33,6 @@ def index(request):
 	t = loader.get_template('home.html')
 	c = RequestContext(request, {'foo': 'bar'})
 	return HttpResponse(t.render(c), content_type="text/html")
-'''
-def login_view(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
-    user = auth.authenticate(username=username, password=password)
-    if user is not None and user.is_active:
-        # Correct password, and the user is marked "active"
-        auth.login(request, user)
-        # Redirect to a success page.
-        return HttpResponseRedirect("/account/loggedin/")
-    else:
-        # Show an error page
-        return HttpResponseRedirect("/account/invalid/")
-'''
-
-
 
 def simpleForm(request):
 	form = None
@@ -361,18 +345,10 @@ def submitBid(request):
 			if(bidAmount == None or bidAmount == ""):
 				logger.error("no bid")
 			else:
-				#todo get auctionId from...db?
 				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), item_id = itemId)
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")	
-	'''
-	#logger.error(" path: %s" % request.META.get('PATH_INFO'))			
-	if(request.META.get('PATH_INFO') == "/audio/catalog/submitBid" ):
-		return HttpResponse(json.dumps({"success":True, "location":"You must meet the minimum bid."}), content_type="application/json")	
-
-	else:
-		return HttpResponse(json.dumps({"success":True, "msg":"You must meet the minimum bid."}), content_type="application/json")	
-	'''
+	
 
 def deleteBid(request):
 	if(request.user.is_authenticated()):

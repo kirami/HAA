@@ -1,0 +1,116 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+<div>Import current users from a csv file.</div>
+<br><br>
+<div id="msg"></div>
+<div id="problemEmails"></div>
+<div><button id="import">Import all users</button></div>
+
+
+<div id="import-confirm" title="Please Confirm">Are you sure you want to import all users?</div>
+
+<div><button id="importEmail">Email all recently imported users?</button></div>
+
+
+<div id="importEmail-confirm" title="Please Confirm">Are you sure you want to email all recent users?</div>
+
+
+<script type="text/javascript">
+	
+$( document ).ready(function() {
+
+	$( "#import-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false, 
+		buttons: {
+			"Import Users": function() {
+				var csrftoken = getCookie('csrftoken');
+				ajaxSetup(csrftoken);
+
+				$.ajax({
+					type: "POST",
+					url: "/admin/importUsers/",
+					success: function(data) {
+						if(data.success){
+
+							$("#msg").css("color","green")
+							$("#msg").text("You've successfully kicked off the import")
+							$("#problemEmails").text("The emails had issues and might not have been created: "+data.problemEmails)
+						}else{
+							$("#msg").text("Something went wrong with the import: "  + data.msg)
+			        	
+						}
+
+
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+			        	$("#msg").text("Something went wrong, not all users were created")
+			        	return false;
+			      	}
+				});
+				$( this ).dialog( "close" );
+			},
+		Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	$( "#importEmail-confirm" ).dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		autoOpen: false, 
+		buttons: {
+			"Email Users": function() {
+				var csrftoken = getCookie('csrftoken');
+				ajaxSetup(csrftoken);
+
+				$.ajax({
+					type: "POST",
+					url: "/admin/importUserEmail/",
+					success: function(data) {
+						if(data.success){
+
+							$("#msg").css("color","green")
+							$("#msg").text("You've successfully emailed those with an email address")
+							$("#problemEmails").text("These users didn't have an email address: "+data.problemEmails)
+						}else{
+							$("#msg").text("Something went wrong with the emailing: "  + data.msg)
+			        	
+						}
+
+
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+			        	$("#msg").text("Something went wrong")
+			        	return false;
+			      	}
+				});
+				$( this ).dialog( "close" );
+			},
+		Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	$( "#import" ).click(function() {
+    	$( "#import-confirm" ).dialog( "open" );
+    });
+
+    $( "#importEmail" ).click(function() {
+    	$( "#importEmail-confirm" ).dialog( "open" );
+    });
+
+
+});
+
+</script>
+
+{%endblock%}

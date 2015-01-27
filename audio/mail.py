@@ -26,8 +26,10 @@ def getEmailMessage(to, subject, data, template):
 	plaintext = get_template('email/'+template+'.txt')
 	htmly     = get_template('email/'+template+'.html')
 	#domain = Site.objects.get_current().domain
-	#data["domain"] = domain
+	#TODO get from setting or something else 
+	data["domain"] = "haa/audio"
 	d = Context(data)
+	#TODO get email from settings
 	subject, from_email, to = subject, 'kirajmd@gmail.com', to
 	text_content = plaintext.render(d)
 	html_content = htmly.render(d)
