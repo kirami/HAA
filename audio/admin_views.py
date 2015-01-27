@@ -170,42 +170,68 @@ def printLabels(request, auctionId, labelType=None):
 		
 	return render_to_response('admin/audio/printLabels.html', {"data":data, "success": False}, context_instance=RequestContext(request))
 
-
+#send email after importing user from csv
 def importUserEmail(request):
-	messages = []
 	data = {}
-	emailList = []
-	firstId = 10000000
-	try:
-		users = User.objects.filter(id__gte=firstId)
-		for user in users:
-			profile = UserProfile.objects.get(user = user)
-			if user.is_active and profile.email_invoice:
-				password = User.objects.make_random_password()
-				user.set_password(password)
-				emailData={}
-				emailData["user"] = user
-				emailData["password"] = password	
-				msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
-				messages.append(msg)
-				emailList.append(user.email)
-		logger.error("sending emails to: %s" % emailList)
-		#sendBulkEmail(messages)
-	except Exception as e:
-		logger.error("error sending new user emails: %s" % e)
-		return HttpResponse(json.dumps({"success":False, "data": data}), content_type="application/json")
+
+	if request.method == 'POST':
+		messages = []
+		emailList = []
+		noEmailList = []
+		#pull only auth user ids greater than this.  Will most likely be the first user's id that was imported 
+		firstId = 1209
+		try:
+			users = User.objects.filter(id__gte=firstId)
+			for user in users:
+				profile = UserProfile.objects.get(user = user)
+				if user.is_active and profile.email_invoice:
+					
+					if user.email:
+						password = User.objects.make_random_password()
+						user.set_password(password)
+						emailData={}
+						emailData["user"] = user
+						emailData["password"] = password	
+						msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
+						messages.append(msg)
+						emailList.append(user.email)
+
+					else:
+						noEmailList.append(int(user.id))
+
+			logger.error("sending emails to: %s" % emailList)
+			logger.error("user ids without email: %s" % noEmailList)
+			data["emailList"] =  emailList
+			data["problemEmails"] = noEmailList
+			#sendBulkEmail(messages)
+		except Exception as e:
+			logger.error("error sending new user emails: %s" % e)
+			return HttpResponse(json.dumps({"success":False, "data": data}), content_type="application/json")
 
 	return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
+
+
+def importAdmin(request):
+	data = {}
+	
+	if request.method == 'POST':
+		data["problemEmails"] = importUserCSV(request)
+		return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
+
+	return render_to_response('admin/audio/importUsers.html', {"data":data}, context_instance=RequestContext(request))
+
 
 def importUserCSV(request):
 	data = {}
 	i=0
 	errors={}
-	with open("/srv/hawthorn/importData.csv") as f:
+	with open("/srv/hawthorn/importDataFull.csv") as f:
 		reader = csv.reader(f)
 		for row in reader:
-			if i==7:
+
+			if i<7:
 				try:
+					
 					zip = row[0]
 					address1 = row[1]
 					address2=row[2]
@@ -232,18 +258,33 @@ def importUserCSV(request):
 			
 					password = User.objects.make_random_password()
 					if i>0:
-						user,success = User.objects.get_or_create(email=email)
-						user.username=email 
+						
+						if not email:
+							user,created = User.objects.get_or_create(username=firstName+lastName)	
+							if not created:
+								logger.error("User username NOT created but retrieved: %s" % firstName+lastName)
+
+						else:
+							user,created = User.objects.get_or_create(email=email)
+							user.username=email 
+							if not created:
+								logger.error("User email NOT created but retrieved: %s" % email)
+					
+						
 						user.set_password(password)
 						if firstName:
 							user.first_name = firstName
 						if lastName:
 							user.last_name = lastName
+						
+						#if created:	
+						#	user.save()
 
+						#TODO should this override all info?
 						user.save()
-
-						addressObj = Address.objects.create(user = user)
-						profile = UserProfile.objects.create(user = user)
+						
+						addressObj = Address.objects.get_or_create(user = user)
+						profile = UserProfile.objects.get_or_create(user = user)
 						
 						if zip:
 							addressObj.zipcode = zip
@@ -281,15 +322,17 @@ def importUserCSV(request):
 							profile.notes = notes
 						profile.save()
 
-
+						
 
 				except Exception as e:
-					logger.error("Error creating user: %s" %e)
-					errors[i]=email
+					
+					logger.error("Error creating user: %s" % e)
+					errors[i]=email +" "+ firstName+lastName
 			i=i+1
 	
-	logger.error("These users were had issues: %s" % errors)
-	return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
+	logger.error("These users had issues: %s" % errors)
+	
+	return errors
 
 
 def createUser(request):
@@ -322,7 +365,7 @@ def createUser(request):
 					return render_to_response('admin/audio/createUser.html', {"data":data, "success": False, "msg":e}, context_instance=RequestContext(request))
 	
 			else:
-				logger.error("no")
+				logger.error("no email sent to: %s" % user.email)
 			
 			data["form"] = form
 			return render_to_response('admin/audio/createUser.html', {"data":data, "success": True}, context_instance=RequestContext(request))
@@ -337,23 +380,6 @@ def createUser(request):
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
 
-
-'''
-	if request.method == "POST":
-		form = UserCreateForm(request.POST)
-		password = User.objects.make_random_password()
-    	form.user.set_password(password)
-    	if form.is_valid():
-    		form.save()
-    		data["form"] = form
-    		return render_to_response('admin/audio/createUser.html', {"data":data, "success": True}, context_instance=RequestContext(request))
-    	else:
-    		data["form"] = form
-    		return render_to_response('admin/audio/createUser.html', {"data":data, "error": True}, context_instance=RequestContext(request))
-	else:	
-		data["form"] = UserCreateForm()
-		return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
-'''
 
 def shippingByInvoiceFlat(request, auctionId):
 	data = {}
@@ -527,17 +553,17 @@ def endBlindAuction(request, auctionId):
 
 
 def endFlatAuction(request, auctionId, userId = None):
-	#TODO check user is checked in user or admin to do this!
+	
 	now = datetime.now()
 	#for all bids in auction not invoiced
 
 	#make sure to do all manual stuff first
 	auction = Auction.objects.get(id = auctionId)
 	if auction.flat_locked == True and userId == None:
-		return HttpResponse(json.dumps({"success":False, "msg":"This auction is flat locked"}), content_type="application/json")
+		return HttpResponse(json.dumps({"success":False, "msg":"This auction is Set Sale locked"}), content_type="application/json")
 
 	if now < auction.second_chance_end_date:
-		return HttpResponse(json.dumps({"success":False, "msg":"The flat auction time isn't up."}), content_type="application/json")
+		return HttpResponse(json.dumps({"success":False, "msg":"The Set Sale auction time isn't up."}), content_type="application/json")
 
 
 	#DO NOT mark winners - they should already be marked
@@ -621,7 +647,7 @@ def sendLoserLetters(request, auctionId):
 		logger.error("loser %s" % loser)
 		profile = UserProfile.objects.get(user_id = loser.user_id)
 		user = User.objects.get(id = loser.user_id )
-		#todo if profile has send emails
+		
 		if profile and profile.email_invoice:
 			msg = getEmailMessage(user.email,"test",{"data":data}, template)
 			messages.append(msg)
@@ -761,7 +787,6 @@ def reportByUser(request):
 
 
 def markWinners(auctionId):
-	#TODO - is this after invoice run?  are you sure?
 	#set all winners for this auction to 0
 	resetWinners(auctionId)
 
@@ -843,4 +868,3 @@ def runReport(request, auctionId):
 
 	return render_to_response('admin/audio/report.html', {"data":data}, context_instance=RequestContext(request))
 
-#view for marking entire bidder paid, not just per item

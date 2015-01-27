@@ -105,7 +105,7 @@ class Bid(models.Model):
 		unique_together = (("user", "item"),)
 
 class UserProfile(models.Model):
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, unique = True)
 	#TODO defaults?
 	pdf_list = models.BooleanField(default = False)
 	printed_list = models.BooleanField(default = False)

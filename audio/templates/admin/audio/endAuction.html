@@ -11,7 +11,7 @@
 
 {%if data.blind_locked%}
 <div>This blind auction has been locked.</div>
-<div>Lock the flat auction? <button id="lockFlat">Lock</button></div>
+<div>Lock the Set Sale auction? <button id="lockFlat">Lock</button></div>
 {%else%}
 <div>This blind auction is open.</div>
 <div>Lock the blind auction? <button id="lockBlind">Lock</button></div>
@@ -19,7 +19,7 @@
 
 {%endif%}
 
-<div id="lockFlat-confirm" title="Please Confirm">Are you sure you want to lock the Flat auction for auction #{{data.auctionId}}?</div>
+<div id="lockFlat-confirm" title="Please Confirm">Are you sure you want to lock the Set Sale auction for auction #{{data.auctionId}}?</div>
 
 <div id="lockBlind-confirm" title="Please Confirm">Are you sure you want to lock the Blind auction for auction #{{data.auctionId}}?</div>
 
