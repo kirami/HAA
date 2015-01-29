@@ -14,7 +14,7 @@ from audio.forms import ContactForm, BidSubmitForm, UserCreateForm, UserForm
 from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice, Category
 
 from datetime import datetime, date  
-from audio.utils import getCurrentAuction, isSecondChance
+from audio.utils import *
 
 import logging
 import json, math
@@ -43,6 +43,11 @@ def simpleForm(request):
 		if(request.user.is_authenticated()):
 
 			try:
+				addresses = Address.objects.filter(user=request.user)
+		
+				if len(addresses) < 1:
+					return render_to_response('item.html', {"form":form, "success": False, "msg":"You must have an address on file to bid."}, context_instance=RequestContext(request))					
+			
 				form = BidSubmitForm(currentAuction.id, request.POST)
 			except:
 				return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
@@ -120,6 +125,10 @@ def register(request):
 def bids(request):
 	if(request.user.is_authenticated()):
 		currentAuction = getCurrentAuction()
+		
+		if not currentAuction:
+			return redirect('noAuction')
+
 		currentAuctionId = currentAuction.id
 		bids = Bid.objects.filter(item__auction = currentAuctionId, user= request.user)
 		success = False
@@ -137,24 +146,44 @@ def bids(request):
 				return render_to_response('flatBids.html', {"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
 			else:
 				#They've already ended their auction.  Summary?
-				return redirect("auctionSummary")
+				return redirect("auctionSummaries")
 
 		else:
 			return render_to_response('bids.html', {"success":success,"bids":bids}, context_instance=RequestContext(request))
 	else:
 		return redirect("profile")
 
+def auctionSummaries(request):
+	data = {}
+	if(request.user.is_authenticated()):
+		data["auctions"] = getWonAuctions(request.user.id)
+		return render_to_response('auctionSummaries.html', {"data":data}, context_instance=RequestContext(request))
+	else:
+		return redirect("profile")
 
-def auctionSummary(request):
+
+def auctionSummary(request, auctionId):
 	data={}
 	if(request.user.is_authenticated()):
-		currentAuction = getCurrentAuction()
+		auctions = Auction.objects.filter(id=auctionId)
+		
+		if len(auctions) < 1:
+			return redirect("catalog")
+		
+		currentAuction = auctions[0]
+		
+		#if still in auction
+		#if blind
+
+		if not currentAuction.blind_locked:
+			return redirect("catalog")
+
 		data["auction"] = currentAuction
 		data["bids"] = Bid.objects.filter(user = request.user, item__auction = currentAuction, winner = True)
 
 		return render_to_response('endingBids.html', {"data":data}, context_instance=RequestContext(request))
-	else:
-		return redirect("catalog")
+	
+	return redirect("catalog")
 
 
 
@@ -199,7 +228,7 @@ def flatFeeCatalog(request):
 			if len(invoices) > 0:
 				invoice = invoices[0]
 				if invoice.second_chance_invoice_amount > 0:
-					return redirect("auctionSummary")
+					return redirect("auctionSummaries")
 
 			items = Item.objects.filter(bid=None)
 		except Exception as e:
@@ -290,7 +319,7 @@ def catalog(request, msg= None):
 
 		
 		if page < 1 or page > total:
-			return redirect("catalog")
+			return redirect("profile")
 
 		#logger.error("%s : %s" % (perPage*(page-1), (perPage*page)))
 		items = items[perPage*(page-1):(perPage*page)]

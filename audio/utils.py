@@ -27,7 +27,9 @@ def adjustLotIdsUtil(auctionId, index, increment = True):
 	cursor.execute("update audio_item set lot_id = lot_id "+op+" 1 where auction_id = "+str(auctionId)+" and lot_id >= "+str(index)+" order by lot_id " + order)
 	row = dictfetchall(cursor)
 
-
+def getWonAuctions(userId):
+	auctions = list(Auction.objects.raw('select distinct a.* from audio_auction a, audio_bid b, audio_item i where a.id = i.auction_id and b.item_id = i.id and b.user_id='+str(userId)+' and b.winner=true'))
+	return auctions
 
 def test():
 	bidDict = {}
