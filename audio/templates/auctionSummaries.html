@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+
+<div>
+	
+	{%if not data.auctions%}
+		<div>You haven't won any items yet.</div>
+	{%else%}
+		<div>You've won items in these auctions:</div>
+		{%for auction in data.auctions%}
+			<div><a href="/audio/accounts/auctionSummary/{{auction.id}}">{{auction.name}}</a></div>
+		{%endfor%}
+	{%endif%}
+
+</div>
+
+{% endblock %}
