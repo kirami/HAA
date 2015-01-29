@@ -99,8 +99,14 @@ function submitBid(itemId){
 		data: {"bidAmount": $("#bidAmount_" + itemId).val(), "itemId":itemId},
 		success: function(data) {
 			if(data.success){
-				window.location+="?success=true"; 
+				split = window.location.search.split("&")
+				if(split=="")
+					window.location+="?success=true"; 
+				else
+					if(split=="?success=true")
+						window.location.reload()
 			}else{
+				$('.successMsg').hide()
 				$("#msg").text("Something went wrong, we could not save your bid: "  + data.msg)
         	
 			}

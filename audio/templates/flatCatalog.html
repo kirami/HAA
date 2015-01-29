@@ -5,51 +5,59 @@
 
 <div id="msg" style="color:red; font-weight:bold; font-size:18px; text-align:center"></div>
 
-<div style="margin-bottom:10px; text-align:center" class="header" >
-The blind auction has ended.  These items were not sold.<br>
-</div>
 
-<div style="margin-left:auto; margin-right:auto; width:840px">
+{%if not catItems%}
+	<div style="margin-bottom:10px; text-align:center" class="header">The blind auction has ended.  There are no unsold items for this auction.</div>
+{%else%}
 
-<div class="tableHeader">
-	<div class="left" style="width:70px;">&nbsp;</div>		
-	<div class="left">Lot ID:</div>
-	<div class="left">Category:</div>
-	<div class="left">Name:</div>
-	<div class="left">Artist:</div>
-	<div class="left">Price:</div>
-	<div class="clear"></div>
-</div>
-
-
-{%for item in catItems%}
-<div class="catalogBox">
-	<div style="margin-top:7px; float:left" class="tableBody">
-	<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
-			{%if item.image%}
-				{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
-				{%endif%}
-			{%else%}
-				{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
-				{%endif%}
-			{%endif%}
-			</div> 
-		<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
-		<div class="category" style="float:left">{{item.category.name}}</div>
-		<div class="category" style="float:left">{{item.name}}</div>
-		<div class="category" style="float:left">{{item.artist}} {%if not item.artist%}&nbsp;{%endif%}</div>
-		<div class="category" style="float:left">{{item.min_bid}}</div>
-	</div>
-	<div style="float:left">
-			<input type ="hidden" name="itemId" value="{{item.id}}">
-			<button onclick="submitBid({{item.id}})" class="button">Bid Now</button>
-		</form>
+	<div style="margin-bottom:10px; text-align:center" class="header" >
+	The blind auction has ended.  These items were not sold.<br>
 	</div>
 
-	<div class="clear"></div>	
-</div>
+	<div style="margin-left:auto; margin-right:auto; width:910px">
 
-{%endfor%}
-</div>
+		<div class="tableHeader">
+			<div class="left" style="width:70px;">&nbsp;</div>		
+			<div class="left">Lot ID:</div>
+			<div class="left">Category:</div>
+			<div class="left">Name:</div>
+			<div class="left">Artist:</div>
+			<div class="left">Price:</div>
+			<div class="clear"></div>
+		</div>
+
+
+		{%for item in catItems%}
+		<div class="catalogBox">
+			<div style="margin-top:7px; float:left" class="tableBody">
+			<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
+					{%if item.image%}
+						{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
+						{%endif%}
+					{%else%}
+						{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
+						{%endif%}
+					{%endif%}
+					</div> 
+				<div  style="float:left">{{item.lot_id}}</div> 
+				<div class="category" style="float:left">{{item.category.name}}</div>
+				<div class="category" style="float:left">{{item.name}}</div>
+				<div class="category" style="float:left">{{item.artist}} {%if not item.artist%}&nbsp;{%endif%}</div>
+				<div class="category" style="float:left">{{item.min_bid}}</div>
+			</div>
+			<div style="float:left">
+					<input type ="hidden" name="itemId" value="{{item.id}}">
+					<button onclick="submitBid({{item.id}})" class="button">Bid Now</button>
+				</form>
+			</div>
+
+			<div class="clear"></div>	
+		</div>
+
+		{%endfor%}
+	
+	</div>
+	{%endif%}
+
 
 {% endblock %}

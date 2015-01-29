@@ -7,11 +7,10 @@
 	<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
 	{%if success%}<div class="successMsg">Your bid has been successfully submitted.</div>{%endif%}
 
-	<div class="header" style="">Our current catalog:{%if not loggedIn%}<div class="successError">You must log in to bid.</div>{%else%}<div>Click <a href="simpleForm">here</a> to enter bids directly.</div>{%endif%}</div>
+	<div class="header" style="">Our current catalog: <div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div>{%if not loggedIn%}<div class="successError">You must log in to bid.</div>{%else%}<div>Click <a href="simpleForm">here</a> to enter bids manually.</div>{%endif%}</div>
 
 	<ul id="pagination" class="pagination-sm"></ul>
 </div>
-{{sort}}
 <div class="left">
 	<div>Table of contents:</div>
 	{%for cat in categories%}
@@ -20,7 +19,7 @@
 	{%endfor%}
 </div>
 
-<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="right">
+<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
 	<div class="innerRight">
 	<div class="tableHeader">
 		<div class="left" style="width:70px;">&nbsp;</div>	
@@ -45,7 +44,7 @@
 				{%endif%}
 			{%endif%}
 			</div> 
-			<div id="{{item.id}}" class="catalogItem" style="float:left">{{item.lot_id}}</div> 
+			<div class="" style="float:left">{{item.lot_id}}</div> 
 			<div class="category" style="float:left">{{item.category.name}}</div>
 			<div class="category" style="float:left">{{item.name}} {%if item.name_two%}{{item.name_two}}{%endif%}</div>
 			<div class="category" style="float:left">{{item.artist}}</div>
