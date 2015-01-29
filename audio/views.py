@@ -39,9 +39,9 @@ def simpleForm(request):
 	data = None
 	now = date.today()
 	currentAuction = getCurrentAuction()
-	if request.method == "POST":
-		if(request.user.is_authenticated()):
-
+	if(request.user.is_authenticated()):
+		
+		if request.method == "POST":
 			try:
 				addresses = Address.objects.filter(user=request.user)
 		
@@ -65,18 +65,20 @@ def simpleForm(request):
 			else:
 				return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
 
-	else:
-		if isSecondChance():
-			bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
-			if len(bids) < 1:
+		else:
+			if isSecondChance():
+				bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
+				logger.error("bids: %s" % bids)
+				if len(bids) < 1:
+					return redirect("noAuction")
+				return redirect("flatFeeCatalog")
+
+			if currentAuction == None:
 				return redirect("noAuction")
-			return redirect("flatFeeCatalog")
 
-		if currentAuction == None:
-			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
-
-		form = BidSubmitForm(auctionId = currentAuction.id)
-
+			form = BidSubmitForm(auctionId = currentAuction.id)
+	else:
+		return redirect("catalog")
 	return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
 		
 	
@@ -224,13 +226,17 @@ def flatFeeCatalog(request):
 
 			invoices = Invoice.objects.filter(user = request.user, auction = auction)
 			invoice = None
-		
+			#if user ended their auction and got an invoice
 			if len(invoices) > 0:
 				invoice = invoices[0]
 				if invoice.second_chance_invoice_amount > 0:
 					return redirect("auctionSummaries")
+				
+			bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
+			if len(bids) < 1:	
+				return redirect("noAuction")
 
-			items = Item.objects.filter(bid=None)
+			items = getNoBidItems(auction.id)
 		except Exception as e:
 			logger.error("error in catalog")
 			logger.error(e)
@@ -242,9 +248,27 @@ def flatFeeCatalog(request):
 def noAuction(request):
 	data = {}
 	currentAuction = getCurrentAuction()
+	
+	if currentAuction:
 
-	if currentAuction and not isSecondChance():
-		return redirect("catalog")
+		if request.user.is_authenticated():
+		
+			try:
+				#if after close but in 2nd chance
+				if isSecondChance():
+					#only allow winners to bid (so only add on to won shipments)
+					bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
+					if len(bids) > 0:	
+						return redirect("flatFeeCatalog")
+				else:
+					return redirect("catalog")
+			except:
+				return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
+		elif isSecondChance():
+			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
+		
+		else: 
+			return redirect("catalog")
 	return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
 def catalog(request, msg= None):
@@ -347,34 +371,44 @@ def submitBid(request):
 		now = date.today()
 		data = request.POST
 		bidAmount = data.get("bidAmount")
-		
-		addresses = Address.objects.filter(user=request.user)
-		
-		if len(addresses) < 1:
-			return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
-
-		itemId = data.get("itemId")
-		item = Item.objects.get(id = itemId)
-
-		if isSecondChance():
-			bidAmount = item.min_bid
-			bids = Bid.objects.filter(user=request.user, item__auction=currentAuctionId, winner=True)
-			if len(bids) < 1:
-				return HttpResponse(json.dumps({"success":False, "msg":"This auction is now closed."}), content_type="application/json")	
-
-		
-		if Decimal(bidAmount) < item.min_bid:
-			return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	
-
 		try:
-			instance = Bid.objects.get(user=request.user, item_id=itemId)
-			instance.amount = bidAmount
-			instance.save()
-		except:	
-			if(bidAmount == None or bidAmount == ""):
-				logger.error("no bid")
-			else:
+			addresses = Address.objects.filter(user=request.user)
+			
+			if len(addresses) < 1:
+				return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
+
+			itemId = data.get("itemId")
+
+			item = Item.objects.get(id = itemId)
+
+			if not item.auction == auction:
+				logger.error("Item id %s not in auction id %s" % (item.id, auction.id))
+				return HttpResponse(json.dumps({"success":False, "msg":"Illegal action."}), content_type="application/json")	
+
+
+			if isSecondChance():
+				bidAmount = item.min_bid
+				bids = Bid.objects.filter(user=request.user, item__auction=currentAuctionId, winner=True)
+				if len(bids) < 1:
+					return HttpResponse(json.dumps({"success":False, "msg":"This auction is now closed."}), content_type="application/json")	
+
+			
+			if Decimal(bidAmount) < item.min_bid:
+				return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	
+
+			instances = Bid.objects.filter(user=request.user, item_id=itemId)
+			if len(instances) < 1:
 				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), item_id = itemId)
+			else:
+				instance = instances[0]	
+				instance.amount = bidAmount
+				instance.save()
+		
+		except Exception as e:
+			logger.error("error submitting bid")
+			logger.error(e)
+			return HttpResponse(json.dumps({"success":False, "msg":"Illegal action."}), content_type="application/json")	
+
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")	
 	

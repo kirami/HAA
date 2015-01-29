@@ -12,6 +12,7 @@
 	<!--img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">-->
 	<div>
 		{% if user.is_authenticated %}
+			<div style="float:left; margin-right:10px; margin-top:10px;">Hello {{user.first_name}}!</div>
 			<button class="button" onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
 			<button class="button" onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
 			<button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>

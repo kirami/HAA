@@ -13,7 +13,7 @@
 
 {%endif%}
 
-<div class="header" style="margin-bottom:20px;">Your current FLAT bids:</div>
+<div class="header" style="margin-bottom:20px;">Your current Set Sale bids:</div>
 <div class="tableHeader">	
 	<div class="left">Lot ID:</div>
 	<div class="left">Name:</div>
@@ -27,8 +27,8 @@
 	
 	<div class="left" style="margin-top:7px;">{{bid.item.lot_id}}</div>
 	<div class="left" style="margin-top:7px;">{{bid.item.name}}</div>
-	<div class="category" style="float:left">{{bid.item.artist}} {%if not bid.item.artist%}&nbsp;{%endif%}</div>
-	<div class="category" style="float:left">{{bid.item.min_bid}}</div>
+	<div class="left" style="margin-top:7px;">{{bid.item.artist}} {%if not bid.item.artist%}&nbsp;{%endif%}</div>
+	<div class="left" style="margin-top:7px;">{{bid.item.min_bid}}</div>
 
 	<form class="left" method="POST" action="/audio/catalog/deleteBid">
 	 {% csrf_token %}
