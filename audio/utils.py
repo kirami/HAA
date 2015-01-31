@@ -53,6 +53,8 @@ def isSecondChance():
 	now =  datetime.now()
 	#TODO current auction
 	currentAuction = getCurrentAuction()
+	if not currentAuction:
+		return False
 	currentAuctionId = currentAuction.id
 	auction = Auction.objects.get(id = currentAuctionId)
 	if auction.end_date < now and auction.second_chance_end_date > now:

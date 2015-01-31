@@ -185,23 +185,28 @@ class ContactForm(ModelForm):
             choices=getCountries())
 
 class BulkConsignment(Form):
+    from django import forms
     consignor = ModelChoiceField(Consignor.objects.all())
-    bcItemsAvailable = MultipleChoiceField()	
-    bcItemsSelected = MultipleChoiceField()
+    bcItemsAvailable = MultipleChoiceField(required=False)	
+    #bcItemsSelected = MultipleChoiceField(widget=forms.RadioSelect)
+    bcItemsSelected = MultipleChoiceField(widget=forms.SelectMultiple())
     
     def __init__(self,*args,**kwargs):
         auctionId = kwargs.pop("auctionId")     # client is the parameter passed from views.py
         super(BulkConsignment, self).__init__(*args,**kwargs)
         choice = [(xt.id, xt.name) for xt in getNoBidItems(auctionId, True) ]
-        self.fields["bcItemsAvailable"] = MultipleChoiceField(choices=choice)
+        self.fields["bcItemsAvailable"] = MultipleChoiceField(choices=choice, required=False)
+        #logger.error("fields: %s" % choice)
+        #self.fields["bcItemsSelected"] = MultipleChoiceField(choices=choice, required=False)
         
     def save(self):
     	consignor = self.data["consignor"]
     	total = int(self.data["totalConsignments"])
-    	index = 1
-
-    	for selected in self.data["bcItemsSelected"]:
-    		while index<=total:
+    	
+        
+    	for selected in self.data.getlist("bcItemsSelected"):
+            index = 1
+            while index<=total:
 	    		min = self.data["min" + str(index)]
 	    		max = self.data["max" + str(index)]
     	
@@ -216,22 +221,16 @@ class BulkConsignment(Form):
 	    		item = Item.objects.get(id=selected)
 	    		Consignment.objects.create(item = item, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
 	    		index = index + 1
+    
 
-    def clean_bcItemsSelected(self):
-    	logger.error("cleaning selected")
-    	data = self.data['bcItemsSelected']
-    	
-    	if data == None:
-    		raise ValidationError('Invalid value')
-
-    	return data
+        
 
     def clean(self):
-    	self.clean_bcItemsSelected()
-    	if 'bcItemsAvailable' in self._errors:
-    		self.errors.pop('bcItemsAvailable')
+            
     	if 'bcItemsSelected' in self._errors:
     		self.errors.pop('bcItemsSelected')
     	return self.cleaned_data
+        
+        
 
     
