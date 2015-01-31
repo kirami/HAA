@@ -161,6 +161,9 @@ class Consignment(models.Model):
 	def __unicode__(self):
 		return self.item.name
 
+	class Meta:
+		unique_together = (("minimum", "item"), ("maximum", "item"),)
+
 class Condition(models.Model):
 	user = models.ForeignKey(User)
 	auction = models.ForeignKey(Auction)

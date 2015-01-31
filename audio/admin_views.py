@@ -847,19 +847,23 @@ def unsoldItems(request, auctionId):
 	return render_to_response('admin/audio/unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
 
 def bulkConsignment(request, auctionId):
-	
-	if request.method == 'POST':
-		form = BulkConsignment(request.POST, auctionId = auctionId)
-		if form.is_valid():			
-			new_user = form.save()
-			return HttpResponseRedirect("/admin/audio/consignment/")
+	error = False
+	try:
+		if request.method == 'POST':
+			form = BulkConsignment(request.POST, auctionId = auctionId)
+			if form.is_valid():			
+				new_user = form.save()
+				return HttpResponseRedirect("/admin/audio/consignment/")
+			else:
+				return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
+
 		else:
-			return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
-
-	else:
-		form = BulkConsignment(auctionId = auctionId)
-
-	return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
+			form = BulkConsignment(auctionId = auctionId)
+	except Exception as e:
+		logger.error("error in bulk consignment: %s" %e)
+		error = True
+	
+	return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "error":error}, context_instance=RequestContext(request))
 
 
 def runReport(request, auctionId):

@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{%if success%}<div class="successMsg">Your consignments were added successfully.</div>{%endif%}
+{%if error%}<div class="successError">Something went wrong. One of these exact consignments might already exist?</div>{%endif%}
 
  <form action="" method="post">
     {% csrf_token %}

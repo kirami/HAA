@@ -174,8 +174,6 @@ def auctionSummary(request, auctionId):
 		
 		currentAuction = auctions[0]
 		
-		#if still in auction
-		#if blind
 
 		if not currentAuction.blind_locked:
 			return redirect("catalog")
@@ -217,11 +215,11 @@ def userInfo(request):
 
 def flatFeeCatalog(request):
 	items = None
+	auction = getCurrentAuction()
 	if request.user.is_authenticated():
-		if not isSecondChance():
+		if not isSecondChance() or not auction:
 			return redirect("catalog")
-
-		auction = getCurrentAuction()
+		
 		try:
 
 			invoices = Invoice.objects.filter(user = request.user, auction = auction)
