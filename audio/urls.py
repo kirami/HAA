@@ -10,11 +10,20 @@ admin.autodiscover()
 urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
     url(r'^accounts/login/$',  login),
-    url(r'^accounts/changePassword/$',  password_change, {'template_name': 'changePassword.html'}),
-    url(r'^acounts/changePasswordDone/$',
-                    password_change_done,
-                    name='password_change_done'),
-   	#url(r'^accounts/logout/$', logout),
+    #url(r'^accounts/changePassword/$',  password_change,  {'template_name': 'changePassword.html'}),
+
+   
+
+    url(r'^accounts/changePassword/$', 
+        'django.contrib.auth.views.password_change', 
+      
+        {'post_change_redirect' : '/accounts/passwordChangeDone/', 'template_name': 'changePassword.html'}, 
+
+        name="password_change"), 
+
+    
+
+    #url(r'^accounts/logout/$', logout),
     (r'^accounts/logout/$', logout,
                           {'next_page': '/audio/accounts/profile'}),
     url(r'^accounts/profile/$', views.profile, name='profile'),

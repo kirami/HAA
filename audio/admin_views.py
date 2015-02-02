@@ -30,6 +30,25 @@ def test(request):
 	return "test"
 
 
+#add many test items quickly
+def testItemInput(request, index, length):
+	i = int(index)
+	label = Label.objects.get(pk=1)
+	category = Category.objects.get(pk=1)
+	auction = Auction.objects.get(pk=7)
+
+	try:
+		logger.error("index:%s,  length :%s" % (index, length))
+		while i < int(index) + int(length):
+			item = Item.objects.get_or_create(name="N"+str(i), condition = "x", auction  = auction, artist="A"+str(i), min_bid=2.0, label=label, category=category, lot_id = i)
+			logger.error("item: %s" % item)
+			i = i +1
+
+	except Exception as e:
+		return HttpResponse(json.dumps({"success":False, "msg": e}), content_type="application/json")
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+
 
 def adjustLotIds(request, auctionId):
 	data={}
@@ -98,6 +117,8 @@ def addItem(request):
 	label = request.GET.get('label', None)
 	min_bid = request.GET.get('min_bid', None)
 	artist = request.GET.get('artist', None)
+	name = request.GET.get('name', None)
+	condition = request.GET.get('condition', None)
 	category = request.GET.get('category', None)
 	lotId = 0
 	lastLotId = 0
@@ -109,14 +130,14 @@ def addItem(request):
 		lotId = lotIds[0]
 		lastLotId = lotId
 		lotId = lotId + 1
-	initData = {"auction":auction, "label":label, "min_bid": min_bid, "category": category, "artist": artist, "lot_id" : lotId}
+	initData = {"auction":auction, "label":label, "min_bid": min_bid, "category": category, "artist": artist, "lot_id" : lotId, "name":name, "condition":condition}
 	form = ItemForm(initial = initData)
 
 	if request.method == 'POST':
 		try:
 			auctionObj = Auction.objects.get(pk=auction)
 			if auctionObj.flat_locked:
-				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False, "lastLotId":lastLotId, "nextLotId":lotId, "auctionEnded":TrueT}, context_instance=RequestContext(request))
+				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False, "lastLotId":lastLotId, "nextLotId":lotId, "auctionEnded":True}, context_instance=RequestContext(request))
 			
 
 			form = ItemForm(request.POST)
@@ -853,7 +874,8 @@ def bulkConsignment(request, auctionId):
 			form = BulkConsignment(request.POST, auctionId = auctionId)
 			if form.is_valid():			
 				new_user = form.save()
-				return HttpResponseRedirect("/admin/audio/consignment/")
+				form = BulkConsignment(auctionId = auctionId)
+				return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "error":error, "success":True}, context_instance=RequestContext(request))
 			else:
 				return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
 
