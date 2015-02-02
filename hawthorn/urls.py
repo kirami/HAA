@@ -52,10 +52,20 @@ urlpatterns = patterns('',
     url(r'^admin/setDiscount/(?P<invoiceId>\d+)/$', admin_views.setDiscount, name='setDiscount'),  
     url(r'^admin/itemPrintOut/(?P<auctionId>\d+)/$', admin_views.itemPrintOut, name='itemPrintOut'),
     url(r'^admin/adjustLotIds/(?P<auctionId>\d+)/$', admin_views.adjustLotIds, name='adjustLotIds'),
+    
+    url(r'^accounts/passwordChangeDone/$', 
+        'django.contrib.auth.views.password_change_done', {'template_name': 'changePasswordDone.html'}),
    
+
+   
+
+    #for testing and setup only, comment out after done
+    url(r'^admin/testInput/(?P<index>\d+)/(?P<length>\d+)/$', admin_views.testItemInput, name='testItemInput'),
 
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^audio/', include('audio.urls')),
+
+
 
 )
 
