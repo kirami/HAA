@@ -378,6 +378,9 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	total = 0
 	gross = 0
 	used = []
+	ordered = {}
+
+	
 
 	for item in consignedItems:
 		money = 0
@@ -418,6 +421,14 @@ def getAllConsignmentInfo(consignorId, auctionId):
 			gross += itemCost
 			used.append(item["item_id"])
 		
+		if str(item["item_id"]) not in ordered:
+			ordered[str(item["item_id"])]= []
+			ordered[str(item["item_id"])].append(item)
+		else:
+			ordered[str(item["item_id"])].append(item)
+		
+		
+	data["ordered"] = ordered	
 	data["gross"]=gross		
 	data["consignedItems"] = consignedItems
 	data["consignorTotal"] = total
