@@ -21,11 +21,13 @@
 		<div id="reportDiv" class="reportTable">
 			<div class="maxBidItem maxBidItemTitle">Lot ID:</div>
 				<div class="maxBidItem maxBidItemTitle">Name:</div>
+				<div class="maxBidItem maxBidItemTitle">Artist:</div>
 				<div class="maxBidItem maxBidItemTitle">Winning Bid:</div>
 				<div class="clear"></div>
 			{%for winner in value.bids.wonItems%}
 				<div class="maxBidItem">{{winner.item.lot_id}}</div>
 				<div class="maxBidItem">{{winner.item.name}}</div>
+				<div class="maxBidItem">{{winner.item.artist}}</div>
 				<div class="maxBidItem">{{winner.amount}}</div>
 				<div class="clear"></div>
 			{%endfor%}
