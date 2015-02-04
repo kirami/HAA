@@ -275,7 +275,7 @@ def catalog(request, msg= None):
 	now =  date.today()
 	currentAuction = getCurrentAuction()
 	total = 0
-	perPage = 3
+	perPage = settings.ITEMS_PER_PAGE
 	categories = None
 
 	page = int(request.GET.get("page", 1))

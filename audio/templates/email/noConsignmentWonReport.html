@@ -1,0 +1,20 @@
+{% extends "email/baseEmail.html" %}
+
+
+{%block content%}
+<h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction :{{header.auction.name}}</h1>
+
+<div id="reportDiv" class="reportTable">
+
+	<div>None of your items sold in this auction.</div>
+
+	
+	<div>Unsold items:
+		{%for unsoldItem in data.unsoldConsignorItems%}
+			<div>{{unsoldItem.id}} {{unsoldItem.label.name}} {{unsoldItem.name}}</div>
+		{%endfor%}
+	
+	</div>
+
+</div>
+{%endblock%}

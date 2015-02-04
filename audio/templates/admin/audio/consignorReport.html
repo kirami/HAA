@@ -36,6 +36,17 @@
 		{%endif%}
 	{%endfor%}
 
+
+
+	<div style="margin-top:20px;">
+		<div>The consignors didn't sell anything:</div>
+		{%for loser in data.nonWinners%}
+		
+			<div class="maxBidItem"><a href="/admin/consignorReport/{{data.auctionId}}/{{loser.id}}" target="_blank">{{loser.first_name}} {{loser.last_name}}</a></div>
+	
+		{%endfor%}
+	</div>
+
 </div>
 
 {%endblock%}

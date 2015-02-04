@@ -6,6 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib import admin
 from django.http import HttpResponse
+from django import forms
 
 
 
@@ -15,7 +16,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-UserAdmin.list_display = ('email', 'first_name', 'last_name', 'is_active', 'date_joined', 'is_staff')
+UserAdmin.list_display = ('email', 'username', 'first_name', 'last_name', 'is_active', 'date_joined')
+
+class CustomConsignmentModelForm(forms.ModelForm):
+    class Meta:
+        model = Consignment
+    def __init__(self, *args, **kwargs):
+        super(CustomConsignmentModelForm, self).__init__(*args, **kwargs)
+        self.fields['item'].queryset = Item.objects.filter(consignedItem=None)
 
 
 
@@ -53,7 +61,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class ConsignmentAdmin(admin.ModelAdmin):
-
+    #form = CustomConsignmentModelForm
     list_display = ('item', 'consignor', 'minimum', 'maximum', 'percentage',)
     list_filter = ('item__auction',)
 
@@ -72,5 +80,7 @@ admin.site.register(Consignment, ConsignmentAdmin)
 admin.site.register(Condition, ConditionAdmin)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+
+
 
 

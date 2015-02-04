@@ -92,7 +92,7 @@ class Item(models.Model):
 class Bid(models.Model):
 	user = models.ForeignKey(User)
 	date = models.DateTimeField()
-	item = models.ForeignKey(Item)
+	item = models.ForeignKey(Item,  related_name='bidItem')
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	winner = models.BooleanField(default = False)
 	invoice = models.ForeignKey(Invoice, null = True, blank = True, on_delete=models.SET_NULL)
@@ -152,8 +152,8 @@ class Consignor(models.Model):
 		return self.first_name + " " + self.last_name
 
 class Consignment(models.Model):
-	item = models.ForeignKey(Item)
-	consignor = models.ForeignKey(Consignor)
+	item = models.ForeignKey(Item, related_name="consignedItem")
+	consignor = models.ForeignKey(Consignor, related_name="consignmentConsignor")
 	percentage = models.DecimalField(max_digits=19, decimal_places=2)
 	minimum = models.DecimalField(max_digits=19, decimal_places=2)
 	maximum  = models.DecimalField(max_digits=19, decimal_places=2, blank  = True, null=True)
