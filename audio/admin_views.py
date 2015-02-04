@@ -44,6 +44,10 @@ def testItemInput(request, index, length):
 			logger.error("item: %s" % item)
 			i = i +1
 
+		#create test users:
+
+
+
 	except Exception as e:
 		return HttpResponse(json.dumps({"success":False, "msg": e}), content_type="application/json")
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
@@ -749,12 +753,13 @@ def consignorReport(request, auctionId, template = None):
 	getHeaderData(data, auctionId)
 	messages = []
 	usedConsignors = {}
-	
-	consignors = getConsignmentWinners(auctionId = auctionId)
+	data["nonWinners"] = getLoserConsignors(auctionId)
+
+	consignors = getWinnerConsignors(auctionId = auctionId)
 	for consignor in consignors:
-		consignorId = consignor["consignor_id"]
+		consignorId = consignor.id
 		if consignorId not in usedConsignors:
-			logger.error("consignor: %s" % consignorId)
+			#logger.error("consignor: %s" % consignorId)
 			consignor = Consignor.objects.get(id = consignorId)
 			consignInfo = consignorId
 			indData = getAllConsignmentInfo(consignorId, auctionId)
@@ -762,10 +767,22 @@ def consignorReport(request, auctionId, template = None):
 			usedConsignors[consignorId] = True
 
 			if template:
-				msg = getEmailMessage(consignor.email,"test",{"data":indData}, template)
+				msg = getEmailMessage(consignor.email,"Hawthorn Antique Audio Consignor Report",{"data":indData, "header":data}, template)
 				messages.append(msg)
 
+
 	if template:
+
+		for nonwinner in data["nonWinners"]:
+			
+			consignInfo = nonwinner.id
+			indData = getAllConsignmentInfo(nonwinner.id, auctionId)
+			#logger.error("consignor: %s" % indData)
+			data[consignInfo] = indData
+			msg = getEmailMessage(nonwinner.email,"Hawthorn Antique Audio Consignor Report",{"data":indData, "header":data}, "noConsignmentWonReport")
+			messages.append(msg)
+
+
 		sendBulkEmail(messages)
 		return HttpResponse(json.dumps({"success":True,"msg":"sent bulk emails"}), content_type="application/json")
 

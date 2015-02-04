@@ -93,6 +93,7 @@ def getActiveUsers():
 	return ""
 
 #bidders are not current but have bid in the past
+#TODO of all time or past # of auctions??
 def getNonActiveUsers(auctionId):
 	nonCurrent = getNonCurrentUsers(auctionId)[0]
 	pastBidders = list(User.objects.raw('select distinct a.id from audio_bid b, auth_user a where a.id=b.user_id'))
@@ -113,20 +114,21 @@ def getLosers(auctionId):
 
 #returns ALL items in db with no bids ever.
 def getNoBidItems(auctionId, orderByName = False):
-	query = 'SELECT * from audio_item where id not in (select item_id from audio_bid) and auction_id=' + str(auctionId)
 	if orderByName:
-		query+= " order by name"
-	return list(Item.objects.raw(query))
+		return Item.objects.filter(bidItem=None, auction=auctionId).order_by("name")
+	else:
+		return Item.objects.filter(bidItem=None, auction=auctionId)
+	
 
 def resetWinners(auctionId):
 	#todo check lock here?
 	return Bid.objects.filter(item__auction = auctionId).update(winner=False)
 
 def getBidItems(auctionId, orderByName = False):
-	query = 'SELECT * from audio_item where id in (select item_id from audio_bid) and auction_id =' + str(auctionId)
 	if orderByName:
-		query+= " order by name"
-	return list(Item.objects.raw(query))
+		return Item.objects.filter(bidItem__isnull=False, auction=auctionId).order_by("name")
+	else:
+		return Item.objects.filter(bidItem__isnull=False, auction=auctionId)
 
 #get winning flat bids after blind auction end date
 def getWinningFlatBids(auctionId, date, userId = None):
@@ -179,7 +181,7 @@ def getWinnerSum(auctionId, userId, date = None, onlyNonInvoiced = False):
 		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
 
 	else:
-		return 0
+		return { "sum": 0 , "wonItems":None} 
 
 #date is end of blind auction
 def getWinnerFlatSum(auctionId, userId, date = None):
@@ -188,7 +190,7 @@ def getWinnerFlatSum(auctionId, userId, date = None):
 		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
 
 	else:
-		return 0
+		return { "sum": 0 , "wonItems":None} 
 
 def getSumWinners(auctionId, userId = None, date = None):
 	winners = getWinningBids(auctionId, userId = userId, date = date)
@@ -196,7 +198,7 @@ def getSumWinners(auctionId, userId = None, date = None):
 		return { "sum": winners.aggregate(Sum('amount'))["amount__sum"] , "wonItems":winners} 
 
 	else:
-		return 0
+		return { "sum": 0 , "wonItems":None} 
 
 def getDuplicateItems(auctionId):
 	auctionId = 1
@@ -207,6 +209,8 @@ def getOrderedBids(auctionId):
 	return list(Bid.objects.raw('SELECT b.* FROM audio_bid b, audio_item i WHERE b.item_id = i.id and i.auction_id = '+str(auctionId)+'  ORDER BY item_id ASC, amount DESC, date ASC;'))
 
 
+def getNonConsignedItems():
+	return Item.objects.filter(consignedItem=None)
 
 
 #get consigned items won in certain auction by consignor
@@ -231,17 +235,30 @@ def getConsignorBidSums(auctionId):
 	return row
 '''
 
-#get consigment which was not won in this auction
-def getConsignedLosers(auctionId, consignorId):
-	cursor = connection.cursor()
-	sql = "select * from audio_consignment  c, audio_item i where auction_id = "+ str(auctionId)+" and item_id not in(select distinct b.item_id from audio_bid b where b.winner = true) and c.item_id = i.id"
-	if consignorId != None:
-		sql = sql + " and c.consignor_id = " + str(consignorId)
-	cursor.execute(sql)
-	row = dictfetchall(cursor)
-	return row
+#get consigment which was has no BIDS in this auction
+def getConsignmentLosers(auctionId, consignorId = None):
+	if not consignorId:
+		return Item.objects.filter(bidItem=None, auction=auctionId, consignedItem__isnull=False).distinct()
+	else:
+		return Item.objects.filter(bidItem=None, auction=7, consignedItem__isnull=False, consignedItem__consignor=consignorId).distinct()
 
+#get all consingors who had no won items
+def getLoserConsignors(auctionId):
+	ids = getWinnerConsignors(auctionId)
+	all = Consignor.objects.filter(consignmentConsignor__item__auction = auctionId).distinct()
+	return set(ids) ^ set(all)
+	
 
+def getWinnerConsignors(auctionId):
+	#ids = Item.objects.filter(bidItem__isnull=False, auction=auctionId, consignedItem__isnull=False).distinct()
+	#Consignor.objects.filter(consignmentConsignor__in=set(ids)).distinct()
+
+	return list(Consignor.objects.raw('select cc.* from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
+	' and c.item_id = i.id and c.consignor_id = cc.id group by consignor_id'))
+	
+def getWinnerConsignorIds(auctionId):
+	return list(Consignor.objects.raw('select cc.id from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
+	' and c.item_id = i.id and c.consignor_id = cc.id group by consignor_id')) 
 
 #--------------------------
 
@@ -353,7 +370,7 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	for each item, get consignors, group by consignor id.
 	'''
 
-	notWon = getConsignedLosers(consignorId = consignorId, auctionId = auctionId)
+	notWon = getConsignmentLosers(consignorId = consignorId, auctionId = auctionId)
 	consignedItems = getConsignmentWinners(consignorId, auctionId)
 	
 	consignTotal = 0
@@ -442,6 +459,7 @@ def getHeaderData(data, auctionId):
  	winners = getAlphaWinners(auctionId)
 
  	data["auctionId"] = auctionId
+ 	data['auction'] = Auction.objects.get(pk=auctionId)
  	data["winners"] = winningBids
 
  	data["winnersCount"] = len(winners)
