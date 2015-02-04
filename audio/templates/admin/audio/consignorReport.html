@@ -5,12 +5,10 @@
 
 <h1>Consignor report for auction: {{data.auctionId}}</h1>{{ data.totalsByConsignor}}
 
- <form action="/admin/sendConsignorEmails/" method="post">
-    {% csrf_token %}
-    <input type="hidden" value="{{data.auctionId}}" name="auctionId">
+ <button id="ccemailButton">Email consignor report to each consignor</button>
+ <div style="font-size:18px;" id="consignorIdEmailMsg"></div>
 
-      <input type="submit" value="Email consignor report to each consignor">
-  </form>
+  <div id="ccemail-confirm" title="Please Confirm">Are you sure you want to email a consignor report to all consignors for auction {{data.auction.name}}?</div>
 
 <div>Gross auction total:  ${{data.total}}</div>
 
@@ -48,5 +46,54 @@
 	</div>
 
 </div>
+
+<script type="text/javascript">
+	
+	function ccEmail(){
+		var csrftoken = getCookie('csrftoken');
+			ajaxSetup(csrftoken);
+
+			$.ajax({
+			type: "POST",
+			url: "/admin/sendConsignorEmails/",
+			data: { "auctionId":{{data.auctionId}}},
+			success: function(data) {
+				$('#consignorIdEmailMsg').css("color","green")
+				$('#consignorIdEmailMsg').text("Emails were successfully sent.")
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				$('#consignorIdEmailMsg').css("color","red")
+				$('#consignorIdEmailMsg').text("Something went wrong - emaals were not sent.")
+	        	return false;
+	      	}
+		});
+	}
+
+	$( document ).ready(function() {
+
+		$( "#ccemail-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Email": function() {
+					ccEmail()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		$("#ccemailButton").click(function(){
+			$( "#ccemail-confirm" ).dialog( "open" );
+			return false;
+		})
+
+	})
+
+	</script>
 
 {%endblock%}

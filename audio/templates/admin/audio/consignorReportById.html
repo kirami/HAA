@@ -5,7 +5,9 @@
 
 <h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction #{{data.auctionId}}</h1>
 
-<button onclick='sendEmail("singleConsignorReport", {{data.auctionId}},{{data.consignor}})'>Email report to {{data.firstName}} {{data.lastName}}</button>
+ <div id="ccemail-confirm" title="Please Confirm">Are you sure you want to email a consignor report to {{data.firstName}} {{data.lastName}} for auction {{data.auction.name}}?</div>
+
+<button id='ccemailButton'>Email report to {{data.firstName}} {{data.lastName}}</button>
 <div id="consignorIdEmailMsg"></div>
 
 <div id="reportDiv" class="reportTable">
@@ -56,5 +58,34 @@
 	</div>
 
 </div>
+
+<script type="text/javascript">
+
+	$( document ).ready(function() {
+
+		$( "#ccemail-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Email": function() {
+					sendEmail("singleConsignorReport", {{data.auctionId}},{{data.consignor}})
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		$("#ccemailButton").click(function(){
+			$( "#ccemail-confirm" ).dialog( "open" );
+			return false;
+		})
+
+	})
+
+	</script>
 
 {%endblock%}
