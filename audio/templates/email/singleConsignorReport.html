@@ -1,40 +1,54 @@
 {% extends "email/baseEmail.html" %}
 
 
+
 {%block content%}
-<h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction #{{header.auction.name}}</h1>
+
+
+<h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction #{{header.auction.}}</h1>
 
 <div id="reportDiv" class="reportTable">
 		
-	<div>Consignment info by item:</div>	
-	<div style="float: left; margin-right: 20px; width: 120px;">Item number:</div>
-	<div style="float: left; margin-right: 20px; width: 75px;">Bidder:</div>
-	<div style="float: left; margin-right: 20px; width: 75px;">Total amount:</div>
-	<div style="float: left; margin-right: 20px; width: 75px;">Range amount:</div>
-	<div style="float: left; margin-right: 20px; width: 75px;">Range Min:</div>
-	<div style="float: left; margin-right: 20px; width: 75px;">Range Max:</div>
-	<div style="float: left; margin-right: 20px; width: 75px;">Percent:</div>
+	<div class="red">Consignment info by item:</div>	
+	<div style="float: left; margin-right: 20px; width: 100px;">Item:</div>
+	<div style="float: left; margin-right: 20px; width: 50px;">Bidder:</div>
+	<div style="float: left; margin-right: 20px; width: 50px;">Total amount:</div>
+	<div style="float: left; margin-right: 20px; width: 50px;">Range amount:</div>
+	<div style="float: left; margin-right: 20px; width: 50px;">Range Min:</div>
+	<div style="float: left; margin-right: 20px; width: 50px;">Range Max:</div>
+	<div style="float: left; margin-right: 20px; width: 50px;">Percent:</div>
 	<div style="float: left; width: 75px;">Range percentage:</div>
 	
 
 	
 	<div style="clear:both"></div>
 	<br><br>
-	{%for item in data.consignedItems%} 
-		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
-			<div style="float: left; margin-right: 20px; width: 120px;">{{item.id}} {{item.label.name}} {{item.name}}</div>
-			<div style="float: left; margin-right: 20px; width: 75px;">{{item.user_id}}</div>
-			<div style="float: left; margin-right: 20px; width: 75px;">${{item.amount}}</div>
-			<div style="float: left; margin-right: 20px; width: 75px;">${{item.inRange}}</div>
-			<div style="float: left; margin-right: 20px; width: 75px;">${{item.minimum}}</div>
-			<div style="float: left; margin-right: 20px; width: 75px;">${{item.maximum}}</div>
-			<div style="float: left; margin-right: 20px; width: 75px;">{{item.percentage}}</div>
-			<div style="float: left; width: 75px;">${{item.rangeAmount|floatformat:2}}</div>
+	{%for key, value in data.ordered.items%}
+		<div style="margin-bottom:15px;">
+		{%for item in value%}
+			
+		<div style="{%if item.HAA == True%}background-color:red{%endif%} ">
+			<div style="float: left; margin-right: 20px; width: 100px;">{{item.artist}} {{item.name}}</div>
+			<div style="float: left; margin-right: 20px; width: 50px;">{{item.user_id}}</div>
+			<div style="float: left; margin-right: 20px; width: 50px;">${{item.amount}}</div>
+			<div style="float: left; margin-right: 20px; width: 50px;">${{item.inRange}}</div>
+			<div style="float: left; margin-right: 20px; width: 50px;">${{item.minimum}}</div>
+			{%if item.maximum%}
+			<div style="float: left; margin-right: 20px; width: 50px;">${{item.maximum}}</div>
+			{%else%}
+
+			<div style="float: left; margin-right: 20px; width: 50px;">{{item.maximum}}</div>
+			{%endif%}
+			<div style="float: left; margin-right: 20px; width: 50px;">{{item.percentage}}%</div>
+			<div style="float: left; margin-right: 20px; width: 50px;">${{item.rangeAmount|floatformat:2}}</div>
 			
 			<div style="clear:both"></div>
 		</div>
 
 		<div style="clear:both"></div>
+	
+		{%endfor%}
+	</div>
 	{%endfor%}
 
 	<hr>

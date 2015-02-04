@@ -142,7 +142,7 @@ def bids(request):
 			invoice = invoices[0]
 			
 		if isSecondChance():
-			if invoice == None or invoice.second_chance_invoice_amount == None:
+			if invoice == None or invoice.second_chance_invoice_amount == 0:
 				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date)
 				
 				return render_to_response('flatBids.html', {"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
@@ -216,6 +216,11 @@ def userInfo(request):
 def flatFeeCatalog(request):
 	items = None
 	auction = getCurrentAuction()
+	
+	success = False
+	if request.GET.get("success"):
+		success = True
+
 	if request.user.is_authenticated():
 		if not isSecondChance() or not auction:
 			return redirect("catalog")
@@ -239,7 +244,7 @@ def flatFeeCatalog(request):
 			logger.error("error in catalog")
 			logger.error(e)
 		
-		return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id}, context_instance=RequestContext(request))
+		return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id, "success":success}, context_instance=RequestContext(request))
 	return redirect("profile")
 
 
