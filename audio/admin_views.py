@@ -738,7 +738,7 @@ def consignorReportById(request, consignorId, auctionId, template = None):
 	consignor = Consignor.objects.get(id=consignorId)
 	
 	if template:
-		msg = getEmailMessage(consignorId.email,"test",{"data":data}, template)
+		msg = getEmailMessage(consignor.email,"Hawthorn Antique Audio Consignor Report",{"data":data}, template)
 		sendEmail(msg)
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 		

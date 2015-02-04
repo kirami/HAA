@@ -58,7 +58,7 @@ function sendEmail (template, auctionId, consignorId) {
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			$('#consignorIdEmailMsg').css("color","red")
-			$('#consignorIdEmailMsg').text("Something went wrong - email was not.")
+			$('#consignorIdEmailMsg').text("Something went wrong - email was not sent.")
         	return false;
       	}
 	});
