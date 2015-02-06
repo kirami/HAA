@@ -39,6 +39,7 @@ def test():
 		bidDict[str(bid.item.id)] = str(bid.amount)
 	return bidDict
 
+
 def getCurrentAuction():
 	now = datetime.today()
 	# where date is after start date and before second_end date
@@ -48,6 +49,9 @@ def getCurrentAuction():
 	else:
 		#TODO throw error
 		return None
+
+def getPreviousAuction():
+	return 0
 
 def isSecondChance():
 	now =  datetime.now()
@@ -262,15 +266,20 @@ def getWinnerConsignorIds(auctionId):
 
 #--------------------------
 
-def getUnbalancedUsers():
+def getUnbalancedUsers(auctionId = None, userId = None):
 	cursor = connection.cursor()
-	cursor.execute("select user_id, coalesce(payments,0) as payments, invoiced, invoiced + invoiced2 +tax1+tax2+shipping1+shipping2 -discount - coalesce(payments,0) as balance "+
-		"from(select sum(amount) as payments, it.user_id, invoiced, invoiced2, tax1, tax2, shipping1, shipping2, discount from audio_payment p "+
-		"right join (select sum(invoiced_amount) as invoiced, sum(second_chance_invoice_amount) as invoiced2, sum(tax) as tax1, sum(second_chance_tax) as tax2," +
-		"sum(shipping) as shipping1, sum(second_chance_shipping) as shipping2, coalesce(sum(discount),0)  as discount,"+
-			" user_id from audio_invoice group by user_id) "+
-		"as it on it.user_id = p.user_id group by user_id) as joined "+
-		"where joined.payments != joined.invoiced or joined.payments is NULL")
+	sql = "SELECT user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance, auction_id \
+	FROM(select sum(amount) as payments, it.user_id, invoiced, auction_id from audio_payment p \
+	RIGHT JOIN (SELECT sum(invoiced_amount)  + sum(second_chance_invoice_amount) + sum(tax) + \
+	sum(second_chance_tax) + sum(shipping) + sum(second_chance_shipping) - coalesce(sum(discount),0)  as invoiced, user_id, auction_id \
+	FROM audio_invoice group by user_id) as it on it.user_id = p.user_id group by user_id) as joined \
+	where joined.invoiced != joined.payments or joined.payments is NULL"
+	if userId:
+		sql = sql + " and user_id = " + str(userId)
+	if auctionId:
+		sql = sql + " and auction_id < " + str(auctionId)
+
+	cursor.execute(sql)
 	row = dictfetchall(cursor)
 	return row
 
@@ -444,9 +453,17 @@ def getAllConsignmentInfo(consignorId, auctionId):
 
 def getInvoiceData(auctionId, userId):
 	data = {}
+	balances = getUnbalancedUsers(auctionId, userId)
+	balance = 0
+
+	if len(balances) > 0:
+			data["balanceData"] = balances[0]
+			balance = balances[0]["balance"]
+
 	data["info"]=getSumWinners(auctionId, userId)
 	invoices = Invoice.objects.filter(auction = auctionId, user = userId)
 	if len(invoices) > 0:
+		data["auction"] = Auction.objects.get(pk=auctionId)
 		invoice = invoices[0]
 		data["invoice"] = invoice
 		shipping = invoice.shipping or 0
@@ -458,7 +475,11 @@ def getInvoiceData(auctionId, userId):
 		data["discount"] = discount
 		data["taxTotal"] = tax + secondTax
 		data["shippingTotal"] = shipping + secondShipping
-		data["orderTotal"] = invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount
+		data["orderTotal"] = invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount + balance
+		data["user"]= User.objects.get(pk=userId)
+		
+
+			
 	return data
 
 

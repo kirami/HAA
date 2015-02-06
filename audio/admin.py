@@ -25,7 +25,7 @@ class CustomConsignmentModelForm(forms.ModelForm):
         super(CustomConsignmentModelForm, self).__init__(*args, **kwargs)
         self.fields['item'].queryset = Item.objects.filter(consignedItem=None)
 
-
+        
 
 class ConditionAdmin(admin.ModelAdmin):
     list_filter = ("auction",)
@@ -33,9 +33,9 @@ class ConditionAdmin(admin.ModelAdmin):
 
 class BidAdmin(admin.ModelAdmin):
 
-    list_display = ('user', 'item', 'amount', )
-    search_fields = ['user__email', 'item__lot_id']
-    list_filter = ('item__auction',)
+    list_display = ('user', 'item', 'amount', 'winner', )
+    search_fields = ['user__email', 'item__lot_id', 'item__name', 'item__artist']
+    list_filter = ('item__auction', 'winner',)
 
     raw_id_fields = ("item",)
     """
@@ -50,7 +50,7 @@ class BidAdmin(admin.ModelAdmin):
 class InvoiceAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'auction',)
-    search_fields = ['user']
+    search_fields = ['user__email', 'user__first_name', 'user__last_name', 'user__username']
     list_filter = ('auction',)
     
 class ItemAdmin(admin.ModelAdmin):

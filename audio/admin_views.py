@@ -29,7 +29,6 @@ def test(request):
 	data={}
 	return "test"
 
-
 #add many test items quickly
 def testItemInput(request, index, length):
 	i = int(index)
@@ -639,7 +638,7 @@ def userBreakdown(request, auctionId):
 	data["auctionId"]=auctionId
 
 	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
-
+'''
 def endAuction(request, auctionId):
 	data = {}
 	data["auctionId"]=auctionId
@@ -652,7 +651,7 @@ def endAuction(request, auctionId):
 
 
 	return render_to_response('admin/audio/endAuction.html', {"data":data}, context_instance=RequestContext(request))
-
+'''
 
 def invoices(request, auctionId):
 	data = {}
@@ -686,34 +685,54 @@ def sendLoserLetters(request, auctionId):
 
 
 def getInvoices(request, auctionId, userId = None, template=None):
-	data = {}
-	if userId != None:
-		data = getInvoiceData(auctionId, userId)
+	try:
+		data = {}
+
+		if userId != None:
+			data = getInvoiceData(auctionId, userId)
+	except Exception as e:
+		logger.error("Error in getInvoices: %e" % e)	
 	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
 
 
-def sendInvoices(request, auctionId):
-	
+def sendInvoices(request):
+	auctionId = request.POST.get("auctionId")
+	userId = request.POST.get("userId", None)
 	auction = Auction.objects.get(id = auctionId)
 	
-	winners = getAlphaWinners(auctionId)
+	winners = {}
 	messages = []
-	template = "invoice"
 	data = {}
+
+	if not auction.blind_locked:
+		return HttpResponse(json.dumps({"success":True, "msg":"This auction has not been locked.  Please make sure to lock the auction before trying to send invoices."}), content_type="application/json")
+
+	if auction.flat_locked:
+		#get just flat winners.
+		#send updated or flat only?
+		template = "flatInvoice"
+		#include any payment received.
+	else:
+		if userId == None:
+			winners = getAlphaWinners(auctionId)
+		else:
+			winners = [{"id" : userId}] 	
+
+		template = "invoice"
+
 
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner["id"])
 		if profile and profile.email_invoice:
 			user = User.objects.get(id = winner["id"] )
 			data = getInvoiceData(auctionId, userId)
-			msg = getEmailMessage(user.email,"Invoice for Hawthorn's " + auction.name, {"data":data}, template)
+			msg = getEmailMessage(user.email,"Invoice for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template)
 			messages.append(msg)
-			
-	if template :
-		sendBulkEmail(messages)
-		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+				
+		if template :
+			sendBulkEmail(messages)
+			return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
-	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 		
 
