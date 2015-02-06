@@ -53,10 +53,11 @@
                     </a>
                 </caption>
                 <tbody>
+
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('bulkConsignment/', 'bulkConsignmentAuctionId')" >Bulk Consignment</a></th>                   
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=Bulk Consignment&auction=true&nextPage=bulkConsignment" target="_blank">Bulk Consignment</a></th>                   
                         <td>Auction ID:<input type="text" id="bulkConsignmentAuctionId" class="adminInput"></td>  
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('bulkConsignment/', 'bulkConsignmentAuctionId')">Go Quick</a></td>     
                     </tr>
                     
                     <!--
@@ -66,32 +67,36 @@
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
                     </tr> -->
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('invoices/', 'invoicesAdminAuctionId')"  >Invoices</a></th>                   
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=Print/Email Invoices&auction=true&nextPage=invoices">Print/Email Invoices</a></th>                   
                         <td>Auction ID:<input type="text" id="invoicesAdminAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('invoices/', 'invoicesAdminAuctionId')">Go Quick</a></td>     
                     </tr>
+
+
+
                     <tr class="model-group">           
                         <th scope="row"><a class="adminLink" href="/admin/userBreakdown">User breakdown</a></th>                   
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>  
                         <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
                     </tr>
-
+                    
+                    <!--
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('endAuction/', 'endAuctionId')"  >End Auction</a></th>                   
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=End Auction&auction=true&nextPage=endAuction"  >End Auction</a></th>                   
                         <td>Auction ID:<input type="text" id="endAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
-                    </tr>
+                        <td><a class="quick" onclick="goTo('endAuction/', 'endAuctionId')"></a></td>     
+                    </tr>-->
 
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('createBid/', 'createBidAuctionId')"  >Create Bid</a></th>                   
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=Create Bid&auction=true&nextPage=createBid" >Create Bid</a></th>                   
                         <td>Auction ID:<input type="text" id="createBidAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('createBid/', 'createBidAuctionId')">Go Quick</a></td>     
                     </tr>
 
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('emailAdmin/', 'emailAdminAuctionId')"  >Email Admin</a></th>                   
+                        <th scope="row"><a class="adminLink"  href="/admin/filterAdminIndex?page=Email Admin&auction=true&nextPage=emailAdmin" >Email Admin</a></th>                   
                         <td>Auction ID:<input type="text" id="emailAdminAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('emailAdmin/', 'emailAdminAuctionId')">Go Quick</a></td>     
                     </tr>
 
                     <tr class="model-group">           
@@ -101,9 +106,10 @@
                     </tr>
 
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('shippingByInvoice/', 'shippingByInvoiceAuctionId')"  >Shipping by Invoice</a></th>                   
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=Shipping By Invoice&auction=true&nextPage=shippingByInvoice">Shipping by Invoice</a></th>                   
                         <td>Auction ID:<input type="text" id="shippingByInvoiceAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('shippingByInvoice/', 'shippingByInvoiceAuctionId')">Go Quick
+                        </a></td>     
                     </tr>
 
                     <tr class="model-group">           
@@ -113,9 +119,9 @@
                     </tr>
 
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('adjustLotIds/', 'adjustLotIdsAuctionId')"  >Adjust Lot IDS</a></th>                   
+                        <th scope="row"><a class="adminLink"  href="/admin/filterAdminIndex?page=Adjust Lot IDS&auction=true&nextPage=adjustLotIds">Adjust Lot IDS</a></th>                   
                         <td>Auction ID:<input type="text" id="adjustLotIdsAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('adjustLotIds/', 'adjustLotIdsAuctionId')" >Go Quick</a></td>     
                     </tr>
 
                     <tr class="model-group">           
@@ -149,35 +155,35 @@
                     </tr>
 
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('winners/','winnersAuctionId')" >Winners Report</a></th>
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=Winners Report&auction=true&nextPage=winners" >Winners Report</a></th>
                         <td>Auction ID:<input type="text" id="winnersAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('winners/','winnersAuctionId')">Go Quick</a></td>     
                     </tr>
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('losers/','losersAuctionId')" >Losers Report</a></th>
+                        <th scope="row"><a class="adminLink"  href="/admin/filterAdminIndex?page=Losers Report&auction=true&nextPage=losers">Losers Report</a></th>
                         <td>Auction ID:<input type="text" id="losersAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('losers/','losersAuctionId')">Go Quick</a></td>     
                     </tr>
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('wonItems/','wonItemsAuctionId')" >Won Items Report</a></th>
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=Won Items Report&auction=true&nextPage=wonItems">Won Items Report</a></th>
                         <td>Auction ID:<input type="text" id="wonItemsAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick"  onclick="goTo('wonItems/','wonItemsAuctionId')">Go Quick</a></td>     
                     </tr>
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('unsoldItems/','unsoldItemsAuctionId')" >Unsold Items Report</a></th>
+                        <th scope="row"><a class="adminLink"  href="/admin/filterAdminIndex?page=Unsold Items Report&auction=true&nextPage=unsoldItems">Unsold Items Report</a></th>
                         <td>Auction ID:<input type="text" id="unsoldItemsAuctionId" class="adminInput"></td> 
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('unsoldItems/','unsoldItemsAuctionId')">Go Quick</a></td>     
                     </tr>
 
                     <tr class="model-group">           
-                        <th scope="row"><a class="adminLink" onclick="goTo('report/', 'reportAuctionId')" >Auction Summary</a></th>                   
+                        <th scope="row"><a class="adminLink" href="/admin/filterAdminIndex?page=Auction Summary&auction=true&nextPage=report" >Auction Summary</a></th>                   
                         <td>Auction ID:<input type="text" id="reportAuctionId" class="adminInput"></td>  
-                        <td><a class="addlink" href="/admin/audio/userprofile/add/"></a></td>     
+                        <td><a class="quick" onclick="goTo('report/', 'reportAuctionId')">Go Quick</a></td>     
                     </tr>
 
                     <tr class="model-group">           
                         <th scope="row"><a class="adminLink" onclick="goToInvoices()">Invoices</a></th>                   
-                        <td>Auction ID:<input type="text" id="invoicesAdminAuctionId" class="adminInput"></td> 
+                        <td>Auction ID:<input type="text" id="invoicesReportAuctionId" class="adminInput"></td> 
                         <td>User ID:<input type="text" id="invoiceUserId" class="adminInput"></td>        
                     </tr>
                     <tr class="model-group">           
@@ -236,6 +242,12 @@
         width:50px;
     }
 
+    .quick{
+        cursor: pointer;
+        color:blue;
+        padding-top: 4px;
+    }
+
 </style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
@@ -260,7 +272,7 @@ function goToConsignor(){
 
 function goToInvoices(){
     locationUrl = "getInvoices/"
-    auctionId = $('#invoicesAdminAuctionId').val()
+    auctionId = $('#invoicesReportAuctionId').val()
     userId = $('#invoiceUserId').val()
 
     if(auctionId != "")

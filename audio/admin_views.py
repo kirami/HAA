@@ -17,7 +17,7 @@ from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consigno
 from audio.utils import *
 from audio.mail import *
 
-from datetime import datetime 
+from datetime import datetime, date 
 import json, csv
 
 import logging
@@ -50,6 +50,38 @@ def testItemInput(request, index, length):
 	except Exception as e:
 		return HttpResponse(json.dumps({"success":False, "msg": e}), content_type="application/json")
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+def filterAdminIndex(request):
+	data = {}
+	data["page"] = request.GET.get("page")
+	data["nextPage"] = request.GET.get("nextPage")
+	data["user"] = request.GET.get("user", False)
+	data["auction"] = request.GET.get("auction", False)
+
+	if data["auction"]:
+		data["auctions"]=Auction.objects.all()
+
+	#not deadbeats?
+	if data["user"]:
+		data["users"]=User.objects.all()
+
+	if request.method == 'POST':
+		try:
+			index = request.POST.get("userId")
+			order = request.POST.get("invoiceId")
+			
+			data["success"]=True
+			return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+		except Exception as e:
+			data["success"]=False
+			data["errorMsg"] = e
+			logger.error("error updating lot ids: %s" % e)
+			return render_to_response('admin/audio/filterAdminIndex.html', {"data":data}, context_instance=RequestContext(request))
+
+
+
+	return render_to_response('admin/audio/filterAdminIndex.html', {"data":data}, context_instance=RequestContext(request))
 
 
 
@@ -655,7 +687,12 @@ def endAuction(request, auctionId):
 
 def invoices(request, auctionId):
 	data = {}
-	data["auctionId"]=auctionId
+	auctions = Auction.objects.filter(pk=auctionId)
+	if len(auctions) < 1:
+		data["error"]=True
+		data["errorMsg"] = "Auction #"+auctionId+" doens't exist"
+	else:
+		data["auction"] = auctions[0]
 	return render_to_response('admin/audio/invoiceAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
 

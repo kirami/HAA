@@ -453,7 +453,7 @@ def getAllConsignmentInfo(consignorId, auctionId):
 
 def getInvoiceData(auctionId, userId):
 	data = {}
-	balances = getUnbalancedUsers(auctionId, userId)
+	balances = getUnbalancedUsers(userId = userId)
 	balance = 0
 
 	if len(balances) > 0:
@@ -475,9 +475,10 @@ def getInvoiceData(auctionId, userId):
 		data["discount"] = discount
 		data["taxTotal"] = tax + secondTax
 		data["shippingTotal"] = shipping + secondShipping
-		data["orderTotal"] = invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount + balance
+		data["orderTotal"] = balance
 		data["user"]= User.objects.get(pk=userId)
-		
+		data["previousBalance"] = balance - (invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount)
+		data["balanceDate"] = date.today() 
 
 			
 	return data
