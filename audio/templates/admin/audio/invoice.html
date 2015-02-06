@@ -7,6 +7,7 @@
  <div id="invoiceEmail-confirm" title="Please Confirm">Are you sure you want to email this invoice to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>
 
 <button id='invoiceEmailButton'>Email report to {{data.user.first_name}} {{data.user.last_name}}</button>
+<button onclick="window.open('/admin/audio/payment/add/?invoice={{data.invoice.id}}&user={{data.user.id}}')">Add Payment to this Invoice</button>
 <div id="consignorIdEmailMsg"></div>
 
 <div id="reportDiv" class="reportTable">
@@ -39,7 +40,7 @@
 <div>CA State Tax: ${{data.taxTotal}}</div>
 {%endif%}
 {%if data.balanceData%}
-<div>Previous balance as of {{data.balanceDate}}: ${{data.balanceData.balance}}</div>
+<div>Previous balance (as of {{data.balanceDate}}): ${{data.previousBalance}}</div>
 {%endif%}
 <div>Total: ${{data.orderTotal}}</div>
 

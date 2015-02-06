@@ -46,7 +46,7 @@ urlpatterns = patterns('',
     #url(r'^admin/lookupItemWinner/(?P<auctionId>\d+)/(?P<itemId>\d+)', admin_views.lookupItemWinner, name='lookupItemWinner'),   
     #url(r'^admin/lookupItemWinner/(?P<auctionId>\d+)/$', admin_views.lookupItemWinner, name='lookupItemWinner'),   
     
-
+    url(r'^admin/filterAdminIndex/$', admin_views.filterAdminIndex, name='filterAdminIndex'),  
     url(r'^admin/importUsers/', admin_views.importAdmin, name='importAdmin'),
     url(r'^admin/importUserEmail/', admin_views.importUserEmail, name='importUserEmail'),
     url(r'^admin/printLabels/(?P<auctionId>\d+)/(?P<labelType>\w+)/$', admin_views.printLabels, name='printLabels'),

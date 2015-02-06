@@ -1,0 +1,64 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+
+
+<h1>{{data.page}}</h1>
+
+{%if data.auctions%}
+<DIV>Select auction:</DIV>
+<select id="auctionSelect">
+	{%for a in data.auctions%}
+	<option value="{{a.id}}">{{a.name}}</option>
+	{%endfor%}
+</select>
+{%endif%}
+
+{%if data.users%}
+<DIV>Select user:</DIV>
+<select id="userSelect">
+	{%for u in data.users%}
+	<option value="{{u.id}}">{{u}}</option>
+	{%endfor%}
+</select>
+{%endif%}
+<button onclick="goTo()">Go</button>
+
+
+<script type="text/javascript">
+	
+function goTo(){
+	user = $("#userSelect").val()
+	auction = $("#auctionSelect").val()
+	page = "{{data.nextPage}}"
+	url = "/admin/"+page
+	used = false
+
+	if (auction != null){
+		url+="/" + auction
+	}
+
+	if (user != null){
+		url+="/" + user
+	}
+
+	window.open(url)
+
+}
+
+$(document).ready(function(){
+
+	$("#auctionSelect").change(function(){
+		//if needs user go get that stuff
+	})
+
+
+})
+
+
+</script>
+
+
+{%endblock%}
