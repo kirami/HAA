@@ -2,11 +2,18 @@
  
 {%block info%}
 
+<h1 style="margin-top:30px;">Report for user: {{data.user.first_name}} {{data.user.last_name}} Auction: {{data.auction}}</h1>
+
+ <div id="invoiceEmail-confirm" title="Please Confirm">Are you sure you want to email this invoice to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>
+
+<button id='invoiceEmailButton'>Email report to {{data.user.first_name}} {{data.user.last_name}}</button>
+<div id="consignorIdEmailMsg"></div>
 
 <div id="reportDiv" class="reportTable">
 	<div class="maxBidItem">Lot Id:</div>
 
 	<div class="maxBidItem">Item name:</div>
+	<div class="maxBidItem">Item artist:</div>
 	<div class="maxBidItem">Amount bid:</div>
 	<div class="clear"></div>
 	<br><br>
@@ -14,6 +21,7 @@
 {%for winner in data.info.wonItems%}
 	<div class="maxBidItem">{{winner.item.lot_id}}</div>
 	<div class="maxBidItem">{{winner.item.name}}</div>
+	<div class="maxBidItem">{{winner.item.artist}}</div>
 	<div class="maxBidItem">{{winner.amount}}</div>
 	<div class="clear"></div>
 {%endfor%}
@@ -28,13 +36,67 @@
 <hr>
 <div>Shipping: ${{data.shippingTotal}}</div>
 {%if data.invoice.tax%}
-<div>CA State Tax: {{data.taxTotal}}</div>
+<div>CA State Tax: ${{data.taxTotal}}</div>
 {%endif%}
-<div>total: ${{data.orderTotal}}</div>
+{%if data.balanceData%}
+<div>Previous balance as of {{data.balanceDate}}: ${{data.balanceData.balance}}</div>
+{%endif%}
+<div>Total: ${{data.orderTotal}}</div>
 
 </div>
 
+<script type="text/javascript">
 
+		function sendInvoices(){
+		var csrftoken = getCookie('csrftoken');
+			ajaxSetup(csrftoken);
+
+			data = { "auctionId":{{data.auction.id}}, "userId":{{data.user.id}}}
+
+
+			$.ajax({
+			type: "POST",
+			url: "/admin/sendInvoices/",
+			data: data,
+			success: function(data) {
+				$('#consignorIdEmailMsg').css("color","green")
+				$('#consignorIdEmailMsg').text("Email was successfully sent.")
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				$('#consignorIdEmailMsg').css("color","red")
+				$('#consignorIdEmailMsg').text("Something went wrong - emails were not sent.")
+	        	return false;
+	      	}
+		});
+	}
+
+
+	$( document ).ready(function() {
+
+		$( "#invoiceEmail-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Email": function() {
+					sendInvoices()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		$("#invoiceEmailButton").click(function(){
+			$( "#invoiceEmail-confirm" ).dialog( "open" );
+			return false;
+		})
+
+	})
+
+	</script>
 
 
 {%endblock%}
