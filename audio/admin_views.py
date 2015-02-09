@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core import serializers
 
 
 from django import forms
@@ -51,12 +52,17 @@ def testItemInput(request, index, length):
 		return HttpResponse(json.dumps({"success":False, "msg": e}), content_type="application/json")
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
+
+
+
 def filterAdminIndex(request):
 	data = {}
 	data["page"] = request.GET.get("page")
 	data["nextPage"] = request.GET.get("nextPage")
 	data["user"] = request.GET.get("user", False)
 	data["auction"] = request.GET.get("auction", False)
+	data["invoice"] = request.GET.get("invoice", False)
+	auctionId = request.GET.get("auctionId", None)
 
 	if data["auction"]:
 		data["auctions"]=Auction.objects.all()
@@ -65,10 +71,13 @@ def filterAdminIndex(request):
 	if data["user"]:
 		data["users"]=User.objects.all()
 
+	if data["invoice"]:
+		data["invoices"] = Invoice.objects.filter(auction = auctionId)
+
 	if request.method == 'POST':
 		try:
 			index = request.POST.get("userId")
-			order = request.POST.get("invoiceId")
+			
 			
 			data["success"]=True
 			return HttpResponse(json.dumps({"success":True}), content_type="application/json")

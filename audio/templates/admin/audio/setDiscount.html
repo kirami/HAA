@@ -11,7 +11,7 @@
 <form action="" method="post" id="setDiscountForm">
     {% csrf_token %} 
     {{ data.form.as_p }}
-    <input type="decimal" name="discountPercent" id="discountPercent">
+    <label>Enter desired percent:</label><input type="decimal" name="discountPercent" id="discountPercent">
     <button id="calculateBtn">Calculate discount</button>
     <button id="saveBtn">Save</button>
 </form>
@@ -50,16 +50,16 @@ function round(value, decimals) {
 			discount1 = round(ie1 * percentage,2)
 			discount2 = round(ie2 * percentage,2)
 
-			invoiceElement1.val(ie1 - discount1)
-			invoiceElement2.val(ie2 -discount2)
+			//invoiceElement1.val(ie1 - discount1)
+			//invoiceElement2.val(ie2 -discount2)
 			
 
 			$("#id_discount").val(discount2 + discount1)
 
 			if(tax1.val()>0)
-				tax1.val(round(invoiceElement1.val() * .0975,2))
+				tax1.val(round((ie1 - discount1) * .0975,2))
 			if(tax2.val()>0)
-				tax2.val(round(invoiceElement2.val() * .0975, 2))
+				tax2.val(round((ie2 - discount2) * .0975, 2))
 
 			return false;
 		})

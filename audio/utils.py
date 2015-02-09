@@ -462,8 +462,10 @@ def getInvoiceData(auctionId, userId):
 
 	data["info"]=getSumWinners(auctionId, userId)
 	invoices = Invoice.objects.filter(auction = auctionId, user = userId)
+	data["auction"] = Auction.objects.get(pk=auctionId)
+	data["user"]= User.objects.get(pk=userId)
 	if len(invoices) > 0:
-		data["auction"] = Auction.objects.get(pk=auctionId)
+		
 		invoice = invoices[0]
 		data["invoice"] = invoice
 		shipping = invoice.shipping or 0
@@ -476,7 +478,7 @@ def getInvoiceData(auctionId, userId):
 		data["taxTotal"] = tax + secondTax
 		data["shippingTotal"] = shipping + secondShipping
 		data["orderTotal"] = balance
-		data["user"]= User.objects.get(pk=userId)
+		#TODO discount on here or off of each amount already???
 		data["previousBalance"] = balance - (invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount)
 		data["balanceDate"] = date.today() 
 

@@ -12,6 +12,8 @@ from datetime import datetime
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
+
 class ItemPrePopulateForm(Form):
     auction = ModelChoiceField(Auction.objects.all())
     category = ModelChoiceField(Category.objects.all())
@@ -21,7 +23,7 @@ class ItemPrePopulateForm(Form):
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
-        fields = ['invoiced_amount', 'second_chance_invoice_amount', 'tax', 'second_chance_tax', 'shipping', 'second_chance_shipping', 'discount']
+        fields = ['invoiced_amount', 'second_chance_invoice_amount', 'tax', 'second_chance_tax', 'discount']
 
 class ItemForm(ModelForm):
     class Meta:
@@ -196,14 +198,11 @@ class BulkConsignment(Form):
         super(BulkConsignment, self).__init__(*args,**kwargs)
         choice = [(xt.id, xt.name) for xt in getNoBidItems(auctionId, True) ]
         self.fields["bcItemsAvailable"] = MultipleChoiceField(choices=choice, required=False)
-        #logger.error("fields: %s" % choice)
-        #self.fields["bcItemsSelected"] = MultipleChoiceField(choices=choice, required=False)
         
     def save(self):
     	consignor = self.data["consignor"]
     	total = int(self.data["totalConsignments"])
     	
-        
     	for selected in self.data.getlist("bcItemsSelected"):
             index = 1
             while index<=total:
@@ -221,9 +220,7 @@ class BulkConsignment(Form):
 	    		item = Item.objects.get(id=selected)
 	    		Consignment.objects.create(item = item, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
 	    		index = index + 1
-    
 
-        
 
     def clean(self):
             

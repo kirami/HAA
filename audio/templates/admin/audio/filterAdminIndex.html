@@ -24,6 +24,15 @@
 	{%endfor%}
 </select>
 {%endif%}
+
+{%if data.invoices%}
+<DIV>Select invoice:</DIV>
+<select id="invoiceSelect">
+	{%for i in data.invoices%}
+	<option value="{{i.id}}">{{i}}</option>
+	{%endfor%}
+</select>
+{%endif%}
 <button onclick="goTo()">Go</button>
 
 
@@ -32,9 +41,17 @@
 function goTo(){
 	user = $("#userSelect").val()
 	auction = $("#auctionSelect").val()
+	invoice = $("#invoiceSelect").val()
 	page = "{{data.nextPage}}"
 	url = "/admin/"+page
 	used = false
+
+
+	if(page=="setDiscount"){
+		url+="/" + invoice
+		window.open(url)
+		return
+	}
 
 	if (auction != null){
 		url+="/" + auction
@@ -44,14 +61,31 @@ function goTo(){
 		url+="/" + user
 	}
 
+
 	window.open(url)
 
 }
 
 $(document).ready(function(){
 
+
+
+
 	$("#auctionSelect").change(function(){
+		
+		auction = $(this).val()
+		console.log(auction)
+		
 		//if needs user go get that stuff
+	
+		//if needs invoice go get them.
+		invoice = "{{data.invoice}}"
+		
+		if (invoice == "true"){
+			window.location.href+="&auctionId=" + auction
+
+		}
+
 	})
 
 

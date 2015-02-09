@@ -56,20 +56,20 @@
 
 
 			$.ajax({
-			type: "POST",
-			url: "/admin/sendInvoices/",
-			data: data,
-			success: function(data) {
-				$('#consignorIdEmailMsg').css("color","green")
-				$('#consignorIdEmailMsg').text("Email was successfully sent.")
-			},
-			error: function (xhr, ajaxOptions, thrownError) {
-				$('#consignorIdEmailMsg').css("color","red")
-				$('#consignorIdEmailMsg').text("Something went wrong - emails were not sent.")
-	        	return false;
-	      	}
-		});
-	}
+				type: "POST",
+				url: "/admin/sendInvoices/",
+				data: data,
+				success: function(data) {
+					$('#consignorIdEmailMsg').css("color","green")
+					$('#consignorIdEmailMsg').text("Email was successfully sent.")
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					$('#consignorIdEmailMsg').css("color","red")
+					$('#consignorIdEmailMsg').text("Something went wrong - emails were not sent.")
+		        	return false;
+		      	}
+			});
+		}
 
 
 	$( document ).ready(function() {
