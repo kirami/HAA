@@ -56,6 +56,8 @@ urlpatterns = patterns('',
     url(r'^admin/setDiscount/(?P<invoiceId>\d+)/$', admin_views.setDiscount, name='setDiscount'),  
     url(r'^admin/itemPrintOut/(?P<auctionId>\d+)/$', admin_views.itemPrintOut, name='itemPrintOut'),
     url(r'^admin/adjustLotIds/(?P<auctionId>\d+)/$', admin_views.adjustLotIds, name='adjustLotIds'),
+
+
     
     url(r'^accounts/passwordChangeDone/$', 
         'django.contrib.auth.views.password_change_done', {'template_name': 'changePasswordDone.html'}),
