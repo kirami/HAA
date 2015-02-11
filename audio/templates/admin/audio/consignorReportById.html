@@ -3,7 +3,7 @@
 
 {%block info%}
 
-<h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction {{data.auction.name}}</h1>
+<h1 style="margin-top:30px;">Report for consignor: {{data.firstName}} {{data.lastName}} Auction: {{data.auction.name}}</h1>
 
  <div id="ccemail-confirm" title="Please Confirm">Are you sure you want to email a consignor report to {{data.firstName}} {{data.lastName}} for auction {{data.auction.name}}?</div>
 
@@ -16,9 +16,10 @@
 	<div class="maxBidItem">Item number:</div>
 	<div class="maxBidItem">Bidder:</div>
 	<div class="maxBidItem">Total amount:</div>
-	<div class="maxBidItem">Range amount:</div>
+
 	<div class="maxBidItem">Range Min:</div>
 	<div class="maxBidItem">Range Max:</div>
+		<div class="maxBidItem">Range amount:</div>
 	<div class="maxBidItem">Percent:</div>
 	<div class="maxBidItem">Range percentage:</div>
 	
@@ -34,8 +35,8 @@
 		<div style="{%if item.HAA == True%}background-color:red{%endif%}">
 			<div class="maxBidItem">{{item.id}} {{item.label.name}} {{item.name}}</div>
 			<div class="maxBidItem">{{item.user_id}}</div>
-			<div class="maxBidItem">${{item.amount}}</div>
-			<div class="maxBidItem">${{item.inRange}}</div>
+			<div class="maxBidItem">${{item.amount|floatformat:2}}</div>
+
 			<div class="maxBidItem">${{item.minimum}}</div>
 			{%if item.maximum%}
 			<div class="maxBidItem">${{item.maximum}}</div>
@@ -43,9 +44,10 @@
 
 			<div class="maxBidItem">{{item.maximum}}</div>
 			{%endif%}
+			<div class="maxBidItem">${{item.inRange|floatformat:2}}</div>
 			<div class="maxBidItem">{{item.percentage}}%</div>
 			<div class="maxBidItem">${{item.rangeAmount|floatformat:2}}</div>
-			
+			{{item.rangeAmount}}
 			<div class="clear"></div>
 		</div>
 

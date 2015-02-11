@@ -53,6 +53,13 @@ function goTo(){
 		return
 	}
 
+	if(page=="getInvoices"){
+		url+="/" + auction
+		url+="/" + user
+		window.open(url)
+		return
+	}
+
 	if (auction != null){
 		url+="/" + auction
 	}
@@ -68,6 +75,9 @@ function goTo(){
 
 $(document).ready(function(){
 
+	auctionId = "{{data.auctionId}}"
+	if(auctionId != "")
+		$("#auctionSelect").val(auctionId)
 
 
 
@@ -80,8 +90,9 @@ $(document).ready(function(){
 	
 		//if needs invoice go get them.
 		invoice = "{{data.invoice}}"
-		
-		if (invoice == "true"){
+		user = "{{data.user}}"
+
+		if (invoice == "true" || user=="true"){
 			window.location.href+="&auctionId=" + auction
 
 		}

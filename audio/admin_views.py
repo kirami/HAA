@@ -63,16 +63,22 @@ def filterAdminIndex(request):
 	data["auction"] = request.GET.get("auction", False)
 	data["invoice"] = request.GET.get("invoice", False)
 	auctionId = request.GET.get("auctionId", None)
+	data["auctionId"] = auctionId
 
 	if data["auction"]:
-		data["auctions"]=Auction.objects.all()
+		data["auctions"]=Auction.objects.all().order_by("-id")
+		if data["user"]:
+			data["users"]=User.objects.filter(userInvoice__isnull=False, userInvoice__auction=auctionId)
 
-	#not deadbeats?
-	if data["user"]:
-		data["users"]=User.objects.all()
+	else:
+		if data["user"]:
+			data["users"]=User.objects.all()
+	
 
 	if data["invoice"]:
+		
 		data["invoices"] = Invoice.objects.filter(auction = auctionId)
+		logger.error(data["invoices"])
 
 	if request.method == 'POST':
 		try:
@@ -668,8 +674,18 @@ def endFlatAuction(request, auctionId, userId = None):
 		auction.save()
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
-def userBreakdown(request, auctionId):
+def userBreakdown(request, auctionId = None):
 	data = {}
+	
+	if not auctionId:
+		auction = getCurrentAuction()
+		if not auction:
+			auction = Auction.objects.latest('start_date')
+			auctionId = auction.id
+		else:
+			auctionId = auction.id	
+
+
 	data["new"] = getNewUsers()[0]
 	data["current"] = getCurrentUsers(auctionId)[0]
 	data["nonCurrent"] = getNonCurrentUsers(auctionId)[0]
@@ -862,24 +878,34 @@ def userBalanceInfo(request, userId):
 	data["invoices"] = invoices
 	data["payments"] = getPaymentInfoByUser(userId)
 	data["remaining"] = invoices["sum"] - data["payments"]["sum"]
-	data["user"] = User.objects.get(id=userId)
+	data["user"] = User.objects.get(pk=userId)
 	return render_to_response('admin/audio/userBalance.html', {"data":data}, context_instance=RequestContext(request))	
 
 
-def calculateBalances(request):
+def calculateBalances(request, auctionId = None):
 	data = {}
 	
 	#get invoices for this auction?  
 	#get unpaid invoices?
 	#invoices amount total - paid amount total?
 	#
-
-	data["totalPayments"] = getTotalPaymentAmount()
-	data["totalInvoices"] = getTotalInvoiceAmount()
-	data["remaining"] = data["totalPayments"] - data["totalInvoices"]
+	data["auctions"] = Auction.objects.all().order_by("-id")
+	if auctionId:
+		data["auction"]= Auction.objects.get(pk=auctionId)
+	data["totalPayments"] = getTotalPaymentAmount(auctionId)
+	data["totalInvoices"] = getTotalInvoiceAmount(auctionId)
+	data["remaining"] = data["totalInvoices"] -data["totalPayments"]
 
 	#per user
-	data["unbalancedUsers"] = getUnbalancedUsers()
+	unbalancedUsers = getUnbalancedUsers()
+	for user in unbalancedUsers:
+		logger.error("user_id %s" % user["user_id"])
+		users = User.objects.filter(pk=user["user_id"])
+		if len(users) > 0:
+			user["user"] = users[0]
+
+	data["unbalancedUsers"] = unbalancedUsers
+
 	return render_to_response('admin/audio/balances.html', {"data":data}, context_instance=RequestContext(request))	
 
 def reportByUser(request):

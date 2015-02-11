@@ -9,7 +9,7 @@
 <h1>Adjust lot IDs for {{data.auction.name}}</h1>
 <form method="post" id="adjustForm">
 	{% csrf_token %}
-	<div>Do you want to adjust lotIds up or down?</div>
+	<div>Do you want to adjust lotIds up or down?  Up makes room for a new item, Down means you deleted an item and want to shift the rest of the ids down.</div>
 	<select name="order" id="order">
 		<option value="up">up</option>
 		<option value="down">down</option>
