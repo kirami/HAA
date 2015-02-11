@@ -11,7 +11,7 @@
 <form action="" method="post" id="setDiscountForm">
     {% csrf_token %} 
     {{ data.form.as_p }}
-    <label>Enter desired percent:</label><input type="decimal" name="discountPercent" id="discountPercent">
+
     <button id="calculateBtn">Calculate discount</button>
     <button id="saveBtn">Save</button>
 </form>
@@ -34,7 +34,7 @@ function round(value, decimals) {
 	$( document ).ready(function() {
 		
 		$("#calculateBtn").click(function(){
-			percent = $("#discountPercent").val();
+			percent = $("#id_discount_percent").val();
 			percentage = (percent/100);
 
 			invoiceElement1 = $("#id_invoiced_amount")

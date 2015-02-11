@@ -23,7 +23,7 @@ class ItemPrePopulateForm(Form):
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
-        fields = ['invoiced_amount', 'second_chance_invoice_amount', 'tax', 'second_chance_tax', 'discount']
+        fields = ['invoiced_amount', 'second_chance_invoice_amount', 'tax', 'second_chance_tax', 'discount', 'discount_percent']
 
 class ItemForm(ModelForm):
     class Meta:

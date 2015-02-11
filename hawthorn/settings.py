@@ -21,11 +21,11 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 SECRET_KEY = 'z5!kac$#pv4ox3bl$p)01&5@j0tr+(@z*srib1pcdg0_dc1a$m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["haa", "anaplan-test"]
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'

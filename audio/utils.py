@@ -1,7 +1,8 @@
-from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User, UserProfile, Auction
+from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User, UserProfile, Auction, PrintedCatalog
 from django.db import connection
 from django.db.models import Sum
 from django.conf import settings
+from decimal import Decimal
 
 from datetime import datetime, date
 
@@ -76,22 +77,23 @@ def getNewUsers():
 	users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
 	return list( users), Address.objects.filter(user__in=set(users))
 
-#users bid within last 3 auctions
+#users bid within last 3 auctions or printed list = true or paid for a catalog within 3 auctions
 def getCurrentUsers(auctionId):
 	users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
-	ids = UserProfile.objects.values_list("user", flat=True).filter(printed_list = True)
-	two = User.objects.filter(pk__in=set(ids))
+	two = User.objects.filter(upUser__printed_list=True)
 
-	combined = set(users) | set(two)
-	return list(combined), Address.objects.filter(user__in=set(combined))
+	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(auctionId-3))
 
-#users no bid last three auctions & not on keep me on list
+	combined = set(users) | set(two) | set(printed)
+	return list(combined), Address.objects.filter(user__in=combined)
+
+#users no bid last three auctions & not on keep me on list & no printed catalog bought
 def getNonCurrentUsers(auctionId):
-	users = list(User.objects.raw('select a.* from auth_user a where id not in(select a.id from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+ str(auctionId) +' group by b.user_id)'))
-	ids = UserProfile.objects.values_list("user", flat=True).filter(printed_list = False)
-	two = User.objects.filter(pk__in=set(ids))
-	combined = set(users) & set(two)
-	return list(combined), Address.objects.filter(user__in=set(combined))
+	actives = getCurrentUsers(auctionId)
+	active = actives[0]
+	all = User.objects.all()
+	combined = set(active) ^ set(all)
+	return list(combined), Address.objects.filter(user__in=combined)
 
 def getActiveUsers():
 	return ""
@@ -220,7 +222,8 @@ def getNonConsignedItems():
 #get consigned items won in certain auction by consignor
 def getConsignmentWinners(consignorId = None, auctionId = None):
 	cursor = connection.cursor()
-	sql = "select * from audio_bid b, audio_consignment c, audio_item i where b.winner = true and b.item_id = c.item_id and c.item_id = i.id"
+	sql = "select * from audio_bid b, audio_consignment c, audio_item i, audio_invoice ii where b.winner = true \
+	and b.item_id = c.item_id and c.item_id = i.id and ii.id=b.invoice_id"
 	if auctionId != None:
 		sql +=" and i.auction_id = "+str(auctionId)
 
@@ -266,7 +269,28 @@ def getWinnerConsignorIds(auctionId):
 
 #--------------------------
 
-def getUnbalancedUsers(auctionId = None, userId = None):
+def getUnbalancedUsersByAuction(auctionId = None):
+	cursor = connection.cursor()
+	sql = "SELECT user_id, invoiced, auction_id, payments, invoiced - payments AS balance \
+	FROM \
+	(   SELECT it.id AS invoice_id, it.user_id, it.auction_id, \
+	it.invoiced_amount  + it.second_chance_invoice_amount + it.tax + it.second_chance_tax + it.shipping + it.second_chance_shipping - COALESCE(it.discount, 0) AS invoiced, \
+	COALESCE(SUM(p.amount), 0) AS payments \
+	    FROM audio_invoice AS it \
+	    LEFT OUTER JOIN audio_payment AS p \
+	    ON it.id = p.invoice_id \
+	    AND it.user_id = p.user_id \
+	    GROUP BY 1, 2, 3, 4 \
+	) AS billing \
+	WHERE invoiced != payments"
+	if auctionId:
+		sql = sql + " and auction_id = " + str(auctionId)
+
+	cursor.execute(sql)
+	row = dictfetchall(cursor)
+	return row
+
+def getUnbalancedUsers(userId = None):
 	cursor = connection.cursor()
 	sql = "SELECT user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance, auction_id \
 	FROM(select sum(amount) as payments, it.user_id, invoiced, auction_id from audio_payment p \
@@ -276,8 +300,6 @@ def getUnbalancedUsers(auctionId = None, userId = None):
 	where joined.invoiced != joined.payments or joined.payments is NULL"
 	if userId:
 		sql = sql + " and user_id = " + str(userId)
-	if auctionId:
-		sql = sql + " and auction_id < " + str(auctionId)
 
 	cursor.execute(sql)
 	row = dictfetchall(cursor)
@@ -394,18 +416,19 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	for item in consignedItems:
 		money = 0
 		itemCost = item["amount"]
+		discount = item["discount_percent"]
+		if discount:
+			discount = Decimal(discount)
+		if discount > 0:
+			itemCost = itemCost * ((100-discount)/100)
+			item["amount"] = itemCost
+		
 		
 		min = item["minimum"]
 		max = item["maximum"]	
 		percent = item["percentage"]
 		item["inRange"] = 0
-		'''
-		logger.error("cost: %s" % itemCost)
-		logger.error("min: %s" % min)
-		logger.error("max: %s" % max)		
-		logger.error("percent: %s" % percent)
-		'''
-		
+	
 		if max == None and itemCost > min:
 			money = (itemCost - min) * (percent/100)
 			item["inRange"] = (itemCost - min)
@@ -417,6 +440,9 @@ def getAllConsignmentInfo(consignorId, auctionId):
 		if itemCost <= max and itemCost > min:
 			money = (itemCost - min) * (percent/100)
 			item["inRange"] = (itemCost - min)
+
+		
+		money = round(money,2)	
 
 		if "consignorItemTotal" in item:
 			item["consignorItemTotal"] += money
@@ -490,7 +516,7 @@ def getInvoiceData(auctionId, userId):
 def getHeaderData(data, auctionId):
 	winningBids = getWinningBids(auctionId)
  	noBids = getNoBidItems(auctionId)
- 	losers = getLosingBids(auctionId)
+ 	losers = getLosers(auctionId)
  	winners = getAlphaWinners(auctionId)
 
  	data["auctionId"] = auctionId

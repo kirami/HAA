@@ -7,24 +7,59 @@
 
 <div id="reportDiv" class="reportTable">
 
-<div>We've received payments totaling ${{data.totalPayments}}</div>
-<div>We've sent invoices totaling ${{data.totalInvoices}}</div>
-<div>Leaving a total balance of ${{data.remaining}}</div>
+{%if data.auction%}
+	<div style="font-size:18px;">For Auction: {{data.auction}}</div>
+{%else%}
+	<DIV>This is for all auctions.  To see a specific auction: select and go</DIV>
+	<select id="auctionSelect">
+	{%for auction in data.auctions%}
+		<option value="{{auction.id}}">{{auction}}</option>
+	{%endfor%}
+	
+	</select>
+	<button id="goToAuction">go</button>
+	<br><br>
+{%endif%}
+
+	<div>We've received payments totaling ${{data.totalPayments}}</div>
+	<div>We've sent invoices totaling ${{data.totalInvoices}}</div>
+	<div>Leaving a total balance of ${{data.remaining}}</div>
 	
 
 	<br><br>
 	<div>These users are not balanced:</div>	
+	
+		<div class="maxBidItem">User ID:</div>
+		<div class="maxBidItem">Name:</div>
+		<div class="maxBidItem">Total Payments:</div>
+		<div class="maxBidItem">Total Amount Invoiced:</div>
+		<div class="maxBidItem">Balance:</div>
+		<div class="clear"></div>
+
 	{%for user in data.unbalancedUsers%} 
-		<div class="maxBidItem"><a href="/admin/balances/{{user.user_id}}">{{user.user_id}}</a></div>
-		<div class="maxBidItem">{{user.first_name}} {{user.last_name}}</div>
-		<div class="maxBidItem">{{user.payments}}</div>
-		<div class="maxBidItem">{{user.invoiced}}</div>
-		<div class="maxBidItem">{{user.balance}}</div>
+		<div class="maxBidItem"><a href="/admin/userBalances/{{user.user_id}}">{{user.user_id}}</a></div>
+		<div class="maxBidItem">{{user.user.first_name}} {{user.user.last_name}}</div>
+		<div class="maxBidItem">${{user.payments}}</div>
+		<div class="maxBidItem">${{user.invoiced}}</div>
+		<div class="maxBidItem">${{user.balance}}</div>
 
 
 		<div class="clear"></div>
 	{%endfor%}
 
 </div>
+
+
+<script type="text/javascript">
+	
+
+
+	$(document).ready(function(){
+		$("#goToAuction").click(function(){
+			window.location.href="/admin/balances/"+$("#auctionSelect").val()
+		})
+	})
+
+</script>
 
 {%endblock%}

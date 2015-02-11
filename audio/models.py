@@ -17,7 +17,7 @@ class Auction(models.Model):
 		return u"%s" % self.name
 
 class Invoice(models.Model):
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, related_name="userInvoice")
 	auction = models.ForeignKey(Auction)
 	invoiced_amount = models.DecimalField(max_digits=19, decimal_places=2)
 	invoice_date = models.DateField()
@@ -31,6 +31,7 @@ class Invoice(models.Model):
 	tax = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 	second_chance_tax = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 	discount = models.DecimalField(max_digits=19, decimal_places=2, default=0)
+	discount_percent = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 
 	def __unicode__(self):
 		return u"%s - %s" % (self.user,  self.auction.name)
@@ -105,7 +106,7 @@ class Bid(models.Model):
 		unique_together = (("user", "item"),)
 
 class UserProfile(models.Model):
-	user = models.ForeignKey(User, unique = True)
+	user = models.ForeignKey(User, unique = True, related_name="upUser")
 	#TODO defaults?
 	pdf_list = models.BooleanField(default = False)
 	printed_list = models.BooleanField(default = False)
@@ -137,8 +138,11 @@ class Address(models.Model):
 		return self.user.email + " "+self.user.first_name + " " + self.user.last_name
 
 class PrintedCatalog(models.Model):
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, related_name="pcUser")
 	auction = models.IntegerField()
+
+	def __unicode__(self):
+		return unicode(self.user)
 	
 
 
