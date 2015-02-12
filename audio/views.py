@@ -15,9 +15,10 @@ from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice, Cate
 
 from datetime import datetime, date  
 from audio.utils import *
+from audio.mail import *
 
 import logging
-import json, math
+import json, math, string, random
 
 
 
@@ -115,13 +116,53 @@ def register(request):
             nu = authenticate(username=request.POST['username'],
                                     password=request.POST['password1'])
             login(request, nu)
-           
+            confirmation_code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(33))
+            p = UserProfile.objects.get(user=new_user)
+            p.confirmation_code = confirmation_code
+            p.save()
+            send_registration_confirmation(new_user)
             return HttpResponseRedirect("../profile")
     else:
         form = UserCreateForm()
     return render(request, "registration/register.html", {
         'form': form,
     })
+
+def send_registration_confirmation(user):
+	p = UserProfile.objects.get(user=user)
+	emailData={}
+	emailData["url"] = "http://haa/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
+	emailData["user"]=user
+	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
+	sendEmail(msg)
+
+
+def verifyEmail(request):
+	if(request.user.is_authenticated()):
+		send_registration_confirmation(request.user)
+		data = {}
+		data["user"] = request.user
+		data["resent"]=True
+		return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
+	else:
+		return redirect("profile")	
+
+def confirm(request, confirmation_code, username):
+	users = UserProfile.objects.filter(user__username=username)
+	user = User.objects.get(username = username)
+	profile = None
+	if len(users)> 0:
+		profile = users[0]
+		
+		if profile.confirmation_code == confirmation_code:
+			profile.verified = True
+			profile.save()
+			#auth_login(request,user)
+			verified = profile.verified
+
+	data = {}
+	data["user"] = user
+	return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
 
 
 def bids(request):
@@ -192,6 +233,8 @@ def profile(request):
 	data = {}
 	if request.user.is_authenticated():
 		addresses = Address.objects.filter(user=request.user)
+		profile = UserProfile.objects.get(user=request.user)
+		data["needVerified"]= not profile.verified
 		if len(addresses) < 1:
 			data["addressMsg"]=True
 	return render_to_response('profile.html', {"data":data}, context_instance=RequestContext(request))
@@ -379,6 +422,10 @@ def submitBid(request):
 			
 			if len(addresses) < 1:
 				return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
+
+			if not UserProfile.objects.get(user=request.user).verified:
+				return HttpResponse(json.dumps({"success":False, "msg":"You must verify your email address before you can bid."}), content_type="application/json")	
+
 
 			itemId = data.get("itemId")
 

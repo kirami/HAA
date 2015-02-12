@@ -30,6 +30,7 @@ urlpatterns = patterns('',
    	url(r'^accounts/register/$', views.register, name='register'),
     url(r'^accounts/contact/$', views.contact_info, name='contact_info'), 
     url(r'^accounts/bids/$', views.bids, name='bids'),
+    url(r'^accounts/verifyEmail/$', views.verifyEmail, name='verifyEmail'),
     url(r'^accounts/auctionSummary/(?P<auctionId>\d+)$', views.auctionSummary, name='auctionSummary'),
     url(r'^accounts/auctionSummary/$', views.auctionSummaries, name='auctionSummaries'),
     url(r'^accounts/userInfo/$', views.userInfo, name='userInfo'),
@@ -43,6 +44,8 @@ urlpatterns = patterns('',
     url(r'^catalog/setPrice', views.flatFeeCatalog, name='flatFeeCatalog'),
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
+
+    url(r'^accounts/confirm/(?P<confirmation_code>\w+)/(?P<username>\w+)$', views.confirm, name='confirm'),
 
 )
 

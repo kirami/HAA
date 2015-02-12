@@ -1,0 +1,14 @@
+{% extends "email/baseEmail.html" %}
+ 
+
+{%block content%}
+
+<div>{%if data.user.first_name%}Hello {{data.user.first_name}} {{data.user.last_name}}!{%else%}Hello!{%endif%}</div>
+
+
+
+<div>You must verify your email to bid. <a href="{{url}}">Click to verify</a>.</div>
+
+
+
+{%endblock%}

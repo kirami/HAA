@@ -91,7 +91,7 @@ class Item(models.Model):
 		return str(self.lot_id) + " " + self.name
 
 class Bid(models.Model):
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, related_name="bidUser")
 	date = models.DateTimeField()
 	item = models.ForeignKey(Item,  related_name='bidItem')
 	amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
@@ -114,6 +114,9 @@ class UserProfile(models.Model):
 	deadbeat = models.BooleanField(default=False)
 	email_invoice = models.BooleanField(default=True)
 	notes = models.CharField(max_length=200, null = True, blank=True)
+	verified = models.BooleanField(default=False)
+	confirmation_code = models.CharField(max_length=200, null = True, blank=True)
+
 
 	def __unicode__(self):
 		return unicode(self.user)

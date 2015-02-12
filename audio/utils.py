@@ -28,7 +28,10 @@ def adjustLotIdsUtil(auctionId, index, increment = True):
 	cursor.execute("update audio_item set lot_id = lot_id "+op+" 1 where auction_id = "+str(auctionId)+" and lot_id >= "+str(index)+" order by lot_id " + order)
 	row = dictfetchall(cursor)
 
+#auctions for a user where they won something.
 def getWonAuctions(userId):
+	#a = Item.objects.values_list("auction").filter(bidItem__winner=True, bidItem__user=5).distinct()
+	#auctions = Auction.objects.filter(id__in=a)
 	auctions = list(Auction.objects.raw('select distinct a.* from audio_auction a, audio_bid b, audio_item i where a.id = i.auction_id and b.item_id = i.id and b.user_id='+str(userId)+' and b.winner=true'))
 	return auctions
 
@@ -74,6 +77,7 @@ def usersWithoutAddress():
 
 #users with no bids	
 def getNewUsers():
+	#users = User.objects.filter(bidUser__isnull=True)
 	users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
 	return list( users), Address.objects.filter(user__in=set(users))
 
@@ -102,6 +106,7 @@ def getActiveUsers():
 #TODO of all time or past # of auctions??
 def getNonActiveUsers(auctionId):
 	nonCurrent = getNonCurrentUsers(auctionId)[0]
+	#pastBidders = User.objects.filter(bidUser__isnull=False).distinct()
 	pastBidders = list(User.objects.raw('select distinct a.id from audio_bid b, auth_user a where a.id=b.user_id'))
 	combined = set(nonCurrent) & set(pastBidders)
 	return list(combined), Address.objects.filter(user__in=set(combined))
@@ -260,11 +265,13 @@ def getWinnerConsignors(auctionId):
 	#ids = Item.objects.filter(bidItem__isnull=False, auction=auctionId, consignedItem__isnull=False).distinct()
 	#Consignor.objects.filter(consignmentConsignor__in=set(ids)).distinct()
 
-	return list(Consignor.objects.raw('select cc.* from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
+	return list(Consignor.objects.raw('select cc.* from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i \
+		where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
 	' and c.item_id = i.id and c.consignor_id = cc.id group by consignor_id'))
 	
 def getWinnerConsignorIds(auctionId):
-	return list(Consignor.objects.raw('select cc.id from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
+	return list(Consignor.objects.raw('select cc.id from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i \
+		where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
 	' and c.item_id = i.id and c.consignor_id = cc.id group by consignor_id')) 
 
 #--------------------------

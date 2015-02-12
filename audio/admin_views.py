@@ -27,8 +27,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 def test(request):
-	data={}
-	return "test"
+	user = User.objects.get(id=9)
+	p = UserProfile.objects.get(user=user)
+	emailData={}
+	emailData["url"] = "http://haa/audio/confirm/" + str(p.confirmation_code) + "/" + user.username
+	logger.error("url %s" % emailData["url"])
+	emailData["user"]=user
+	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
+	sendEmail(msg)
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 #add many test items quickly
 def testItemInput(request, index, length):

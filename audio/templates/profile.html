@@ -4,8 +4,14 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+  
+
+
   <p class="header">Welcome, {{ user.username }}. Thanks for logging in.</p>
 {%if data.addressMsg%}<div style="margin-bottom:10px" class="successError">We don't have your address information.  You cannot bid without this, please fill it out <a href="../contact">here</a></div><div class="clear"></div> {%endif%}
+  {%if data.needVerified%}
+  <div class="successError" style="margin-bottom:10px">You must verify your email to bid.  Please check your email.  Click <a href="/audio/accounts/verifyEmail/">here</a> to send another verification email.</div>
+  {%endif%}
   <div>
   <div style="height:50px;"><a href="../../catalog" class="button">View Catalog</a></div>
   <div style="height:50px;"><a href="../contact" class="button">View Contact Info</a></div>
@@ -17,7 +23,7 @@
 
 
 {% else %}
-  <p>Welcome! Please <a href="/audio/accounts/login">log in</a> or <a href="/audio/accounts/register">register</a> .</p>
+  <p>Welcome! Please <a href="/audio/accounts/login">log in</a> or <a href="/audio/accounts/register">register</a>.</p>
 {% endif %}
 
 
