@@ -67,7 +67,7 @@ urlpatterns = patterns('',
         'django.contrib.auth.views.password_change_done', {'template_name': 'changePasswordDone.html'}),
    
 
-   
+   url(r'^admin/test/', admin_views.test, name='test'),
 
     #for testing and setup only, comment out after done
     url(r'^admin/testInput/(?P<index>\d+)/(?P<length>\d+)/$', admin_views.testItemInput, name='testItemInput'),

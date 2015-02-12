@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+	{%if resent%}
+		<div class="successMsg" style="text-align:center">We have resent you a confirmation email.</div>
+	{%else%}
+		<div class="successMsg" style="text-align:center">You have successfully verified your email address.  You may visit your profile <a href="/audio/accounts/profile">here</a> or view the catalog <a href="/audio/catalog">here</a>.</div>
+	{%endif%}
+
+
+
+
+{% endblock %}
