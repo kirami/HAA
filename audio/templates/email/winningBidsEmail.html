@@ -1,0 +1,26 @@
+{% extends "email/baseEmail.html" %}
+
+
+{%block content%}
+<h1 style="margin-top:30px;">Winning Bids for Auction :{{data.auction.name}}</h1>
+
+<div id="reportDiv" class="reportTable">
+	<div style="float:left; width:75px;">Lot ID:</div>
+	<div style="float:left; width:75px;">Label:</div>
+	<div style="float:left; width:75px;">Name:</div>
+	<div style="float:left; width:75px;">Winning Bid:</div>
+
+	<div class="clear" style="clear:both"></div>
+	
+
+	<br><br>	
+	{%for item in data.winningBids%}
+		<div style="float:left; width:75px;">{{item.item.lot_id}}</div>
+		<div style="float:left; width:75px;">{{item.item.label.name}}</div>
+		<div style="float:left; width:75px;">{{item.item.name}}</div>
+		<div style="float:left; width:75px;">${{item.amount}}</div>
+		<div style="clear:both"></div>
+	{%endfor%}
+
+</div>
+{%endblock%}

@@ -1,0 +1,81 @@
+{% extends "admin/audio/baseReport.html" %}
+ 
+
+{%block info%}
+<div>Winning Bid Report for Auction: {{data.auction}}</div>
+
+ <button id="wbemailButton" style="margin-top:20px">Email Winning Bid Report to all bidders</button>
+ <div style="font-size:18px;" id="wbEmailMsg"></div>
+
+  <div id="wbemail-confirm" title="Please Confirm">Are you sure you want to email a winning bid report to ALL bidders for auction {{data.auction.name}}?</div>
+
+
+<div id="reportDiv" class="reportTable">
+	<div class="maxBidItem">Lot ID:</div>
+	<div class="maxBidItem">Label:</div>
+	<div class="maxBidItem">Name:</div>
+	<div class="maxBidItem">Winning Bid:</div>
+
+	<div class="clear"></div>
+	
+
+	<br><br>	
+	{%for item in data.winningBids%}
+		<div class="maxBidItem">{{item.item.lot_id}}</div>
+		<div class="maxBidItem">{{item.item.label.name}}</div>
+		<div class="maxBidItem">{{item.item.name}}</div>
+		<div class="maxBidItem">${{item.amount}}</div>
+		<div class="clear"></div>
+	{%endfor%}
+
+</div>
+
+<script>
+	function wbEmail(){
+			var csrftoken = getCookie('csrftoken');
+				ajaxSetup(csrftoken);
+
+				$.ajax({
+				type: "POST",
+				url: "/admin/sendWinningBidReport/",
+				data: { "auctionId":{{data.auction.id}}},
+				success: function(data) {
+					$('#wbEmailMsg').css("color","green")
+					$('#wbEmailMsg').text("Emails were successfully sent.")
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					$('#wbEmailMsg').css("color","red")
+					$('#wbEmailMsg').text("Something went wrong - emails were not sent.")
+		        	return false;
+		      	}
+			});
+		}
+
+	$( document ).ready(function() {
+
+		$( "#wbemail-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Email": function() {
+					wbEmail()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		$("#wbemailButton").click(function(){
+			$( "#wbemail-confirm" ).dialog( "open" );
+			return false;
+		})
+
+	})
+
+	</script>
+
+{%endblock%}
