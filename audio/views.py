@@ -147,6 +147,32 @@ def verifyEmail(request):
 	else:
 		return redirect("profile")	
 
+def resetPassword(request):
+	data = {}
+	if request.POST:
+		try:
+			emailAddress = request.POST.get("email")
+			users = User.objects.filter(email = emailAddress)
+			if len(users) < 1:
+				return HttpResponse(json.dumps({"success":False, "msg":"That email hasn't been registered with us."}), content_type="application/json")
+			user = users[0]
+			password = User.objects.make_random_password()
+			user.set_password(password)
+			user.save()
+			logger.error("user: %s" %user.email)
+			emailData={}
+			emailData["user"] = user
+			emailData["password"] = password	
+			msg = getEmailMessage(user.email,"We received a request to reset your password",{"data":emailData}, "resetPassword")
+			sendEmail(msg)
+		except Exception as e:
+			logger.error("Error reseting password: %s" % e)
+			return HttpResponse(json.dumps({"success":False, "msg":"Something went wrong.  Please contact us."}), content_type="application/json")
+	
+		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+	
+	return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))					
+
 def confirm(request, confirmation_code, username):
 	users = UserProfile.objects.filter(user__username=username)
 	user = User.objects.get(username = username)

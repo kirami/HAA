@@ -14,7 +14,13 @@
     <input type="password" name="password" value="" id="password">
 
     <input type="submit" value="login" />
+    {%if next%}
+    <input type="hidden" name="next" value="{{ next }}" />
+    {%else%}
     <input type="hidden" name="next" value="/audio/accounts/profile" />
+    {%endif%}
   </form>
+
+  <div>Forgot your password?  <a href="/audio/accounts/resetPassword">Reset it here</a>.</div>
 
 {% endblock %}
