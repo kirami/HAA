@@ -108,6 +108,8 @@ STATIC_ROOT = '/srv/hawthorn/static/'
 IMAGES_ROOT = STATIC_ROOT + "audio/images/"
 IMAGES_URL = STATIC_URL + "audio/images"
 
+LOGIN_URL = "/audio/accounts/login/"
+
 MEDIA_ROOT = IMAGES_ROOT
 
 EMAIL_USE_TLS = True
