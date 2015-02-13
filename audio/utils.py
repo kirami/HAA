@@ -120,6 +120,13 @@ def getCourtesyBidders():
 
 #Bid utils
 
+def getBidders(auctionId):
+	ids = Bid.objects.values_list("user", flat=True).filter(item__auction = auctionId)
+	users = User.objects.filter(pk__in=set(ids))
+	return users
+	
+
+
 def getLosers(auctionId):
 	return list(Bid.objects.raw('select b.* from audio_bid b, audio_item i where i.id = b.item_id and i.auction_id = '+str(auctionId)+' group by user_id HAVING COUNT(CASE WHEN winner=1 THEN 1 ELSE NULL END) <1;'))
 

@@ -60,7 +60,56 @@ def testItemInput(request, index, length):
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 
+def winningBidReport(request, auctionId):
+	data = {}
+	data["winningBids"] = getWinningBids(auctionId)
+	#data["auction"]=Auction.objects.get(pk=auctionId)
+	getHeaderData(data, auctionId)
+	return render_to_response('admin/audio/winningBids.html', {"data":data}, context_instance=RequestContext(request))
 
+def sendWinningBidReport(request):
+	data = {}
+	messages = []
+	emailList = []
+	noEmailList = []
+	
+	auctionId = request.POST.get("auctionId", None)
+	userId = request.POST.get("userId", None)
+	auction = None
+	winningBids = getWinningBids(auctionId)
+	try:
+		auction = Auction.objects.get(pk=auctionId)
+		if userId:
+			users = []
+			users.append(User.objects.get(pk=userId))
+		else:
+			users = getBidders(auctionId)
+		for user in users:
+			profile = UserProfile.objects.get(user = user)
+			if user.is_active and profile.email_invoice:
+				
+				if user.email:
+					emailData={}
+					emailData["auction"]= auction
+					emailData["user"] = user
+					emailData["winningBids"] = winningBids	
+					msg = getEmailMessage(user.email,"Winning Bids for Auction: " + auction.name,{"data":emailData}, "winningBidsEmail")
+					messages.append(msg)
+					emailList.append(user.email)
+
+				else:
+					noEmailList.append(int(user.id))
+
+		logger.error("sending emails to: %s" % emailList)
+		logger.error("user ids without email: %s" % noEmailList)
+		data["emailList"] =  emailList
+		data["problemEmails"] = noEmailList
+		sendBulkEmail(messages)
+	except Exception as e:
+		logger.error("error sending new user emails: %s" % e)
+		return HttpResponse(json.dumps({"success":False, "data": data}), content_type="application/json")
+
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 def filterAdminIndex(request):
 	data = {}
