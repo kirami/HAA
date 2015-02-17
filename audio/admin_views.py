@@ -113,14 +113,18 @@ def sendWinningBidReport(request):
 	auctionId = request.POST.get("auctionId", None)
 	userId = request.POST.get("userId", None)
 	auction = None
+	#TODO only winning bids or any bidder?
 	winningBids = getWinningBids(auctionId)
+	
 	try:
 		auction = Auction.objects.get(pk=auctionId)
+		#if user is specified only send to that user
 		if userId:
 			users = []
 			users.append(User.objects.get(pk=userId))
 		else:
 			users = getBidders(auctionId)
+		
 		for user in users:
 			profile = UserProfile.objects.get(user = user)
 			if user.is_active and profile.email_invoice:
@@ -481,7 +485,12 @@ def importUserCSV(request):
 						profile.courtesy_list = True if courtesy_list=="T" else False
 						profile.deadbeat = True if deadbeat=="T" else False
 						#TODO figure out email_invoice/paperless from info above
-						profile.email_invoice = True
+						
+						if not email:
+							profile.email_invoice = False 
+						else:
+							profile.email_invoice = True 
+						
 						if notes:
 							profile.notes = notes
 						profile.save()
@@ -661,7 +670,7 @@ def createBid(request, auctionId):
 				
 
 	data["form"] = AdminBidForm(auctionId = auctionId)
-	data["auction"] = auctionId
+	data["auction"] = Auction.objects.get(pk = auctionId)
 	return render_to_response('admin/audio/createBid.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -789,7 +798,7 @@ def userBreakdown(request, auctionId = None):
 	data["auctionId"]=auctionId
 
 	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
-'''
+
 def endAuction(request, auctionId):
 	data = {}
 	data["auctionId"]=auctionId
@@ -802,7 +811,7 @@ def endAuction(request, auctionId):
 
 
 	return render_to_response('admin/audio/endAuction.html', {"data":data}, context_instance=RequestContext(request))
-'''
+
 
 def invoices(request, auctionId):
 	data = {}
@@ -993,7 +1002,7 @@ def calculateBalances(request, auctionId = None):
 	#per user
 	unbalancedUsers = getUnbalancedUsers()
 	for user in unbalancedUsers:
-		logger.error("user_id %s" % user["user_id"])
+		#logger.error("user_id %s" % user["user_id"])
 		users = User.objects.filter(pk=user["user_id"])
 		if len(users) > 0:
 			user["user"] = users[0]

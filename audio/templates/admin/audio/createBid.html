@@ -14,6 +14,8 @@
 
 <h1>Create a bid for auction: {{data.auction}}</h1>
 
+<Div>**Please note, if the blind auction has ended, the time entered needs to be before that.</Div>
+<Div>For this auction, ending time was: {{data.auction.end_date}}</Div>
 <form action="" method="post">
     {% csrf_token %}
       {{ data.form.as_p }}

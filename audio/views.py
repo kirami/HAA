@@ -45,9 +45,12 @@ def simpleForm(request):
 		if request.method == "POST":
 			try:
 				addresses = Address.objects.filter(user=request.user)
-		
+				up = UserProfile.objects.get(user = request.user)
 				if len(addresses) < 1:
 					return render_to_response('item.html', {"form":form, "success": False, "msg":"You must have an address on file to bid."}, context_instance=RequestContext(request))					
+				
+				if up.deadbeat:
+					return render_to_response('item.html', {"form":form, "success": False, "msg":"There is a problem with your account.  Please contact us if you'd like to bid"}, context_instance=RequestContext(request))					
 			
 				form = BidSubmitForm(currentAuction.id, request.POST)
 			except:
