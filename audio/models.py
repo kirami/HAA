@@ -175,5 +175,6 @@ class Condition(models.Model):
 	user = models.ForeignKey(User)
 	auction = models.ForeignKey(Auction)
 	message = models.CharField(max_length=250, default="")
+	done = models.BooleanField(default = False)
 
 

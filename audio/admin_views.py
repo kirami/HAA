@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, \
 UserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm
 
-from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile, Category, Label
+from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile, Category, Label, Condition
 from audio.utils import *
 from audio.mail import *
 
@@ -60,7 +60,44 @@ def testItemInput(request, index, length):
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 
+
+def conditionsCheck(request, auctionId):
+	data = {}
+	
+	auction = None
+	auctions = Auction.objects.filter(pk=auctionId)
+	if len(auctions) < 1:
+		data["badAuction"]=True
+		logger.error("bad auction in conditions")
+		return render_to_response('admin/audio/conditions.html', {"data":data}, context_instance=RequestContext(request))
+	else:
+		auction = auctions[0]
+		data["auction"]=auction
+		if auction.blind_locked:
+			data["blindLocked"]=True
+
+	if request.method == 'POST':
+		
+		data["success"] = markWinners(auctionId)
+		conditions = Condition.objects.filter(auction = auctionId)
+		
+		info = []
+		for condition in conditions:
+			cond = {}
+			cond["condition"] = condition
+			cond["bids"] = getWinnerSum(auctionId=auctionId, userId = condition.user.id)
+			info.append(cond)
+			#logger.error("sum: %s" % sum)
+
+		data["info"] = info	
+		return render_to_response('admin/audio/conditionsReport.html', {"data":data}, context_instance=RequestContext(request))
+
+	return render_to_response('admin/audio/conditions.html', {"data":data}, context_instance=RequestContext(request))
+
+
+
 def winningBidReport(request, auctionId):
+	logger.info("test")
 	data = {}
 	data["winningBids"] = getWinningBids(auctionId)
 	#data["auction"]=Auction.objects.get(pk=auctionId)
@@ -641,7 +678,8 @@ def endBlindAuction(request, auctionId):
 	if now < auction.end_date:
 		return HttpResponse(json.dumps({"success":False, "msg":"The blind auction time isn't up."}), content_type="application/json")
 
-	#mark winners
+	#reset then mark winners
+	resetWinners(auction.id)
 	markWinners(auction.id)
 	
 	#get all won items before end date

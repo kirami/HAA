@@ -141,6 +141,12 @@ LOGGING = {
             'filename': '/srv/hawthorn/logs/debug.log',
             'formatter': 'verbose'
         },
+        'request_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/srv/hawthorn/logs/request.log',
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django': {
@@ -148,8 +154,14 @@ LOGGING = {
             'propagate': True,
             'level':'INFO',
         },
+        
+        'django.request': {
+            'handlers':['request_file'],
+            'propagate': True,
+            'level':'INFO',
+        },
         'audio': {
-            'handlers': ['file'],
+            'handlers': ['file', 'request_file'],
             'level': 'INFO',
         },
     }

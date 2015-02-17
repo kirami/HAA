@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^admin/sendWinningBidReport/$', admin_views.sendWinningBidReport, name='sendWinningBidReport'),
     
     url(r'^admin/winningBidReport/(?P<auctionId>\d+)/$', admin_views.winningBidReport, name='winningBidReport'),
+    url(r'^admin/conditions/(?P<auctionId>\d+)/$', admin_views.conditionsCheck, name='conditionsCheck'),
     url(r'^admin/report/(?P<auctionId>\d+)/$', admin_views.runReport, name='runReport'),
     #url(r'^admin/markWinners/(?P<auctionId>\d+)/$', admin_views.markWinners, name='markWinners'),
     url(r'^admin/winners/(?P<auctionId>\d+)/$', admin_views.winners, name='winners'),

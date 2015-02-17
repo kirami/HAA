@@ -46,7 +46,7 @@
 			</div> 
 			<div class="" style="float:left">{{item.lot_id}}</div> 
 			<div class="category" style="float:left">{{item.category.name}}</div>
-			<div class="category" style="float:left">{{item.name}} {%if item.name_two%}{{item.name_two}}{%endif%}</div>
+			<div class="category" style="float:left">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
 			<div class="category" style="float:left">{{item.artist}}</div>
 			<div class="category" style="float:left">${{item.min_bid}}</div>
 		</div>

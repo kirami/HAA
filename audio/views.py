@@ -445,12 +445,16 @@ def submitBid(request):
 		bidAmount = data.get("bidAmount")
 		try:
 			addresses = Address.objects.filter(user=request.user)
+			profile  = UserProfile.objects.get(user=request.user)
 			
 			if len(addresses) < 1:
 				return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
 
-			if not UserProfile.objects.get(user=request.user).verified:
+			if profile.verified:
 				return HttpResponse(json.dumps({"success":False, "msg":"You must verify your email address before you can bid."}), content_type="application/json")	
+
+			if profile.deadbeat:
+				return HttpResponse(json.dumps({"success":False, "msg":"There is a problem with your account.  Please contact us if you'd like to bid."}), content_type="application/json")	
 
 
 			itemId = data.get("itemId")
