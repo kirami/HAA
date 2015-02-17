@@ -138,13 +138,13 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/srv/hawthorn/logs/debug.log',
+            'filename': 'logs/debug.log',
             'formatter': 'verbose'
         },
         'request_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/srv/hawthorn/logs/request.log',
+            'filename': 'logs/request.log',
             'formatter': 'verbose'
         },
     },

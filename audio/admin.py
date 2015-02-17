@@ -51,7 +51,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'auction',)
     search_fields = ['user__email', 'user__first_name', 'user__last_name', 'user__username']
-    list_filter = ('auction',)
+    list_filter = ('auction', 'on_hold')
     
 class ItemAdmin(admin.ModelAdmin):
 
