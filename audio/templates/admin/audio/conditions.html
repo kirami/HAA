@@ -1,0 +1,77 @@
+{% extends "admin/audio/baseAdmin.html" %}
+
+
+
+{%block content%}
+<div id="mwDialog-confirm" title="Please Confirm">Are you sure you want to mark winners?  This will reset all existing win/lose information for this auction.</div>
+
+{%if data.blindLocked%}<div class="successError">This auction has been locked, you can't run winners with it locked.</div>{%endif%}
+{%if badAuction%}<div class="successError" style="display:block">That is not a valid auction</div>{%endif%}
+
+<div>First run mark winners.  This will give us the winning bids without generating an invoice.</div>
+
+
+<div id="markWinnersMsg" class="successMsg"></div>
+
+
+<button id="markWinners" style="margin-bottom:10px">Run Mark Winners</button>
+
+
+<div>Next, based on the conditions change the bids as necessary and mark condition as met.  When all are done you can lock the auction.</div>
+
+<div id="conditionsTable">
+	{{data.sum}}
+</div>
+
+<script type="text/javascript">
+	
+	function markWinners(){
+			var csrftoken = getCookie('csrftoken');
+				ajaxSetup(csrftoken);
+
+				$.ajax({
+				type: "POST",
+				url: "/admin/conditions/{{data.auction.id}}/",
+				success: function(data) {
+					$('#markWinnersMsg').css("color","green")
+					$('#markWinnersMsg').text("You've successfully marked winners for this auction.")
+					$("#conditionsTable").html(data)
+					
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					$('#markWinnersMsg').css("color","red")
+					$('#markWinnersMsg').text("Something went wrong - emails were not sent.")
+		        	return false;
+		      	}
+			});
+		}
+
+	$( document ).ready(function() {
+
+		$( "#mwDialog-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Run mark winners": function() {
+					markWinners()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		$("#markWinners").click(function(){
+			$( "#mwDialog-confirm" ).dialog( "open" );
+			return false;
+		})
+
+	})
+</script>
+
+{% endblock %}
+
+
