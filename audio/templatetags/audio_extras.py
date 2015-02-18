@@ -11,3 +11,7 @@ register = template.Library()
 def get_item(dictionary, key):
     return dictionary.get(str(key))
 
+@register.filter
+def modulo(num, val):
+    return num % val
+

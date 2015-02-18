@@ -30,8 +30,8 @@
 		<div style="{%if item.HAA == True%}background-color:red{%endif%} ">
 			<div style="float: left; margin-right: 20px; width: 100px;">{{item.artist}} {{item.name}}</div>
 			<div style="float: left; margin-right: 20px; width: 50px;">{{item.user_id}}</div>
-			<div style="float: left; margin-right: 20px; width: 50px;">${{item.amount}}</div>
-			<div style="float: left; margin-right: 20px; width: 50px;">${{item.inRange}}</div>
+			<div style="float: left; margin-right: 20px; width: 50px;">${{item.amount|floatformat:2}}</div>
+			<div style="float: left; margin-right: 20px; width: 50px;">${{item.inRange|floatformat:2}}</div>
 			<div style="float: left; margin-right: 20px; width: 50px;">${{item.minimum}}</div>
 			{%if item.maximum%}
 			<div style="float: left; margin-right: 20px; width: 50px;">${{item.maximum}}</div>

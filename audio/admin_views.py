@@ -932,43 +932,52 @@ def consignorReportById(request, consignorId, auctionId, template = None):
 
 def consignorReport(request, auctionId, template = None):
 	data = {}
-	#all consignors, consignor total money
-	data["total"] = getSumWinners(auctionId)
-	getHeaderData(data, auctionId)
 	messages = []
 	usedConsignors = {}
-	data["nonWinners"] = getLoserConsignors(auctionId)
+	consignorTotal = 0
+	gross = 0
 
-	consignors = getWinnerConsignors(auctionId = auctionId)
-	for consignor in consignors:
-		consignorId = consignor.id
-		if consignorId not in usedConsignors:
-			#logger.error("consignor: %s" % consignorId)
-			consignor = Consignor.objects.get(id = consignorId)
-			consignInfo = consignorId
-			indData = getAllConsignmentInfo(consignorId, auctionId)
-			data[consignInfo] = indData
-			usedConsignors[consignorId] = True
+	try:
+		#all consignors, consignor total money
+		data["total"] = getSumWinners(auctionId)
+		getHeaderData(data, auctionId)
+		data["nonWinners"] = getLoserConsignors(auctionId)
+		
+		consignors = getWinnerConsignors(auctionId = auctionId)
+		for consignor in consignors:
+			consignorId = consignor.id
+			if consignorId not in usedConsignors:
+				#logger.error("consignor: %s" % consignorId)
+				consignor = Consignor.objects.get(id = consignorId)
+				consignInfo = consignorId
+				indData = getAllConsignmentInfo(consignorId, auctionId)
+				data[consignInfo] = indData
+				usedConsignors[consignorId] = True
+				consignorTotal = consignorTotal + indData["consignorTotal"]
+				gross = gross + indData["gross"]
+				if template:
+					msg = getEmailMessage(consignor.email,"Hawthorn Antique Audio Consignor Report",{"data":indData, "header":data}, template)
+					messages.append(msg)
 
-			if template:
-				msg = getEmailMessage(consignor.email,"Hawthorn Antique Audio Consignor Report",{"data":indData, "header":data}, template)
+		data["consignorTotal"] = consignorTotal
+		data["consignedTotal"] = gross
+		data["totalHAA"] = float(gross) - consignorTotal 
+		if template:
+
+			for nonwinner in data["nonWinners"]:
+				
+				consignInfo = nonwinner.id
+				indData = getAllConsignmentInfo(nonwinner.id, auctionId)
+				#logger.error("consignor: %s" % indData)
+				data[consignInfo] = indData
+				msg = getEmailMessage(nonwinner.email,"Hawthorn Antique Audio Consignor Report",{"data":indData, "header":data}, "noConsignmentWonReport")
 				messages.append(msg)
 
 
-	if template:
-
-		for nonwinner in data["nonWinners"]:
-			
-			consignInfo = nonwinner.id
-			indData = getAllConsignmentInfo(nonwinner.id, auctionId)
-			#logger.error("consignor: %s" % indData)
-			data[consignInfo] = indData
-			msg = getEmailMessage(nonwinner.email,"Hawthorn Antique Audio Consignor Report",{"data":indData, "header":data}, "noConsignmentWonReport")
-			messages.append(msg)
-
-
-		sendBulkEmail(messages)
-		return HttpResponse(json.dumps({"success":True,"msg":"sent bulk emails"}), content_type="application/json")
+			sendBulkEmail(messages)
+			return HttpResponse(json.dumps({"success":True,"msg":"sent bulk emails"}), content_type="application/json")
+	except Exception as e:
+		logger.error("consignorReport error: %s" % e)		
 
 	return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
 

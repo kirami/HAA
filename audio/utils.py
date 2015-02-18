@@ -218,6 +218,9 @@ def getSumWinners(auctionId, userId = None, date = None):
 	else:
 		return { "sum": 0 , "wonItems":None} 
 
+def getSumDiscount(auctionId):
+	return Invoice.objects.filter(auction = auctionId).aggregate(Sum('discount'))["discount__sum"]
+
 def getDuplicateItems(auctionId):
 	auctionId = 1
 	return Item.objects.filter(quantity__gte=2, auction_id = auctionId)
@@ -467,7 +470,7 @@ def getAllConsignmentInfo(consignorId, auctionId):
 		total += money
 
 		if item["item_id"] not in used:
-			gross += itemCost
+			gross = gross + itemCost
 			used.append(item["item_id"])
 		
 		if str(item["item_id"]) not in ordered:
@@ -546,8 +549,11 @@ def getHeaderData(data, auctionId):
  	data["unsoldItems"] = noBids
  	data["noBidItemsCount"] = len(noBids)
  	sums = getSumWinners(auctionId)
+ 	data["discount"] = getSumDiscount(auctionId)
+ 	data ["preDiscount"] = sums["sum"]
+ 	
  	if len(sums) > 0:
- 		data["total"] = sums["sum"]	
+ 		data["total"] = sums["sum"]	- data["discount"]
  	else:
  		data["total"] = 0
  	return data
