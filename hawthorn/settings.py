@@ -122,6 +122,7 @@ CA_TAX = 0.975
 ITEMS_PER_PAGE = 10
 
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -136,33 +137,29 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'logs/debug.log',
+            'filename': '/srv/hawthorn/logs/debug.log',
             'formatter': 'verbose'
         },
         'request_file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'logs/request.log',
+            'filename': '/srv/hawthorn/logs/request.log',
             'formatter': 'verbose'
         },
     },
     'loggers': {
-        'django': {
-            'handlers':['file'],
-            'propagate': True,
-            'level':'INFO',
-        },
+    
         
         'django.request': {
             'handlers':['request_file'],
             'propagate': True,
-            'level':'INFO',
+            'level':'DEBUG',
         },
         'audio': {
-            'handlers': ['file', 'request_file'],
-            'level': 'INFO',
+            'handlers': ['file'],
+            'level': 'DEBUG',
         },
     }
 }

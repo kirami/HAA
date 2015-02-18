@@ -3,18 +3,20 @@
 
 {%block info%}
 
-<h1>Consignor report for auction: {{data.auctionId}}</h1>{{ data.totalsByConsignor}}
+<h1 style="margin-top:15px;">Consignor report for auction: {{data.auctionId}}</h1>{{ data.totalsByConsignor}}
 
- <button id="ccemailButton">Email consignor report to each consignor</button>
+<div style="margin-bottom:10px;">
+ <button id="ccemailButton">Email all consignors (each consignor their own report)</button>
  <div style="font-size:18px;" id="consignorIdEmailMsg"></div>
+ </div>
 
-  <div id="ccemail-confirm" title="Please Confirm">Are you sure you want to email a consignor report to all consignors for auction {{data.auction.name}}?</div>
+  <div id="ccemail-confirm" title="Please Confirm">Are you sure you want to email a consignor report to ALL consignors for auction {{data.auction.name}}?</div>
 
 <div>Gross auction total:  ${{data.total}}</div>
 
-<div>Total gross of consigned items: ${{data.consignedTotal}}</div>
-<div>Gross consignor total:  ${{data.consignorTotal}}</div>
-<div>Gross HAA total:  ${{data.totalHAA}}</div>
+<div>Total gross of consigned items: ${{data.consignedTotal|floatformat:2}}</div>
+<div>Gross consignor total:  ${{data.consignorTotal|floatformat:2}}</div>
+<div>Gross HAA total:  ${{data.totalHAA|floatformat:2}}</div>
 
 <div id="reportDiv" class="reportTable">
 	

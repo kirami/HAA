@@ -9,7 +9,9 @@
 	<div class="maxBidItem">Lot ID:</div>
 	<div class="maxBidItem">Label:</div>
 	<div class="maxBidItem">Name:</div>
+	<div class="maxBidItem">Artist:</div>
 	<div class="maxBidItem">Amount:</div>
+
 
 	<div class="clear"></div>
 	
@@ -19,10 +21,16 @@
 		<div class="maxBidItem">{{item.item.lot_id}}</div>
 		<div class="maxBidItem">{{item.item.label.name}}</div>
 		<div class="maxBidItem">{{item.item.name}}</div>
+		<div class="maxBidItem">{{item.item.artist}}</div>
 		<div class="maxBidItem">{{item.amount}}</div>
 
 		<div class="clear"></div>
 	{%endfor%}
+
+	<hr>
+	<div>Total ${{data.preDiscount}}</div>
+	<div>Discount ${{data.discount}}</div>
+	<div>Total after Discount: ${{data.total}}</div>
 
 </div>
 

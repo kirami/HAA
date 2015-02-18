@@ -8,16 +8,18 @@
 	<div class="maxBidItem">Lot Id:</div>
 
 	<div class="maxBidItem">Item name:</div>
-	<div class="maxBidItem">Winner email:</div>
+	<div class="maxBidItem" style="width:200px">Winner email:</div>
 	<div class="maxBidItem">Amount bid:</div>
+	<div class="maxBidItem">Discount:</div>
 	<div class="clear"></div>
 	<br><br>
 	
 {%for winner in data.winners%}
 	<div class="maxBidItem">{{winner.item.lot_id}}</div>
 	<div class="maxBidItem">{{winner.item.name}}</div>
-	<div class="maxBidItem">{{winner.user.email}}</div>
-	<div class="maxBidItem">{{winner.amount}}</div>
+	<div class="maxBidItem" style="width:200px;">{{winner.user.email}}</div>
+	<div class="maxBidItem">${{winner.amount}}</div>
+	<div class="maxBidItem">${{winner.discount}}</div>
 	<div class="clear"></div>
 {%endfor%}
 
