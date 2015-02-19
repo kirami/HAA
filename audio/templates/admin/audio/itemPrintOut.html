@@ -4,23 +4,26 @@
 
 {%block content%}
 
-{%for item in data.items%}
-<div>
+{%for key, value in data.items%}
+<div style="margin-bottom:10px;">
+	<div>{{key}}</div>
+	{%for item in value%}
 	<div class="itemLeft">{{item.lot_id}}</div>
 	<div class="itemLeft">{{item.label}}</div> 
-	<div class="itemLeft">{{item.record_number}} </div>
+	<div class="itemLeft">{%if item.record_number%} {{item.record_number}}{%else%}&nbsp{%endif%} </div>
 	<div class="itemLeft" style="width:200px">{{item.name}} 
 		{%if item.name_two%}<br>{{item.name_two}}{%endif%} 
 		{%if item.notes%}<br>{{item.notes}}{%endif%} 
 	</div>
 	<div class="itemLeft">
 		{{item.artist}} 
-		{%if item.name_two%}-{%endif%}
+		
 	</div>
 	<div class="itemLeft">
 		{{item.condition}}
 	</div>
 	<div class="clear"></div>
+	{%endfor%}
 </div>
 {%endfor%}
 
@@ -32,7 +35,7 @@
 <style type="text/css">
 	.itemLeft{
 		float:left;
-		width:50px;
+		width:150px;
 	}
 </style>
 

@@ -146,18 +146,22 @@ def verifyEmail(request):
 		data = {}
 		data["user"] = request.user
 		data["resent"]=True
+		logger.error("resent")
 		return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
 	else:
 		return redirect("profile")	
 
 def resetPassword(request):
+	
 	data = {}
 	if request.POST:
 		try:
 			emailAddress = request.POST.get("email")
 			users = User.objects.filter(email = emailAddress)
 			if len(users) < 1:
-				return HttpResponse(json.dumps({"success":False, "msg":"That email hasn't been registered with us."}), content_type="application/json")
+				data["errorMsg"]="That email hasn't been registered with us."
+				logger.error("tried to reset unregistered account: %s" % emailAddress)
+				return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))	
 			user = users[0]
 			password = User.objects.make_random_password()
 			user.set_password(password)
@@ -170,9 +174,11 @@ def resetPassword(request):
 			sendEmail(msg)
 		except Exception as e:
 			logger.error("Error reseting password: %s" % e)
-			return HttpResponse(json.dumps({"success":False, "msg":"Something went wrong.  Please contact us."}), content_type="application/json")
-	
-		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+			data["errorMsg"]="Something went wrong.  Please contact us."
+			return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))	
+		logger.error("true")
+		data["success"]=True
+		return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))	
 	
 	return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))					
 
@@ -180,6 +186,7 @@ def confirm(request, confirmation_code, username):
 	users = UserProfile.objects.filter(user__username=username)
 	user = User.objects.get(username = username)
 	profile = None
+	data = {}
 	if len(users)> 0:
 		profile = users[0]
 		
@@ -188,8 +195,10 @@ def confirm(request, confirmation_code, username):
 			profile.save()
 			#auth_login(request,user)
 			verified = profile.verified
+		else:
+			data["errorMsg"] = "The information you provided is not correct."
 
-	data = {}
+	
 	data["user"] = user
 	return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
 
@@ -389,7 +398,7 @@ def catalog(request, msg= None):
 	try:
 		#if after close but in 2nd chance
 		if isSecondChance():
-		
+			
 			#only allow winners to bid (so only add on to won shipments)
 			bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
 			if len(bids) < 1:
@@ -403,8 +412,8 @@ def catalog(request, msg= None):
 	
 	try:
 		items = None
-		categories = Category.objects.filter(item__auction=currentAuction).distinct()
-
+		categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct()
+		logger.debug("cats")
 		if category:	
 			if int(category) not in categories.values_list("id",flat=True):
 				items = Item.objects.filter(auction = currentAuction).order_by(order)
@@ -424,7 +433,7 @@ def catalog(request, msg= None):
 		items = items[perPage*(page-1):(perPage*page)]
 		if(request.user.is_authenticated()):
 			bids = Bid.objects.filter(user = request.user, item__auction = currentAuctionId)
-		
+			
 		for bid in bids:
 			bidDict[str(bid.item.id)] = str(bid.amount)
 
@@ -453,7 +462,7 @@ def submitBid(request):
 			if len(addresses) < 1:
 				return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
 
-			if profile.verified:
+			if not profile.verified:
 				return HttpResponse(json.dumps({"success":False, "msg":"You must verify your email address before you can bid."}), content_type="application/json")	
 
 			if profile.deadbeat:

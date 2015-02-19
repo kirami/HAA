@@ -186,6 +186,30 @@ class ContactForm(ModelForm):
         self.fields['country'] = ChoiceField(
             choices=getCountries())
 
+    def clean_city(self):
+        country = self.data["country"]
+        city = self.data["city"]
+        
+        if country == "USA":
+            if not city:
+                raise ValidationError(('You must entery a city'))
+
+    def clean_zipcode(self):
+        country = self.data["country"]
+        zip = self.data["zipcode"]
+        
+        if country == "USA":
+            if not zip:
+                raise ValidationError(('You must entery a zipcode'))  
+
+    def clean_state(self):
+        country = self.data["country"]
+        state = self.data["state"]
+        
+        if country == "USA":
+            if not state:
+                raise ValidationError(('You must entery a state')) 
+
 class BulkConsignment(Form):
     from django import forms
     consignor = ModelChoiceField(Consignor.objects.all())

@@ -42,13 +42,13 @@ def testItemInput(request, index, length):
 	i = int(index)
 	label = Label.objects.get(pk=1)
 	category = Category.objects.get(pk=1)
-	auction = Auction.objects.get(pk=7)
+	auction = Auction.objects.get(pk=8)
 
 	try:
 		logger.error("index:%s,  length :%s" % (index, length))
 		while i < int(index) + int(length):
 			item = Item.objects.get_or_create(name="N"+str(i), condition = "x", auction  = auction, artist="A"+str(i), min_bid=2.0, label=label, category=category, lot_id = i)
-			logger.error("item: %s" % item)
+			#logger.error("item: %s" % item)
 			i = i +1
 
 		#create test users:
@@ -56,6 +56,7 @@ def testItemInput(request, index, length):
 
 
 	except Exception as e:
+		logger.error("test input error: %s" % e)
 		return HttpResponse(json.dumps({"success":False, "msg": e}), content_type="application/json")
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
@@ -222,8 +223,15 @@ def adjustLotIds(request, auctionId):
 
 def itemPrintOut(request, auctionId):
 	data ={}
-	items = Item.objects.filter(auction = auctionId)
-	data["items"]=items
+	cats = Category.objects.filter(itemCategory__auction = auctionId).distinct()
+	for cat in cats:
+		items = Item.objects.filter(auction = auctionId, category = cat).order_by("lot_id")
+		
+		if cat in data:
+			data[cat.name] =  items
+		else:
+			data[cat.name] =  {}
+			data[cat.name] =  items
 	return render_to_response('admin/audio/itemPrintOut.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -557,7 +565,7 @@ def createUser(request):
 def shippingByInvoiceFlat(request, auctionId):
 	data = {}
 	data["auctionId"] = auctionId
-	auction = getCurrentAuction()
+	auction = Auction.objects.get(pk=auctionId)
 	data["invoices"] = {}
 	winners = getAlphaWinners(auctionId)
 	
@@ -580,9 +588,11 @@ def shippingByInvoiceFlat(request, auctionId):
 	for winner in winners:
 		
 		winnersFlatSum = getWinnerFlatSum(auctionId, userId = winner["id"], date=auction.end_date)
+		logger.error(winnersFlatSum)
 		#if bought flat items
-		if winnersFlatSum != 0:
+		if winnersFlatSum["sum"] != 0:
 			winnersSum = getWinnerSum(auctionId, userId = winner["id"], date=auction.end_date)
+
 			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
 			logger.error(invoices)
 			if len(invoices) > 0:
@@ -630,9 +640,17 @@ def shippingByInvoice(request, auctionId, filter=None):
 	
 
 	firstInvoice = None
+
 	for winner in winners:
+		address = None
+		addresses = Address.objects.filter(user = winner["id"])
+		if len(addresses)  < 1:
+			logger.error("shippingByInvoice() user %s doesn't have an address on file" % winner["id"])
+		else:
+			address = addresses[0]
+		
 		if filter:
-			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"], shipping=None)
+			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"], shipping=0)
 		
 		else:
 			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
@@ -645,6 +663,9 @@ def shippingByInvoice(request, auctionId, filter=None):
 			data["invoices"][str(invoice.id)]["bids"] = winnersSum
 			data["invoices"][str(invoice.id)]["shipping"] = invoice.shipping 
 			data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
+			if address:
+				data["invoices"][str(invoice.id)]["country"] = address.country
+			
 			if firstInvoice != None:
 				firstInvoice = invoice.id
 	data["firstInvoice"] = firstInvoice
@@ -1089,15 +1110,18 @@ def unsoldItems(request, auctionId):
 
 def bulkConsignment(request, auctionId):
 	error = False
+	data = {}
+	data["auction"] = Auction.objects.get(pk=auctionId)
 	try:
 		if request.method == 'POST':
 			form = BulkConsignment(request.POST, auctionId = auctionId)
 			if form.is_valid():			
 				new_user = form.save()
 				form = BulkConsignment(auctionId = auctionId)
-				return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "error":error, "success":True}, context_instance=RequestContext(request))
+
+				return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "data":data, "error":error, "success":True}, context_instance=RequestContext(request))
 			else:
-				return render_to_response('admin/audio/bulkConsignment.html', {"form":form}, context_instance=RequestContext(request))
+				return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "data":data}, context_instance=RequestContext(request))
 
 		else:
 			form = BulkConsignment(auctionId = auctionId)
@@ -1105,7 +1129,7 @@ def bulkConsignment(request, auctionId):
 		logger.error("error in bulk consignment: %s" %e)
 		error = True
 	
-	return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "error":error}, context_instance=RequestContext(request))
+	return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "error":error, "data": data}, context_instance=RequestContext(request))
 
 
 def runReport(request, auctionId):

@@ -41,32 +41,49 @@ td h1, td h2, td p { font-size: 12px; }
 {%for address in data.addresses%}
 	{%if address.country == "USA" %}
 	
+        {% ifequal forloop.counter0|modulo:3 0 %}
 
+        <tr>
+        {%endifequal%}
 
+        <td >{{address.user.first_name}} {{address.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{{address.city}} {{address.state}}, {{address.zipcode}}</td>
 
+        {% ifequal forloop.counter0|modulo:3 0 %}
+        <td class="separator" />
+        {%endifequal%}
 
-{% ifequal forloop.counter0|modulo:3 0 %}
+        {% ifequal forloop.counter0|modulo:3 1 %}
+        <td class="separator" />
+        {%endifequal%}
 
-<tr>
-{%endifequal%}
-
-<td >{{address.user.first_name}} {{address.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{{address.city}} {{address.state}}, {{address.zipcode}}</td>
-
-{% ifequal forloop.counter0|modulo:3 0 %}
-<td class="separator" />
-{%endifequal%}
-
-{% ifequal forloop.counter0|modulo:3 1 %}
-<td class="separator" />
-{%endifequal%}
-
-{% ifequal forloop.counter0|modulo:3 2 %}
-</tr>
-{%endifequal%}
+        {% ifequal forloop.counter0|modulo:3 2 %}
+        </tr>
+        {%endifequal%}
 
 
 
     {%else%}
+
+        {% ifequal forloop.counter0|modulo:3 0 %}
+
+            <tr>
+            {%endifequal%}
+
+            <td >{{address.user.first_name}} {{address.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{%if address.address_three%}{{address.address_three}}<br>{%endif%}{{address.city}} {%if address.province%}{{address.province}}{%endif%} {{address.postal_code}}<br>{{address.country}}</td>
+
+            {% ifequal forloop.counter0|modulo:3 0 %}
+            <td class="separator" />
+            {%endifequal%}
+
+            {% ifequal forloop.counter0|modulo:3 1 %}
+            <td class="separator" />
+            {%endifequal%}
+
+            {% ifequal forloop.counter0|modulo:3 2 %}
+            </tr>
+            {%endifequal%}
+
+
     {%endif%}
 {%endfor%}
 </table>

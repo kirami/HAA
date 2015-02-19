@@ -3,7 +3,7 @@
 
 
 {% block content %}
-
+<div style="margin-bottom:10px; font-size:16px;">Adding consignments to auction: {{data.auction.name}}</div>
 {%if success%}<div class="successMsg">Your consignments were added successfully.</div>{%endif%}
 {%if error%}<div class="successError">Something went wrong. One of these exact consignments might already exist?</div>{%endif%}
 
