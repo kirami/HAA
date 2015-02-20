@@ -204,6 +204,7 @@ def confirm(request, confirmation_code, username):
 
 
 def bids(request):
+	logger.error("bids")
 	if(request.user.is_authenticated()):
 		currentAuction = getCurrentAuction()
 		
@@ -230,7 +231,8 @@ def bids(request):
 				return render_to_response('flatBids.html', {"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
 			else:
 				#They've already ended their auction.  Summary?
-				return redirect("auctionSummaries")
+					return render_to_response('flatBids.html', {"success":success, "bids":bids, "ended":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
+			
 
 		else:
 			return render_to_response('bids.html', {"success":success,"bids":bids}, context_instance=RequestContext(request))
@@ -520,8 +522,13 @@ def deleteBid(request):
 		instance = Bid.objects.get(user=request.user, item_id=itemId)
 		instance.delete()
 
+	logger.error("path : %s" % request.META.get('PATH_INFO'))
+	if isSecondChance():
+		return redirect("bids")
 	if(request.META.get('PATH_INFO') == "/audio/catalog/deleteBid"):
 		return redirect("catalog")
+
+		
 	else:
 		return redirect("bids")
 		

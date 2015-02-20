@@ -3,6 +3,10 @@
 
 {% block content %}
 
+{%if ended%}
+<div>You have no current bids.</div>
+{%else%}
+
 {%if endAuctionOption%}
 <div style="margin-bottom:20px;">
 	<div>Click here to close your bidding for this auction and we will start preparing your items to ship.  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
@@ -38,5 +42,7 @@
 	<div class="clear"></div>
 {% endfor %}
 </div>
+
+{%endif%}
 
 {% endblock %}
