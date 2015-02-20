@@ -39,7 +39,7 @@
 {%if data.invoice.tax%}
 <div>CA State Tax: ${{data.taxTotal}}</div>
 {%endif%}
-{%if data.balanceData%}
+{%if data.previousBalance%}
 <div>Previous balance (as of {{data.balanceDate}}): ${{data.previousBalance}}</div>
 {%endif%}
 <div>Total: ${{data.orderTotal}}</div>

@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'south',
     'audio',
     'django_extensions',
+    'django_requestlogging',
     #'django.contrib.sites',
 )
 
@@ -57,6 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_requestlogging.middleware.LogSetupMiddleware',
 )
 
 ROOT_URLCONF = 'hawthorn.urls'
@@ -118,9 +120,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'kirajmd@gmail.com'
 EMAIL_HOST_PASSWORD = 'lfn1k1taKD'
 
-CA_TAX = 0.975
+CA_TAX = 0.0975
 ITEMS_PER_PAGE = 10
-
 
 
 LOGGING = {
@@ -150,7 +151,11 @@ LOGGING = {
         },
     },
     'loggers': {
-    
+        'django': {
+            'handlers':['file'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
         
         'django.request': {
             'handlers':['request_file'],
@@ -158,7 +163,7 @@ LOGGING = {
             'level':'DEBUG',
         },
         'audio': {
-            'handlers': ['file'],
+            'handlers': ['file', 'request_file'],
             'level': 'DEBUG',
         },
     }

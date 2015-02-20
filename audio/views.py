@@ -212,6 +212,9 @@ def bids(request):
 
 		currentAuctionId = currentAuction.id
 		bids = Bid.objects.filter(item__auction = currentAuctionId, user= request.user)
+		#logger.error("bids: %s" % bids)
+		#logger.error("user: %s" % request.user)
+
 		success = False
 		if request.GET.get("success"):
 			success = True
@@ -222,7 +225,7 @@ def bids(request):
 			
 		if isSecondChance():
 			if invoice == None or invoice.second_chance_invoice_amount == 0:
-				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date)
+				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date, user=request.user)
 				
 				return render_to_response('flatBids.html', {"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
 			else:
@@ -369,7 +372,7 @@ def catalog(request, msg= None):
 	order = request.GET.get("sort", 'lot_id')
 	sortGet= order
 
-
+	logger.error
 	if order == "nameAsc":
 		order = "name"
 
@@ -413,7 +416,7 @@ def catalog(request, msg= None):
 	try:
 		items = None
 		categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct()
-		logger.debug("cats")
+		
 		if category:	
 			if int(category) not in categories.values_list("id",flat=True):
 				items = Item.objects.filter(auction = currentAuction).order_by(order)
@@ -490,10 +493,15 @@ def submitBid(request):
 
 			instances = Bid.objects.filter(user=request.user, item_id=itemId)
 			if len(instances) < 1:
-				Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), item_id = itemId)
+				bidObj = Bid.objects.create(amount=bidAmount, user=request.user, date=datetime.now(), item_id = itemId)
+				if isSecondChance():
+					bidObj.winner = True
+					bidObj.save()
 			else:
 				instance = instances[0]	
 				instance.amount = bidAmount
+				if isSecondChance():
+					instance.winner = True
 				instance.save()
 		
 		except Exception as e:
