@@ -33,6 +33,11 @@
 	{%endfor%}
 </select>
 {%endif%}
+
+{%if data.flat%}
+<div>Show only set sale shipping?<input type="checkbox" name="isFlat" id = "isFlat"></div>
+{%endif%}
+
 <button onclick="goTo()">Go</button>
 
 
@@ -56,6 +61,14 @@ function goTo(){
 	if(page=="getInvoices"){
 		url+="/" + auction
 		url+="/" + user
+		window.open(url)
+		return
+	}
+
+	if(page="shippingByInvoice"){
+		url+="/" + auction
+		if($("#isFlat").is(':checked'))
+			url+="/flatOnly" 
 		window.open(url)
 		return
 	}

@@ -77,10 +77,14 @@ def conditionsCheck(request, auctionId):
 		if auction.blind_locked:
 			data["blindLocked"]=True
 
+	conditions = Condition.objects.filter(auction = auctionId)
+	if len(conditions) < 1:
+		data["noConditions"] = True	
+
 	if request.method == 'POST':
 		
 		data["success"] = markWinners(auctionId)
-		conditions = Condition.objects.filter(auction = auctionId)
+		
 		
 		info = []
 		for condition in conditions:
@@ -89,7 +93,8 @@ def conditionsCheck(request, auctionId):
 			cond["bids"] = getWinnerSum(auctionId=auctionId, userId = condition.user.id)
 			info.append(cond)
 			#logger.error("sum: %s" % sum)
-
+	
+		
 		data["info"] = info	
 		return render_to_response('admin/audio/conditionsReport.html', {"data":data}, context_instance=RequestContext(request))
 
@@ -160,6 +165,7 @@ def filterAdminIndex(request):
 	data["user"] = request.GET.get("user", False)
 	data["auction"] = request.GET.get("auction", False)
 	data["invoice"] = request.GET.get("invoice", False)
+	data["flat"] = request.GET.get("flat", False)
 	auctionId = request.GET.get("auctionId", None)
 	data["auctionId"] = auctionId
 
@@ -727,11 +733,21 @@ def endBlindAuction(request, auctionId):
 			invoicedAmount = sum["sum"]
 			#add tax if in CA
 			tax = None
+			existingInvoices = Invoice.objects.get_or_create(user = user, auction = auction)	
+			invoice = existingInvoices[0]
 			if address.state == "CA":
+
 				tax = float(invoicedAmount) * settings.CA_TAX
-				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now(), tax = tax)
-			else:
-				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now())
+				logger.error("amount:%s tax:%s total:%s" % (invoicedAmount, settings.CA_TAX, tax))
+				invoice.tax = tax
+
+			invoice.invoiced_amount = invoicedAmount 
+			invoice.invoice_date = datetime.now()
+			invoice.save()
+			
+
+
+
 			invoices[userId] = invoice.id
 			winner.invoice = invoice
 			winner.save()
@@ -748,16 +764,18 @@ def endBlindAuction(request, auctionId):
 
 
 def endFlatAuction(request, auctionId, userId = None):
-	
+	logger.error("flat %s" % userId)
 	now = datetime.now()
 	#for all bids in auction not invoiced
 
 	#make sure to do all manual stuff first
 	auction = Auction.objects.get(id = auctionId)
 	if auction.flat_locked == True and userId == None:
+		logger.error("This auction is Set Sale locked")
 		return HttpResponse(json.dumps({"success":False, "msg":"This auction is Set Sale locked"}), content_type="application/json")
 
-	if now < auction.second_chance_end_date:
+	if now < auction.second_chance_end_date and not userId:
+		logger.error("The Set Sale auction time isn't up.")
 		return HttpResponse(json.dumps({"success":False, "msg":"The Set Sale auction time isn't up."}), content_type="application/json")
 
 
@@ -765,7 +783,9 @@ def endFlatAuction(request, auctionId, userId = None):
 
 	#get all won items before end date
 
+	#winners = getWinningFlatBids(auctionId, onlyNonInvoiced=True, userId = userId)
 	winners = getWinningFlatBids(auctionId, date=auction.end_date, userId = userId)
+	logger.error("winners %s"  % winners)
 
 	for winner in winners:
 		winnerId = winner.user_id
@@ -873,9 +893,9 @@ def sendLoserLetters(request, auctionId):
 def getInvoices(request, auctionId, userId = None, template=None):
 	try:
 		data = {}
-
 		if userId != None:
 			data = getInvoiceData(auctionId, userId)
+			getHeaderData(data, auctionId)
 	except Exception as e:
 		logger.error("Error in getInvoices: %e" % e)	
 	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))

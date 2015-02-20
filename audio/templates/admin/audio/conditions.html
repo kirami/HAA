@@ -8,6 +8,9 @@
 {%if data.blindLocked%}<div class="successError">This auction has been locked, you can't run winners with it locked.</div>{%endif%}
 {%if badAuction%}<div class="successError" style="display:block">That is not a valid auction</div>{%endif%}
 
+{%if data.noConditions%}<div>No one has any conditions for this auction. You can go straight to locking.</div>{%else%}
+
+
 <div>First run mark winners.  This will give us the winning bids without generating an invoice.</div>
 
 
@@ -22,6 +25,7 @@
 <div id="conditionsTable">
 	{{data.sum}}
 </div>
+{%endif%}
 
 <script type="text/javascript">
 	

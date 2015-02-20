@@ -149,11 +149,18 @@ def getBidItems(auctionId, orderByName = False):
 		return Item.objects.filter(bidItem__isnull=False, auction=auctionId)
 
 #get winning flat bids after blind auction end date
-def getWinningFlatBids(auctionId, date, userId = None):
-	if userId == None:
-		return Bid.objects.filter(winner=True, item__auction=auctionId, date__gte=date )
+def getWinningFlatBids(auctionId, date, userId = None, onlyNonInvoiced = False):
+	
+	if onlyNonInvoiced:
+		if userId == None:
+			return Bid.objects.filter(winner=True, item__auction=auctionId, date__gte=date, invoice = None )
+		else:
+			return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__gte=date, invoice = None)
 	else:
-		return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__gte=date)
+		if userId == None:
+			return Bid.objects.filter(winner=True, item__auction=auctionId, date__gte=date )
+		else:
+			return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__gte=date)
 	
 
 #if date - get bids before said date
@@ -262,7 +269,7 @@ def getConsignmentLosers(auctionId, consignorId = None):
 	if not consignorId:
 		return Item.objects.filter(bidItem=None, auction=auctionId, consignedItem__isnull=False).distinct()
 	else:
-		return Item.objects.filter(bidItem=None, auction=7, consignedItem__isnull=False, consignedItem__consignor=consignorId).distinct()
+		return Item.objects.filter(bidItem=None, auction=auctionId, consignedItem__isnull=False, consignedItem__consignor=consignorId).distinct()
 
 #get all consingors who had no won items
 def getLoserConsignors(auctionId):
@@ -286,9 +293,9 @@ def getWinnerConsignorIds(auctionId):
 
 #--------------------------
 
-def getUnbalancedUsersByAuction(auctionId = None):
+def getUnbalancedUsersByAuction(auctionId = None, userId = None):
 	cursor = connection.cursor()
-	sql = "SELECT user_id, invoiced, auction_id, payments, invoiced - payments AS balance \
+	sql = "SELECT user_id, invoiced, sum(invoiced) as iSum, auction_id, payments, sum(payments) as pSum, invoiced - payments AS balance \
 	FROM \
 	(   SELECT it.id AS invoice_id, it.user_id, it.auction_id, \
 	it.invoiced_amount  + it.second_chance_invoice_amount + it.tax + it.second_chance_tax + it.shipping + it.second_chance_shipping - COALESCE(it.discount, 0) AS invoiced, \
@@ -303,6 +310,9 @@ def getUnbalancedUsersByAuction(auctionId = None):
 	if auctionId:
 		sql = sql + " and auction_id = " + str(auctionId)
 
+	if userId:
+		sql = sql + " and user_id = " + str(userId)
+
 	cursor.execute(sql)
 	row = dictfetchall(cursor)
 	return row
@@ -310,11 +320,11 @@ def getUnbalancedUsersByAuction(auctionId = None):
 def getUnbalancedUsers(userId = None):
 	cursor = connection.cursor()
 	sql = "SELECT user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance, auction_id \
-	FROM(select sum(amount) as payments, it.user_id, invoiced, auction_id from audio_payment p \
-	RIGHT JOIN (SELECT sum(invoiced_amount)  + sum(second_chance_invoice_amount) + sum(tax) + \
-	sum(second_chance_tax) + sum(shipping) + sum(second_chance_shipping) - coalesce(sum(discount),0)  as invoiced, user_id, auction_id \
-	FROM audio_invoice group by user_id) as it on it.user_id = p.user_id group by user_id) as joined \
-	where joined.invoiced != joined.payments or joined.payments is NULL"
+    FROM(select sum(amount) as payments, it.user_id, invoiced, auction_id from audio_payment p \
+    RIGHT JOIN (SELECT sum(invoiced_amount)  + sum(second_chance_invoice_amount) + sum(tax) + \
+    sum(second_chance_tax) + sum(shipping) + sum(second_chance_shipping) - coalesce(sum(discount),0)  as invoiced, user_id, auction_id \
+    FROM audio_invoice group by user_id) as it on it.user_id = p.user_id group by user_id) as joined \
+    where joined.invoiced != joined.payments or joined.payments is NULL"
 	if userId:
 		sql = sql + " and user_id = " + str(userId)
 
@@ -496,12 +506,14 @@ def getAllConsignmentInfo(consignorId, auctionId):
 
 def getInvoiceData(auctionId, userId):
 	data = {}
-	balances = getUnbalancedUsers(userId = userId)
+	#balances = getUnbalancedUsers(userId = userId)
+	balances = getUnbalancedUsersByAuction(userId = userId)
 	balance = 0
 
 	if len(balances) > 0:
 			data["balanceData"] = balances[0]
-			balance = balances[0]["balance"]
+			balance = balances[0]["iSum"] - balances[0]["pSum"]
+			logger.error("balance %s" % balance)
 
 	data["info"]=getSumWinners(auctionId, userId)
 	invoices = Invoice.objects.filter(auction = auctionId, user = userId)

@@ -76,7 +76,7 @@ function endMyAuction (auctionId, userId) {
 		data: {},
 		success: function(data) {
 			$('#endAuctionlMsg').css("color","green")
-			$('#endAuctionlMsg').text("Email was successfully sent.")
+			window.location.reload()
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			$('#endAuctionlMsg').css("color","red")

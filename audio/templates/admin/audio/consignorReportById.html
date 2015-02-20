@@ -47,9 +47,9 @@
 			<div class="maxBidItem">${{item.inRange|floatformat:2}}</div>
 			<div class="maxBidItem">{{item.percentage}}%</div>
 			<div class="maxBidItem">${{item.rangeAmount|floatformat:2}}</div>
-			{{item.rangeAmount}}
+		
 			<div class="clear"></div>
-		</div>
+		</div> 
 
 		<div class="clear"></div>
 	
@@ -88,10 +88,11 @@
 	<br><br>
 	<div>Unsold items:
 	{%if data.unsoldConsignorItemsCount == 0%}
+
 		<div>All items were sold!</div>
 	{%else%}
 		{%for unsoldItem in data.unsoldConsignorItems%}
-			<div>{{unsoldItem.id}} {{unsoldItem.label.name}} {{unsoldItem.name}}</div>
+			<div>{{unsoldItem.id}} {{unsoldItem.label.name}} {{unsoldItem.name}} {{unsoldItem.artist}}</div>
 		{%endfor%}
 	{%endif%}
 	</div>
