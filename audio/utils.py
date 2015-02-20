@@ -77,26 +77,32 @@ def usersWithoutAddress():
 
 #users with no bids	
 def getNewUsers():
-	#users = User.objects.filter(bidUser__isnull=True)
-	users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
+	users = User.objects.filter(bidUser__isnull=True, is_staff = False)
+	#users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
+	#admin = User.objects.filter(is_staff = True)
 	return list( users), Address.objects.filter(user__in=set(users))
 
 #users bid within last 3 auctions or printed list = true or paid for a catalog within 3 auctions
 def getCurrentUsers(auctionId):
-	users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
+	#users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
+	users = User.objects.filter(bidUser__item__auction__gt = int(auctionId)-4).distinct()
 	two = User.objects.filter(upUser__printed_list=True)
 
-	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(auctionId-3))
-
+	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
+	admin = User.objects.filter(is_staff = True)
 	combined = set(users) | set(two) | set(printed)
-	return list(combined), Address.objects.filter(user__in=combined)
+	all = combined - set(admin)
+	return list(all), Address.objects.filter(user__in=all)
 
 #users no bid last three auctions & not on keep me on list & no printed catalog bought
 def getNonCurrentUsers(auctionId):
 	actives = getCurrentUsers(auctionId)
 	active = actives[0]
 	all = User.objects.all()
-	combined = set(active) ^ set(all)
+	admin = User.objects.filter(is_staff = True)
+	#not in first but in second
+	combined = set(all) - set(active)
+	combined = combined - set(admin)
 	return list(combined), Address.objects.filter(user__in=combined)
 
 def getActiveUsers():
@@ -106,8 +112,8 @@ def getActiveUsers():
 #TODO of all time or past # of auctions??
 def getNonActiveUsers(auctionId):
 	nonCurrent = getNonCurrentUsers(auctionId)[0]
-	#pastBidders = User.objects.filter(bidUser__isnull=False).distinct()
-	pastBidders = list(User.objects.raw('select distinct a.id from audio_bid b, auth_user a where a.id=b.user_id'))
+	pastBidders = User.objects.filter(bidUser__isnull=False).distinct()
+	#pastBidders = list(User.objects.raw('select distinct a.id from audio_bid b, auth_user a where a.id=b.user_id'))
 	combined = set(nonCurrent) & set(pastBidders)
 	return list(combined), Address.objects.filter(user__in=set(combined))
 
