@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core import serializers
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 from django import forms
@@ -26,6 +27,7 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+@staff_member_required
 def test(request):
 	user = User.objects.get(id=9)
 	p = UserProfile.objects.get(user=user)
@@ -37,6 +39,7 @@ def test(request):
 	sendEmail(msg)
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
+@staff_member_required
 #add many test items quickly
 def testItemInput(request, index, length):
 	i = int(index)
@@ -61,7 +64,7 @@ def testItemInput(request, index, length):
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 
-
+@staff_member_required
 def conditionsCheck(request, auctionId):
 	data = {}
 	
@@ -101,7 +104,7 @@ def conditionsCheck(request, auctionId):
 	return render_to_response('admin/audio/conditions.html', {"data":data}, context_instance=RequestContext(request))
 
 
-
+@staff_member_required
 def winningBidReport(request, auctionId):
 	logger.info("test")
 	data = {}
@@ -110,6 +113,7 @@ def winningBidReport(request, auctionId):
 	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/winningBids.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def sendWinningBidReport(request):
 	data = {}
 	messages = []
@@ -158,6 +162,7 @@ def sendWinningBidReport(request):
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
+@staff_member_required
 def filterAdminIndex(request):
 	data = {}
 	data["page"] = request.GET.get("page")
@@ -203,7 +208,7 @@ def filterAdminIndex(request):
 	return render_to_response('admin/audio/filterAdminIndex.html', {"data":data}, context_instance=RequestContext(request))
 
 
-
+@staff_member_required
 def adjustLotIds(request, auctionId):
 	data={}
 	data["auction"]=Auction.objects.get(pk=auctionId)
@@ -226,7 +231,7 @@ def adjustLotIds(request, auctionId):
 
 	return render_to_response('admin/audio/adjustLotIds.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def itemPrintOut(request, auctionId):
 	data ={}
 	cats = Category.objects.filter(itemCategory__auction = auctionId).distinct()
@@ -240,7 +245,7 @@ def itemPrintOut(request, auctionId):
 			data[cat.name] =  items
 	return render_to_response('admin/audio/itemPrintOut.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def setDiscount(request, invoiceId):
 	data ={}
 	data["invoice"] = Invoice.objects.get(pk=invoiceId)
@@ -263,13 +268,13 @@ def setDiscount(request, invoiceId):
 	
 	return render_to_response('admin/audio/setDiscount.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def addItemPrepop(request):
 	data = {}
 	data["form"] = ItemPrePopulateForm()
 	return render_to_response('admin/audio/addItemEntry.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def addItem(request):
 	data = {}
 	initData = {}
@@ -325,7 +330,7 @@ def addItem(request):
 	return render_to_response('admin/audio/addItem.html', {"data":data, "success": success, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 
 
-
+@staff_member_required
 def printLabels(request, auctionId, labelType=None):
 	data = {}
 	if labelType:
@@ -352,6 +357,7 @@ def printLabels(request, auctionId, labelType=None):
 		
 	return render_to_response('admin/audio/printLabels.html', {"data":data, "success": False}, context_instance=RequestContext(request))
 
+@staff_member_required
 #send email after importing user from csv
 def importUserEmail(request):
 	data = {}
@@ -392,7 +398,7 @@ def importUserEmail(request):
 
 	return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
 
-
+@staff_member_required
 def importAdmin(request):
 	data = {}
 	
@@ -402,7 +408,7 @@ def importAdmin(request):
 
 	return render_to_response('admin/audio/importUsers.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def importUserCSV(request):
 	data = {}
 	i=0
@@ -521,7 +527,7 @@ def importUserCSV(request):
 	
 	return errors
 
-
+@staff_member_required
 def createUser(request):
 	data = {}
 	form = None
@@ -567,7 +573,7 @@ def createUser(request):
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
 
-
+@staff_member_required
 def shippingByInvoiceFlat(request, auctionId):
 	data = {}
 	data["auctionId"] = auctionId
@@ -612,10 +618,11 @@ def shippingByInvoiceFlat(request, auctionId):
 
 	return render_to_response('admin/audio/shippingByInvoiceFlat.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def shippingByInvoiceFiltered(request, auctionId):
 	return shippingByInvoice(request, auctionId, True)
 	
-
+@staff_member_required
 def shippingByInvoice(request, auctionId, filter=None):
 	
 	data = {}
@@ -677,11 +684,12 @@ def shippingByInvoice(request, auctionId, filter=None):
 	data["firstInvoice"] = firstInvoice
 	return render_to_response('admin/audio/shippingByInvoice.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def emailAdmin(request, auctionId):
 	data = {}
 	return render_to_response('admin/audio/sendEmailsAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def createBid(request, auctionId):
 	data = {}
 	
@@ -700,7 +708,7 @@ def createBid(request, auctionId):
 	data["auction"] = Auction.objects.get(pk = auctionId)
 	return render_to_response('admin/audio/createBid.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def endBlindAuction(request, auctionId):
 	invoices = {}
 	
@@ -733,8 +741,12 @@ def endBlindAuction(request, auctionId):
 			invoicedAmount = sum["sum"]
 			#add tax if in CA
 			tax = None
-			existingInvoices = Invoice.objects.get_or_create(user = user, auction = auction)	
-			invoice = existingInvoices[0]
+			existingInvoices = Invoice.objects.filter(user = user, auction = auction)
+			#existingInvoices = Invoice.objects.get_or_create(user = user, auction = auction)	
+			if len(existingInvoices) < 1:
+				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now())
+			else:
+				invoice = existingInvoices[0]
 			if address.state == "CA":
 
 				tax = float(invoicedAmount) * settings.CA_TAX
@@ -762,7 +774,7 @@ def endBlindAuction(request, auctionId):
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
-
+@staff_member_required
 def endFlatAuction(request, auctionId, userId = None):
 	logger.error("flat %s" % userId)
 	now = datetime.now()
@@ -818,6 +830,7 @@ def endFlatAuction(request, auctionId, userId = None):
 		auction.save()
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
+@staff_member_required
 def userBreakdown(request, auctionId = None):
 	data = {}
 	
@@ -840,6 +853,7 @@ def userBreakdown(request, auctionId = None):
 
 	return render_to_response('admin/audio/userBreakdown.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def endAuction(request, auctionId):
 	data = {}
 	data["auctionId"]=auctionId
@@ -853,7 +867,7 @@ def endAuction(request, auctionId):
 
 	return render_to_response('admin/audio/endAuction.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def invoices(request, auctionId):
 	data = {}
 	auctions = Auction.objects.filter(pk=auctionId)
@@ -864,7 +878,7 @@ def invoices(request, auctionId):
 		data["auction"] = auctions[0]
 	return render_to_response('admin/audio/invoiceAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def sendLoserLetters(request, auctionId):
 	losers = getLosers(auctionId)
 	messages = []
@@ -889,7 +903,7 @@ def sendLoserLetters(request, auctionId):
 	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
-
+@staff_member_required
 def getInvoices(request, auctionId, userId = None, template=None):
 	try:
 		data = {}
@@ -900,7 +914,7 @@ def getInvoices(request, auctionId, userId = None, template=None):
 		logger.error("Error in getInvoices: %e" % e)	
 	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def sendInvoices(request):
 	auctionId = request.POST.get("auctionId")
 	userId = request.POST.get("userId", None)
@@ -941,7 +955,7 @@ def sendInvoices(request):
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 		
-
+@staff_member_required
 def sendAllConsignorReports(request):
 	d = request.POST
 	auctionId = d.get("auctionId")
@@ -950,6 +964,7 @@ def sendAllConsignorReports(request):
 	template = "singleConsignorReport"
 	return consignorReport(request, auctionId, template)
 
+@staff_member_required
 def sendTemplateEmail(request):
 	d = request.POST
 	consignorId = d.get("consignorId")
@@ -957,6 +972,7 @@ def sendTemplateEmail(request):
 	template = d.get("template")
 	return consignorReportById(request, consignorId, auctionId, template)
 
+@staff_member_required
 def consignorReportById(request, consignorId, auctionId, template = None):
 	data = getAllConsignmentInfo(consignorId, auctionId)	
 	getHeaderData(data, auctionId)
@@ -970,7 +986,7 @@ def consignorReportById(request, consignorId, auctionId, template = None):
 
 	return render_to_response('admin/audio/consignorReportById.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def consignorReport(request, auctionId, template = None):
 	data = {}
 	messages = []
@@ -1023,7 +1039,7 @@ def consignorReport(request, auctionId, template = None):
 	return render_to_response('admin/audio/consignorReport.html', {"data":data}, context_instance=RequestContext(request))	
 
 
-
+@staff_member_required
 def userBalanceInfo(request, userId):
 	data = {}
 
@@ -1034,7 +1050,7 @@ def userBalanceInfo(request, userId):
 	data["user"] = User.objects.get(pk=userId)
 	return render_to_response('admin/audio/userBalance.html', {"data":data}, context_instance=RequestContext(request))	
 
-
+@staff_member_required
 def calculateBalances(request, auctionId = None):
 	data = {}
 	
@@ -1061,11 +1077,43 @@ def calculateBalances(request, auctionId = None):
 
 	return render_to_response('admin/audio/balances.html', {"data":data}, context_instance=RequestContext(request))	
 
+@staff_member_required
 def reportByUser(request):
 	data = {}
 	auctionId = 1
 	data["winningBids"] = getWinningBids(auctionId, userId = 1)
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))	
+
+
+@staff_member_required
+def getRunningBidTotal(request, auctionId):
+	data = {}
+	data["auction"] = Auction.objects.get(pk=auctionId)
+	dupes = getDuplicateItems(auctionId)
+	bids = getOrderedBids(auctionId)
+	currentItemId = 0
+	index = 0
+	total = 0
+	logger.error("bids: %s" % bids)
+ 	for bid in bids:
+ 		if currentItemId != bid.item_id:
+ 			#reset
+ 			item = Item.objects.filter(id = bid.item_id)
+ 			if len(item) > 0:
+ 				quantity = int(item[0].quantity)
+ 			else:
+ 				quantity = 0
+
+ 			currentItemId = bid.item_id
+ 			index = 0 			
+
+ 		if index < quantity:
+ 			total = total + bid.amount
+ 			logger.error("bid: %s total: %s"  % (bid.amount, total))
+ 		
+ 		index = index + 1
+ 	data["total"] = total
+ 	return render_to_response('admin/audio/runningTotal.html', {"data":data}, context_instance=RequestContext(request))	
 
 
 def markWinners(auctionId):
@@ -1096,7 +1144,7 @@ def markWinners(auctionId):
  	
 	return True
 
-
+@staff_member_required
 def winners(request, auctionId):
 	data = {}
 	winners = getAlphaWinners(auctionId)
@@ -1113,21 +1161,25 @@ def winners(request, auctionId):
 	
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def losers(request, auctionId):
 	data = {}
 	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/losers.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def wonItems(request, auctionId):
 	data = {}
  	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/wonItems.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def unsoldItems(request, auctionId):
 	data = {}
 	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
 def bulkConsignment(request, auctionId):
 	error = False
 	data = {}
@@ -1151,7 +1203,7 @@ def bulkConsignment(request, auctionId):
 	
 	return render_to_response('admin/audio/bulkConsignment.html', {"form":form, "error":error, "data": data}, context_instance=RequestContext(request))
 
-
+@staff_member_required
 def runReport(request, auctionId):
  	data = {}
  	getHeaderData(data, auctionId)

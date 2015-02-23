@@ -11,10 +11,19 @@
 
 {%else%}
 
+<div id="endAuction-confirm" title="Please Confirm">Are you sure you want to end your auction?  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
+
 	<div style="margin-bottom:10px; text-align:center" class="header" >
 	The blind auction has ended.  These items were not sold.<br>
 	</div>
 	<div style="text-align:center; font-size:16px;">See your current set price bids <a href="/audio/accounts/bids">here</a>.</div>
+
+	<div style="margin-bottom:20px; text-align:center">
+	<div>Click here to close your bidding for this auction and we will start preparing your items to ship.</div>
+	<div><button class="button" id="EMA_BTN">End my auction</button></div>
+	<div id="endAuctionlMsg"></div>
+</div>
+
 
 	<div style="margin-left:auto; margin-right:auto; width:910px">
 
@@ -60,6 +69,32 @@
 	
 	</div>
 	{%endif%}
+
+	<script type="text/javascript">
+
+
+		$(document).ready(function(){
+
+			$( "#endAuction-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"End Auction": function() {
+					endMyAuction("{{auctionId}}", "{{user.id}}")
+					console.log("{{auctionId}}, {{user.id}}")
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+
+		})
+	</script>
 
 
 {% endblock %}

@@ -244,6 +244,7 @@ $( document ).ready(function() {
 		}
 	});
 
+
 	
 	$( "#emailInvoices" ).click(function() {
     	$( "#emailInvoices-confirm" ).dialog( "open" );
@@ -259,6 +260,10 @@ $( document ).ready(function() {
 
     $( "#lockBlind" ).click(function() {
     	$( "#lockBlind-confirm" ).dialog( "open" );
+    });
+
+    $( "#EMA_BTN" ).click(function() {
+    	$( "#endAuction-confirm" ).dialog( "open" );
     });
 
 

@@ -8,9 +8,10 @@
 {%else%}
 
 {%if endAuctionOption%}
+<div id="endAuction-confirm" title="Please Confirm">Are you sure you want to end your auction?  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
 <div style="margin-bottom:20px;">
 	<div>Click here to close your bidding for this auction and we will start preparing your items to ship.  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
-	<div><button class="button" onclick="endMyAuction({{auctionId}}, {{user.id}})">End my auction</button></div>
+	<div><button class="button" id="EMA_BTN">End my auction</button></div>
 	<div id="endAuctionlMsg"></div>
 </div>
 
@@ -44,5 +45,31 @@
 </div>
 
 {%endif%}
+
+	<script type="text/javascript">
+
+
+		$(document).ready(function(){
+
+			$( "#endAuction-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"End Auction": function() {
+					endMyAuction("{{auctionId}}", "{{user.id}}")
+					
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+
+		})
+	</script>
 
 {% endblock %}

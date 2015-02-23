@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^admin/endBlindAuction/(?P<auctionId>\d+)/$', admin_views.endBlindAuction, name='endBlindAuction'),
     url(r'^admin/endFlatAuction/(?P<auctionId>\d+)/(?P<userId>\d+)', admin_views.endFlatAuction, name='endFlatAuction'),
     url(r'^admin/endFlatAuction/(?P<auctionId>\d+)/$', admin_views.endFlatAuction, name='endFlatAuction'),
+    url(r'^admin/runningTotal/(?P<auctionId>\d+)/$', admin_views.getRunningBidTotal, name='getRunningBidTotal'),
     
     #url(r'^admin/createUser/$', admin_views.createUser, name='createUser'),
     #url(r'^admin/winners/$', admin_views.winners, name='winners'),
