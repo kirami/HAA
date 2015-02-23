@@ -80,22 +80,28 @@ def getNewUsers():
 	users = User.objects.filter(bidUser__isnull=True, is_staff = False)
 	#users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
 	#admin = User.objects.filter(is_staff = True)
+	#todo no quiet
 	return list( users), Address.objects.filter(user__in=set(users))
 
 #users bid within last 3 auctions or printed list = true or paid for a catalog within 3 auctions
 def getCurrentUsers(auctionId):
 	#users = list(User.objects.raw('select a.* from auth_user a, audio_bid b, audio_item i where a.id = b.user_id and b.item_id = i.id and i.auction_id > '+str(auctionId)+' group by b.user_id'))
 	users = User.objects.filter(bidUser__item__auction__gt = int(auctionId)-4).distinct()
-	two = User.objects.filter(upUser__printed_list=True)
+	#two = User.objects.filter(upUser__printed_list=True)
 
 	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
 	admin = User.objects.filter(is_staff = True)
 	combined = set(users) | set(two) | set(printed)
 	all = combined - set(admin)
+
+	#and is not quiet
+
 	return list(all), Address.objects.filter(user__in=all)
 
 #users no bid last three auctions & not on keep me on list & no printed catalog bought
+#reminder group
 def getNonCurrentUsers(auctionId):
+	#but have bid on 4th ago.
 	actives = getCurrentUsers(auctionId)
 	active = actives[0]
 	all = User.objects.all()
@@ -105,12 +111,18 @@ def getNonCurrentUsers(auctionId):
 	combined = combined - set(admin)
 	return list(combined), Address.objects.filter(user__in=combined)
 
+#take off
 def getActiveUsers():
 	return ""
 
 #bidders are not current but have bid in the past
 #TODO of all time or past # of auctions??
 def getNonActiveUsers(auctionId):
+	
+	#no bids since 4 or more
+	#todo make inactive
+	#and not quiet
+	#not printed catalog
 	nonCurrent = getNonCurrentUsers(auctionId)[0]
 	pastBidders = User.objects.filter(bidUser__isnull=False).distinct()
 	#pastBidders = list(User.objects.raw('select distinct a.id from audio_bid b, auth_user a where a.id=b.user_id'))
@@ -119,6 +131,7 @@ def getNonActiveUsers(auctionId):
 
 
 def getCourtesyBidders():
+	
 	ids = UserProfile.objects.values_list("user", flat=True).filter(courtesy_list = True)
 	users = User.objects.filter(pk__in=set(ids))
 	return users, Address.objects.filter(user__in=set(users))
