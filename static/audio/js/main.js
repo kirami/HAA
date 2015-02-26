@@ -73,14 +73,14 @@ function endMyAuction (auctionId, userId) {
 		$.ajax({
 		type: "POST",
 		url: "/admin/endFlatAuction/"+auctionId+"/" + userId + "/",
-		data: {},
+		data: {"email" : true},
 		success: function(data) {
-			$('#endAuctionlMsg').css("color","green")
+			$('#endAuctionMsg').css("color","green")
 			window.location.reload()
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
-			$('#endAuctionlMsg').css("color","red")
-			$('#endAuctionlMsg').text("Something went wrong - email was not.")
+			$('#endAuctionMsg').css("color","red")
+			$('#endAuctionMsg').text("Something went wrong. Please contact us.")
         	return false;
       	}
 	});
@@ -106,7 +106,7 @@ function submitBid(itemId){
 					window.location.reload()
 			}else{
 				$('.successMsg').hide()
-				$("#msg").text("Something went wrong, we could not save your bid: "  + data.msg)
+				$("#msg").html("<div>Something went wrong, we could not save your bid:<br> "  + data.msg + "</div>")
         	
 			}
 		},
@@ -262,9 +262,7 @@ $( document ).ready(function() {
     	$( "#lockBlind-confirm" ).dialog( "open" );
     });
 
-    $( "#EMA_BTN" ).click(function() {
-    	$( "#endAuction-confirm" ).dialog( "open" );
-    });
+
 
 
 });

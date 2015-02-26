@@ -52,23 +52,26 @@
 		$(document).ready(function(){
 
 			$( "#endAuction-confirm" ).dialog({
-			resizable: false,
-			height:240,
-			modal: true,
-			autoOpen: false, 
-			buttons: {
-				"End Auction": function() {
-					endMyAuction("{{auctionId}}", "{{user.id}}")
-					
-					$( this ).dialog( "close" );
-				},
-			Cancel: function() {
-					$( this ).dialog( "close" );
+				resizable: false,
+				height:240,
+				modal: true,
+				autoOpen: false, 
+				buttons: {
+					"End Auction": function() {
+						endMyAuction("{{auctionId}}", "{{user.id}}")
+						
+						$( this ).dialog( "close" );
+					},
+				Cancel: function() {
+						$( this ).dialog( "close" );
+					}
 				}
-			}
-		});
+			});
 
-
+			$( "#EMA_BTN" ).click(function() {
+	    		$( "#endAuction-confirm" ).dialog( "open" );
+	    	})
+  
 		})
 	</script>
 

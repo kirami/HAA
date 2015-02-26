@@ -6,9 +6,14 @@
 
  <div id="invoiceEmail-confirm" title="Please Confirm">Are you sure you want to email this invoice to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>
 
-<button id='invoiceEmailButton'>Email report to {{data.user.first_name}} {{data.user.last_name}}</button>
+<button id='invoiceEmailButton'>Email Invoice to {{data.user.first_name}} {{data.user.last_name}}</button>
 <button onclick="window.open('/admin/audio/payment/add/?invoice={{data.invoice.id}}&user={{data.user.id}}')">Add Payment to this Invoice</button>
 <div id="consignorIdEmailMsg"></div>
+
+<div id="invoiceReminder-confirm" title="Please Confirm">Are you sure you want to email a reminder to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>
+
+<button id='invoiceReminderButton'>Email Reminder to {{data.user.first_name}} {{data.user.last_name}}</button>
+<div id="reminderMsg"></div>
 
 <div id="reportDiv" class="reportTable">
 	<div class="maxBidItem">Lot Id:</div>
@@ -48,28 +53,51 @@
 
 <script type="text/javascript">
 
-		function sendInvoices(){
+	function sendInvoices(){
 		var csrftoken = getCookie('csrftoken');
-			ajaxSetup(csrftoken);
+		ajaxSetup(csrftoken);
 
-			data = { "auctionId":{{data.auction.id}}, "userId":{{data.user.id}}}
+		data = { "auctionId":{{data.auction.id}}, "userId":{{data.user.id}}}
 
 
-			$.ajax({
-				type: "POST",
-				url: "/admin/sendInvoices/",
-				data: data,
-				success: function(data) {
-					$('#consignorIdEmailMsg').css("color","green")
-					$('#consignorIdEmailMsg').text("Email was successfully sent.")
-				},
-				error: function (xhr, ajaxOptions, thrownError) {
-					$('#consignorIdEmailMsg').css("color","red")
-					$('#consignorIdEmailMsg').text("Something went wrong - emails were not sent.")
-		        	return false;
-		      	}
-			});
-		}
+		$.ajax({
+			type: "POST",
+			url: "/admin/sendInvoices/",
+			data: data,
+			success: function(data) {
+				$('#reminderlMsg').css("color","green")
+				$('#reminderlMsg').text("Reminder email was successfully sent.")
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				$('#reminderlMsg').css("color","red")
+				$('#reminderlMsg').text("Something went wrong - email was not sent.")
+	        	return false;
+	      	}
+		});
+	}
+
+	function sendReminder(){
+		var csrftoken = getCookie('csrftoken');
+		ajaxSetup(csrftoken);
+
+		data = { "auctionId":{{data.auction.id}}, "userId":{{data.user.id}}}
+
+
+		$.ajax({
+			type: "POST",
+			url: "/admin/sendReminder/",
+			data: data,
+			success: function(data) {
+				$('#consignorIdEmailMsg').css("color","green")
+				$('#consignorIdEmailMsg').text("Invoice email was successfully sent.")
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				$('#consignorIdEmailMsg').css("color","red")
+				$('#consignorIdEmailMsg').text("Something went wrong - email was not sent.")
+	        	return false;
+	      	}
+		});
+	}
 
 
 	$( document ).ready(function() {
@@ -80,7 +108,23 @@
 			modal: true,
 			autoOpen: false, 
 			buttons: {
-				"Email": function() {
+				"Email Invoice": function() {
+					sendInvoices()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		$( "#invoiceReminder-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Email Reminder": function() {
 					sendInvoices()
 					$( this ).dialog( "close" );
 				},
@@ -92,6 +136,11 @@
 
 		$("#invoiceEmailButton").click(function(){
 			$( "#invoiceEmail-confirm" ).dialog( "open" );
+			return false;
+		})
+
+		$("#invoiceReminderButton").click(function(){
+			$( "#invoiceReminder-confirm" ).dialog( "open" );
 			return false;
 		})
 

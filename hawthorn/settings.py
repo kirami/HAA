@@ -125,46 +125,55 @@ ITEMS_PER_PAGE = 10
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
+    "version":1,
+    'disable_existing_loggers': True,
+    'filters': {
+        # Add an unbound RequestFilter.
+        'request': {
+            '()': 'django_requestlogging.logging_filters.RequestFilter',
+        },
+    },
     'formatters': {
-        'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        'request_format': {
+            'format': '%(remote_addr)s %(username)s "%(request_method)s '
+            '%(path_info)s %(server_protocol)s" %(http_user_agent)s '
+            '%(message)s %(asctime)s',
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
     },
     'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'filters': ['request'],
+            'formatter': 'simple',
+        },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': '/srv/hawthorn/logs/debug.log',
-            'formatter': 'verbose'
         },
-        'request_file': {
+        'error_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/srv/hawthorn/logs/request.log',
-            'formatter': 'verbose'
+            'filename': '/srv/hawthorn/logs/error.log',
         },
     },
     'loggers': {
-        'django': {
-            'handlers':['file'],
-            'propagate': True,
-            'level':'DEBUG',
-        },
-        
-        'django.request': {
-            'handlers':['request_file'],
-            'propagate': True,
-            'level':'DEBUG',
-        },
         'audio': {
-            'handlers': ['file', 'request_file'],
+            # Add your handlers that have the unbound request filter
+            'handlers': ['file'],
+            # Optionally, add the unbound request filter to your
+            # application.
+            'filters': ['request'],
             'level': 'DEBUG',
         },
-    }
+         'django.request': {
+            'handlers': ['error_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
 }
+
