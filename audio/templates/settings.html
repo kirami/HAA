@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{%if data.success%}
+<div class="successMsg">You've successfully updated your settings.</div>
+{%endif%}
+<form action="" method="POST">
+  {% csrf_token %}
+  <div style="float:left; margin-right:10px;">Hold all Contact</div>
+  <input name="quietBox" type="checkbox" {%if data.quietChecked%}checked{%endif%}>
+  <div class="clear"></div>
+  <input type="submit" value="Save">
+  <div>You will not be able to bid while we are not in contact with you.</div>
+</form>
+
+
+
+
+{% endblock %}

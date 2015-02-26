@@ -1,5 +1,6 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from decimal import Decimal
 from django import forms
@@ -19,6 +20,7 @@ from audio.mail import *
 
 import logging
 import json, math, string, random
+
 
 
 
@@ -51,7 +53,11 @@ def simpleForm(request):
 				
 				if up.deadbeat:
 					return render_to_response('item.html', {"form":form, "success": False, "msg":"There is a problem with your account.  Please contact us if you'd like to bid"}, context_instance=RequestContext(request))					
-			
+				
+				if up.quiet:
+					return HttpResponse(json.dumps({"success":False, "msg":"You're set to not receive any contact from us.  To bid please go to your profile and uncheck 'I want no contact' "}), content_type="application/json")	
+
+
 				form = BidSubmitForm(currentAuction.id, request.POST)
 			except:
 				return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
@@ -70,10 +76,15 @@ def simpleForm(request):
 				return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
 
 		else:
-			if isSecondChance():
+			if isSecondChance() or isBetweenSegments():
 				bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
-				logger.error("bids: %s" % bids)
-				if len(bids) < 1:
+				
+
+				if len(bids) < 1 and isBetweenSegments():
+					return render_to_response('noAuction.html', data, context_instance=RequestContext(request))	
+
+					
+				elif len(bids) < 1:
 					return redirect("noAuction")
 				return redirect("flatFeeCatalog")
 
@@ -84,8 +95,30 @@ def simpleForm(request):
 	else:
 		return redirect("catalog")
 	return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
+
+
+@login_required
+def accountSettings(request):
+	data = {}
+	up = UserProfile.objects.get(user = request.user)
+	if request.method == "POST":
+		try:
+			quiet = request.POST.get("quietBox", None)
+
+			if quiet:
+				up.quiet = True
+			else:
+				up.quiet = False
+			up.save()
+			data["success"] = True
+		except:
+			data["error"] = True
+			return render_to_response('settings.html', {"data":data}, context_instance=RequestContext(request))
+
+	data["quietChecked"] = up.quiet
+	return render_to_response('settings.html', {"data":data}, context_instance=RequestContext(request))
 		
-	
+@login_required	
 def contact_info(request):
 	if request.method == 'POST':
 		try:
@@ -130,6 +163,7 @@ def register(request):
     return render(request, "registration/register.html", {
         'form': form,
     })
+
 
 def send_registration_confirmation(user):
 	p = UserProfile.objects.get(user=user)
@@ -202,7 +236,7 @@ def confirm(request, confirmation_code, username):
 	data["user"] = user
 	return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
 
-
+@login_required
 def bids(request):
 	logger.error("bids")
 	if(request.user.is_authenticated()):
@@ -239,6 +273,7 @@ def bids(request):
 	else:
 		return redirect("profile")
 
+@login_required
 def auctionSummaries(request):
 	data = {}
 	if(request.user.is_authenticated()):
@@ -247,7 +282,7 @@ def auctionSummaries(request):
 	else:
 		return redirect("profile")
 
-
+@login_required
 def auctionSummary(request, auctionId):
 	data={}
 	if(request.user.is_authenticated()):
@@ -258,6 +293,8 @@ def auctionSummary(request, auctionId):
 		
 		currentAuction = auctions[0]
 		
+		if isBetweenSegments():
+			return redirect("catalog")
 
 		if not currentAuction.blind_locked:
 			return redirect("catalog")
@@ -271,7 +308,7 @@ def auctionSummary(request, auctionId):
 
 
 
-
+@login_required
 def profile(request):
 	data = {}
 	if request.user.is_authenticated():
@@ -282,6 +319,7 @@ def profile(request):
 			data["addressMsg"]=True
 	return render_to_response('profile.html', {"data":data}, context_instance=RequestContext(request))
 
+@login_required
 def userInfo(request):
 	
 	if request.user.is_authenticated():
@@ -298,7 +336,7 @@ def userInfo(request):
 		return redirect("profile")
 
 
-
+@login_required
 def flatFeeCatalog(request):
 	items = None
 	auction = getCurrentAuction()
@@ -324,6 +362,9 @@ def flatFeeCatalog(request):
 			bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
 			if len(bids) < 1:	
 				return redirect("noAuction")
+			
+			if isBetweenSegments():
+				return render_to_response('inBetween.html', data, context_instance=RequestContext(request))	
 
 			items = getNoBidItems(auction.id)
 		except Exception as e:
@@ -344,10 +385,15 @@ def noAuction(request):
 		
 			try:
 				#if after close but in 2nd chance
-				if isSecondChance():
+				if isSecondChance() or isBetweenSegments():
 					#only allow winners to bid (so only add on to won shipments)
 					bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
-					if len(bids) > 0:	
+					
+					if len(bids) < 1 and isBetweenSegments():
+						return render_to_response('noAuction.html', data, context_instance=RequestContext(request))	
+
+					elif len(bids) > 0:	
+						
 						return redirect("flatFeeCatalog")
 				else:
 					return redirect("catalog")
@@ -402,12 +448,15 @@ def catalog(request, msg= None):
 	currentAuctionId = currentAuction.id
 	try:
 		#if after close but in 2nd chance
-		if isSecondChance():
+		if isSecondChance() or isBetweenSegments():
 			
 			#only allow winners to bid (so only add on to won shipments)
 			bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
 			if len(bids) < 1:
 				return redirect("noAuction")
+			
+			if isBetweenSegments():
+				return render_to_response('inBetween.html', data, context_instance=RequestContext(request))	
 			return redirect("flatFeeCatalog")
 	except Exception as e:
 		logger.error("error in catalog")
@@ -452,7 +501,7 @@ def catalog(request, msg= None):
 	return render_to_response('catalog.html', {"sort":sortGet, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
 
 
-
+@login_required
 def submitBid(request):
 	if(request.user.is_authenticated()):
 		auction = getCurrentAuction()
@@ -473,7 +522,10 @@ def submitBid(request):
 			if profile.deadbeat:
 				return HttpResponse(json.dumps({"success":False, "msg":"There is a problem with your account.  Please contact us if you'd like to bid."}), content_type="application/json")	
 
+			if profile.quiet:
+				return HttpResponse(json.dumps({"success":False, "msg":"You're set to not receive any contact from us.  To bid please go to your settings and uncheck 'Hold all Contact' "}), content_type="application/json")	
 
+				
 			itemId = data.get("itemId")
 
 			item = Item.objects.get(id = itemId)
@@ -488,6 +540,8 @@ def submitBid(request):
 				bids = Bid.objects.filter(user=request.user, item__auction=currentAuctionId, winner=True)
 				if len(bids) < 1:
 					return HttpResponse(json.dumps({"success":False, "msg":"This auction is now closed."}), content_type="application/json")	
+			if isBetweenSegments():
+				return HttpResponse(json.dumps({"success":False, "msg":"This auction isn't open."}), content_type="application/json")	
 
 			
 			if Decimal(bidAmount) < item.min_bid:
@@ -514,7 +568,7 @@ def submitBid(request):
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")	
 	
-
+@login_required
 def deleteBid(request):
 	if(request.user.is_authenticated()):
 		data = request.POST
@@ -532,7 +586,7 @@ def deleteBid(request):
 	else:
 		return redirect("bids")
 		
-
+@login_required
 def showItem(request, auctionId, lotId):
 	if request.method == 'POST':
 		form = BidSubmitForm(request.POST)

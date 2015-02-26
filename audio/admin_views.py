@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core import serializers
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 
 
 from django import forms
@@ -26,42 +27,19 @@ import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 @staff_member_required
-def test(request):
-	user = User.objects.get(id=9)
-	p = UserProfile.objects.get(user=user)
-	emailData={}
-	emailData["url"] = "http://haa/audio/confirm/" + str(p.confirmation_code) + "/" + user.username
-	logger.error("url %s" % emailData["url"])
-	emailData["user"]=user
-	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
-	sendEmail(msg)
-	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+def printRecordLabels(request, auctionId, startingIndex = None):
 
-@staff_member_required
-#add many test items quickly
-def testItemInput(request, index, length):
-	i = int(index)
-	label = Label.objects.get(pk=1)
-	category = Category.objects.get(pk=1)
-	auction = Auction.objects.get(pk=8)
+	data = {}
+	data["auction"] = Auction.objects.get(pk = auctionId)
+	if startingIndex:
+		data["items"] = Item.objects.filter(auction = auctionId, lot_id__gte = startingIndex).order_by("lot_id")  
+	else:
+		data["items"] = Item.objects.filter(auction = auctionId).order_by("lot_id")  
 
-	try:
-		logger.error("index:%s,  length :%s" % (index, length))
-		while i < int(index) + int(length):
-			item = Item.objects.get_or_create(name="N"+str(i), condition = "x", auction  = auction, artist="A"+str(i), min_bid=2.0, label=label, category=category, lot_id = i)
-			#logger.error("item: %s" % item)
-			i = i +1
-
-		#create test users:
-
-
-
-	except Exception as e:
-		logger.error("test input error: %s" % e)
-		return HttpResponse(json.dumps({"success":False, "msg": e}), content_type="application/json")
-	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+	return render_to_response('admin/audio/printRecordLabels.html', {"data":data}, context_instance=RequestContext(request))
 
 
 @staff_member_required
@@ -774,11 +752,27 @@ def endBlindAuction(request, auctionId):
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
-@staff_member_required
+@login_required
 def endFlatAuction(request, auctionId, userId = None):
-	logger.error("flat %s" % userId)
+	logger.error("user %s" % request.user)
+	if userId:
+		logger.error("userId:%s logged in:%s" %(userId, request.user.id))
+		if int(userId) != int(request.user.id) and not request.user.is_staff:
+			logger.error("Tried to end Flat Auction with bad user: %s" % request.user)
+			return HttpResponse(json.dumps({"success":False, "msg":"Something went wrong.  Please contanct us."}), content_type="application/json")
+
+
+
+	
+	data = {}
+	data["auction"] =  Auction.objects.get(pk = auctionId)
+	data["user"] =  request.user
 	now = datetime.now()
 	#for all bids in auction not invoiced
+
+	email = request.POST.get("email", True)
+
+
 
 	#make sure to do all manual stuff first
 	auction = Auction.objects.get(id = auctionId)
@@ -798,7 +792,7 @@ def endFlatAuction(request, auctionId, userId = None):
 	#winners = getWinningFlatBids(auctionId, onlyNonInvoiced=True, userId = userId)
 	winners = getWinningFlatBids(auctionId, date=auction.end_date, userId = userId)
 	logger.error("winners %s"  % winners)
-
+	invoice = None
 	for winner in winners:
 		winnerId = winner.user_id
 
@@ -828,6 +822,12 @@ def endFlatAuction(request, auctionId, userId = None):
 	if userId == None:			
 		auction.flat_locked = True
 		auction.save()
+
+	if userId and email:
+		data["invoice"]=invoice
+		msg = getEmailMessage(settings.EMAIL_HOST_USER ,"User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)
+		msg.send()	
+	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 @staff_member_required
@@ -885,15 +885,15 @@ def sendLoserLetters(request, auctionId):
 	template = "loserLetter"
 	data = {}
 	data["auctionId"] = auctionId
-	logger.error("losers:")
+	#logger.error("losers:")
 	for loser in losers:
 
-		logger.error("loser %s" % loser)
+		#logger.error("loser %s" % loser)
 		profile = UserProfile.objects.get(user_id = loser.user_id)
 		user = User.objects.get(id = loser.user_id )
 		
 		if profile and profile.email_invoice:
-			msg = getEmailMessage(user.email,"test",{"data":data}, template)
+			msg = getEmailMessage(user.email,"Hawthorn Antique Audio Auction results",{"data":data}, template, True)
 			messages.append(msg)
 
 	if template :
@@ -946,7 +946,50 @@ def sendInvoices(request):
 		if profile and profile.email_invoice:
 			user = User.objects.get(id = winner["id"] )
 			data = getInvoiceData(auctionId, userId)
-			msg = getEmailMessage(user.email,"Invoice for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template)
+			msg = getEmailMessage(user.email,"Invoice for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template, True)
+			messages.append(msg)
+				
+		if template :
+			sendBulkEmail(messages)
+			return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+
+
+@staff_member_required
+def sendReminder(request):
+	auctionId = request.POST.get("auctionId")
+	userId = request.POST.get("userId", None)
+	auction = Auction.objects.get(id = auctionId)
+	
+	balances = getUnbalancedUsersByAuction()
+	balance = 0
+
+	if len(balances) > 0:
+		balance = balances[0]["iSum"] - balances[0]["pSum"]
+	
+	messages = []
+	data = {}
+	data["auction"] = auction
+
+	#if not auction.blind_locked:
+	#	return HttpResponse(json.dumps({"success":True, "msg":"This auction has not been locked.  Please make sure to lock the auction before trying to send reminders."}), content_type="application/json")
+
+	if userId == None:
+		winners = getAlphaWinners(auctionId)
+	else:
+		winners = [{"id" : userId}] 	
+
+	template = "reminder"
+
+
+	for winner in winners:
+		profile = UserProfile.objects.get(user_id = winner["id"])
+		if profile and profile.email_invoice:
+			user = User.objects.get(id = winner["id"] )
+			data = getInvoiceData(auctionId, userId)
+			msg = getEmailMessage(user.email,"Reminder for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template)
 			messages.append(msg)
 				
 		if template :
@@ -1210,3 +1253,38 @@ def runReport(request, auctionId):
 
 	return render_to_response('admin/audio/report.html', {"data":data}, context_instance=RequestContext(request))
 
+@staff_member_required
+def test(request):
+	user = User.objects.get(id=9)
+	p = UserProfile.objects.get(user=user)
+	emailData={}
+	emailData["url"] = "http://haa/audio/confirm/" + str(p.confirmation_code) + "/" + user.username
+	logger.error("url %s" % emailData["url"])
+	emailData["user"]=user
+	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
+	sendEmail(msg)
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+@staff_member_required
+#add many test items quickly
+def testItemInput(request, index, length):
+	i = int(index)
+	label = Label.objects.get(pk=1)
+	category = Category.objects.get(pk=1)
+	auction = Auction.objects.get(pk=8)
+
+	try:
+		logger.error("index:%s,  length :%s" % (index, length))
+		while i < int(index) + int(length):
+			item = Item.objects.get_or_create(name="N"+str(i), condition = "x", auction  = auction, artist="A"+str(i), min_bid=2.0, label=label, category=category, lot_id = i)
+			#logger.error("item: %s" % item)
+			i = i +1
+
+		#create test users:
+
+
+
+	except Exception as e:
+		logger.error("test input error: %s" % e)
+		return HttpResponse(json.dumps({"success":False, "msg": e}), content_type="application/json")
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")

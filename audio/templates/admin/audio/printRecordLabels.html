@@ -1,0 +1,74 @@
+{% load audio_extras %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+<style>
+@media print {
+@page {
+size: portrait;
+margin: 0.42in 0.22in 0.42in 0.22in ;
+}
+}
+tr {
+width: 100%;
+margin: 0;
+}
+td {
+font-size: 12px;
+font-family: sans-serif;
+width: 2.57in;
+height: 0.99in;
+margin: 0;
+vertical-align: top;
+-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+padding: 0.05in;
+/*border: 0.1px solid black;*/
+overflow: hidden;
+}
+td.separator {
+width: 0.12in;
+}
+* { font-family: sans-serif; }
+td h1, td h2, td p { font-size: 12px; }
+</style>
+
+
+</head>
+<body>
+
+<table>
+
+<!--  auction number, grade defects min bid company name, notes, label record number-->
+
+{%for item in data.items%}
+    {% ifequal forloop.counter0|modulo:3 0 %}
+        <tr>
+    {%endifequal%}
+
+    <td><span style="font-size:14px; font-weight:bold;margin-right:10px;">{{item.lot_id}}</span>a:{{data.auction.id}} Hawthorn's Antique Audio<br>
+    {{item.label.name}} {%if item.record_number%}{{item.record_number}}{%endif%} ${{item.min_bid}}<br>
+    {{item.condition}} {{item.defect}}<br>
+    <span style="max-width:200px;">{{item.notes}}</span>
+    </td>
+
+    {% ifequal forloop.counter0|modulo:3 0 %}
+        <td class="separator" />
+    {%endifequal%}
+
+    {% ifequal forloop.counter0|modulo:3 1 %}
+        <td class="separator" />
+    {%endifequal%}
+
+    {% ifequal forloop.counter0|modulo:3 2 %}
+        </tr>
+    {%endifequal%}
+{%endfor%}
+
+</table>
+
+
+
+</body>
+</html>

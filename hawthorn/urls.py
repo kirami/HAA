@@ -42,6 +42,7 @@ urlpatterns = patterns('',
     url(r'^admin/userBreakdown/(?P<auctionId>\d+)/$', admin_views.userBreakdown, name='userBreakdown'),
     url(r'^admin/userBreakdown/$', admin_views.userBreakdown, name='userBreakdown'),
     url(r'^admin/sendInvoices/$', admin_views.sendInvoices, name='sendInvoices'),
+    url(r'^admin/sendReminder/$', admin_views.sendReminder, name='sendReminder'),
     url(r'^admin/sendLoserLetters/(?P<auctionId>\d+)', admin_views.sendLoserLetters, name='sendLoserLetters'),
     url(r'^admin/endAuction/(?P<auctionId>\d+)/$', admin_views.endAuction, name='endAuction'),
     url(r'^admin/emailAdmin/(?P<auctionId>\d+)', admin_views.emailAdmin, name='emailAdmin'),
@@ -66,6 +67,8 @@ urlpatterns = patterns('',
     url(r'^admin/setDiscount/(?P<invoiceId>\d+)/$', admin_views.setDiscount, name='setDiscount'),  
     url(r'^admin/itemPrintOut/(?P<auctionId>\d+)/$', admin_views.itemPrintOut, name='itemPrintOut'),
     url(r'^admin/adjustLotIds/(?P<auctionId>\d+)/$', admin_views.adjustLotIds, name='adjustLotIds'),
+    url(r'^admin/printRecordLabels/(?P<auctionId>\d+)/(?P<startingIndex>\d+)/$', admin_views.printRecordLabels, name='printRecordLabels'),
+    url(r'^admin/printRecordLabels/(?P<auctionId>\d+)/$', admin_views.printRecordLabels, name='printRecordLabels'),
 
 
     

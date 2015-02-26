@@ -13,6 +13,12 @@
 </div>	
 <br><br>	
 
+
+<div id="loserEmail-confirm" title="Please Confirm">Are you sure you want to email Loser letters to all these users for auction {{data.auction.name}}?</div>
+
+<button id='loserEmailButton'>Email ALL Loser letters</button>
+<div id="reminderMsg"></div>
+
 <div id="reportDiv" class="reportTable">
 	<div class="maxBidItem">ID:</div>
 	<div class="maxBidItem">Last Name:</div>
@@ -32,5 +38,63 @@
 	{%endfor%}
 
 </div>
+
+
+
+<script type="text/javascript">
+
+	function sendLoserLetters(){
+		var csrftoken = getCookie('csrftoken');
+		ajaxSetup(csrftoken);
+
+
+		$.ajax({
+			type: "POST",
+			url: "/admin/sendLoserLetters/{{data.auction.id}}",
+			success: function(data) {
+				$('#reminderMsg').css("color","green")
+				$('#reminderMsg').text("Loser emails were successfully sent.")
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				$('#reminderMsg').css("color","red")
+				$('#reminderMsg').text("Something went wrong - emails were not sent.")
+	        	return false;
+	      	}
+		});
+	}
+
+
+
+	$( document ).ready(function() {
+
+		$( "#loserEmail-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"Email Loser Letter": function() {
+					sendLoserLetters()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+
+
+		$("#loserEmailButton").click(function(){
+			$( "#loserEmail-confirm" ).dialog( "open" );
+			return false;
+		})
+
+
+
+	})
+
+	</script>
+
 
 {%endblock%}

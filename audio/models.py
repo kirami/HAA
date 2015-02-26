@@ -7,6 +7,7 @@ from django.conf import settings
 class Auction(models.Model):
 	start_date = models.DateTimeField()
 	end_date = models.DateTimeField()
+	second_chance_start_date = models.DateTimeField(null = True)
 	second_chance_end_date = models.DateTimeField(null = True)
 	#flat_bid_amount = models.DecimalField(max_digits=19, decimal_places=2, default=2.00)
 	blind_locked = models.BooleanField(default = False)
@@ -79,6 +80,7 @@ class Item(models.Model):
 	lot_id = models.IntegerField(null = True, blank=True, default=" ")
 	category = models.ForeignKey(Category, related_name="itemCategory")
 	condition = models.CharField(max_length=100, default="")
+	defect = models.CharField(max_length=100, default="")
 	quantity = models.IntegerField(default = 1)
 	auction = models.ForeignKey(Auction)
 	thumbnail = models.FileField(upload_to='items/', null = True, blank=True)
@@ -109,12 +111,13 @@ class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique = True, related_name="upUser")
 	#TODO defaults?
 	pdf_list = models.BooleanField(default = False)
-	printed_list = models.BooleanField(default = False)
 	courtesy_list = models.BooleanField(default = False)
 	deadbeat = models.BooleanField(default=False)
-	email_invoice = models.BooleanField(default=True)
+	email_only = models.BooleanField(default=True)
+	quiet = models.BooleanField(default = False)
 	notes = models.CharField(max_length=200, null = True, blank=True)
 	verified = models.BooleanField(default=False)
+	
 	confirmation_code = models.CharField(max_length=200, null = True, blank=True)
 
 

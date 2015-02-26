@@ -22,7 +22,7 @@ def sendBulkEmail(messages):
 	connection.send_messages(messages)
 
 
-def getEmailMessage(to, subject, data, template):
+def getEmailMessage(to, subject, data, template, record = False):
 	plaintext = get_template('email/'+template+'.txt')
 	htmly     = get_template('email/'+template+'.html')
 	#domain = Site.objects.get_current().domain
@@ -35,4 +35,10 @@ def getEmailMessage(to, subject, data, template):
 	html_content = htmly.render(d)
 	msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
 	msg.attach_alternative(html_content, "text/html")
+
+	if record:
+		pdf = open('/srv/hawthorn/files/RosevilleRecord.pdf', 'rb')
+		msg.attach('RosevilleRecord.pdf', pdf.read(),'application/pdf')
+
+	
 	return msg
