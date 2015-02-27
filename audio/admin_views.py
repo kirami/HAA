@@ -260,6 +260,7 @@ def addItem(request):
 	auction = request.GET.get('auction', None)
 	label = request.GET.get('label', None)
 	min_bid = request.GET.get('min_bid', None)
+	item_type = request.GET.get('item_type', None)
 	artist = request.GET.get('artist', None)
 	name = request.GET.get('name', None)
 	condition = request.GET.get('condition', None)
@@ -274,7 +275,7 @@ def addItem(request):
 		lotId = lotIds[0]
 		lastLotId = lotId
 		lotId = lotId + 1
-	initData = {"auction":auction, "label":label, "min_bid": min_bid, "category": category, "artist": artist, "lot_id" : lotId, "name":name, "condition":condition}
+	initData = {"auction":auction, "label":label, "min_bid": min_bid, "category": category, "artist": artist, "lot_id" : lotId, "name":name, "condition":condition, "item_type":item_type}
 	form = ItemForm(initial = initData)
 
 	if request.method == 'POST':
@@ -791,7 +792,7 @@ def endFlatAuction(request, auctionId, userId = None):
 
 	#winners = getWinningFlatBids(auctionId, onlyNonInvoiced=True, userId = userId)
 	winners = getWinningFlatBids(auctionId, date=auction.end_date, userId = userId)
-	logger.error("winners %s"  % winners)
+	#logger.error("winners %s"  % winners)
 	invoice = None
 	for winner in winners:
 		winnerId = winner.user_id

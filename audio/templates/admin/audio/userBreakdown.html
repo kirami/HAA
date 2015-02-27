@@ -7,8 +7,8 @@
 <div style="float:left">
 	<div class="bd" id="newDiv">New: {{data.new|length}} <a href="/admin/printLabels/{{data.auctionId}}/New">Print List</a></div>
 	<div class="bd" id="currentDiv">Current: {{data.current|length}} <a href="/admin/printLabels/{{data.auctionId}}/Current">Print List</a></div>
-	<div class="bd" id="nonCurrentDiv">NonCurrent: {{data.nonCurrent|length}} <a href="/admin/printLabels/{{data.auctionId}}/NonCurrent">Print List</a></div>	
-	<div class="bd" id="nonActiveDiv">NonActive: {{data.nonActive|length}} <a href="/admin/printLabels/{{data.auctionId}}/NonActive">Print List</a></div>	
+	<div class="bd" id="nonCurrentDiv">NonCurrent (Reminder): {{data.nonCurrent|length}} <a href="/admin/printLabels/{{data.auctionId}}/NonCurrent">Print List</a></div>	
+	<div class="bd" id="nonActiveDiv">Inactive: {{data.nonActive|length}} <a href="/admin/printLabels/{{data.auctionId}}/NonActive">Print List</a></div>	
 	<div class="bd" id="courtesyDiv">Courtesy: {{data.courtesy|length}} <a href="/admin/printLabels/{{data.auctionId}}/Courtesy">Print List</a></div>		
 </div>
 

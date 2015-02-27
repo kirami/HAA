@@ -1,7 +1,7 @@
 from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, \
                  EmailField, DateTimeField, IntegerField, ChoiceField, FileField
 from django.contrib.auth.forms import UserCreationForm
-from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction, Category, Label
+from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction, Category, Label, ItemType
 from audio.utils import *
 from audio.dropdowns import *
 from django.core.exceptions import ValidationError
@@ -18,6 +18,7 @@ class ItemPrePopulateForm(Form):
     auction = ModelChoiceField(Auction.objects.all())
     category = ModelChoiceField(Category.objects.all())
     label =  ModelChoiceField(Label.objects.all())
+    item_type =  ModelChoiceField(ItemType.objects.all())
     min_bid = DecimalField(label='Minumum Bid', initial=2.00)
 
 class InvoiceForm(ModelForm):

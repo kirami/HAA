@@ -67,6 +67,12 @@ class Label(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class ItemType(models.Model):
+	name = models.CharField(max_length=200, default="")
+	notes = models.CharField(max_length=200, default="", null = True, blank = True)
+
+	def __unicode__(self):
+		return self.name
         
 class Item(models.Model):
 	#TODO fix requireds
@@ -79,12 +85,14 @@ class Item(models.Model):
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
 	lot_id = models.IntegerField(null = True, blank=True, default=" ")
 	category = models.ForeignKey(Category, related_name="itemCategory")
+	item_type = models.ForeignKey(ItemType, related_name="itemType")
 	condition = models.CharField(max_length=100, default="")
-	defect = models.CharField(max_length=100, default="")
+	defect = models.CharField(max_length=100, default="", null = True, blank=True)
 	quantity = models.IntegerField(default = 1)
 	auction = models.ForeignKey(Auction)
 	thumbnail = models.FileField(upload_to='items/', null = True, blank=True)
 	image = models.FileField(upload_to='items/', null = True, blank=True)
+
 	
 	class Meta:
 		unique_together = (("auction", "lot_id"),)
@@ -115,9 +123,9 @@ class UserProfile(models.Model):
 	deadbeat = models.BooleanField(default=False)
 	email_only = models.BooleanField(default=True)
 	quiet = models.BooleanField(default = False)
+	ebay = models.BooleanField(default = False)
 	notes = models.CharField(max_length=200, null = True, blank=True)
 	verified = models.BooleanField(default=False)
-	
 	confirmation_code = models.CharField(max_length=200, null = True, blank=True)
 
 

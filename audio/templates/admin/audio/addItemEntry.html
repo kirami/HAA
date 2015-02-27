@@ -45,6 +45,14 @@ $( document ).ready(function() {
 			url+="min_bid=" + $("#id_min_bid").val()	
 		}
 
+		if ($("#id_item_type").val()){
+			if(first)
+				first = false
+			else 
+				url+='&'
+			url+="item_type=" + $("#id_item_type").val()	
+		}
+
 		
 		window.open(url)
 		return false;
