@@ -13,9 +13,10 @@
 </div>
 <div class="left">
 	<div>Table of contents:</div>
+	<div class="leftMenu" id="" ><a href="/audio/catalog" style="{%if not category%}color:black{%endif%}">All</a></div>
+	
 	{%for cat in categories%}
-
-	<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category == cat.id %}color:black{%endif%}">{{cat}}</a></div>
+		<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category == cat.id %}color:black{%endif%}">{{cat}}</a></div>
 	{%endfor%}
 </div>
 
@@ -62,7 +63,7 @@
 						<form autocomplete="off">
 						<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}"></form>
 					</div>
-					<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Bid Now</button></div>
+					<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Enter Bid</button></div>
 				
 				{%else%}
 						

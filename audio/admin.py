@@ -1,5 +1,6 @@
 from django.contrib import admin
-from audio.models import Auction, Category, Item, Bid, Address, Label, UserProfile, Payment, Invoice, Condition, PrintedCatalog
+from audio.models import Auction, Category, Item, Bid, Address, Label, UserProfile, \
+Payment, Invoice, Condition, PrintedCatalog, ItemType
 from audio.models import Consignor, Consignment
 from django.conf.urls import patterns, url
 from django.contrib.auth.admin import UserAdmin
@@ -55,9 +56,9 @@ class InvoiceAdmin(admin.ModelAdmin):
     
 class ItemAdmin(admin.ModelAdmin):
 
-    list_display = ('name', 'lot_id', 'auction',)
+    list_display = ('name', 'lot_id', 'auction')
     search_fields = ['name', 'lot_id']
-    list_filter = ('auction',)
+    list_filter = ('auction', 'item_type')
 
 class PrintedCatalogAdmin(admin.ModelAdmin):
 
@@ -78,6 +79,7 @@ admin.site.register(Item, ItemAdmin)
 admin.site.register(Bid, BidAdmin)
 admin.site.register(Address)
 admin.site.register(Label)
+admin.site.register(ItemType)
 admin.site.register(UserProfile)
 admin.site.register(Payment)
 admin.site.register(Invoice, InvoiceAdmin)
