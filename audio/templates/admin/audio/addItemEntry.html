@@ -53,6 +53,14 @@ $( document ).ready(function() {
 			url+="item_type=" + $("#id_item_type").val()	
 		}
 
+		if ($("#id_beginning_lot_id").val()){
+			if(first)
+				first = false
+			else 
+				url+='&'
+			url+="beginning_lot_id=" + $("#id_beginning_lot_id").val()	
+		}
+
 		
 		window.open(url)
 		return false;

@@ -117,7 +117,6 @@ class Bid(models.Model):
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique = True, related_name="upUser")
-	#TODO defaults?
 	pdf_list = models.BooleanField(default = False)
 	courtesy_list = models.BooleanField(default = False)
 	deadbeat = models.BooleanField(default=False)
@@ -142,8 +141,7 @@ class Address(models.Model):
 	zipcode = models.CharField(max_length=100, default="", null=True, blank=True)
 	postal_code = models.CharField(max_length=100, null=True, blank=True)
 	country = models.CharField(max_length=100, default="")
-	telephone = models.CharField(max_length=100, null=True, blank = True)
-	cell_phone = models.CharField(max_length=100, null=True, blank=True)
+	telephone = models.CharField(max_length=100, default="")
 	fax = models.CharField(max_length=100, null=True, blank=True)
 
 	class Meta:

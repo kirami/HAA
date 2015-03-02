@@ -1,0 +1,83 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+<div>Auction: {{data.auction.name}}</div>
+
+<div id="endSSMsg"></div>
+
+{%if data.errorMsg%}
+	<div class="errorMsg">{{data.errorMsg}}</div>
+{%else%}
+
+	<div>End the Set Sale segment for {{data.user.first_name}} {{data.user.last_name}}? <button id="endSS">End Set Sale</button></div>
+{%endif%}
+
+
+
+<div id="endSS-confirm" title="Please Confirm">Are you sure you want to end the Set Sale auction for auction: "{{data.auction.name}}"?</div>
+
+
+
+
+<DIV id="msg" style="margin-top:20px; font-size:20px; color:red"></DIV>
+
+<input type="hidden" id="auctionId" name="auctionId" value="{{data.auctionId}}">
+
+<script type="text/javascript">
+	
+
+	function endSSAuction(){
+		var csrftoken = getCookie('csrftoken');
+		ajaxSetup(csrftoken);
+
+		
+
+
+		$.ajax({
+			type: "POST",
+			url: "/admin/endFlatAuction/{{data.auction.id}}/{{data.user.id}}",
+			success: function(data) {
+				$('#endSSMsg').css("color","green")
+				$('#endSSMsg').text("Ended Set Sale auction successfully.")
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				$('#endSSMsg').css("color","red")
+				$('#endSSMsg').text("Something went wrong - set sale auction was not ended")
+	        	return false;
+	      	}
+		});
+	}
+
+
+	$( document ).ready(function() {
+
+		$( "#endSS-confirm" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			buttons: {
+				"End Set Sale": function() {
+					endSSAuction()
+					$( this ).dialog( "close" );
+				},
+			Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+
+
+		$("#endSS").click(function(){
+			$( "#endSS-confirm" ).dialog( "open" );
+			return false;
+		})
+
+	})
+
+	</script>
+
+{%endblock%}
