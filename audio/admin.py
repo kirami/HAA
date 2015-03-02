@@ -30,7 +30,7 @@ class CustomConsignmentModelForm(forms.ModelForm):
 
 class ConditionAdmin(admin.ModelAdmin):
     list_filter = ("auction", "done")
-    list_display = ('user', 'message')
+    list_display = ('user', 'message' ,"done")
 
 class BidAdmin(admin.ModelAdmin):
 

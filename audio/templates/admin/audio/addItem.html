@@ -8,8 +8,8 @@
 
 {%endif%}
 
-{%if error%}
-	<div style="color:red; font-size:18px">Something went wrong - bid was not created.</div>
+{%if data.errorMsg%}
+	<div style="color:red; font-size:18px">{{data.errorMsg}}</div>
 {%endif%}
 
 {%if data.auctionEnded%}

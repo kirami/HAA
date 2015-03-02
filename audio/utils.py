@@ -89,18 +89,25 @@ def usersWithoutAddress():
 
 
 #users with no bids	
-def getNewUsers(emailOnly = False):
+def getNewUsers(emailOnly = False, excludeEbay = True):
 	users = User.objects.filter(bidUser__isnull=True, is_staff = False)
+	#exlude = User.objects.
 	#users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
 	#admin = User.objects.filter(is_staff = True)
 	#todo no quiet
 	return list( users), Address.objects.filter(user__in=set(users))
 
 #users bid within last 3 auctions or printed list = true or paid for a catalog within 3 auctions
-def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False):
+def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False, excludeEbay = True):
 	users = User.objects.filter(bidUser__item__auction__gt = int(auctionId)-4).distinct()
 	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
-	admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+	
+	if excludeEbay:
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
+	
+	else:
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+	
 	combined = set(users) | set(printed)
 	
 	if emailOnly:
@@ -120,11 +127,16 @@ def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False):
 
 #users no bid last three auctions & not on keep me on list & no printed catalog bought
 #reminder group
-def getNonCurrentUsers(auctionId, emailOnly = False, printedOnly = False):
+def getNonCurrentUsers(auctionId, emailOnly = False, printedOnly = False, excludeEbay = True):
 	#not bids last 3 auctions, but bid in 4th
 
 	users = User.objects.filter(bidUser__item__auction__gt = int(auctionId)-5 ).exclude(bidUser__item__auction__gt = int(auctionId)-4).distinct()
-	admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+	if excludeEbay:
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
+	
+	else:
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+	
 	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
 	combined = set(users) - set(admin) - set(printed)
 	
@@ -144,13 +156,18 @@ def getActiveUsers():
 
 #bidders are not current but have bid in the past
 #TODO of all time or past # of auctions??
-def getNonActiveUsers(auctionId, emailOnly = False, printedOnly = False):
+def getNonActiveUsers(auctionId, emailOnly = False, printedOnly = False, excludeEbay = True):
 	
 	#no bids since 4 or more
 	users = User.objects.filter(bidUser__isnull=False).exclude(bidUser__item__auction__gt = int(auctionId)-5).distinct()
-	admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
-	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
+	
+	if excludeEbay:
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
+	
+	else:
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
 
+	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
 	combined = set(users) - set(admin) - set(printed)
 
 	if emailOnly:
@@ -160,6 +177,7 @@ def getNonActiveUsers(auctionId, emailOnly = False, printedOnly = False):
 	if printedOnly:
 		printedOnly = User.objects.filter(upUser__email_only=False)
 		combined = combined & set(emailOnly)
+	
 	return list(combined), Address.objects.filter(user__in=set(combined))
 
 

@@ -58,7 +58,7 @@ def conditionsCheck(request, auctionId):
 		if auction.blind_locked:
 			data["blindLocked"]=True
 
-	conditions = Condition.objects.filter(auction = auctionId)
+	conditions = Condition.objects.filter(auction = auctionId, done=False)
 	if len(conditions) < 1:
 		data["noConditions"] = True	
 
@@ -265,16 +265,18 @@ def addItem(request):
 	name = request.GET.get('name', None)
 	condition = request.GET.get('condition', None)
 	category = request.GET.get('category', None)
-	lotId = 0
-	lastLotId = 0
+	lotId = request.GET.get('beginning_lot_id', 0)
+	lastLotId = request.GET.get('last_lot_id', 0)
+
+	
 
 
-
-	lotIds = (Item.objects.filter(auction=auction).order_by('-lot_id').values_list('lot_id', flat=True).distinct())
-	if len(lotIds)>0:
-		lotId = lotIds[0]
-		lastLotId = lotId
-		lotId = lotId + 1
+	if lotId == 0:
+		lotIds = (Item.objects.filter(auction=auction).order_by('-lot_id').values_list('lot_id', flat=True).distinct())
+		if len(lotIds)>0:
+			lotId = lotIds[0]
+			lastLotId = lotId
+			lotId = lotId + 1
 	initData = {"auction":auction, "label":label, "min_bid": min_bid, "category": category, "artist": artist, "lot_id" : lotId, "name":name, "condition":condition, "item_type":item_type}
 	form = ItemForm(initial = initData)
 
@@ -282,6 +284,8 @@ def addItem(request):
 		try:
 			auctionObj = Auction.objects.get(pk=auction)
 			if auctionObj.flat_locked:
+				logger.error("Auction %s is locked" % auction)
+				data["errorMsg"] = "This auction is locked"
 				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False, "lastLotId":lastLotId, "nextLotId":lotId, "auctionEnded":True}, context_instance=RequestContext(request))
 			
 
@@ -289,22 +293,23 @@ def addItem(request):
 
 			if form.is_valid():
 				item = form.save()
-				lotId = lotId+1
-				lastLotId =  lastLotId+1
+				lotId = int(form.data["lot_id"]) + 1
+				lastLotId =  form.data["lot_id"]
 				initData["lot_id"] = lotId
+				
 			else:
 				data["form"] = form
 				return render_to_response('admin/audio/addItem.html', {"data":data, "success": False, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 			
 			
-
 			data["form"] = ItemForm(initial = initData)
+			logger.error("lotId: %s  last_lot_id: %s" % (lotId, lastLotId))
 			return render_to_response('admin/audio/addItem.html', {"data":data, "success": True, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 			
-		except:
+		except Exception as e:
+			logger.error("error creating item: %s" % e)
 			return render_to_response('admin/audio/addItem.html', {"data":data, "success": False}, context_instance=RequestContext(request))
 			
-
 	data["form"] = form
 	return render_to_response('admin/audio/addItem.html', {"data":data, "success": success, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 
@@ -460,12 +465,12 @@ def importUserCSV(request):
 						if address2:
 							addressObj.address_two = address2
 						if cell_phone:
-							addressObj.cell_phone = cell_phone
+							addressObj.telephone= cell_phone
 						if city:
 							addressObj.city = city
 						if state:
 							addressObj.state = state
-						if telephone:
+						if telephone and not cell_phone:
 							addressObj.telephone = telephone
 						if provence:
 							addressObj.provence = provence
@@ -752,6 +757,25 @@ def endBlindAuction(request, auctionId):
 
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+#admin page for ending user's flat auction
+@login_required
+def endSSAuction(request, auctionId, userId = None):
+	data = {}
+	data["auction"] = Auction.objects.get(pk=auctionId) 
+	invoice = None
+	
+	invoices = Invoice.objects.filter(user = userId, auction=auctionId)
+	if len(invoices) < 1:
+		data["errorMsg"] = "This user doesn't have an invoice, they should not have a Set Sale open."
+	else:
+		invoice = invoices[0]
+		if invoice.second_chance_invoice_amount != 0:
+			data["errorMsg"]= "This user already has information saved for second_chance invoice."
+
+	data["user"] = User.objects.get(pk=userId)
+	return render_to_response('admin/audio/endSSAuction.html', {"data":data}, context_instance=RequestContext(request))
+
 
 @login_required
 def endFlatAuction(request, auctionId, userId = None):

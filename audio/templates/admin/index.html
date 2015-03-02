@@ -153,6 +153,13 @@
                     </tr>
 
                     <tr class="model-group">           
+                        <th scope="row"><a class="adminLink"  href="/admin/filterAdminIndex?page=End User's Set Sale&auction=true&nextPage=endSSAuction&user=true" target="_blank">End User's Set Sale</a></th>                   
+                        <td>Auction ID:<input type="text" id="endSSAuctionId" class="adminInput"></td> 
+                        <td>User ID:<input type="text" id="endSSUserId" class="adminInput"></td>
+                        <td><a class="quick" onclick="goToEndSS()" >Go Quick</a></td>     
+                    </tr>
+
+                    <tr class="model-group">           
                         <th scope="row"><a class="adminLink"  href="/admin/filterAdminIndex?page=Item Printout&auction=true&nextPage=itemPrintOut" target="_blank">Item Printout</a></th>                   
                         <td>Auction ID:<input type="text" id="IOAuctionId" class="adminInput"></td> 
                         <td><a class="quick" onclick="goTo('itemPrintOut/', 'IOAuctionId')" >Go Quick</a></td>     
@@ -287,6 +294,23 @@ function goToConsignor(){
     locationUrl = "consignorReport/"
     auctionId = $('#consignorAuction').val()
     consignorId = $('#consignorId').val()
+
+    if(auctionId != "")
+        locationUrl+= ""+auctionId + '/'
+    else
+        locationUrl+="0/"
+
+    if(consignorId != "")
+        locationUrl+= "" + consignorId + '/'
+
+    window.open( locationUrl)
+    return false;
+}
+
+function goToEndSS(){
+    locationUrl = "endSSAuction/"
+    auctionId = $('#endSSAuctionId').val()
+    consignorId = $('#endSSUserId').val()
 
     if(auctionId != "")
         locationUrl+= ""+auctionId + '/'

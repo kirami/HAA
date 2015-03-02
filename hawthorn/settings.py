@@ -142,17 +142,22 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
     },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
             'filters': ['request'],
-            'formatter': 'simple',
+            'formatter': 'verbose',
         },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': '/srv/hawthorn/logs/debug.log',
+            'formatter': 'verbose',
         },
         'error_file': {
             'level': 'DEBUG',
@@ -168,6 +173,7 @@ LOGGING = {
             # application.
             'filters': ['request'],
             'level': 'DEBUG',
+            'formatter': 'verbose',
         },
          'django.request': {
             'handlers': ['error_file'],

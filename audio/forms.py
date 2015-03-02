@@ -20,6 +20,7 @@ class ItemPrePopulateForm(Form):
     label =  ModelChoiceField(Label.objects.all())
     item_type =  ModelChoiceField(ItemType.objects.all())
     min_bid = DecimalField(label='Minumum Bid', initial=2.00)
+    beginning_lot_id = IntegerField(label="Starting lot id", required=False)
 
 class InvoiceForm(ModelForm):
     class Meta:
