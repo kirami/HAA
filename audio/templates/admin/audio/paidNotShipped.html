@@ -43,7 +43,9 @@
 
 		<hr>
 		<div>Shipping: ${{value.estimatedShipping}}</div>
-		<div>Total: ${{value.total}}</div>
+		<div>Total: <b>${{value.total}}</b></div>
+
+		<div style="margin-top:15px;">We've received payments, attributed to this invoice, of <b>${{value.payment.sum}}</b></div>
 
 	</div>
 </div>

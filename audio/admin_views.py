@@ -691,6 +691,8 @@ def getPaidUnshipped(request, auctionId):
 				data["invoices"][str(invoice.id)]["subTotal"] = invoice.invoiced_amount + invoice.tax + invoice.second_chance_tax  + invoice.second_chance_invoice_amount - invoice.discount
 				data["invoices"][str(invoice.id)]["estimatedShipping"] = invoice.shipping + invoice.second_chance_shipping
 				data["invoices"][str(invoice.id)]["total"] = data["invoices"][str(invoice.id)]["subTotal"] + data["invoices"][str(invoice.id)]["estimatedShipping"]
+				data["invoices"][str(invoice.id)]["payment"] = getPaymentInfoByUser(winner.id, auctionId = auctionId)
+				
 				#data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
 				if address:
 					data["invoices"][str(invoice.id)]["address"] = address

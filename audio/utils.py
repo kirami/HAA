@@ -463,7 +463,7 @@ def getPaymentInfoByUser(userId, auctionId = None):
 	if auctionId == None:
 		payments = Payment.objects.filter(user_id = userId)
 	else:
-		payments = Payment.objects.filter(user_id = userId, auction_id = auctionId)
+		payments = Payment.objects.filter(user_id = userId, invoice__auction = auctionId)
 	
 	if len(payments) > 0:
 		return { "sum": payments.aggregate(Sum('amount'))["amount__sum"], "payments":payments} 
