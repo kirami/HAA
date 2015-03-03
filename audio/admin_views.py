@@ -268,9 +268,6 @@ def addItem(request):
 	lotId = request.GET.get('beginning_lot_id', 0)
 	lastLotId = request.GET.get('last_lot_id', 0)
 
-	
-
-
 	if lotId == 0:
 		lotIds = (Item.objects.filter(auction=auction).order_by('-lot_id').values_list('lot_id', flat=True).distinct())
 		if len(lotIds)>0:
@@ -667,6 +664,75 @@ def shippingByInvoice(request, auctionId, filter=None):
 				firstInvoice = invoice.id
 	data["firstInvoice"] = firstInvoice
 	return render_to_response('admin/audio/shippingByInvoice.html', {"data":data}, context_instance=RequestContext(request))
+
+@staff_member_required
+def getPaidUnshipped(request, auctionId):
+	data = {}
+	data["invoices"] = {}
+	data["auction"] = Auction.objects.get(pk = auctionId)
+	winners = User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True, paymentUser__invoice__auction=auctionId).distinct().order_by("last_name")
+	#firstInvoice = None
+	for winner in winners:
+		address = None
+		addresses = Address.objects.filter(user = winner)
+		if len(addresses)  < 1:
+			logger.error("shippingByInvoice() user %s doesn't have an address on file" % winner.id)
+		else:
+			address = addresses[0]
+
+		invoices = Invoice.objects.filter(auction = auctionId, user_id = winner.id)
+		
+		if len(invoices) > 0:
+			invoice = invoices[0]
+			if not invoice.shipped_date:
+				winnersSum = getWinnerSum(auctionId, userId =winner.id)
+				data["invoices"][str(invoice.id)] = {}
+				data["invoices"][str(invoice.id)]["bids"] = winnersSum
+				data["invoices"][str(invoice.id)]["subTotal"] = invoice.invoiced_amount + invoice.tax + invoice.second_chance_tax  + invoice.second_chance_invoice_amount - invoice.discount
+				data["invoices"][str(invoice.id)]["estimatedShipping"] = invoice.shipping + invoice.second_chance_shipping
+				data["invoices"][str(invoice.id)]["total"] = data["invoices"][str(invoice.id)]["subTotal"] + data["invoices"][str(invoice.id)]["estimatedShipping"]
+				#data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
+				if address:
+					data["invoices"][str(invoice.id)]["address"] = address
+				
+			#if firstInvoice != None:
+				#firstInvoice = invoice.id
+	#data["firstInvoice"] = firstInvoice
+	return render_to_response('admin/audio/paidNotShipped.html', {"data":data}, context_instance=RequestContext(request))
+
+
+@staff_member_required
+def markShipped(request, auctionId):
+	data = {}
+	data["invoices"] = {}
+	data["auction"] = Auction.objects.get(pk = auctionId)
+	
+	if request.method == "POST":
+		logger.debug(request.POST)
+
+		try:
+			date = request.POST.get("shipped_date", None)
+			if not date:
+				data["errorMsg"] = "You must specify a date"
+			else:
+				for req in request.POST:
+				
+					if "invoice" in req:
+						invoiceNum = req[8:]
+						invoice = Invoice.objects.get(pk=invoiceNum)
+						invoice.shipped_date = date
+						invoice.save()
+
+				data["success"] = True
+
+		except Exception as e:
+			logger.error("Error in markShipped %s" % e)
+
+	winners = User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True, paymentUser__invoice__auction=auctionId).distinct().order_by("last_name")
+	data["invoices"] = Invoice.objects.filter(user__in=set(winners), shipped_date = None, auction = auctionId).distinct()
+
+	return render_to_response('admin/audio/markShipped.html', {"data":data}, context_instance=RequestContext(request))
+
 
 @staff_member_required
 def emailAdmin(request, auctionId):

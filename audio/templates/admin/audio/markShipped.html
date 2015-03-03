@@ -1,0 +1,55 @@
+{% extends "admin/audio/baseAdmin.html" %}
+ 
+
+{%block content%}
+
+{%if data.errorMsg%}
+<div class="successError">{{data.errorMsg}}</div>
+{%endif%}
+
+{%if data.success%}
+<div class="successMsg">You've successfully saved the shipping date.</div>
+{%endif%}
+
+<div style="font-size:14px; font-weight:bold;margin-bottom:15px;">Choose all invoices to mark as shipped for auction {{data.auction.name}}</div>
+
+<div>
+<form action="" method="POST">	
+    {% csrf_token %}
+	<div class="form-row field-invoice_date" style="margin-bottom:15px;">
+
+        <div>
+            
+            
+        <label for="id_invoice_date" class="required">Shipped date:</label>
+        
+            <input type="text" value="2015-03-02" size="10" name="shipped_date" id="shipped_invoice_date" class="vDateField">
+                
+            
+            
+        </div>
+		    
+	</div>
+{%for invoice in data.invoices%}
+<div>
+<input type="checkbox" name="invoice_{{invoice.id}}" style="margin-right:10px;"> <a href="/admin/audio/invoice/{{invoice.id}}">#{{invoice.id}}: {{invoice.user.first_name}} {{invoice.user.last_name}}  -- {{invoice.user}}</a> 
+</div>
+{%endfor%}
+
+<input type="submit" value="Save" style="margin-top:15px;">
+
+</form>
+</div>
+
+
+<script type="text/javascript">
+
+$( document ).ready(function() {
+
+
+
+});
+	
+</script>
+
+{%endblock%}

@@ -5,47 +5,52 @@
 
 
 
-<div>Invoices Auction: {{data.auctionId}}</div>
+<div>Invoices paid but not shipped for auction: {{data.auctionId}}</div>
 <input type="hidden" value="{{data.auctionId}}" name="auctionId" id="auctionId"> 
+
 <div id="invoices">
 {%for key,value in data.invoices.items%} 
-
 	<div id="invoiceDiv_{{key}}" class="invoiceDivs" style="display:none">
 		<div>Invoice for user: <a href="/admin/audio/invoice/{{key}}" target="_blank">{{value.bids.wonItems.0.user}}</a></div>
-		{%if data.filtered == False%}
-		<div>Take me to only invoices with no shipping entered yet <a href="/admin/shippingByInvoice/{{data.auctionId}}/filtered/">here</a></div>
+
+		<div style="font-size:14px; font:weight:bold; margin:10px 0px;">Address:</div>
+		{%if value.address.country == "USA" %}
+		<div>{{value.address.user.first_name}} {{value.address.user.last_name}}<br>{{value.address.address_one}}<br> {%if value.address.address_two%}{{value.address.address_two}}<br>{%endif%}{{value.address.city}} {{value.address.state}}, {{value.address.zipcode}}</div>
 		{%else%}
-		<div>Take me to all invoices <a href="/admin/shippingByInvoice/{{data.auctionId}}/">here</a></div>
+			<div>{{value.address.user.first_name}} {{value.address.user.last_name}}<br>{{value.address.address_one}}<br> {%if value.address.address_two%}{{value.address.address_two}}<br>{%endif%}{%if value.address.address_three%}{{value.address.address_three}}<br>{%endif%}{{value.address.city}} {%if value.address.province%}{{value.address.province}}{%endif%} {{value.address.postal_code}}<br>{{value.address.country}}</div>
 		{%endif%}
 
-		<div id="reportDiv" class="reportTable">
-			<div class="maxBidItem maxBidItemTitle">Lot ID:</div>
-			<div class="maxBidItem maxBidItemTitle">Label:</div>
-			<div class="maxBidItem maxBidItemTitle">Number:</div>
-			<div class="maxBidItem maxBidItemTitle">Name:</div>
-			<div class="maxBidItem maxBidItemTitle">Artist:</div>
-			<div class="maxBidItem maxBidItemTitle">Winning Bid:</div>
-			<div class="clear"></div>
-			{%for winner in value.bids.wonItems%}
-				<div class="maxBidItem">{{winner.item.lot_id}}</div>
-				<div class="maxBidItem">{{winner.item.label.name}}</div>
-				<div class="maxBidItem">{%if winner.item.record_number%}{{winner.item.record_number}}{%else%}&nbsp;{%endif%}</div>
-				<div class="maxBidItem">{{winner.item.name}}</div>
-				<div class="maxBidItem">{{winner.item.artist}}</div>
-				<div class="maxBidItem">{{winner.amount}}</div>
-				<div class="clear"></div>
-			{%endfor%}
-		</div>
+	<div id="reportDiv" class="reportTable">
+		<div class="maxBidItem">Lot Id:</div>
+
+		<div class="maxBidItem">Item name:</div>
+		<div class="maxBidItem">Item artist:</div>
+		<div class="maxBidItem">Amount bid:</div>
+		<div class="clear"></div>
 		<br><br>
-		<div id="invoice_{{key}}_msg"></div>
-		<div>Shipping Country: {{value.country}}</div>
-		<input type="text" value="{{value.shipping}}" id="invoiceShipping_{{key}}">
-		<input type="submit" value="Save Shipping" id="submit_{{key}}">
+		
+		{%for winner in value.bids.wonItems%}
+			<div class="maxBidItem">{{winner.item.lot_id}}</div>
+			<div class="maxBidItem">{{winner.item.name}}</div>
+			<div class="maxBidItem">{{winner.item.artist}}</div>
+			<div class="maxBidItem">{{winner.amount}}</div>
+			<div class="clear"></div>
+		{%endfor%}
+
+		<hr>
+		<div>Subtotal:</div>
+		<div>${{value.subTotal}}</div>
+
+		<hr>
+		<div>Shipping: ${{value.estimatedShipping}}</div>
+		<div>Total: ${{value.total}}</div>
 
 	</div>
+</div>
+
 {%endfor%}
-	<div>
-	<br><br>   
+	<br><br>
+	<div>   
 	<div>#<span id="indexNum"></span> out of <span id="outOfNum"></span></div>
 		<input type="button" id="btnLeft" value="&lt;&lt; Back" disabled="true" />
 		<input type="button" id="btnRight" value="Next &gt;&gt;" />
@@ -64,17 +69,13 @@ $( document ).ready(function() {
 
 	index = 0;
 	invoiceDivs = $(".invoiceDivs");
+	
 	if(invoiceDivs){
-		if (invoiceDivs.length ==1){
-			$("#btnLeft").attr("disabled",true)
-			$("#btnRight").attr("disabled",true)
-		}
 		$(invoiceDivs[0]).css("display","block");
 		
 		$("#outOfNum").text(invoiceDivs.length)
 		
 		$("#indexNum").text(index+1)
-		
 	}else{
 		$("#btnLeft").attr("disabled",true)
 		$("#btnRight").attr("disabled",true)
@@ -84,9 +85,6 @@ $( document ).ready(function() {
 	$("#jumpToBtn").click(function(){
 
 		val = $("#jumpTo").val()
-		if (invoiceDivs.length ==1)
-			return;
-
 		if (invoiceDivs && val <= invoiceDivs.length){
 			$(invoiceDivs[index]).css("display","none");
 			index = val;
@@ -139,7 +137,7 @@ $( document ).ready(function() {
 
 		$.ajax({
 			type: "POST",
-			url: "/admin/shippingByInvoice/"+ $("#auctionId").val() + "/",
+			url: "/admin/shippingByInvoice/"+ $("#auctionId").val() + "/flatOnly/",
 			data:{"invoiceId":invoiceId, "shippingAmount": shipping},
 			success: function(data) {
 				if(data.success){
@@ -156,7 +154,7 @@ $( document ).ready(function() {
 
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
-	        	$("#msg").text("Something went wrong, this flat auction wasn't locked")
+	        	$("#msg").text("Something went wrong, this shipping wasn't saved")
 	        	return false;
 			}
 		});
