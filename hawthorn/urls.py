@@ -24,7 +24,8 @@ urlpatterns = patterns('',
     url(r'^admin/endFlatAuction/(?P<auctionId>\d+)/$', admin_views.endFlatAuction, name='endFlatAuction'),
     url(r'^admin/runningTotal/(?P<auctionId>\d+)/$', admin_views.getRunningBidTotal, name='getRunningBidTotal'),
     url(r'^admin/endSSAuction/(?P<auctionId>\d+)/(?P<userId>\d+)', admin_views.endSSAuction, name='endSSAuction'),
-    
+    url(r'^admin/paidNotShipped/(?P<auctionId>\d+)/$', admin_views.getPaidUnshipped, name='getPaidUnshipped'),
+    url(r'^admin/markShipped/(?P<auctionId>\d+)/$', admin_views.markShipped, name='markShipped'),
 
     #url(r'^admin/createUser/$', admin_views.createUser, name='createUser'),
     #url(r'^admin/winners/$', admin_views.winners, name='winners'),

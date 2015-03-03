@@ -43,7 +43,7 @@ class Payment(models.Model):
 	amount = models.DecimalField(max_digits=19, decimal_places=2)
 	#auction?
 	payment_type = models.CharField(max_length=100)
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, related_name="paymentUser")
 	invoice = models.ForeignKey(Invoice)
 	date_received = models.DateField()
 

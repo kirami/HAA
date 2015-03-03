@@ -404,6 +404,8 @@ def getUnbalancedUsers(userId = None):
 	return row
 
 def getAlphaWinners(auctionId):
+	#return User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True).distinct().order_by("last_name")
+
 	cursor = connection.cursor()
 	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name from audio_bid b, "+
 		" auth_user au, audio_item i WHERE b.winner = true and b.item_id = i.id and b.user_id = au.id and i.auction_id="+
@@ -574,6 +576,23 @@ def getAllConsignmentInfo(consignorId, auctionId):
 	data["consignor"] = consignor.id
 	return data
 
+def gatherInfoFromInvoice(data, invoice, balance = None):
+	
+	data["invoice"] = invoice
+	shipping = invoice.shipping or 0
+	tax = invoice.tax or 0
+	secondAmount = invoice.second_chance_invoice_amount or 0
+	secondShipping = invoice.second_chance_shipping or 0
+	secondTax = invoice.second_chance_tax or 0
+	discount = invoice.discount or 0
+	data["discount"] = discount
+	data["taxTotal"] = tax + secondTax
+	data["shippingTotal"] = shipping + secondShipping
+	data["orderTotal"] = balance
+	#TODO discount on here or off of each amount already???
+	data["previousBalance"] = balance - (invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount)
+	data["balanceDate"] = date.today() 
+	return data
 
 def getInvoiceData(auctionId, userId):
 	data = {}
@@ -589,25 +608,10 @@ def getInvoiceData(auctionId, userId):
 	invoices = Invoice.objects.filter(auction = auctionId, user = userId)
 	data["auction"] = Auction.objects.get(pk=auctionId)
 	data["user"]= User.objects.get(pk=userId)
+	
 	if len(invoices) > 0:
-		
 		invoice = invoices[0]
-		data["invoice"] = invoice
-		shipping = invoice.shipping or 0
-		tax = invoice.tax or 0
-		secondAmount = invoice.second_chance_invoice_amount or 0
-		secondShipping = invoice.second_chance_shipping or 0
-		secondTax = invoice.second_chance_tax or 0
-		discount = invoice.discount or 0
-		data["discount"] = discount
-		data["taxTotal"] = tax + secondTax
-		data["shippingTotal"] = shipping + secondShipping
-		data["orderTotal"] = balance
-		#TODO discount on here or off of each amount already???
-		data["previousBalance"] = balance - (invoice.invoiced_amount + tax + shipping + secondTax + secondShipping + secondAmount - discount)
-		data["balanceDate"] = date.today() 
-
-			
+		gatherInfoFromInvoice(data, invoice, balance)
 	return data
 
 

@@ -9,6 +9,8 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django import forms
 
+from django.contrib.admin import SimpleListFilter
+from django.utils.translation import ugettext_lazy as _
 
 
 import logging
@@ -18,6 +20,24 @@ logger = logging.getLogger(__name__)
 
 
 UserAdmin.list_display = ('email', 'username', 'first_name', 'last_name', 'is_active', 'date_joined')
+
+
+class InvoiceFilter(SimpleListFilter):
+    title="No Shipping"
+    parameter_name = 'shipped_date'
+
+    def lookups(self, request, model_admin):
+     return (
+                ('Null', _('Not shipped yet')),
+                ('Not Null', _('Already shipped')),
+            )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'Null':
+            return queryset.filter(shipped_date = None)
+        if self.value() == 'Not Null':
+            return queryset.filter(shipped_date__isnull = False)
+
 
 class CustomConsignmentModelForm(forms.ModelForm):
     class Meta:
@@ -52,7 +72,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'auction',)
     search_fields = ['user__email', 'user__first_name', 'user__last_name', 'user__username']
-    list_filter = ('auction', 'on_hold')
+    list_filter = ('auction', 'on_hold', InvoiceFilter)
     
 class ItemAdmin(admin.ModelAdmin):
 
