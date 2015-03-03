@@ -24,30 +24,30 @@
 	<div class="clear"></div>
 	<br><br>
 	
-{%for winner in data.info.wonItems%}
-	<div class="maxBidItem">{{winner.item.lot_id}}</div>
-	<div class="maxBidItem">{{winner.item.name}}</div>
-	<div class="maxBidItem">{{winner.item.artist}}</div>
-	<div class="maxBidItem">{{winner.amount}}</div>
-	<div class="clear"></div>
-{%endfor%}
+	{%for winner in data.info.wonItems%}
+		<div class="maxBidItem">{{winner.item.lot_id}}</div>
+		<div class="maxBidItem">{{winner.item.name}}</div>
+		<div class="maxBidItem">{{winner.item.artist}}</div>
+		<div class="maxBidItem">{{winner.amount}}</div>
+		<div class="clear"></div>
+	{%endfor%}
 
-<hr>
-<div>Subtotal:</div>
-<div>${{data.info.sum}}</div>
-{%if data.discount != 0%}
-<div>Discount:</div>
-<div>${{data.discount}}</div>
-{%endif%}
-<hr>
-<div>Shipping: ${{data.shippingTotal}}</div>
-{%if data.invoice.tax%}
-<div>CA State Tax: ${{data.taxTotal}}</div>
-{%endif%}
-{%if data.previousBalance%}
-<div>Previous balance (as of {{data.balanceDate}}): ${{data.previousBalance}}</div>
-{%endif%}
-<div>Total: ${{data.orderTotal}}</div>
+	<hr>
+	<div>Subtotal:</div>
+	<div>${{data.info.sum}}</div>
+	{%if data.discount != 0%}
+	<div>Discount:</div>
+	<div>${{data.discount}}</div>
+	{%endif%}
+	<hr>
+	<div>Shipping: ${{data.shippingTotal}}</div>
+	{%if data.invoice.tax%}
+	<div>CA State Tax: ${{data.taxTotal}}</div>
+	{%endif%}
+	{%if data.previousBalance%}
+	<div>Previous balance (as of {{data.balanceDate}}): ${{data.previousBalance}}</div>
+	{%endif%}
+	<div>Total: ${{data.orderTotal}}</div>
 
 </div>
 
@@ -65,12 +65,12 @@
 			url: "/admin/sendInvoices/",
 			data: data,
 			success: function(data) {
-				$('#reminderlMsg').css("color","green")
-				$('#reminderlMsg').text("Reminder email was successfully sent.")
+				$('#reminderMsg').css("color","green")
+				$('#reminderMsg').text("Reminder email was successfully sent.")
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
-				$('#reminderlMsg').css("color","red")
-				$('#reminderlMsg').text("Something went wrong - email was not sent.")
+				$('#reminderMsg').css("color","red")
+				$('#reminderMsg').text("Something went wrong - email was not sent.")
 	        	return false;
 	      	}
 		});

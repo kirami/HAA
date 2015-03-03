@@ -44,7 +44,7 @@ class Payment(models.Model):
 	#auction?
 	payment_type = models.CharField(max_length=100)
 	user = models.ForeignKey(User, related_name="paymentUser")
-	invoice = models.ForeignKey(Invoice)
+	invoice = models.ForeignKey(Invoice, related_name = "paymentInvoice")
 	date_received = models.DateField()
 
 	def __unicode__(self):
