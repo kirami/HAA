@@ -180,8 +180,9 @@ class ContactForm(ModelForm):
         exclude = ('user',)
         #fields = ['address_one', 'address_two', 'city', 'state', 'zipcode', 'postal_code', 'country', 'telephone', ]
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self,  *args, **kwargs):
         super(ContactForm, self).__init__(*args, **kwargs)
+
         self.fields['state'] = ChoiceField(
             choices=getStates(), required=False )
 
@@ -189,28 +190,49 @@ class ContactForm(ModelForm):
             choices=getCountries())
 
     def clean_city(self):
-        country = self.data["country"]
-        city = self.data["city"]
-        
+
+        #logger.error("name: %s" % self.PREFIX_FIELD_NAME)
+        if self.prefix:
+            country = self.data[self.prefix + "-country"]
+            city = self.data[self.prefix + "-city"]
+
+        else:
+            country = self.data["country"]
+            city = self.data["city"]
+            
         if country == "USA":
             if not city:
                 raise ValidationError(('You must entery a city'))
+        return city
 
     def clean_zipcode(self):
-        country = self.data["country"]
-        zip = self.data["zipcode"]
+        if self.prefix:
+            country = self.data[self.prefix + "-country"]
+            zip = self.data[self.prefix + "-zipcode"]
+
+        else:
+
+            country = self.data["country"]
+            zip = self.data["zipcode"]
         
         if country == "USA":
             if not zip:
                 raise ValidationError(('You must entery a zipcode'))  
+        return zip
 
     def clean_state(self):
-        country = self.data["country"]
-        state = self.data["state"]
+        if self.prefix:
+            country = self.data[self.prefix + "-country"]
+            state = self.data[self.prefix + "-state"]
+
+        else:
+            country = self.data["country"]
+            state = self.data["state"]
         
         if country == "USA":
             if not state:
                 raise ValidationError(('You must entery a state')) 
+        return state
 
 class BulkConsignment(Form):
     from django import forms

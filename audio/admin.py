@@ -68,6 +68,7 @@ class BidAdmin(admin.ModelAdmin):
     """
 
 
+
 class InvoiceAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'auction',)

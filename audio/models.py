@@ -115,24 +115,9 @@ class Bid(models.Model):
 	class Meta:
 		unique_together = (("user", "item"),)
 
-class UserProfile(models.Model):
-	user = models.ForeignKey(User, unique = True, related_name="upUser")
-	pdf_list = models.BooleanField(default = False)
-	courtesy_list = models.BooleanField(default = False)
-	deadbeat = models.BooleanField(default=False)
-	email_only = models.BooleanField(default=True)
-	quiet = models.BooleanField(default = False)
-	ebay = models.BooleanField(default = False)
-	notes = models.CharField(max_length=200, null = True, blank=True)
-	verified = models.BooleanField(default=False)
-	confirmation_code = models.CharField(max_length=200, null = True, blank=True)
 
-
-	def __unicode__(self):
-		return unicode(self.user)
 
 class Address(models.Model):
-	user = models.ForeignKey(User)
 	address_one = models.CharField(max_length=100, default="")
 	address_two = models.CharField(max_length=100, null = True, blank=True)
 	address_three = models.CharField(max_length=100, null = True, blank=True)
@@ -148,7 +133,25 @@ class Address(models.Model):
 		verbose_name_plural = "Addresses"
 
 	def __unicode__(self):
-		return self.user.email + " "+self.user.first_name + " " + self.user.last_name
+		return str(self.id) + "--"+self.address_one
+
+class UserProfile(models.Model):
+	user = models.ForeignKey(User, unique = True, related_name="upUser")
+	pdf_list = models.BooleanField(default = False)
+	courtesy_list = models.BooleanField(default = False)
+	deadbeat = models.BooleanField(default=False)
+	email_only = models.BooleanField(default=True)
+	quiet = models.BooleanField(default = False)
+	ebay = models.BooleanField(default = False)
+	notes = models.CharField(max_length=200, null = True, blank=True)
+	verified = models.BooleanField(default=False)
+	confirmation_code = models.CharField(max_length=200, null = True, blank=True)
+	shipping_address = models.ForeignKey(Address, related_name="upShipping")
+	billing_address = models.ForeignKey(Address, related_name="upBilling")
+
+
+	def __unicode__(self):
+		return unicode(self.user)
 
 class PrintedCatalog(models.Model):
 	user = models.ForeignKey(User, related_name="pcUser")
