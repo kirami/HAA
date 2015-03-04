@@ -95,7 +95,7 @@ def getNewUsers(emailOnly = False, excludeEbay = True):
 	#users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
 	#admin = User.objects.filter(is_staff = True)
 	#todo no quiet
-	return list( users), Address.objects.filter(user__in=set(users))
+	return list( users), Address.objects.filter(upBilling__user__in=set(users))
 
 #users bid within last 3 auctions or printed list = true or paid for a catalog within 3 auctions
 def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False, excludeEbay = True):
@@ -123,7 +123,7 @@ def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False, excludeEb
 
 	#and is not quiet
 
-	return list(all), Address.objects.filter(user__in=all)
+	return list(all), Address.objects.filter(upBilling__user__in=all)
 
 #users no bid last three auctions & not on keep me on list & no printed catalog bought
 #reminder group
@@ -148,7 +148,7 @@ def getNonCurrentUsers(auctionId, emailOnly = False, printedOnly = False, exclud
 		printedOnly = User.objects.filter(upUser__email_only=False)
 		combined = combined & set(emailOnly)
 
-	return list(combined), Address.objects.filter(user__in=combined)
+	return list(combined), Address.objects.filter(upBilling__user__in=combined)
 
 #take off
 def getActiveUsers():
@@ -178,14 +178,13 @@ def getNonActiveUsers(auctionId, emailOnly = False, printedOnly = False, exclude
 		printedOnly = User.objects.filter(upUser__email_only=False)
 		combined = combined & set(emailOnly)
 	
-	return list(combined), Address.objects.filter(user__in=set(combined))
-
+	return list(combined), Address.objects.filter(upBilling__user__in=combined)
 
 def getCourtesyBidders():
 	
 	ids = UserProfile.objects.values_list("user", flat=True).filter(courtesy_list = True)
 	users = User.objects.filter(pk__in=set(ids))
-	return users, Address.objects.filter(user__in=set(users))
+	return users, Address.objects.filter(upBilling__user__in=set(users))
 
 
 #Bid utils

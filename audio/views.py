@@ -120,28 +120,78 @@ def accountSettings(request):
 		
 @login_required	
 def contact_info(request):
+	data = {}
+	billingForm = None
+	shippingForm = None
+	up = UserProfile.objects.get(user = request.user)
+	success = False
+
+	instance = None
+	instances = Address.objects.filter(upShipping__user=request.user)
+	if len(instances) > 0:
+		instance = instances[0]
+
+	billing_instance = None
+	billing_instances = Address.objects.filter(upBilling__user=request.user)
+	if len(billing_instances) > 0:
+		billing_instance = billing_instances[0]
+
+
+	init = {}
+	if not instance:
+		init = {"country":"USA"}
+
 	if request.method == 'POST':
 		try:
-			instance = Address.objects.get(user=request.user)
-			form = ContactForm(request.POST, instance = instance)
-		except:
-			form = ContactForm(request.POST)
+			same = request.POST.get("sameAddress", None)
+			shippingForm = ContactForm(request.POST, instance = instance, prefix="shippingForm")	
+			
+			if same:
+				data["sameAddress"] = True
+				billingForm = ContactForm( prefix="billingForm", initial={"country":"USA"})
 
-		
-		if form.is_valid():
-			contact = form.save(commit=False)
-			contact.user = request.user
-			contact.save()
-			return render_to_response('contact.html', {"form":form, "success": True}, context_instance=RequestContext(request))
-		else:
-			return render_to_response('contact.html', {"form":form}, context_instance=RequestContext(request))
+				if shippingForm.is_valid():
+					contact = shippingForm.save(commit=True)
+					up.shipping_address = contact
+					up.billing_address = contact
+					success = True
+			
+			else:
+				data["sameAddress"] = False
+				billingForm = ContactForm(request.POST, instance = billing_instance, prefix="billingForm")
 
-	try:
-		address = Address.objects.get(user=request.user)
-	except:
-		address = Address()
-	form = ContactForm(instance=address)
-	return render_to_response('contact.html', {"form":form}, context_instance=RequestContext(request))
+
+				if shippingForm.is_valid() and billingForm.is_valid():
+					contact = shippingForm.save(commit=True)
+					newBilling = billingForm.save(commit=True)
+					up.shipping_address = contact
+					up.billing_address = newBilling
+					success = True
+
+
+			if success:
+				up.save()
+
+			data["shippingForm"] = shippingForm
+			data["billingForm"]=billingForm
+
+			return render_to_response('contact.html', {"data":data, "success": success}, context_instance=RequestContext(request))
+
+			
+		except Exception as e:
+			logger.error("contact_info error: %s" %e)
+
+	#if new instance default country to USA	
+
+	shippingForm = ContactForm(instance=instance, prefix="shippingForm", initial=init)
+	if instance and billing_instance == instance:
+		billingForm =  ContactForm( prefix="billingForm", initial={"country":"USA"})
+	else:
+		billingForm = ContactForm(instance=billing_instance, prefix="billingForm", initial=init)
+
+	data["shippingForm"] = shippingForm
+	data["billingForm"]=billingForm
+	return render_to_response('contact.html', {"data":data}, context_instance=RequestContext(request))
 
 
 def register(request):
@@ -312,10 +362,11 @@ def auctionSummary(request, auctionId):
 def profile(request):
 	data = {}
 	if request.user.is_authenticated():
-		addresses = Address.objects.filter(user=request.user)
+		shipping = Address.objects.filter(upShipping__user=request.user)
+		billing = Address.objects.filter(upBilling__user=request.user)
 		profile = UserProfile.objects.get(user=request.user)
 		data["needVerified"]= not profile.verified
-		if len(addresses) < 1:
+		if len(shipping) < 1 or len(billing) < 1:
 			data["addressMsg"]=True
 	return render_to_response('profile.html', {"data":data}, context_instance=RequestContext(request))
 

@@ -452,7 +452,7 @@ def importUserCSV(request):
 						#TODO should this override all info?
 						user.save()
 						
-						addressObj = Address.objects.get_or_create(user = user)
+						addressObj = Address.objects.create()
 						profile = UserProfile.objects.get_or_create(user = user)
 						
 						if zip:
@@ -480,6 +480,10 @@ def importUserCSV(request):
 						if pc:
 							addressObj.postal_code = pc
 						addressObj.save()
+
+						profile.shipping_address = addressObj
+						profile.billing_address = addressObj
+
 
 						profile.printed_list = True if printed_list=="T" else False
 						profile.pdf_list = True if pdf=="T" else False
@@ -523,8 +527,13 @@ def createUser(request):
 			password = User.objects.make_random_password()
 			user.set_password(password)
 			user.save()
+			
 			#create address object for them.
-			Address.objects.create(user = user)
+			newAddress = Address.objects.create()
+			up = UserProfile.objects.get(user = user)
+			up.shipping_address = newAddress
+			up.billing_address = newAddress
+			up.save()
 
 			sendEmailMsg = request.POST.get("sendEmail")
 			if sendEmailMsg:
@@ -618,7 +627,7 @@ def shippingByInvoice(request, auctionId, filter=None):
 		d = request.POST
 		invoiceId = d.get("invoiceId")
 		shipping = d.get("shippingAmount")
-		logger.error("shipping: %s , invoice: %s" % (shipping, invoiceId))
+		#logger.error("shipping: %s , invoice: %s" % (shipping, invoiceId))
 		try:
 			invoice = Invoice.objects.get(id = invoiceId)
 			invoice.shipping = shipping
@@ -637,7 +646,7 @@ def shippingByInvoice(request, auctionId, filter=None):
 
 	for winner in winners:
 		address = None
-		addresses = Address.objects.filter(user = winner["id"])
+		addresses = Address.objects.filter(upShipping__user = winner["id"])
 		if len(addresses)  < 1:
 			logger.error("shippingByInvoice() user %s doesn't have an address on file" % winner["id"])
 		else:
@@ -674,7 +683,7 @@ def getPaidUnshipped(request, auctionId):
 	#firstInvoice = None
 	for winner in winners:
 		address = None
-		addresses = Address.objects.filter(user = winner)
+		addresses = Address.objects.filter(upShipping__user = winner)
 		if len(addresses)  < 1:
 			logger.error("shippingByInvoice() user %s doesn't have an address on file" % winner.id)
 		else:
@@ -787,7 +796,7 @@ def endBlindAuction(request, auctionId):
 		if userId not in invoices:
 			#logger.error( "user not in invoices")
 			user = User.objects.get(id = userId)
-			address = Address.objects.get(user_id = userId)
+			address = Address.objects.get(upBilling__user = userId)
 
 			sum = getWinnerSum(auctionId, userId, date = auction.end_date)
 			invoicedAmount = sum["sum"]
@@ -905,7 +914,7 @@ def endFlatAuction(request, auctionId, userId = None):
 				invoice.second_chance_invoice_amount = invoicedAmount
 				#shipping
 				invoice.second_chance_invoice_date = datetime.now()
-				address = Address.objects.get(user_id = winnerId)
+				address = Address.objects.get(upShipping__user_id = winnerId)
 				tax = None
 				if address.state == "CA":
 					tax = float(invoicedAmount) * .0975
@@ -1287,7 +1296,7 @@ def winners(request, auctionId):
 	for winner in winners:
 		try:
 			#logger.error("winner: " + winner)
-			address = Address.objects.get(user_id = winner["id"])
+			address = Address.objects.get(upShipping__user = winner["id"])
 			winner["zipcode"] = address.zipcode
 		except:
 			pass
