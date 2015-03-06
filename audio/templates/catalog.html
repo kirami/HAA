@@ -3,35 +3,65 @@
 
 {% block content %}
 
-<div style="text-align:center">
-	<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
-	{%if success%}<div class="successMsg">Your bid has been successfully submitted.</div>{%endif%}
-
-	<div class="header" style="">Our current catalog: <div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div>{%if not loggedIn%}<div class="successError">You must log in to bid.</div>{%else%}<div>Click <a href="simpleForm">here</a> to enter bids manually.</div>{%endif%}</div>
-
-	<ul id="pagination" class="pagination-sm"></ul>
-</div>
-<div class="left">
-	<div>Table of contents:</div>
-	<div class="leftMenu" id="" ><a href="/audio/catalog" style="{%if not category%}color:black{%endif%}">All</a></div>
+<div style="margin-bottom:15px;">
 	
-	{%for cat in categories%}
-		<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category == cat.id %}color:black{%endif%}">{{cat}}</a></div>
-	{%endfor%}
+	<div class="sideDiv">
+		<div style="font-weight:bold">Table of contents:</div>
+		<div class="leftMenu" id="" ><a href="/audio/catalog" style="{%if not category%}color:black{%endif%}">All</a></div>
+		
+		{%for cat in categories%}
+			<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category == cat.id %}color:black{%endif%}">{{cat}}</a></div>
+		{%endfor%}
+	</div>
+	
+	<div style="text-align:center; float:left; margin:0 auto; width:46%">
+		<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
+		{%if success%}<div class="successMsg">Your bid has been successfully submitted.</div>{%endif%}
+
+		<div class="" style="font-weight:bold; font-size:26px;
+		">
+			<div>Our current catalog:</div> 
+			
+			{%if not loggedIn%}
+				<div class="successError">You must log in to bid.</div>
+			{%endif%}
+			
+		</div>
+
+		<div style="">Please review our <a  href="/audio/rules">rules page</a> before entering bids.</div>
+
+		<ul id="pagination" class="pagination-sm"></ul>
+	</div>
+	<div class="sideDiv" style="float:right">
+		<div style="font-weight:bold">Tips:</div>
+		<ul>
+		<li>
+		<div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div></li>
+		{%if loggedIn%}
+		<li>
+		<div>Click <a href="simpleForm">here</a> to enter bids manually.</div>
+		</li>
+		{%endif%}
+		</ul>
+	</div>
+
+	<div class="clear"></div>
 </div>
+
+<hr style="border:1px solid black">
 
 <div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
 	<div class="innerRight">
-	<div class="tableHeader">
-		<div class="left" style="width:70px;">&nbsp;</div>	
-		<div class='left clickable {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot ID:</div>
-		<div class="left">Category:</div>
-		<div  id="nameHeader" class='left clickable {%if sort == "nameAsc"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "nameAsc"%}&#9650;{%else%}{%if sort == "nameDesc"%}&#9660;{%endif%}{%endif%} Name:</div>
-		<div  id="artistHeader" class='left  clickable{%if sort == "artistAsc"%}orderAsc{%else%}{%if sort == "artistDesc"%}orderDesc{%endif%}{%endif%}'>{%if sort == "artistAsc"%}&#9650;{%else%}{%if sort == "artistDesc"%}&#9660;{%endif%}{%endif%} Artist:</div>
-		<div class="left">Minimum Bid:</div>
-		<div class="clear"></div>
+		<div class="tableHeader" style="font-weight:bold">
+			<div class="left" style="width:55px;">&nbsp;</div>	
+			<div style="width:70px;" class='left clickable {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot:</div>
+			<div class="left" style="width:105px">Label & Rec#:</div>
+			<div  style="width:250px" id="nameHeader" class='left clickable {%if sort == "nameAsc"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "nameAsc"%}&#9650;{%else%}{%if sort == "nameDesc"%}&#9660;{%endif%}{%endif%} Name:</div>
+			<div  style="width:230px" id="artistHeader" class='left  clickable{%if sort == "artistAsc"%}orderAsc{%else%}{%if sort == "artistDesc"%}orderDesc{%endif%}{%endif%}'>{%if sort == "artistAsc"%}&#9650;{%else%}{%if sort == "artistDesc"%}&#9660;{%endif%}{%endif%} Artist:</div>
+			
+			<div class="clear"></div>
+		</div>
 	</div>
-
 
 	{%for item in catItems%}
 	<div class="catalogBox" style="{%if True%}{%endif%}">
@@ -45,11 +75,10 @@
 				{%endif%}
 			{%endif%}
 			</div> 
-			<div class="" style="float:left">{{item.lot_id}}</div> 
-			<div class="category" style="float:left">{{item.category.name}}</div>
-			<div class="category" style="float:left">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
-			<div class="category" style="float:left">{{item.artist}}</div>
-			<div class="category" style="float:left">${{item.min_bid}}</div>
+			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px"><a href="/audio/item/{{item.id}}">{{item.lot_id}}</a></div> 
+			<div class="category" style="float:left; width:105px">{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}</div>
+			<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
+			<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
 		</div>
 		<div style="float:left">
 			
@@ -58,19 +87,19 @@
 
 				{%if bids|get_item:item.id == None %}
 					
-					<div class="left" style="width:175px; margin-top:5px;">
+					<div class="left" style="width:100px; margin-top:5px;">
 						<div class="left" style="width:10px; margin-top:2px;">$</div>
 						<form autocomplete="off">
-						<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}"></form>
+						<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}" style="width:75px"></form>
 					</div>
 					<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Enter Bid</button></div>
 				
 				{%else%}
 						
-					<div class="left" style="width:175px; margin-top:5px;">
+					<div class="left" style="width:100px; margin-top:5px;">
 						<div class="left" style="width:10px; margin-top:2px;">$</div>
 						<form autocomplete="off">
-						<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}"></form>
+						<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}" style="width:75px"></form>
 					</div>
 					<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
 					
@@ -89,9 +118,13 @@
 		<div class="clear"></div>	
 	</div>
 	{%endfor%}
-	</div>
+
 </div>
-<div class="clear"></div>	
+
+
+
+
+<div class="clear"></div>
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -124,6 +157,9 @@
 			else
 				window.location="?sort=artistAsc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 		})
+
+		$(".headerLink").removeClass("headerActive")
+		$("#catalogLink").addClass("headerActive")
 
 
 	})

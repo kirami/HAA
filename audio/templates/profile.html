@@ -26,7 +26,14 @@
   <p>Welcome! Please <a href="/audio/accounts/login">log in</a> or <a href="/audio/accounts/register">register</a>.</p>
 {% endif %}
 
+<script type="text/javascript">
+  
+$(document).ready(function(){
+      $(".headerLink").removeClass("headerActive")
+      $("#accountLink").addClass("headerActive")
+})
 
+</script>
 
 
 {% endblock %}

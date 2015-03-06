@@ -8,40 +8,73 @@
 <script src="{{ STATIC_URL }}audio/js/esimakin-twbs-pagination-fbdd6fc/jquery.twbsPagination.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 <input type="hidden" id="auctionId" name="auctionId" value="{{auctionId}}">
-<div id="header">
-	<!--img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">-->
-	<div>
-		{% if user.is_authenticated %}
-			<div style="float:left; margin-right:10px; margin-top:10px;">Hello {{user.first_name}}!</div>
-			<button class="button" onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
-			<button class="button" onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
-			<button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
-		{% else %}
-		  <button class="button" onclick="javascript:window.location.href = '/audio/accounts/login'">Log in</button>
-		  <button class="button" onclick="javascript:window.location.href = '/audio/accounts/register'">Register</button>
-		  <button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
-		{% endif %}
+
+<body  class="">
+
+<!--
+<center><img style="margin-bottom:30px" src="http://www.thoseoldrecords.com/hmv.gif"></center>-->
+
+<div >
+	<div id="header" style="background-image:none !important; ">
+		<!--img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">-->
+
+		<div class="headerLeft">
+			
+			<div>
+					<img src="http://thoseoldrecords.com/phono.gif" width="50px;">
+					<img alt="Hawthorn's Antique Audio" src="http://thoseoldrecords.com/haa.gif" width="375px">	
+			</div>
+		</div>
+
+
+
+		<div style="margin: 0 auto; float:right; ">
+			{% if user.is_authenticated %}
+				<div class="headerLink" >Hello {{user.first_name}}!</div>
+				<div class="headerLink" >
+					<a  href="/audio/accounts/logout" id="logoutLink">Logout</a>
+				</div>	
+				<div class="headerLink"  >
+					<a  href="/audio/accounts/profile" id='accountLink'>Account</a>	
+				</div>
+				<div class="headerLink" >
+					<a  href="/audio/catalog" id='catalogLink'>Catalog</a>	
+				</div>
+				
+				
+				<!--
+				<button class="button" onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
+				<button class="button" onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
+				<button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>-->
+			{% else %}
+				<div class="headerLink" >
+					<a  href="/audio/accounts/login" id="loginLink">Log In</a>
+				</div>	
+				<div class="headerLink"  >
+					<a  href="/audio/accounts/register" id="registerLink">Register</a>	
+				</div>
+				<div class="headerLink" >
+					<a  href="/audio/catalog" id="catalogLink">Catalog</a>	
+				</div>
+			  <!--
+			  <button class="button" onclick="javascript:window.location.href = '/audio/accounts/login'">Log in</button>
+			  <button class="button" onclick="javascript:window.location.href = '/audio/accounts/register'">Register</button>
+			  <button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
+			  -->
+			{% endif %}
+		</div>
 	</div>
-</div>
-<div style="clear:both"></div>
-<body background="http://thoseoldrecords.com/10ligh04.jpg">
-<center>
-	<nobr>
-		<img src="http://thoseoldrecords.com/phono.gif">
-		<img alt="Hawthorn's Antique Audio" src="http://thoseoldrecords.com/haa.gif">
-		<img src="http://thoseoldrecords.com/record.gif">
-	</nobr>
-</center>
-
-<center><img style="margin-bottom:30px" src="http://www.thoseoldrecords.com/hmv.gif"></center>
-
-<div id="main">
-{% block content %}
+	<div style="clear:both"></div>
+	<div id="content">
+		<div id="main">
+		{% block content %}
 
 
 
 
-{% endblock %}
+		{% endblock %}
+		</div>
+	</div>
 </div>
 
 </body>
