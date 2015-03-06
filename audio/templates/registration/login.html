@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div id="loginForm">
   {% if form.errors %}
     <p class="successError">Sorry, that's not a valid username or password</p>
   {% endif %}
@@ -22,5 +22,6 @@
   </form>
 
   <div>Forgot your password?  <a href="/audio/accounts/resetPassword">Reset it here</a>.</div>
+  </div>
 
 {% endblock %}

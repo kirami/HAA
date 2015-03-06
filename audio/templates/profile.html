@@ -7,18 +7,18 @@
   
 
 
-  <p class="header">Welcome, {{ user.username }}. Thanks for logging in.</p>
+  <p class="header" style="text-align:center">Welcome, {{ user.first_name }}. Thanks for logging in.</p>
 {%if data.addressMsg%}<div style="margin-bottom:10px" class="successError">We don't have your address information.  You cannot bid without this, please fill it out <a href="../contact">here</a></div><div class="clear"></div> {%endif%}
   {%if data.needVerified%}
   <div class="successError" style="margin-bottom:10px">You must verify your email to bid.  Please check your email.  Click <a href="/audio/accounts/verifyEmail/">here</a> to send another verification email.</div>
   {%endif%}
-  <div>
-  <div style="height:50px;"><a href="../contact" class="button">View Contact Info</a></div>
+  <div id="profileList">
+  <div style="height:50px;"><a href="../contact" class="">View Contact Info</a></div>
   <div class="clear"></div>
-  <div style="height:50px;"><a href="../bids" class="button">View Current Bids</a></div>
-  <div style="height:50px;"><a href="../userInfo" class="button">View Login Info</a></div>
-  <div style="height:50px;"><a href="../settings" class="button">Settings</a></div>
-  <div style="height:50px;"><a href="../auctionSummary" class="button">Auction History</a></div>
+  <div style="height:50px;"><a href="../bids" class="">View Current Bids</a></div>
+  <div style="height:50px;"><a href="../userInfo" class="">View Login Info</a></div>
+  <div style="height:50px;"><a href="../settings" class="">Settings</a></div>
+  <div style="height:50px;"><a href="../auctionSummary" class="">Auction History</a></div>
 </div>
 
 

@@ -1,6 +1,7 @@
 
 body{
-   font-family:raleway;
+   font-family: 'Roboto Slab', serif !important;
+   height: 100%
    
 }
 
@@ -22,10 +23,23 @@ body{
    cursor: pointer;
 }
 
+label{
+   font-weight: normal !important;
+}
+
 #main{
 max-width:1000px; margin: 0 auto;
 padding-top: 25px;
+height:auto%;
 
+}
+
+#content{
+   background-image: url('http://thoseoldrecords.com/10ligh04.jpg');
+   height:100%;
+   overflow:auto;
+  
+   
 }
 
 .errorlist{
@@ -40,9 +54,37 @@ padding-top: 25px;
 	
 }
 
+
+
+#header{
+   margin-top:20px;
+   margin-right:20px;
+   height:60px;
+   padding-bottom:15px;
+}
+
+
+/*
+#header div{
+   float:right;
+   clear:right;
+}*/
+
+.headerActive{
+   background-color: #e7f3f9;
+   background-image: linear-gradient(to bottom, #e7f3f9, #ceebf5);
+   border-radius: 0.3em;
+   padding:0.4em 0.8em;
+}
+
+.headerActive:hover{
+   border: 1px solid white !important;
+   color: #1b75bb !important;
+}
+
 .headerLink{
 
-   width:100px;
+   margin-right:50px;
    float:left;
 }
 
@@ -52,53 +94,54 @@ padding-top: 25px;
 
 }
 
+
 .headerLink a{
-      color: #9c9c9c;
+      color: #1b75bb;
+      border: 1px solid white;
+      padding:0.4em 0.8em;
+
 }
 
-#content{
-   background-image: url('http://thoseoldrecords.com/10ligh04.jpg');
-   
+.headerLink a:hover{
+   background-color: #fff;
+   border: 1px solid #e7f3f9;
+   border-radius: 0.3em;  
+   text-decoration: none;
+   color:#0b458b;
 }
+
+#profileList a{
+   padding:0.4em 0.8em;
+   border: 1px solid transparent !important;
+}
+
+#profileList a:hover{
+   border: 1px solid #1b75bb !important;
+   border-radius: 0.3em;  
+   text-decoration: none;
+   padding:0.4em 0.8em;
+
+}
+
+
+.header{
+   font-size:22px;
+   font-weight: bold;
+}
+
+
 
 .sideDiv{
    width:25%; margin:0 auto; float:left;
 }
 
-
+/*
 .headerLink:hover a{
    color: #445f64;
    text-decoration: none;
 }
+*/
 
-.header{
-	font-size:22px;
-	font-weight: bold;
-
-
-}
-
-#header{
-   margin-top:20px;
-   margin-right:20px;
-      height:60px;
-   padding-bottom:15px;
-}
-
-#header h1{
-	color:red;
-	float: left;
-}
-
-/*
-#header div{
-	float:right;
-	clear:right;
-}*/
-
-.headerActive{
-   color:#668f96 !important;
-}
 
 .simpleSuccess{
 	color:green;
@@ -129,6 +172,10 @@ padding-top: 25px;
 .successMsg{
    color:green;
    font-size:18px;
+}
+
+#shippingForm label, #billingForm label, #userInfoDiv label{
+   width:100px;
 }
 
 

@@ -2,6 +2,7 @@
 {% load audio_extras %}
 
 {% block content %}
+<div id="itemPopup">Test</div>
 
 <div style="margin-bottom:15px;">
 	
@@ -35,13 +36,16 @@
 	<div class="sideDiv" style="float:right">
 		<div style="font-weight:bold">Tips:</div>
 		<ul>
-		<li>
-		<div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div></li>
-		{%if loggedIn%}
-		<li>
-		<div>Click <a href="simpleForm">here</a> to enter bids manually.</div>
-		</li>
-		{%endif%}
+			<li>
+				<div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div></li>
+			{%if loggedIn%}
+			<li>
+				<div>Click <a href="simpleForm">here</a> to enter bids manually.</div>
+			</li>
+			{%endif%}
+			<li>
+				<div>Click on an item's lot # for more information.</div>
+			</li>
 		</ul>
 	</div>
 
@@ -49,6 +53,7 @@
 </div>
 
 <hr style="border:1px solid black">
+
 
 <div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
 	<div class="innerRight">
@@ -75,7 +80,7 @@
 				{%endif%}
 			{%endif%}
 			</div> 
-			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px"><a href="/audio/item/{{item.id}}">{{item.lot_id}}</a></div> 
+			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px"><div id="quickLook_{{item.log_id}}">{{item.lot_id}}</div></div> 
 			<div class="category" style="float:left; width:105px">{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}</div>
 			<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
 			<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
@@ -118,7 +123,7 @@
 		<div class="clear"></div>	
 	</div>
 	{%endfor%}
-
+<div class="clear"></div>	
 </div>
 
 
@@ -161,6 +166,23 @@
 		$(".headerLink").removeClass("headerActive")
 		$("#catalogLink").addClass("headerActive")
 
+		$( "#itemPopup" ).dialog({
+			resizable: false,
+			height:240,
+			modal: true,
+			autoOpen: false, 
+			//position:[200,0],
+			buttons: {
+				Ok: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		$(".quickLook").click(function(){
+			$( "#itemPopup" ).dialog("open", "position", "center");
+			return false;
+		})
 
 	})
 </script>
