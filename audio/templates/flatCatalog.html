@@ -16,11 +16,13 @@
 	<div style="margin-bottom:10px; text-align:center" class="header" >
 	The blind auction has ended.  These items were not sold.<br>
 	</div>
+	<div style="text-align:center">Please review our rules page before entering bids.  Click <a href="/audio/rules">here</a></div>
 	<div style="text-align:center; font-size:16px;">See your current set price bids <a href="/audio/accounts/bids">here</a>.</div>
 
 	<div style="margin-bottom:20px; text-align:center">
-		<div>Click here to close your bidding for this auction and we will start preparing your items to ship.</div>
+		<div>Click "End my auction" button to close your bidding for this auction and we will start preparing your items to ship.</div>
 		<div><button class="button" id="EMA_BTN">End my auction</button></div>
+		
 		<div id="endAuctionMsg"></div>
 	</div>
 
@@ -95,6 +97,10 @@
 		    $( "#EMA_BTN" ).click(function() {
 		    	$( "#endAuction-confirm" ).dialog( "open" );
 		    });
+
+
+		    $(".headerLink").removeClass("headerActive")
+			$("#catalogLink").addClass("headerActive")
 
 
 		})

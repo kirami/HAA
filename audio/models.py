@@ -52,6 +52,10 @@ class Payment(models.Model):
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
+	description = models.CharField(max_length=250)
+	min_bid = models.DecimalField(max_digits=19, decimal_places=2, null = True, blank = True)
+
+
 
 	def __unicode__(self):
 		return self.name
@@ -78,10 +82,12 @@ class Item(models.Model):
 	#TODO fix requireds
 	label = models.ForeignKey(Label, null = True)
 	artist = models.CharField(max_length=200, null = True, blank = True)
+	artist_two = models.CharField(max_length=200, null = True, blank = True)
 	name = models.CharField(max_length=200, default="")
 	name_two = models.CharField(max_length=200, null = True, blank = True)
 	notes = models.CharField(max_length=200, default="", null = True, blank = True)
 	record_number = models.CharField(max_length=100, null = True, blank = True)
+	record_number_two = models.CharField(max_length=100, null = True, blank = True)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
 	lot_id = models.IntegerField(null = True, blank=True, default=" ")
 	category = models.ForeignKey(Category, related_name="itemCategory")

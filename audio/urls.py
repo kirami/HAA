@@ -3,6 +3,7 @@ from django.contrib.auth.views import login, logout, password_change, password_c
 from django.contrib import admin
 from audio import views
 from audio import admin_views
+from django.views.generic import TemplateView
 admin.autodiscover()
 
 
@@ -47,6 +48,7 @@ urlpatterns = patterns('',
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
 
+    url(r'^rules/$',  TemplateView.as_view(template_name='rules.html')),
     url(r'^accounts/confirm/(?P<confirmation_code>\w+)/(?P<username>\w+)$', views.confirm, name='confirm'),
 
 )

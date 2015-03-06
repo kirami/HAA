@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class ItemPrePopulateForm(Form):
-    auction = ModelChoiceField(Auction.objects.all())
+    auction = ModelChoiceField(Auction.objects.all().order_by("-id"))
     category = ModelChoiceField(Category.objects.all())
     label =  ModelChoiceField(Label.objects.all())
     item_type =  ModelChoiceField(ItemType.objects.all())

@@ -1,4 +1,11 @@
 
+body{
+   font-family:raleway;
+   
+}
+
+.bodyClass{background-image: url('http://thoseoldrecords.com/10ligh04.jpg');}
+
 .clear{
 	clear: both;
 }
@@ -16,8 +23,9 @@
 }
 
 #main{
-   margin-left: 20px;
-   margin-right:20px;
+max-width:1000px; margin: 0 auto;
+padding-top: 25px;
+
 }
 
 .errorlist{
@@ -25,21 +33,56 @@
 }
 
 .tableHeader div{
-	width:150px;
+	
 }
 
 .tableBody div{
-	width: 150px;
+	
+}
+
+.headerLink{
+
+   width:100px;
+   float:left;
+}
+
+.headerLeft{
+   margin: 0 auto; float:left;
+   padding-left:20px;
+
+}
+
+.headerLink a{
+      color: #9c9c9c;
+}
+
+#content{
+   background-image: url('http://thoseoldrecords.com/10ligh04.jpg');
+   
+}
+
+.sideDiv{
+   width:25%; margin:0 auto; float:left;
+}
+
+
+.headerLink:hover a{
+   color: #445f64;
+   text-decoration: none;
 }
 
 .header{
 	font-size:22px;
 	font-weight: bold;
+
+
 }
 
 #header{
    margin-top:20px;
    margin-right:20px;
+      height:60px;
+   padding-bottom:15px;
 }
 
 #header h1{
@@ -47,9 +90,14 @@
 	float: left;
 }
 
+/*
 #header div{
 	float:right;
 	clear:right;
+}*/
+
+.headerActive{
+   color:#668f96 !important;
 }
 
 .simpleSuccess{
@@ -107,7 +155,7 @@
    box-shadow: rgba(0,0,0,1) 0 1px 0;
    text-shadow: rgba(0,0,0,.4) 0 1px 0;
    color: white;
-   font-size: 14px;
+   font-size: 13px;
    font-family: Georgia, serif;
    text-decoration: none;
    vertical-align: middle;
