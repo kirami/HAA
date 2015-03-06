@@ -2,75 +2,81 @@
 
 
 {% block content %}
+<div>
 
-{%if success%}
-<div class="simpleSuccess">You have successfully updated your contact info.</div>
-{%endif%}
+  {%if success%}
+  <div class="simpleSuccess">You have successfully updated your contact info.</div>
+  {%endif%}
 
- <form action="" method="post" id="contactForm" autocomplete="off">
- {% csrf_token %}
+  <form action="" method="post" id="contactForm" autocomplete="off">
+    {% csrf_token %}
 
-<div style="float:left">
-<div style="font-size:14px; font-weight:bold; height:50px;">Shipping Address:</div>
+    <div style="float:left">
+      <div style="font-size:14px; font-weight:bold; height:50px;">Shipping Address:</div>
 
- <div id="shippingForm">
+      <div id="shippingForm">
 
-      {{ data.shippingForm.as_p }}
-  
-  </div>
+          {{ data.shippingForm.as_p }}
+      
+      </div>
 
 
-  {% if data.billingForm.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
+      {% if data.billingForm.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-error">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
             <div class="alert alert-error">
                 <strong>{{ error|escape }}</strong>
             </div>
         {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-        <div class="alert alert-error">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
-{% endif %}
+      {% endif %}
+    </div>
+
+
+  <div style="float:left; margin-left:50px;">
+    <div style="font-size:14px; font-weight:bold; height:50px"><div>Billing Address:</div>
+      
+    <input type="checkbox" name="sameAddress" id="sameAddress" {%if data.sameAddress%}checked{%endif%}> <span>My billing address is the same as my shipping address</span>
+    </div>
+
+
+   <div  id="billingForm">
+      
+        {{ data.billingForm.as_p }}
+       
+    </div>
+
+
+    {% if data.shippingForm.errors %}
+      {% for field in form %}
+          {% for error in field.errors %}
+              <div class="alert alert-error">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+          <div class="alert alert-error">
+              <strong>{{ error|escape }}</strong>
+          </div>
+      {% endfor %}
+  {% endif %}
+
+
+  </div> 
+  </form>
+
+  <div class="clear"></div>
+  <button id="addressSave" class="button">Save contact info</button>
+  <div class="clear"></div>
+
 </div>
-
-<div style="float:left; margin-left:50px;">
-  <div style="font-size:14px; font-weight:bold; height:50px"><div>Billing Address:</div>
-    
-  <input type="checkbox" name="sameAddress" id="sameAddress" {%if data.sameAddress%}checked{%endif%}> <span>My billing address is the same as my shipping address</span>
-  </div>
-
-
- <div  id="billingForm">
-    
-      {{ data.billingForm.as_p }}
-     
-  </div>
-
-
-  {% if data.shippingForm.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            <div class="alert alert-error">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-        <div class="alert alert-error">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
-{% endif %}
-
-
-</div>
-</form>
-
 <div class="clear"></div>
-<button id="addressSave" class="button">Save contact info</button>
 
 <script type="text/javascript">
   

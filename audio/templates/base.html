@@ -1,9 +1,10 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}audio/css/main.css" />
+<link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
 
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
 <script src="{{ STATIC_URL }}audio/js/main.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}audio/js/esimakin-twbs-pagination-fbdd6fc/jquery.twbsPagination.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
@@ -19,10 +20,9 @@
 		<!--img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">-->
 
 		<div class="headerLeft">
-			
 			<div>
-					<img src="http://thoseoldrecords.com/phono.gif" width="50px;">
-					<img alt="Hawthorn's Antique Audio" src="http://thoseoldrecords.com/haa.gif" width="375px">	
+				<img src="http://thoseoldrecords.com/phono.gif" width="50px;">
+				<img alt="Hawthorn's Antique Audio" src="http://thoseoldrecords.com/haa.gif" width="375px">	
 			</div>
 		</div>
 
@@ -66,6 +66,7 @@
 	</div>
 	<div style="clear:both"></div>
 	<div id="content">
+
 		<div id="main">
 		{% block content %}
 
@@ -74,7 +75,9 @@
 
 		{% endblock %}
 		</div>
+		<div class="clear"></div>
 	</div>
+	<div class="clear"></div>
 </div>
 
 </body>
