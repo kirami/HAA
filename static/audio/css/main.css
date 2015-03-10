@@ -2,6 +2,7 @@
 body{
    font-family: 'Roboto Slab', serif !important;
    height: 100%
+
    
 }
 
@@ -30,16 +31,14 @@ label{
 #main{
 max-width:1000px; margin: 0 auto;
 padding-top: 25px;
-height:auto%;
-
+height:auto;
+overflow: auto;
 }
 
 #content{
-   background-image: url('http://thoseoldrecords.com/10ligh04.jpg');
-   height:100%;
-   overflow:auto;
-  
    
+   height:100%;
+
 }
 
 .errorlist{
@@ -57,10 +56,11 @@ height:auto%;
 
 
 #header{
-   margin-top:20px;
-   margin-right:20px;
-   height:60px;
+   padding-top:20px;
+   padding-right:20px;
+   height:75px;
    padding-bottom:15px;
+
 }
 
 

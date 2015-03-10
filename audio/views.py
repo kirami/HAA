@@ -464,13 +464,29 @@ def catalogByCategory(request, order):
 	bidDict = []
 	msg = ""
 	success = False
-	page = 1
-	items = {}
+	items = None
+	perPage = settings.ITEMS_PER_PAGE
+	page = int(request.GET.get("page", 1))
+	category = request.GET.get("category", None)
 	ordered = {}
 	try:
 		
+		items = Item.objects.filter(auction=currentAuction).order_by(order)
+		items = items[perPage*(page-1):(perPage*page)]
+		logger.error(items)
+
+
 		categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct().order_by("order_number")
-		logger.error(categories)
+		
+		for item in items:
+			
+			if item.category.order_number not in ordered:
+				ordered[item.category.order_number]= []
+				ordered[item.category.order_number].append(item)
+				#ordered[item.category.order_number]["category"].append(item.category)
+			else:
+				ordered[item.category.order_number].append(item)
+			'''
 		i = 0
 		for category in categories:
 			objs = Item.objects.filter(auction = currentAuction, category = category).order_by(order)
@@ -481,10 +497,11 @@ def catalogByCategory(request, order):
 			ordered[i]["items"].append(objs)
 			ordered[i]["category"] = category
 			i = i+1
+		'''
 
+		logger.error(ordered)
 			
-			
-		logger.error(items)
+		
  
 	except Exception as e:
 		logger.error("Error in catalogByCategory(): %s" % e)

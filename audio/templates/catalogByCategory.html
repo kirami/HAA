@@ -56,7 +56,7 @@
 
 
 <div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
-	<div class="innerRight" style="margin-bottom:15px;">
+	<div class="innerRight">
 		<div class="tableHeader" style="font-weight:bold">
 			<div class="left" style="width:55px;">&nbsp;</div>	
 			<div style="width:70px;" class='left clickable {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot:</div>
@@ -68,44 +68,36 @@
 		</div>
 	</div>
 
-	
 	{%for key, value in ordered.items%}
-		<div style="font-size:16px; margin-bottom:10px"><u style="font-weight:bold">{{value.category.name}}</u> {{value.category.description}} <u style="font-weight:bold; margin-left:10px;">Minium Bid: {{value.category.min_bid}}</u> </div>
-		{%for items in value.items%}
-			{%for item in items%}
-
-				<div class="catalogBox" style="{%if True%}{%endif%}">
-					<div style="margin-top:7px; float:left" class="tableBody">
-						<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
-						{%if item.image%}
-							{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
-							{%endif%}
-						{%else%}
-							{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
-							{%endif%}
-						{%endif%}
-						</div> 
-						<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{item.id}}"><div >{{item.lot_id}}</div></div> 
-						<div class="category" style="float:left; width:105px">{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}</div>
-						<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
-						<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
+		<div style="font-size:16px; margin-bottom:10px; margin-top:20px;"><u style="font-weight:bold">{{value.0.category.name}}</u> {{value.0.category.description}}<u style="font-weight:bold; margin-left:10px;">Minimum Bid: ${{value.0.category.min_bid}}</u></div>
+		{%for item in value%}
+			<div class="catalogBox" style="{%if True%}{%endif%}">
+		<div style="margin-top:7px; float:left" class="tableBody">
+			<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
+			{%if item.image%}
+				{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
+				{%endif%}
+			{%else%}
+				{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
+				{%endif%}
+			{%endif%}
+			</div> 
+			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{item.id}}"><div >{{item.lot_id}}</div></div> 
+			<div class="category" style="float:left; width:105px">{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}</div>
+			<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
+			<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
 		</div>
-		
+		<div style="float:left">
+			
+			
+
+			
+		</div>
 
 		<div class="clear"></div>	
 	</div>
-			
-
-			
-			
-
-			{%endfor%}
-		{%endfor%}
-
 	{%endfor%}
-	
-	
-	
+	{%endfor%}
 <div class="clear"></div>	
 </div>
 
