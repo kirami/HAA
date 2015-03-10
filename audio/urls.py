@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     url(r'^catalog/simpleForm', views.simpleForm, name='simpleForm'),
     url(r'^catalog/deleteBid', views.deleteBid, name='deleteBid'),
     url(r'^catalog/setPrice', views.flatFeeCatalog, name='flatFeeCatalog'),
+    url(r'^catalog/itemInfo/(?P<itemId>\d+)/$', views.itemInfo, name='itemInfo'),
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
 

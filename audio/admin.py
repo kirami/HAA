@@ -93,9 +93,15 @@ class ConsignmentAdmin(admin.ModelAdmin):
     list_filter = ('item__auction', 'consignor',)
     search_fields = ['item__name', 'item__lot_id']
 
+class CategoryAdmin(admin.ModelAdmin):
+    #form = CustomConsignmentModelForm
+    list_display = ('name', 'order_number', )
+    list_filter = ('auction', )
+
+
 
 admin.site.register(Auction)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Bid, BidAdmin)
 admin.site.register(Address)

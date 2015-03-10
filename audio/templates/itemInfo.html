@@ -1,0 +1,31 @@
+
+
+
+<div>
+	
+	{%if data.errorMsg%}
+		<div id="itemInfoError">{{data.errorMsg}}</div>
+
+	{%else%}
+
+	<div style="width:450px;">
+		<span class="itemInfoDetail">Label & Rec #:</span>  {{data.item.label.name}} {{data.item.record_number}}<br>
+		{%if data.item.record_number_two%}{{data.item.label.name}} {{data.item.record_number}}<br>{%endif%}
+		<span class="itemInfoDetail">Artist:</span> {{data.item.artist}}
+		{%if data.item.artist_two%}<br>{{data.item.artist_two}}{%endif%}<br>
+		<span class="itemInfoDetail">Item name:</span> {{data.item.name}}<br>
+		{%if data.item.name_two%}{{data.item.name_two}}<br>{%endif%}
+		{%if data.item.name_three%}{{data.item.name_three}}<br>{%endif%}
+		{%if data.item.notes%}<span class="itemInfoDetail">Notes:</span> {{data.item.notes}}<br> {%endif%}
+		{%if data.item.notes_two%}{{data.item.notes_two}}<br> {%endif%}
+		<span class="itemInfoDetail">Minimum Bid:</span> ${{data.item.min_bid}}<br>
+		<span class="itemInfoDetail">Condition:</span> {{data.item.condition}} {%if data.item.defect%}{{data.item.defect}} {%endif%}<br>
+		<span class="itemInfoDetail">Category:</span> {{data.item.category}}
+
+	</div>
+
+	{%endif%}
+
+</div>
+
+
