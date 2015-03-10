@@ -180,8 +180,16 @@ height:auto%;
 
 
 .successError{
-   color:red;
+   color:red !important;
    font-size:18px;
+}
+
+#itemInfoError{
+   color:red !important;
+}
+
+.itemInfoDetail{
+   font-weight: bold;
 }
 
 

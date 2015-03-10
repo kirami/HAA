@@ -457,6 +457,41 @@ def noAuction(request):
 			return redirect("catalog")
 	return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
+def catalogByCategory(request, order):
+	data = {}
+	currentAuction = getCurrentAuction()
+	total = 1
+	bidDict = []
+	msg = ""
+	success = False
+	page = 1
+	items = {}
+	ordered = {}
+	try:
+		
+		categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct().order_by("order_number")
+		logger.error(categories)
+		i = 0
+		for category in categories:
+			objs = Item.objects.filter(auction = currentAuction, category = category).order_by(order)
+			
+			
+			ordered[i]= {}
+			ordered[i]["items"] = []
+			ordered[i]["items"].append(objs)
+			ordered[i]["category"] = category
+			i = i+1
+
+			
+			
+		logger.error(items)
+ 
+	except Exception as e:
+		logger.error("Error in catalogByCategory(): %s" % e)
+
+	return render_to_response("catalogByCategory.html", {"sort":"lot_id", "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
+
+
 def catalog(request, msg= None):
 	
 	data = {}
@@ -470,6 +505,8 @@ def catalog(request, msg= None):
 	category = request.GET.get("category", None)
 	order = request.GET.get("sort", 'lot_id')
 	sortGet= order
+
+	template = "catalog.html"
 
 	logger.error
 	if order == "nameAsc":
@@ -486,7 +523,7 @@ def catalog(request, msg= None):
 	else:
 		order = "lot_id"
 		sortGet = "lot_id"
-
+		return catalogByCategory(request, order)
 
 
 	if not currentAuction:
@@ -549,7 +586,7 @@ def catalog(request, msg= None):
 		logger.error("error in catalog")
 		logger.error(e)
 		return redirect("catalog")
-	return render_to_response('catalog.html', {"sort":sortGet, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
+	return render_to_response(template, {"sort":sortGet, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -636,7 +673,17 @@ def deleteBid(request):
 		
 	else:
 		return redirect("bids")
-		
+	
+def itemInfo(request, itemId):
+	data = {}
+	items = Item.objects.filter(pk=itemId)
+	if len(items) < 1:
+		data["errorMsg"] = "That is not a valid item."
+	else:
+		data["item"]  = items[0]
+	return render_to_response('itemInfo.html', {"data":data}, context_instance=RequestContext(request))
+
+
 @login_required
 def showItem(request, auctionId, lotId):
 	if request.method == 'POST':
@@ -646,4 +693,4 @@ def showItem(request, auctionId, lotId):
 			bid = form.save()	
 	else:
 		form = BidSubmitForm()
-	return render_to_response('item.html', {"form":form, "auctionId":"1"}, context_instance=RequestContext(request))
+	return render_to_response('item.html', {"form":form, "auctionId":auctionId}, context_instance=RequestContext(request))
