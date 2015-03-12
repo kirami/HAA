@@ -262,6 +262,10 @@ def getWinningBids(auctionId, userId = None, date = None, onlyNonInvoiced = Fals
 				return Bid.objects.filter(winner=True, item__auction=auctionId, user=userId, date__lte=date)
 
 
+def getWinningBidsFromLosers(auctionId, userId):
+	items = Item.objects.filter(bidItem__winner = False, auction=auctionId, bidItem__user = userId)
+	return  Bid.objects.filter(winner=True, item__in=set(items))
+
 def getLosingBids(auctionId, userId = None):
 
 	if userId == None:
