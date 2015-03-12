@@ -69,7 +69,7 @@
 	</div>
 
 	{%for key, value in ordered.items%}
-		<div style="font-size:16px; margin-bottom:10px; margin-top:20px;"><u style="font-weight:bold">{{value.0.category.name}}</u> {{value.0.category.description}}<u style="font-weight:bold; margin-left:10px;">Minimum Bid: ${{value.0.category.min_bid}}</u></div>
+		<div style="font-size:16px; margin-bottom:10px; margin-top:20px;"><u style="font-weight:bold">{{value.0.category.name}}</u> {{value.0.category.description}} <u style="font-weight:bold;">Minimum Bid: ${{value.0.category.min_bid}}</u></div>
 		{%for item in value%}
 			<div class="catalogBox" style="{%if True%}{%endif%}">
 		<div style="margin-top:7px; float:left" class="tableBody">
@@ -87,12 +87,41 @@
 			<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
 			<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
 		</div>
-		<div style="float:left">
+				<div style="float:left">
 			
-			
+			{%if not loggedIn%}
+			{%else%}
+
+				{%if bids|get_item:item.id == None %}
+					
+					<div class="left" style="width:100px; margin-top:5px;">
+						<div class="left" style="width:10px; margin-top:2px;">$</div>
+						<form autocomplete="off">
+						<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}" style="width:75px"></form>
+					</div>
+					<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Enter Bid</button></div>
+				
+				{%else%}
+						
+					<div class="left" style="width:100px; margin-top:5px;">
+						<div class="left" style="width:10px; margin-top:2px;">$</div>
+						<form autocomplete="off">
+						<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}" style="width:75px"></form>
+					</div>
+					<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
+					
+					<form class="left" method="POST" action="/audio/catalog/deleteBid">
+					 {% csrf_token %}
+						<input type ="hidden" name="itemId" value="{{item.id}}">
+						<input type="submit" class="bidSubmitButton" value="Delete Bid">
+					</form>
+
+				{%endif%}
+			{%endif%}
 
 			
 		</div>
+
 
 		<div class="clear"></div>	
 	</div>

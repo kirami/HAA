@@ -87,6 +87,15 @@ function endMyAuction (auctionId, userId) {
 	
 }
 
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
 
 function submitBid(itemId){
 
@@ -99,11 +108,20 @@ function submitBid(itemId){
 		data: {"bidAmount": $("#bidAmount_" + itemId).val(), "itemId":itemId},
 		success: function(data) {
 			if(data.success){
-				split = window.location.search.split("success")
-				if(split=="")
-					window.location+="?success=true"; 
-				else
-					window.location.reload()
+				result = $.urlParam('success')
+				
+				if(result)
+					window.location.reload()			 
+				else{
+					split = window.location.href.split("?")
+					console.log(split)
+					if (split.length>1)
+						window.location+="&success=true";
+					else
+						window.location+="?success=true";
+				}
+					
+				
 			}else{
 				$('.successMsg').hide()
 				$("#msg").html("<div>Something went wrong, we could not save your bid:<br> "  + data.msg + "</div>")

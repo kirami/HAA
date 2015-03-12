@@ -11,7 +11,7 @@
 		<div class="leftMenu" id="" ><a href="/audio/catalog" style="{%if not category%}color:black{%endif%}">All</a></div>
 		
 		{%for cat in categories%}
-			<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category == cat.id %}color:black{%endif%}">{{cat}}</a></div>
+			<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category.id == cat.id %}color:black{%endif%}">{{cat}}</a></div>
 		{%endfor%}
 	</div>
 	
@@ -56,6 +56,9 @@
 
 
 <div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
+{%if category%}
+<div style="font-size:16px; margin-bottom:15px; "><u style="font-weight:bold">{{category.name}}</u>: {{category.description}} <u style="font-weight:bold; ">Minimum Bid: ${{category.min_bid}}</u></div>
+{%endif%}
 	<div class="innerRight">
 		<div class="tableHeader" style="font-weight:bold">
 			<div class="left" style="width:55px;">&nbsp;</div>	
@@ -137,7 +140,9 @@
 		        totalPages: {{total}},
 		        startPage:{{number}},
 		        onPageClick: function (event, page) {
-		        	window.location="?page="+page+"{%if category%}&category={{category}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+	
+		        	
+		        	window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
 
 		        	
 		        }
@@ -145,22 +150,22 @@
 
 		$("#lotIdHeader").click(function(){
 			if(!$(this).hasClass("orderAsc"))
-				window.location="?sort=lot_id{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=lot_id{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 				
 		})
 
 		$("#nameHeader").click(function(){
 			if($(this).hasClass("orderAsc"))
-				window.location="?sort=nameDesc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=nameDesc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 			else
-				window.location="?sort=nameAsc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=nameAsc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 		})
 
 		$("#artistHeader").click(function(){
 			if($(this).hasClass("orderAsc"))
-				window.location="?sort=artistDesc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=artistDesc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 			else
-				window.location="?sort=artistAsc{%if category%}&category={{category}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+				window.location="?sort=artistAsc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 		})
 
 		$(".headerLink").removeClass("headerActive")

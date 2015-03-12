@@ -461,25 +461,26 @@ def catalogByCategory(request, order):
 	data = {}
 	currentAuction = getCurrentAuction()
 	total = 1
-	bidDict = []
+	bidDict = {}
 	msg = ""
 	success = False
 	items = None
-	perPage = settings.ITEMS_PER_PAGE
+	perPage = 2 #settings.ITEMS_PER_PAGE
 	page = int(request.GET.get("page", 1))
 	category = request.GET.get("category", None)
 	ordered = {}
 	try:
 		
 		items = Item.objects.filter(auction=currentAuction).order_by(order)
+		total = math.ceil(float(len(items))/perPage)
 		items = items[perPage*(page-1):(perPage*page)]
-		logger.error(items)
+		#logger.error(items)
 
 
 		categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct().order_by("order_number")
 		
 		for item in items:
-			
+
 			if item.category.order_number not in ordered:
 				ordered[item.category.order_number]= []
 				ordered[item.category.order_number].append(item)
@@ -498,11 +499,17 @@ def catalogByCategory(request, order):
 			ordered[i]["category"] = category
 			i = i+1
 		'''
-
-		logger.error(ordered)
-			
 		
- 
+
+		if(request.user.is_authenticated()):
+			bids = Bid.objects.filter(user = request.user, item__auction = currentAuction.id)
+		
+		for bid in bids:
+			bidDict[str(bid.item.id)] = str(bid.amount)	
+
+		if request.GET.get("success"):
+			success = True
+
 	except Exception as e:
 		logger.error("Error in catalogByCategory(): %s" % e)
 
@@ -515,42 +522,19 @@ def catalog(request, msg= None):
 	now =  date.today()
 	currentAuction = getCurrentAuction()
 	total = 0
-	perPage = settings.ITEMS_PER_PAGE
+	perPage = 2 #settings.ITEMS_PER_PAGE
 	categories = None
 
 	page = int(request.GET.get("page", 1))
 	category = request.GET.get("category", None)
 	order = request.GET.get("sort", 'lot_id')
 	sortGet= order
-
-	template = "catalog.html"
-
-	logger.error
-	if order == "nameAsc":
-		order = "name"
-
-	elif order == "nameDesc":
-		order = "-name"
-
-	elif order == "artistAsc":
-		order = "artist"
-
-	elif order == "artistDesc":
-		order = "-artist"
-	else:
-		order = "lot_id"
-		sortGet = "lot_id"
-		return catalogByCategory(request, order)
-
+	currentAuctionId = None
 
 	if not currentAuction:
 		return redirect("noAuction")
 
-	success = False
-	if request.GET.get("success"):
-		success = True
-
-	currentAuctionId = currentAuction.id
+		currentAuctionId = currentAuction.id
 	try:
 		#if after close but in 2nd chance
 		if isSecondChance() or isBetweenSegments():
@@ -566,6 +550,34 @@ def catalog(request, msg= None):
 	except Exception as e:
 		logger.error("error in catalog")
 		logger.error(e)
+
+	template = "catalog.html"
+
+	logger.error
+	if order == "nameAsc":
+		order = "name"
+
+	elif order == "nameDesc":
+		order = "-name"
+
+	elif order == "artistAsc":
+		order = "artist"
+
+	elif order == "artistDesc":
+		order = "-artist"
+	elif not category:
+		order = "lot_id"
+		sortGet = "lot_id"
+		return catalogByCategory(request, order)
+
+
+	
+
+	success = False
+	if request.GET.get("success"):
+		success = True
+
+
 		
 	bidDict = {}
 	
@@ -583,6 +595,7 @@ def catalog(request, msg= None):
 		
 		total = math.ceil(float(len(items))/perPage)
 		bids = []
+		logger.error("cat total: %s" % total)
 
 		
 		if page < 1 or page > total:
@@ -591,13 +604,14 @@ def catalog(request, msg= None):
 		#logger.error("%s : %s" % (perPage*(page-1), (perPage*page)))
 		items = items[perPage*(page-1):(perPage*page)]
 		if(request.user.is_authenticated()):
-			bids = Bid.objects.filter(user = request.user, item__auction = currentAuctionId)
+			bids = Bid.objects.filter(user = request.user, item__auction = currentAuction.id)
 			
 		for bid in bids:
 			bidDict[str(bid.item.id)] = str(bid.amount)
+		logger.error("bid dict: %s" % bidDict)
 
 		if category:
-			category = int(category)	
+			category = Category.objects.get(pk=category)	
 		
 	except Exception as e:
 		logger.error("error in catalog")
@@ -615,10 +629,9 @@ def submitBid(request):
 		data = request.POST
 		bidAmount = data.get("bidAmount")
 		try:
-			addresses = Address.objects.filter(user=request.user)
 			profile  = UserProfile.objects.get(user=request.user)
 			
-			if len(addresses) < 1:
+			if not profile.shipping_address:
 				return HttpResponse(json.dumps({"success":False, "msg":"You must have an address on file to bid."}), content_type="application/json")	
 
 			if not profile.verified:
@@ -651,6 +664,7 @@ def submitBid(request):
 			
 			if Decimal(bidAmount) < item.min_bid:
 				return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	
+
 
 			instances = Bid.objects.filter(user=request.user, item_id=itemId)
 			if len(instances) < 1:
