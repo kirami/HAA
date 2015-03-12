@@ -97,6 +97,9 @@ $.urlParam = function(name){
     }
 }
 
+
+
+
 function submitBid(itemId){
 
 	var csrftoken = getCookie('csrftoken');
@@ -133,6 +136,11 @@ function submitBid(itemId){
         	return false;
       	}
 	});
+}
+
+function openDialog(elem){
+	$( "#" + elem ).dialog( "open" );
+
 }
 
 $( document ).ready(function() {
@@ -279,6 +287,40 @@ $( document ).ready(function() {
     $( "#lockBlind" ).click(function() {
     	$( "#lockBlind-confirm" ).dialog( "open" );
     });
+
+    $(".quickLook").click(function(){
+			var csrftoken = getCookie('csrftoken');
+			ajaxSetup(csrftoken);
+			item = $(this).attr("id").substring(10)
+			
+
+			$.ajax({
+				type: "POST",
+				url: "/audio/catalog/itemInfo/"+ item + "/",
+				success: function(data) {
+					$("#itemPopup").removeClass("successError")
+					
+					if(data.success){
+						$("#itemPopup").html(data)
+					}else{
+						$("#itemPopup").html(data)
+		        	
+					}
+					$( "#itemPopup" ).dialog("open", "position", "center");
+
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+		        	$("#itemPopup").html("That is not a valid item.")
+		        	$("#itemPopup").addClass("successError")
+		        	$( "#itemPopup" ).dialog("open", "position", "center");
+		        	return false;
+				}
+			});
+			
+			
+
+			return false;
+		})
 
 
 

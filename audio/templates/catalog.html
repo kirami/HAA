@@ -35,7 +35,7 @@
 	</div>
 	<div class="sideDiv" style="float:right">
 		<div style="font-weight:bold">Tips:</div>
-		<ul>
+		<ul class="cat_tips">
 			<li>
 				<div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div></li>
 			{%if loggedIn%}
@@ -184,39 +184,7 @@
 			}
 		});
 
-		$(".quickLook").click(function(){
-			var csrftoken = getCookie('csrftoken');
-			ajaxSetup(csrftoken);
-			item = $(this).attr("id").substring(10)
-			
-
-			$.ajax({
-				type: "POST",
-				url: "/audio/catalog/itemInfo/"+ item + "/",
-				success: function(data) {
-					$("#itemPopup").removeClass("successError")
-					
-					if(data.success){
-						$("#itemPopup").html(data)
-					}else{
-						$("#itemPopup").html(data)
-		        	
-					}
-					$( "#itemPopup" ).dialog("open", "position", "center");
-
-				},
-				error: function (xhr, ajaxOptions, thrownError) {
-		        	$("#itemPopup").html("That is not a valid item.")
-		        	$("#itemPopup").addClass("successError")
-		        	$( "#itemPopup" ).dialog("open", "position", "center");
-		        	return false;
-				}
-			});
-			
-			
-
-			return false;
-		})
+		
 
 	})
 </script>

@@ -115,7 +115,7 @@ def sendWinningBidReport(request):
 		
 		for user in users:
 			profile = UserProfile.objects.get(user = user)
-			if user.is_active and profile.email_invoice:
+			if user.is_active and profile.email_only:
 				
 				if user.email:
 					emailData={}
@@ -353,7 +353,7 @@ def importUserEmail(request):
 			users = User.objects.filter(id__gte=firstId)
 			for user in users:
 				profile = UserProfile.objects.get(user = user)
-				if user.is_active and profile.email_invoice:
+				if user.is_active and profile.email_only:
 					
 					if user.email:
 						password = User.objects.make_random_password()
@@ -492,9 +492,9 @@ def importUserCSV(request):
 						#TODO figure out email_invoice/paperless from info above
 						
 						if not email:
-							profile.email_invoice = False 
+							profile.email_only = False 
 						else:
-							profile.email_invoice = True 
+							profile.email_only = True 
 						
 						if notes:
 							profile.notes = notes
@@ -986,19 +986,21 @@ def sendLoserLetters(request, auctionId):
 	messages = []
 	template = "loserLetter"
 	data = {}
-	data["auctionId"] = auctionId
+	data["auction"] = Auction.objects.get(pk = auctionId)
 	#logger.error("losers:")
 	for loser in losers:
 
-		#logger.error("loser %s" % loser)
+		logger.error("loser %s" % loser)
 		profile = UserProfile.objects.get(user_id = loser.user_id)
 		user = User.objects.get(id = loser.user_id )
+		data["winningBids"] = getWinningBidsFromLosers(auctionId, user.id)
 		
-		if profile and profile.email_invoice:
-			msg = getEmailMessage(user.email,"Hawthorn Antique Audio Auction results",{"data":data}, template, True)
+		if profile and profile.email_only:
+			msg = getEmailMessage(user.email,"Hawthorn Antique Audio Auction results",{"data":data}, template, False)
 			messages.append(msg)
 
 	if template :
+		logger.error("sending msgs")
 		sendBulkEmail(messages)
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
@@ -1045,7 +1047,7 @@ def sendInvoices(request):
 
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner["id"])
-		if profile and profile.email_invoice:
+		if profile and profile.email_only:
 			user = User.objects.get(id = winner["id"] )
 			data = getInvoiceData(auctionId, userId)
 			msg = getEmailMessage(user.email,"Invoice for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template, True)
@@ -1088,7 +1090,7 @@ def sendReminder(request):
 
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner["id"])
-		if profile and profile.email_invoice:
+		if profile and profile.email_only:
 			user = User.objects.get(id = winner["id"] )
 			data = getInvoiceData(auctionId, userId)
 			msg = getEmailMessage(user.email,"Reminder for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template)

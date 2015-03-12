@@ -53,6 +53,9 @@ overflow: auto;
 	
 }
 
+.cat_tips li{
+   margin-bottom: 10px;
+}
 
 
 #header{

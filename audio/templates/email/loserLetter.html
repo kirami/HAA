@@ -2,6 +2,29 @@
 
 {%block content%}
 <div>
-	We're sorry, you didn't win any items in auction: {{data.auctionId}}
+	We're sorry, you didn't win any items in auction: {{data.auction.name}}.
 </div>
+
+
+<div>Here are the winning bids for the items you were interested in:</div>
+<div id="reportDiv" class="reportTable">
+	<div style="float:left; width:75px;">Lot ID:</div>
+	<div style="float:left; width:75px;">Label:</div>
+	<div style="float:left; width:75px;">Name:</div>
+	<div style="float:left; width:75px;">Winning Bid:</div>
+
+	<div class="clear" style="clear:both"></div>
+	
+
+	<br><br>	
+	{%for item in data.winningBids%}
+		<div style="float:left; width:75px;">{{item.item.lot_id}}</div>
+		<div style="float:left; width:75px;">{{item.item.label.name}}</div>
+		<div style="float:left; width:75px;">{{item.item.name}}</div>
+		<div style="float:left; width:75px;">${{item.amount}}</div>
+		<div style="clear:both"></div>
+	{%endfor%}
+
+</div>
+
 {%endblock%}
