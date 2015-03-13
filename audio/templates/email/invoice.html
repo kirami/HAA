@@ -3,6 +3,25 @@
 
 {%block content%}
 
+
+
+{%if data.isFlat%}
+<div>
+	Updated invoice for Hawthorn's Antique Audio Auction: {{data.auction.name}}
+</div>
+{%else%}
+<div>
+	<div>Invoice for Hawthorn's Antique Audio Auction: {{data.auction.name}}</div>
+	<div>If you plan on bidding on Set Sale items, either through mail or online, please wait to send payment until you receive an updated invoice.</div>
+
+</div>
+
+{%endif%}
+
+
+
+
+
 <br><br>
 <div id="reportDiv" class="reportTable">
 	<div style="float: left; margin-right: 20px; width: 120px;">Lot Id:</div>
@@ -14,25 +33,26 @@
 {%for winner in data.info.wonItems%}
 	<div style="float: left; margin-right: 20px; width: 120px;">{{winner.item.lot_id}}</div>
 	<div style="float: left; margin-right: 20px; width: 120px;">{{winner.item.name}}</div>
-	<div style="float: left; margin-right: 20px; width: 120px;">{{winner.amount}}</div>
+	<div style="float: left; margin-right: 20px; width: 120px;">${{winner.amount}}</div>
 	<div style="clear:both"></div>
 {%endfor%}
 
 <hr>
 <div>Subtotal:</div>
 <div>${{data.info.sum}}</div>
-
 {%if data.discount != 0%}
 <div>Discount:</div>
 <div>${{data.discount}}</div>
 {%endif%}
-
 <hr>
 <div>Shipping: ${{data.shippingTotal}}</div>
 {%if data.invoice.tax%}
-<div>CA State Tax: {{data.taxTotal}}</div>
+<div>CA State Tax: ${{data.taxTotal}}</div>
 {%endif%}
-<div>total: ${{data.orderTotal}}</div>
+{%if data.previousBalance%}
+<div>Previous balance (as of {{data.balanceDate}}): ${{data.previousBalance}}</div>
+{%endif%}
+<div>Total: ${{data.orderTotal}}</div>
 
 </div>
 

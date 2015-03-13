@@ -185,7 +185,8 @@ $( document ).ready(function() {
 		autoOpen: false, 
 		buttons: {
 			"Email Invoices": function() {
-				//$("#markWinnersForm").submit()
+				$("#markWinnersForm").submit()
+				sendInvoices()
 				$( this ).dialog( "close" );
 			},
 		Cancel: function() {
