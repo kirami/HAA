@@ -13,7 +13,7 @@
 <div id="invoiceReminder-confirm" title="Please Confirm">Are you sure you want to email a reminder to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>
 
 <button id='invoiceReminderButton'>Email Reminder to {{data.user.first_name}} {{data.user.last_name}}</button>
-<div id="reminderMsg"></div>
+<div id="reminderMsg" class=""></div>
 
 <div id="reportDiv" class="reportTable">
 	<div class="maxBidItem">Lot Id:</div>
@@ -65,11 +65,13 @@
 			url: "/admin/sendInvoices/",
 			data: data,
 			success: function(data) {
-				$('#reminderMsg').css("color","green")
+				$('#reminderMsg').removeClass("successError")
+				$('#reminderMsg').addClass("successMsg")
 				$('#reminderMsg').text("Reminder email was successfully sent.")
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
-				$('#reminderMsg').css("color","red")
+				$('#reminderMsg').addClass("successError")
+				$('#reminderMsg').removeClass("successMsg")
 				$('#reminderMsg').text("Something went wrong - email was not sent.")
 	        	return false;
 	      	}
@@ -88,11 +90,13 @@
 			url: "/admin/sendReminder/",
 			data: data,
 			success: function(data) {
-				$('#consignorIdEmailMsg').css("color","green")
+				$('#consignorIdEmailMsg').removeClass("successError")
+				$('#consignorIdEmailMsg').addClass("successMsg")
 				$('#consignorIdEmailMsg').text("Invoice email was successfully sent.")
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
-				$('#consignorIdEmailMsg').css("color","red")
+				$('#consignorIdEmailMsg').addClass("successError")
+				$('#consignorIdEmailMsg').removeClass("successMsg")
 				$('#consignorIdEmailMsg').text("Something went wrong - email was not sent.")
 	        	return false;
 	      	}
@@ -135,11 +139,14 @@
 		});
 
 		$("#invoiceEmailButton").click(function(){
+			$('#consignorIdEmailMsg').text(" ")
 			$( "#invoiceEmail-confirm" ).dialog( "open" );
+			
 			return false;
 		})
 
 		$("#invoiceReminderButton").click(function(){
+			$('#reminderMsg').text(" ")
 			$( "#invoiceReminder-confirm" ).dialog( "open" );
 			return false;
 		})

@@ -7,7 +7,7 @@
 {%if data.error%}
 <div style="font-size:18px; color:red">{{data.errorMsg}}</div>
 {%endif%}
-
+<div id="msg"></div>
 <div><button id="emailInvoices">Send all invoice emails</button></div>
 <div><button id="printInvoices">Print all invoices that are not emailed</button></div>
 <div><button id="printInvoices">Print all invoices, both emailed and not</button></div>
@@ -19,6 +19,30 @@
 
 <script type="text/javascript">
 	
+
+	function sendInvoices(){
+		var csrftoken = getCookie('csrftoken');
+		ajaxSetup(csrftoken);
+
+		data = { "auctionId":{{data.auction.id}}}
+
+
+		$.ajax({
+			type: "POST",
+			url: "/admin/sendInvoices/",
+			data: data,
+			success: function(data) {
+				$('#msg').css("color","green")
+				$('#msg').text("Emails were successfully sent.")
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				$('#msg').css("color","red")
+				$('#msg').text("Something went wrong - emails were not sent.")
+	        	return false;
+	      	}
+		});
+	}
+
 </script>
 
 {%endblock%}

@@ -927,8 +927,14 @@ def endFlatAuction(request, auctionId, userId = None):
 
 	if userId and email:
 		data["invoice"]=invoice
+		data["user"] = User.objects.get(pk=userId)
 		msg = getEmailMessage(settings.EMAIL_HOST_USER ,"User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)
 		msg.send()	
+
+	if int(userId) == int(request.user.id):
+		logger.error("sending invoice")
+		sendInvoices(request, auction.id, userId)
+
 	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
@@ -1018,45 +1024,57 @@ def getInvoices(request, auctionId, userId = None, template=None):
 		logger.error("Error in getInvoices: %e" % e)	
 	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
 
-@staff_member_required
-def sendInvoices(request):
-	auctionId = request.POST.get("auctionId")
-	userId = request.POST.get("userId", None)
+@login_required
+def sendInvoices(request, auctionId = None, userId = None):
+	if not auctionId:
+		auctionId = request.POST.get("auctionId")
+	if not userId:
+		userId = request.POST.get("userId", None)
 	auction = Auction.objects.get(id = auctionId)
 	
 	winners = {}
 	messages = []
 	data = {}
+	subject = "Invoice for Hawthorn's Antique Audio"
+	isFlat = False
+	data["auction"] = auction
 
 	if not auction.blind_locked:
-		return HttpResponse(json.dumps({"success":True, "msg":"This auction has not been locked.  Please make sure to lock the auction before trying to send invoices."}), content_type="application/json")
+		return HttpResponse(json.dumps({"success":False, "msg":"This auction has not been locked.  Please make sure to lock the auction before trying to send invoices."}), content_type="application/json")
 
 	if auction.flat_locked:
-		#get just flat winners.
-		#send updated or flat only?
-		template = "flatInvoice"
-		#include any payment received.
+		subject = "Updated invoice for Hawthorn's Antique Audio"
+		isFlat = True
+		winners = getWinningFlatBids(auction.id, date=auction.end_date, userId = userId)
 	else:
 		if userId == None:
+			if not request.user.is_staff:
+				return HttpResponse(json.dumps({"success":False, "msg":"Mass invoice email trying to be send from non staffer."}), content_type="application/json")
 			winners = getAlphaWinners(auctionId)
 		else:
 			winners = [{"id" : userId}] 	
 
-		template = "invoice"
-
+	logger.error(winners)
+	logger.error("isFlat: %s" % isFlat)
+	data["isFlat"] = isFlat
 
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner["id"])
 		if profile and profile.email_only:
-			user = User.objects.get(id = winner["id"] )
-			data = getInvoiceData(auctionId, userId)
-			msg = getEmailMessage(user.email,"Invoice for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template, True)
+			logger.error("winner: %s" % winner["id"])
+			
+			data = getInvoiceData(auctionId, winner["id"])
+			logger.error("userId %s" % userId)
+			if userId:
+				if data["invoice"].second_chance_invoice_amount > 0:
+					data["isFlat"] = True	
+					subject = "Updated invoice for Hawthorn's Antique Audio"
+			
+			msg = getEmailMessage(data["user"].email,subject, {"data":data}, "invoice", False)
 			messages.append(msg)
 				
-		if template :
-			sendBulkEmail(messages)
-			return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
+	sendBulkEmail(messages)
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 
