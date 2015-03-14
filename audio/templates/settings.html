@@ -6,13 +6,26 @@
 {%if data.success%}
 <div class="successMsg">You've successfully updated your settings.</div>
 {%endif%}
+<div style="font-weight:bold; font-size:26px; margin-bottom:10px;">Settings:</div>
 <form action="" method="POST">
   {% csrf_token %}
-  <div style="float:left; margin-right:10px;">Hold all Contact</div>
-  <input name="quietBox" type="checkbox" {%if data.quietChecked%}checked{%endif%}>
+  
+  <input name="snailMailBox" type="checkbox" style="float:left; margin-right:10px;" {%if not data.profile.email_only%}checked{%endif%}>
+  <div style="float:left; margin-right:10px;">I want invoices and other notices (this doesn't include the catalog) mailed to me through USPS instead of emailed.</div>
   <div class="clear"></div>
-  <input type="submit" value="Save">
-  <div>You will not be able to bid while we are not in contact with you.</div>
+  
+  <input name="noPCBox" type="checkbox" style="float:left; margin-right:10px;" {%if data.profile.pdf_list%}checked{%endif%}>
+  <div style="float:left; margin-right:10px;">I don't want a printed catalog through USPS, just email me a pdf.</div>
+  
+  
+  <div class="clear"></div>
+
+  <input name="quietBox" type="checkbox" style="float:left;  margin-right:10px;" {%if data.profile.quiet%}checked{%endif%}>
+  <div style="float:left; margin-right:10px;">Hold all Contact</div> <div style="float:left; font-weight:bold">You will not be able to bid while we are not in contact with you.</div>
+
+  <div class="clear"></div>
+  <input type="submit" value="Save Settings" style="margin-top:15px;">
+  
 </form>
 
 
