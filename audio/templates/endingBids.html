@@ -3,7 +3,7 @@
 
 {% block content %}
 
-{%if endAuctionOption%}
+{%if endAuctionOption%} 
 
 
 
@@ -11,16 +11,56 @@
 
 <div class="header" style="margin-bottom:20px;text-align:center">Here are the items you won for auction: {{data.auction.name}}</div>
 
-<div style="margin-left:auto;  margin-right:auto; width:690px">
-	<div class="tableHeader">	
-		<div class="left" style="width:70px;">&nbsp;</div>	
-		<div class="left">Lot ID:</div>
-		<div class="left">Name:</div>
-		<div class="left">Artist:</div>
-		<div class="left">Price:</div>
-		<div class="clear"></div>
+<div style=""></div>
+
+<div style="">
+
+	<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
+	<div id="tableRight" style="margin-left:auto; margin-right:auto; width:910px" class="">
+		<div class="innerRight">
+			<div class="tableHeader" style="font-weight:bold">
+				<div class="left" style="width:70px;">&nbsp;</div>	
+				<div style="width:55px; float:left;" id="lotIdHeader">Lot:</div>
+				<div class="left" style="width:105px">Label & Rec#:</div>
+				<div  style="width:250px; float:left;" id="nameHeader" > Name:</div>
+				<div  style="width:230px; float:left;" id="artistHeader" > Artist:</div>
+
+				<div  style="width:50px; float:left;" id="artistHeader" > Amount:</div>
+				
+				<div class="clear"></div>
+			</div>
+		</div>
+
+
+		{% for bid in data.bids %}
+
+			<div class="catalogBox" style="">
+				<div style="margin-top:7px; float:left" class="tableBody">
+					<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
+					{%if item.image%}
+						{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{bid.item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{bid.item.thumbnail}}" width="50px" height="50px"></a>
+						{%endif%}
+					{%else%}
+						{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{bid.item.thumbnail}}" width="50px" height="50px">
+						{%endif%}
+					{%endif%}
+					</div> 
+					<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{bid.item.id}}"><div >{{bid.item.lot_id}}</div></div> 
+					<div class="category" style="float:left; width:105px">{{bid.item.label.name}} {{bid.item.record_number}}{%if bid.item.record_number_two%}<br>{{bid.item.label.name}} {{bid.item.record_number_two}}{%endif%}</div>
+					<div class="category" style="float:left; width:250px">{{bid.item.name}} {%if bid.item.name_two%}<br>{{bid.item.name_two}}{%endif%}{%if bid.item.notes%}<br>{{bid.item.notes}}{%endif%}</div>
+					<div class="category" style="float:left; width:230px">{{bid.item.artist}}{%if bid.item.artist_two%}<br>{{bid.item.artist_two}}{%endif%}</div>
+					<div class="category" style="float:left; width:50px">${{bid.amount}}</div>
+				</div>
+			</div>
+		{% endfor %}
+		
+		
 	</div>
 
+	<div style=""></div>
+
+
+<!--
 	<div class="tableBody">
 	{% for bid in data.bids %}
 		<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
@@ -39,8 +79,7 @@
 
 		
 		<div class="clear"></div>
-	{% endfor %}
-	</div>
-</div>
+	{% endfor %} -->
+
 
 {% endblock %}

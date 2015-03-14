@@ -104,18 +104,20 @@ def accountSettings(request):
 	if request.method == "POST":
 		try:
 			quiet = request.POST.get("quietBox", None)
+			noPC = request.POST.get("noPCBox", None)
+			snailMail = request.POST.get("snailMailBox", None)
 
-			if quiet:
-				up.quiet = True
-			else:
-				up.quiet = False
+			up.quiet = True if quiet else False
+			up.pdf_list = True if noPC else False
+			up.email_only = False if snailMail else True
+
 			up.save()
 			data["success"] = True
 		except:
 			data["error"] = True
 			return render_to_response('settings.html', {"data":data}, context_instance=RequestContext(request))
 
-	data["quietChecked"] = up.quiet
+	data["profile"] = up
 	return render_to_response('settings.html', {"data":data}, context_instance=RequestContext(request))
 		
 @login_required	
