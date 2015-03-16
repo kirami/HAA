@@ -12,14 +12,15 @@ from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, UserCreateForm, UserForm
 
-from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice, Category
+from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice, Category, ItemType
 
 from datetime import datetime, date  
 from audio.utils import *
 from audio.mail import *
 
 import logging
-import json, math, string, random
+import json, math, string, random, collections
+
 
 
 
@@ -467,10 +468,14 @@ def catalogByCategory(request, order):
 	msg = ""
 	success = False
 	items = None
-	perPage = 2 #settings.ITEMS_PER_PAGE
+	perPage =  settings.ITEMS_PER_PAGE
 	page = int(request.GET.get("page", 1))
 	category = request.GET.get("category", None)
 	ordered = {}
+	categories = None
+	itemType = None
+	firstLibraryKey = None
+	
 	try:
 		
 		items = Item.objects.filter(auction=currentAuction).order_by(order)
@@ -478,18 +483,36 @@ def catalogByCategory(request, order):
 		items = items[perPage*(page-1):(perPage*page)]
 		#logger.error(items)
 
+	
 
-		categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct().order_by("order_number")
+		if itemType:
+			itemType = ItemType.objects.get(name="Record")
+			categories = Category.objects.filter(itemCategory__auction=currentAuction, itemCategory__item_type = itemType).distinct().order_by("order_number")
 		
+		else: 
+			categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct().order_by("order_number")
+
+			#logger.error("categories %s" % categories)
+
 		for item in items:
 
+			if item.item_type.name != "Record" and not firstLibraryKey:
+				firstLibraryKey = item.category.order_number
+
 			if item.category.order_number not in ordered:
-				ordered[item.category.order_number]= []
-				ordered[item.category.order_number].append(item)
+				logger.error("adding ordered: %s" % item.category.order_number)
+				ordered[int(item.category.order_number)]= []
+				ordered[int(item.category.order_number)].append(item)
 				#ordered[item.category.order_number]["category"].append(item.category)
 			else:
-				ordered[item.category.order_number].append(item)
-			'''
+				ordered[int(item.category.order_number)].append(item)
+
+		logger.error(ordered)
+		od = collections.OrderedDict(sorted(ordered.items()))
+		logger.error(od)
+		ordered = od
+
+		'''
 		i = 0
 		for category in categories:
 			objs = Item.objects.filter(auction = currentAuction, category = category).order_by(order)
@@ -502,6 +525,7 @@ def catalogByCategory(request, order):
 			i = i+1
 		'''
 		
+		#logger.error(ordered)
 
 		if(request.user.is_authenticated()):
 			bids = Bid.objects.filter(user = request.user, item__auction = currentAuction.id)
@@ -515,7 +539,7 @@ def catalogByCategory(request, order):
 	except Exception as e:
 		logger.error("Error in catalogByCategory(): %s" % e)
 
-	return render_to_response("catalogByCategory.html", {"sort":"lot_id", "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
+	return render_to_response("catalogByCategory.html", {"sort":"lot_id", "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success, "firstLibraryKey": firstLibraryKey}, context_instance=RequestContext(request))
 
 
 def catalog(request, msg= None):
@@ -524,7 +548,7 @@ def catalog(request, msg= None):
 	now =  date.today()
 	currentAuction = getCurrentAuction()
 	total = 0
-	perPage = 2 #settings.ITEMS_PER_PAGE
+	perPage = settings.ITEMS_PER_PAGE
 	categories = None
 
 	page = int(request.GET.get("page", 1))
@@ -573,8 +597,6 @@ def catalog(request, msg= None):
 		return catalogByCategory(request, order)
 
 
-	
-
 	success = False
 	if request.GET.get("success"):
 		success = True
@@ -597,7 +619,7 @@ def catalog(request, msg= None):
 		
 		total = math.ceil(float(len(items))/perPage)
 		bids = []
-		logger.error("cat total: %s" % total)
+		#logger.error("cat total: %s" % total)
 
 		
 		if page < 1 or page > total:
@@ -610,7 +632,7 @@ def catalog(request, msg= None):
 			
 		for bid in bids:
 			bidDict[str(bid.item.id)] = str(bid.amount)
-		logger.error("bid dict: %s" % bidDict)
+		#logger.error("bid dict: %s" % bidDict)
 
 		if category:
 			category = Category.objects.get(pk=category)	

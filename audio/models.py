@@ -84,7 +84,7 @@ class ItemType(models.Model):
         
 class Item(models.Model):
 	#TODO fix requireds
-	label = models.ForeignKey(Label, null = True)
+	label = models.ForeignKey(Label, null = True, blank=True)
 	artist = models.CharField(max_length=200, null = True, blank = True)
 	artist_two = models.CharField(max_length=200, null = True, blank = True)
 	name = models.CharField(max_length=200, default="")
@@ -102,6 +102,7 @@ class Item(models.Model):
 	auction = models.ForeignKey(Auction)
 	thumbnail = models.FileField(upload_to='items/', null = True, blank=True)
 	image = models.FileField(upload_to='items/', null = True, blank=True)
+	prefix = models.CharField(max_length=200, null = True, blank = True)
 
 	
 	class Meta:

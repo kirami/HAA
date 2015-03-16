@@ -89,8 +89,8 @@ def usersWithoutAddress():
 
 
 #users with no bids	
-def getNewUsers(emailOnly = False, excludeEbay = True):
-	users = User.objects.filter(bidUser__isnull=True, is_staff = False)
+def getNewUsers(auction, emailOnly = False, excludeEbay = True):
+	users = User.objects.filter(bidUser__isnull=True, is_staff = False, date_joined__gt = auction.end_date)
 	if excludeEbay:
 		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
 	
@@ -100,8 +100,7 @@ def getNewUsers(emailOnly = False, excludeEbay = True):
 	all = set(users) - set(admin)
 	#exlude = User.objects.
 	#users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
-	#admin = User.objects.filter(is_staff = True)
-	#todo no quiet
+
 	return list( all), Address.objects.filter(upBilling__user__in=all)
 
 #users bid within last 3 auctions or printed list = true or paid for a catalog within 3 auctions

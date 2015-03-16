@@ -20,7 +20,8 @@
 		{%if data.item.notes_two%}{{data.item.notes_two}}<br> {%endif%}
 		<span class="itemInfoDetail">Minimum Bid:</span> ${{data.item.min_bid}}<br>
 		<span class="itemInfoDetail">Condition:</span> {{data.item.condition}} {%if data.item.defect%}{{data.item.defect}} {%endif%}<br>
-		<span class="itemInfoDetail">Category:</span> {{data.item.category}}
+		<span class="itemInfoDetail">Category:</span> {{data.item.category}}<br>
+		<span class="itemInfoDetail">Type:</span> {{data.item.item_type.name}}
 
 	</div>
 
