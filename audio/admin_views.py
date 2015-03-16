@@ -941,6 +941,7 @@ def endFlatAuction(request, auctionId, userId = None):
 @staff_member_required
 def userBreakdown(request, auctionId = None):
 	data = {}
+	auction = None
 	
 	if not auctionId:
 		auction = getCurrentAuction()
@@ -949,9 +950,10 @@ def userBreakdown(request, auctionId = None):
 			auctionId = auction.id
 		else:
 			auctionId = auction.id	
+	else:
+		auction = Auction.objects.get(pk=auctionId)
 
-
-	data["new"] = getNewUsers()[0]
+	data["new"] = getNewUsers(auction)[0]
 	data["current"] = getCurrentUsers(auctionId)[0]
 	data["nonCurrent"] = getNonCurrentUsers(auctionId)[0]
 	data["nonActive"] = getNonActiveUsers(auctionId)[0]

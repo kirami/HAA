@@ -68,25 +68,53 @@
 		</div>
 	</div>
 
+
 	{%for key, value in ordered.items%}
-		<div style="font-size:16px; margin-bottom:10px; margin-top:20px;"><u style="font-weight:bold">{{value.0.category.name}}</u> {{value.0.category.description}} <u style="font-weight:bold;">Minimum Bid: ${{value.0.category.min_bid}}</u></div>
+		
+		{%ifequal key firstLibraryKey %}
+			<div><u style="font-weight:bold; font-size:16px;">The Library</u> Books, sheet music, record storage albums and sleeves, needle tins and other accessories - it’s all here. <u style="font-weight:bold; font-size:16px;">Minimum Bids Indicated:</u></div>
+		{%endifequal%}
+
+		<div style="font-size:16px; margin-bottom:10px; margin-top:20px;"><u style="font-weight:bold">{{value.0.category.name}}</u> {{value.0.category.description}} {%if value.0.category.min_bid%}<u style="font-weight:bold;">Minimum Bid: ${{value.0.category.min_bid}}</u>{%endif%}</div>
+		
+
+
 		{%for item in value%}
+
+		{%if item.prefix%}
+			<div style="font-style:italic; margin-top:5px;">{{item.prefix}}</div>
+		{%endif%}
+
+
+
 			<div class="catalogBox" style="{%if True%}{%endif%}">
-		<div style="margin-top:7px; float:left" class="tableBody">
-			<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
-			{%if item.image%}
-				{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
-				{%endif%}
-			{%else%}
-				{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
-				{%endif%}
-			{%endif%}
-			</div> 
-			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{item.id}}"><div >{{item.lot_id}}</div></div> 
-			<div class="category" style="float:left; width:105px">{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}</div>
-			<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
-			<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
-		</div>
+				<div style="margin-top:7px; float:left" class="tableBody">
+				
+
+					<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
+					{%if item.image%}
+						{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
+						{%endif%}
+					{%else%}
+						{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
+						{%endif%}
+					{%endif%}
+					</div> 
+					<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{item.id}}"><div >{{item.lot_id}}</div></div> 
+					
+					{%ifequal item.item_type.name "Book"%}
+						<div class="category" style="float:left; width:565px; margin-right:20px;"><u>{{item.name}}</u> by {{item.artist}}. {{item.notes}}</div>
+					{%else%}
+						<div class="category" style="float:left; width:105px">
+							{%if not item.label%}&nbsp;{%else%}
+							{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}{%endif%}</div>
+						<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
+						<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
+					{%endifequal%}
+				</div>
+
+
+
 				<div style="float:left">
 			
 			{%if not loggedIn%}
@@ -122,11 +150,17 @@
 			
 		</div>
 
+		<div class="clear"></div>
 
-		<div class="clear"></div>	
+	
+
+			
 	</div>
 	{%endfor%}
 	{%endfor%}
+
+
+
 <div class="clear"></div>	
 </div>
 
