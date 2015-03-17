@@ -475,6 +475,13 @@ def catalogByCategory(request, order):
 	categories = None
 	itemType = None
 	firstLibraryKey = None
+	sortGet = "lotAsc"
+	
+	if order == "-lot_id":
+		sortGet = "lotDesc"
+	else:
+		sortGet = "lotAsc"
+		
 	
 	try:
 		
@@ -483,14 +490,19 @@ def catalogByCategory(request, order):
 		items = items[perPage*(page-1):(perPage*page)]
 		#logger.error(items)
 
-	
+		'''if order == "-lot_id":
+			catSort = "-order_number"
+		else:
+			catSort = "order_number"
+		'''
+		catSort = "order_number"
 
 		if itemType:
 			itemType = ItemType.objects.get(name="Record")
 			categories = Category.objects.filter(itemCategory__auction=currentAuction, itemCategory__item_type = itemType).distinct().order_by("order_number")
 		
 		else: 
-			categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct().order_by("order_number")
+			categories = Category.objects.filter(itemCategory__auction=currentAuction).distinct().order_by(catSort)
 
 			#logger.error("categories %s" % categories)
 
@@ -507,9 +519,22 @@ def catalogByCategory(request, order):
 			else:
 				ordered[int(item.category.order_number)].append(item)
 
-		logger.error(ordered)
+		logger.error("after loop %s" % ordered)
+		
+		
+		
 		od = collections.OrderedDict(sorted(ordered.items()))
-		logger.error(od)
+		logger.error("after first sort %s" % od)
+		if order == "-lot_id":
+			items = od.items()  # list(od.items()) in Python3
+			items.reverse()
+			od = collections.OrderedDict(items)
+			#od = items
+			logger.error("after reverse %s" % od)
+
+
+
+		
 		ordered = od
 
 		'''
@@ -539,7 +564,7 @@ def catalogByCategory(request, order):
 	except Exception as e:
 		logger.error("Error in catalogByCategory(): %s" % e)
 
-	return render_to_response("catalogByCategory.html", {"sort":"lot_id", "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success, "firstLibraryKey": firstLibraryKey}, context_instance=RequestContext(request))
+	return render_to_response("catalogByCategory.html", {"sort":sortGet, "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success, "firstLibraryKey": firstLibraryKey}, context_instance=RequestContext(request))
 
 
 def catalog(request, msg= None):
@@ -591,6 +616,9 @@ def catalog(request, msg= None):
 
 	elif order == "artistDesc":
 		order = "-artist"
+	elif order == "lotDesc":
+		order = "-lot_id"
+		return catalogByCategory(request, order)
 	elif not category:
 		order = "lot_id"
 		sortGet = "lot_id"
