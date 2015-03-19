@@ -412,16 +412,21 @@ def getUnbalancedUsers(userId = None):
 	row = dictfetchall(cursor)
 	return row
 
-def getAlphaWinners(auctionId):
-	#return User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True).distinct().order_by("last_name")
-
+def getAlphaWinners(auctionId, printOnly = False):
+	if printOnly:
+		return User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True, upUser__email_only = False).distinct().order_by("last_name")
+	else:	
+		return User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True).distinct().order_by("last_name")
+	
+	'''
 	cursor = connection.cursor()
 	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name from audio_bid b, "+
 		" auth_user au, audio_item i WHERE b.winner = true and b.item_id = i.id and b.user_id = au.id and i.auction_id="+
 		str(auctionId) + " order by last_name")
 	row = dictfetchall(cursor)
+	
 	return row
-
+	'''
 
 
 def getInvoices(auctionId = None):
