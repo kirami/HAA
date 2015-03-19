@@ -589,13 +589,13 @@ def shippingByInvoiceFlat(request, auctionId):
 
 	for winner in winners:
 		
-		winnersFlatSum = getWinnerFlatSum(auctionId, userId = winner["id"], date=auction.end_date)
+		winnersFlatSum = getWinnerFlatSum(auctionId, userId = winner.id, date=auction.end_date)
 		logger.error(winnersFlatSum)
 		#if bought flat items
 		if winnersFlatSum["sum"] != 0:
-			winnersSum = getWinnerSum(auctionId, userId = winner["id"], date=auction.end_date)
+			winnersSum = getWinnerSum(auctionId, userId = winner.id, date=auction.end_date)
 
-			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
+			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner.id)
 			logger.error(invoices)
 			if len(invoices) > 0:
 				invoice = invoices[0]
@@ -646,22 +646,22 @@ def shippingByInvoice(request, auctionId, filter=None):
 
 	for winner in winners:
 		address = None
-		addresses = Address.objects.filter(upShipping__user = winner["id"])
+		addresses = Address.objects.filter(upShipping__user = winner.id)
 		if len(addresses)  < 1:
-			logger.error("shippingByInvoice() user %s doesn't have an address on file" % winner["id"])
+			logger.error("shippingByInvoice() user %s doesn't have an address on file" % winner.id)
 		else:
 			address = addresses[0]
 		
 		if filter:
-			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"], shipping=0)
+			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner.id, shipping=0)
 		
 		else:
-			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner["id"])
+			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner.id)
 		
 		if len(invoices) > 0:
 			invoice = invoices[0]
 			
-			winnersSum = getWinnerSum(auctionId, userId = winner["id"])
+			winnersSum = getWinnerSum(auctionId, userId = winner.id)
 			data["invoices"][str(invoice.id)] = {}
 			data["invoices"][str(invoice.id)]["bids"] = winnersSum
 			data["invoices"][str(invoice.id)]["shipping"] = invoice.shipping 
@@ -1016,7 +1016,8 @@ def sendLoserLetters(request, auctionId):
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 @staff_member_required
-def getInvoices(request, auctionId, userId = None, template=None):
+def getInvoices(request, auctionId, userId = None, printIt = None):
+	invoiceTemplate = "admin/audio/printInvoice.html" if printIt else "admin/audio/invoice.html"
 	try:
 		data = {}
 		if userId != None:
@@ -1024,7 +1025,39 @@ def getInvoices(request, auctionId, userId = None, template=None):
 			getHeaderData(data, auctionId)
 	except Exception as e:
 		logger.error("Error in getInvoices: %e" % e)	
-	return render_to_response('admin/audio/invoice.html', {"data":data}, context_instance=RequestContext(request))
+	return render_to_response(invoiceTemplate, {"data":data}, context_instance=RequestContext(request))
+
+@staff_member_required
+def printInvoices(request, auctionId, userId = None):
+	
+	try:
+		filter = request.GET.get("filter", False)
+		data = {}
+		
+		data["auction"] = Auction.objects.get(pk=auctionId)
+		data["invoices"] = {}
+		if userId != None:
+			data["invoices"][str(userId)] = getInvoiceData(auctionId, userId)
+		
+		else:
+			if filter:
+				winners = getAlphaWinners(auctionId, True)
+	
+			else:
+				winners = getAlphaWinners(auctionId)
+
+			logger.error("winners: %s"  % winners)
+			for winner in winners:
+				data["invoices"][str(winner.id)] = getInvoiceData(auctionId, winner.id)
+				#data["invoices"][str(winner["id"])]["winner"] = User.objects.get(pk=winner["id"])
+
+		
+		getHeaderData(data, auctionId)
+		
+
+	except Exception as e:
+		logger.error("Error in printInvoices: %e" % e)	
+	return render_to_response("admin/audio/printInvoice.html", {"data":data}, context_instance=RequestContext(request))
 
 @login_required
 def sendInvoices(request, auctionId = None, userId = None):
@@ -1054,18 +1087,18 @@ def sendInvoices(request, auctionId = None, userId = None):
 				return HttpResponse(json.dumps({"success":False, "msg":"Mass invoice email trying to be send from non staffer."}), content_type="application/json")
 			winners = getAlphaWinners(auctionId)
 		else:
-			winners = [{"id" : userId}] 	
+			winners = [User.objects.get(pk=userId)] 	
 
 	logger.error(winners)
 	logger.error("isFlat: %s" % isFlat)
 	data["isFlat"] = isFlat
 
 	for winner in winners:
-		profile = UserProfile.objects.get(user_id = winner["id"])
+		profile = UserProfile.objects.get(user_id = winner.id)
 		if profile and profile.email_only:
-			logger.error("winner: %s" % winner["id"])
+			logger.error("winner: %s" % winner.id)
 			
-			data = getInvoiceData(auctionId, winner["id"])
+			data = getInvoiceData(auctionId, winner.id)
 			logger.error("userId %s" % userId)
 			if userId:
 				if data["invoice"].second_chance_invoice_amount > 0:
@@ -1103,15 +1136,15 @@ def sendReminder(request):
 	if userId == None:
 		winners = getAlphaWinners(auctionId)
 	else:
-		winners = [{"id" : userId}] 	
+		winners = [User.objects.get(pk=userId)] 		
 
 	template = "reminder"
 
 
 	for winner in winners:
-		profile = UserProfile.objects.get(user_id = winner["id"])
+		profile = UserProfile.objects.get(user_id = winner.id)
 		if profile and profile.email_only:
-			user = User.objects.get(id = winner["id"] )
+			user = User.objects.get(id = winner.id)
 			data = getInvoiceData(auctionId, userId)
 			msg = getEmailMessage(user.email,"Reminder for Hawthorn's Antique Audio Auction: " + auction.name, {"data":data}, template)
 			messages.append(msg)
@@ -1318,7 +1351,7 @@ def winners(request, auctionId):
 	for winner in winners:
 		try:
 			#logger.error("winner: " + winner)
-			address = Address.objects.get(upShipping__user = winner["id"])
+			address = Address.objects.get(upShipping__user = winner.id)
 			winner["zipcode"] = address.zipcode
 		except:
 			pass

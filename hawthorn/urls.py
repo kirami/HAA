@@ -40,6 +40,10 @@ urlpatterns = patterns('',
 
     url(r'^admin/sendEmail/$', admin_views.sendTemplateEmail, name='sendTemplateEmail'),
     url(r'^admin/getInvoices/(?P<auctionId>\d+)/(?P<userId>\d+)', admin_views.getInvoices, name='getInvoices'),
+    #url(r'^admin/printInvoices/(?P<auctionId>\d+)/(?P<printIt>\d+)', admin_views.getInvoices, name='getInvoices'),
+    url(r'^admin/printInvoices/(?P<auctionId>\d+)/(?P<userId>\d+)/$', admin_views.printInvoices, name='printInvoices'),
+    url(r'^admin/printInvoices/(?P<auctionId>\d+)/$', admin_views.printInvoices, name='printInvoices'),
+   
     url(r'^admin/invoices/(?P<auctionId>\d+)/$', admin_views.invoices, name='invoices'),
     url(r'^admin/createBid/(?P<auctionId>\d+)/$', admin_views.createBid, name='createBid'),
     url(r'^admin/userBreakdown/(?P<auctionId>\d+)/$', admin_views.userBreakdown, name='userBreakdown'),

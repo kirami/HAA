@@ -9,13 +9,11 @@
 {%endif%}
 <div id="msg"></div>
 <div><button id="emailInvoices">Send all invoice emails</button></div>
-<div><button id="printInvoices">Print all invoices that are not emailed</button></div>
-<div><button id="printInvoices">Print all invoices, both emailed and not</button></div>
+<div><button id="printInvoices" onclick="javascript:window.location.href = '/admin/printInvoices/{{data.auction.id}}/?filter=true'">Print all invoices that are not emailed</button></div>
+<div><button id="printInvoices" onclick="javascript:window.location.href = '/admin/printInvoices/{{data.auction.id}}'">Print all invoices, both emailed and not</button></div>
 
 
 <div id="emailInvoices-confirm" title="Please Confirm">Are you sure you want email all invoices for auction <span id="auctionIdSpan"></span>?</div>
-
-
 
 <script type="text/javascript">
 	
