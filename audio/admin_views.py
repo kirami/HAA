@@ -1038,7 +1038,7 @@ def printInvoices(request, auctionId, userId = None):
 		data["invoices"] = {}
 		if userId != None:
 			data["invoices"][str(userId)] = getInvoiceData(auctionId, userId)
-		
+			data["invoices"][str(userId)]["profile"] = UserProfile.objects.get(user = userId)
 		else:
 			if filter:
 				winners = getAlphaWinners(auctionId, True)
@@ -1049,7 +1049,7 @@ def printInvoices(request, auctionId, userId = None):
 			logger.error("winners: %s"  % winners)
 			for winner in winners:
 				data["invoices"][str(winner.id)] = getInvoiceData(auctionId, winner.id)
-				#data["invoices"][str(winner["id"])]["winner"] = User.objects.get(pk=winner["id"])
+				data["invoices"][str(winner.id)]["profile"] = UserProfile.objects.get(user = winner.id)
 
 		
 		getHeaderData(data, auctionId)
@@ -1089,8 +1089,7 @@ def sendInvoices(request, auctionId = None, userId = None):
 		else:
 			winners = [User.objects.get(pk=userId)] 	
 
-	logger.error(winners)
-	logger.error("isFlat: %s" % isFlat)
+
 	data["isFlat"] = isFlat
 
 	for winner in winners:

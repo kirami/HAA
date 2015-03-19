@@ -651,7 +651,7 @@ def getHeaderData(data, auctionId):
  	sums = getSumWinners(auctionId)
  	data["discount"] = getSumDiscount(auctionId)
  	data ["preDiscount"] = sums["sum"]
- 	
+ 	data["today"] = date.today()
  	if len(sums) > 0:
  		data["total"] = sums["sum"]	- data["discount"]
  	else:
