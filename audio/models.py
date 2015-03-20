@@ -157,8 +157,8 @@ class UserProfile(models.Model):
 	notes = models.CharField(max_length=200, null = True, blank=True)
 	verified = models.BooleanField(default=False)
 	confirmation_code = models.CharField(max_length=200, null = True, blank=True)
-	shipping_address = models.ForeignKey(Address, related_name="upShipping")
-	billing_address = models.ForeignKey(Address, related_name="upBilling")
+	shipping_address = models.ForeignKey(Address, related_name="upShipping", blank=True, null=True, on_delete=models.SET_NULL)
+	billing_address = models.ForeignKey(Address, related_name="upBilling", blank=True, null=True, on_delete=models.SET_NULL)
 
 
 	def __unicode__(self):

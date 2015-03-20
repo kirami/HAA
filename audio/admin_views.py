@@ -21,7 +21,7 @@ from audio.utils import *
 from audio.mail import *
 
 from datetime import datetime, date 
-import json, csv
+import json, math, string, random, collections, csv
 
 import logging
 
@@ -361,6 +361,7 @@ def importUserEmail(request):
 						emailData={}
 						emailData["user"] = user
 						emailData["password"] = password	
+						emailData["url"] = "http://haa/audio/accounts/confirm/" + str(profile.confirmation_code) + "/" + user.username
 						msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
 						messages.append(msg)
 						emailList.append(user.email)
@@ -394,11 +395,11 @@ def importUserCSV(request):
 	data = {}
 	i=0
 	errors={}
-	with open("/srv/hawthorn/importDataFull.csv") as f:
+	with open("/srv/hawthorn/HAA-addresses.csv") as f:
 		reader = csv.reader(f)
 		for row in reader:
 
-			if i<7:
+			if i<20:
 				try:
 					
 					zip = row[0]
@@ -445,16 +446,16 @@ def importUserCSV(request):
 							user.first_name = firstName
 						if lastName:
 							user.last_name = lastName
-						
-						#if created:	
-						#	user.save()
 
-						#TODO should this override all info?
 						user.save()
 						
-						addressObj = Address.objects.create()
-						profile = UserProfile.objects.get_or_create(user = user)
 						
+						profile, created = UserProfile.objects.get_or_create(user = user)
+						if profile.billing_address:
+							addressObj = profile.billing_address
+						else:
+							addressObj = Address.objects.create()
+						#logger.error("profile: %s" % profile)
 						if zip:
 							addressObj.zipcode = zip
 						if address1:
@@ -465,6 +466,7 @@ def importUserCSV(request):
 							addressObj.telephone= cell_phone
 						if city:
 							addressObj.city = city
+						
 						if state:
 							addressObj.state = state
 						if telephone and not cell_phone:
@@ -473,24 +475,36 @@ def importUserCSV(request):
 							addressObj.provence = provence
 						if fax:
 							addressObj.fax = fax
-						if country == None:
+						if not country or country=="":
 							country = "USA"
-						else:
-							addressObj.country = country.title()
+						else: 
+							country = country.title()
+						
+						addressObj.country = country
+						logger.error("country %s" % country)
+						logger.error("address country: %s" % addressObj.country)
 						if pc:
 							addressObj.postal_code = pc
 						addressObj.save()
-
 						profile.shipping_address = addressObj
 						profile.billing_address = addressObj
+						confirmation_code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(33))
+						profile.confirmation_code = confirmation_code
+
+						if pdf=="T":
+							profile.pdf_list = True
+						else:
+							profile.pdf_list = False
+							if printed_list == "F":
+								profile.quiet = True
 
 
-						profile.printed_list = True if printed_list=="T" else False
+
 						profile.pdf_list = True if pdf=="T" else False
 						profile.courtesy_list = True if courtesy_list=="T" else False
 						profile.deadbeat = True if deadbeat=="T" else False
-						#TODO figure out email_invoice/paperless from info above
-						
+
+			
 						if not email:
 							profile.email_only = False 
 						else:
@@ -942,6 +956,11 @@ def endFlatAuction(request, auctionId, userId = None):
 def userBreakdown(request, auctionId = None):
 	data = {}
 	auction = None
+
+	data["includeEbay"] = request.GET.get("includeEbay", False)
+	data["excludePDF"] = request.GET.get("excludePDF", False)
+	data["excludeEmailOnly"] = request.GET.get("excludeEmailOnly", False)
+	data["excludePrintedNotices"] = request.GET.get("excludePrintedNotices", False)
 	
 	if not auctionId:
 		auction = getCurrentAuction()
@@ -953,11 +972,11 @@ def userBreakdown(request, auctionId = None):
 	else:
 		auction = Auction.objects.get(pk=auctionId)
 
-	data["new"] = getNewUsers(auction)[0]
-	data["current"] = getCurrentUsers(auctionId)[0]
-	data["nonCurrent"] = getNonCurrentUsers(auctionId)[0]
-	data["nonActive"] = getNonActiveUsers(auctionId)[0]
-	data["courtesy"] = getCourtesyBidders()[0]
+	data["new"] = getNewUsers(auction)
+	data["current"] = getCurrentUsers(auctionId, excludeEmailOnly = data["excludeEmailOnly"], excludePDF = data["excludePDF"], excludeEbay = not data["includeEbay"], excludePrintedNotices = data["excludePrintedNotices"])
+	data["nonCurrent"] = getNonCurrentUsers(auctionId)
+	data["nonActive"] = getNonActiveUsers(auctionId)
+	data["courtesy"] = getCourtesyBidders()
 
 	data["auctionId"]=auctionId
 
@@ -1035,16 +1054,23 @@ def printInvoices(request, auctionId, userId = None):
 		data = {}
 		
 		data["auction"] = Auction.objects.get(pk=auctionId)
+		data["flat"] = request.GET.get("flat", False)
 		data["invoices"] = {}
 		if userId != None:
 			data["invoices"][str(userId)] = getInvoiceData(auctionId, userId)
 			data["invoices"][str(userId)]["profile"] = UserProfile.objects.get(user = userId)
 		else:
 			if filter:
-				winners = getAlphaWinners(auctionId, True)
+				if data["flat"]:
+					winners = getWinningFlatBids(auctionId, date=data["auction"].end_date, userId = userId)
+				else:
+					winners = getAlphaWinners(auctionId, True)
 	
 			else:
-				winners = getAlphaWinners(auctionId)
+				if data["flat"]:
+					winners = getWinningFlatBids(auctionId, date=data["auction"].end_date, userId = userId)
+				else:
+					winners = getAlphaWinners(auctionId)
 
 			logger.error("winners: %s"  % winners)
 			for winner in winners:

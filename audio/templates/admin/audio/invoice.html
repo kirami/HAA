@@ -65,9 +65,17 @@
 			url: "/admin/sendInvoices/",
 			data: data,
 			success: function(data) {
-				$('#reminderMsg').removeClass("successError")
-				$('#reminderMsg').addClass("successMsg")
-				$('#reminderMsg').text("Reminder email was successfully sent.")
+				
+				if (data.success){
+
+					$('#reminderMsg').removeClass("successError")
+					$('#reminderMsg').addClass("successMsg")
+					$('#reminderMsg').text("Invoice email was successfully sent.")
+				}else{
+					$('#reminderMsg').addClass("successError")
+					$('#reminderMsg').removeClass("successMsg")
+					$('#reminderMsg').text("Something went wrong - email was not sent. " + data.msg)
+				}
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				$('#reminderMsg').addClass("successError")
@@ -92,7 +100,7 @@
 			success: function(data) {
 				$('#consignorIdEmailMsg').removeClass("successError")
 				$('#consignorIdEmailMsg').addClass("successMsg")
-				$('#consignorIdEmailMsg').text("Invoice email was successfully sent.")
+				$('#consignorIdEmailMsg').text("Reminder email was successfully sent.")
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				$('#consignorIdEmailMsg').addClass("successError")

@@ -52,7 +52,13 @@
 
 	</div>
 
-	<div>CONGRATULATIONS: Here are your winning bids from out auction.  Payment in full in U.S. Dollars is due upon receipt of this invoice.  Domestic shipping is by USPS Media Mail; Priority Mail overseas.  Please allow 3 to 4 weeks for packaging and delivery.  To pay by Visa or Mastercard, please sign below and return this form.  Thanks!</div>
+	{%if data.flat%}
+		<div>Here is your updated invoice.  If you've already sent us a payment please send us any remaining balance.</div>
+	{%%}
+
+	<div>CONGRATULATIONS: Here are your winning bids from out auction.  Payment in full in U.S. Dollars is due upon receipt of this invoice.  Domestic shipping is by USPS Media Mail; Priority Mail overseas.  Please allow 3 to 4 weeks for packaging and delivery.  Our unsold items list has been included, but you can also look at and bid on these items online at www.thoseoldrecords.com/catalog</div>
+
+	<div>To pay by Visa or Mastercard, please sign below and return this form.  Thanks!</div>
 
 	<div style="margin-top:15px; margin-bottom:25px;">
 		<div style="margin-bottom:10px;">

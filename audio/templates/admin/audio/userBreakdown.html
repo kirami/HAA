@@ -5,6 +5,16 @@
 
 
 <div style="float:left">
+	<div>
+		<div><label for="includeEbay" style="margin-right:5px;">Include those from eBay?</label><input type="checkBox" name="includeEbay" id="includeEbay" {%if data.includeEbay%}checked{%endif%}></div>
+
+		<div><label for="excludePDF" style="margin-right:5px; margin-left:0px;">Exclude people on PDF List?</label><input type="checkBox" name="excludePDF" id="excludePDF" {%if data.excludePDF%}checked{%endif%}></div>
+
+		<div><label for="excludeEmailOnly" style="margin-right:5px; margin-left:0px;">Exclude people who want email notices only?</label><input type="checkBox" name="excludeEmailOnly" id="excludeEmailOnly" {%if data.excludeEmailOnly%}checked{%endif%}></div>
+
+		<div><label for="excludePrintedNotices" style="margin-right:5px; margin-left:0px;">Exclude people who want USPS notices?</label><input type="checkBox" name="excludePrintedNotices" id="excludePrintedNotices" {%if data.excludePrintedNotices%}checked{%endif%}></div>
+	</div>
+	
 	<div class="bd" id="newDiv">New: {{data.new|length}} <a href="/admin/printLabels/{{data.auctionId}}/New">Print List</a></div>
 	<div class="bd" id="currentDiv">Current: {{data.current|length}} <a href="/admin/printLabels/{{data.auctionId}}/Current">Print List</a></div>
 	<div class="bd" id="nonCurrentDiv">NonCurrent (Reminder): {{data.nonCurrent|length}} <a href="/admin/printLabels/{{data.auctionId}}/NonCurrent">Print List</a></div>	
@@ -15,27 +25,27 @@
 <div style="float:left; margin-left:50px; margin-top:20px;" id="usersBox">
 	<div style="display:none" id="newList" class="list">
 		{%for user in data.new%}
-			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.user.id}}">{{user.user.id}}</a></div><div style="width:200px">{%if user.user.first_name or user.user.last_name%}{{user.user.first_name}} {{user.user.last_name}}{%else%}&nbsp{%endif%}</div></div>
 		{%endfor%}
 	</div>
 	<div style="display:none" id="currentList" class="list">
 		{%for user in data.current%}
-			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.user.id}}">{{user.user.id}}</a></div><div style="width:200px">{%if user.user.first_name or user.user.last_name%}{{user.user.first_name}} {{user.user.last_name}}{%else%}&nbsp{%endif%}   {%if user.quiet%}QUIET{%endif%}   {%if user.email_only%}emailOnly{%endif%}  {%if user.pdf_list%} pdfList {%endif%}</div></div>
 		{%endfor%}
 	</div>
 	<div style="display:none" id="nonCurrentList" class="list">
 		{%for user in data.nonCurrent%}
-			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
-		{%endfor%}
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.user.id}}">{{user.user.id}}</a></div><div style="width:200px">{%if user.user.first_name or user.user.last_name%}{{user.user.first_name}} {{user.user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+		{%endfor%} 
 	</div>
 	<div style="display:none" id="nonActiveList" class="list">
 		{%for user in data.nonActive%}
-			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.user.id}}">{{user.user.id}}</a></div><div style="width:200px">{%if user.user.first_name or user.user.last_name%}{{user.user.first_name}} {{user.user.last_name}}{%else%}&nbsp{%endif%}</div></div>
 		{%endfor%}
 	</div>
 	<div style="display:none" id="courtesyList" class="list">
 		{%for user in data.courtesy%}
-			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.id}}">{{user.id}}</a></div><div style="width:200px">{%if user.first_name or user.last_name%}{{user.first_name}} {{user.last_name}}{%else%}&nbsp{%endif%}</div></div>
+			<div class="singleUser"><div class="userLink"><a href="/admin/audio/address/?user={{user.user.id}}">{{user.user.id}}</a></div><div style="width:200px">{%if user.user.first_name or user.user.last_name%}{{user.user.first_name}} {{user.user.last_name}}{%else%}&nbsp{%endif%}</div></div>
 		{%endfor%}
 	</div>
 </div>
@@ -76,6 +86,27 @@ $(document).ready(function(){
 			$("#"+name+"List").show()
 			$("#" + id).css("color","green")
 		}
+	})
+
+
+	$(":checkBox").change(function(){
+		url = "?"
+	
+		if($("#includeEbay").is(':checked')){
+			url += "includeEbay=true&"
+
+		}
+		if($("#excludePDF").is(':checked')){
+			url += "excludePDF=true&"
+		}
+		if($("#excludeEmailOnly").is(':checked')){
+			url += "excludeEmailOnly=true&"
+		}
+		if($("#excludePrintedNotices").is(':checked')){
+			url += "excludePrintedNotices=true&"
+		}
+		
+		window.location.href=url
 	})
 })
 
