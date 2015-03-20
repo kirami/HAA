@@ -101,10 +101,10 @@ def getNewUsers(auction, emailOnly = False, excludeEbay = True):
 	#exlude = User.objects.
 	#users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
 
-	return list( all), Address.objects.filter(upBilling__user__in=all)
+	return UserProfile.objects.filter(user__in=all)
 
 #users bid within last 3 auctions or printed list = true or paid for a catalog within 3 auctions
-def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False, excludeEbay = True):
+def getCurrentUsers(auctionId, excludeEmailOnly = False, excludePDF = False, excludeEbay = True, excludePrintedNotices = False):
 	users = User.objects.filter(bidUser__item__auction__gt = int(auctionId)-4).distinct()
 	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
 	
@@ -116,12 +116,19 @@ def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False, excludeEb
 	
 	combined = set(users) | set(printed)
 	
-	if emailOnly:
-		emailOnly = User.objects.filter(upUser__email_only=True)
-		combined = combined & set(emailOnly)
+	#only those not on pdf list
+	if excludePDF:
+		nonPDF = User.objects.filter(upUser__pdf_list=False)
+		combined = combined & set(nonPDF)
 
-	if printedOnly:
-		printedOnly = User.objects.filter(upUser__email_only=False)
+	#only printed notices	
+	if excludeEmailOnly:
+		nonEmailOnly = User.objects.filter(upUser__email_only=False)
+		combined = combined & set(nonEmailOnly)
+
+	#only email notices
+	if excludePrintedNotices:
+		emailOnly = User.objects.filter(upUser__email_only=True)
 		combined = combined & set(emailOnly)
 
 
@@ -129,7 +136,7 @@ def getCurrentUsers(auctionId, emailOnly = False, printedOnly = False, excludeEb
 
 	#and is not quiet
 
-	return list(all), Address.objects.filter(upBilling__user__in=all)
+	return UserProfile.objects.filter(user__in=all)
 
 #users no bid last three auctions & not on keep me on list & no printed catalog bought
 #reminder group
@@ -154,7 +161,7 @@ def getNonCurrentUsers(auctionId, emailOnly = False, printedOnly = False, exclud
 		printedOnly = User.objects.filter(upUser__email_only=False)
 		combined = combined & set(emailOnly)
 
-	return list(combined), Address.objects.filter(upBilling__user__in=combined)
+	return UserProfile.objects.filter(user__in=combined)
 
 #take off
 def getActiveUsers():
@@ -184,13 +191,13 @@ def getNonActiveUsers(auctionId, emailOnly = False, printedOnly = False, exclude
 		printedOnly = User.objects.filter(upUser__email_only=False)
 		combined = combined & set(emailOnly)
 	
-	return list(combined), Address.objects.filter(upBilling__user__in=combined)
+	return UserProfile.objects.filter(user__in=combined)
 
 def getCourtesyBidders():
 	
 	ids = UserProfile.objects.values_list("user", flat=True).filter(courtesy_list = True)
 	users = User.objects.filter(pk__in=set(ids))
-	return users, Address.objects.filter(upBilling__user__in=set(users))
+	return UserProfile.objects.filter(user__in=set(users))
 
 
 #Bid utils
@@ -412,12 +419,16 @@ def getUnbalancedUsers(userId = None):
 	row = dictfetchall(cursor)
 	return row
 
-def getAlphaWinners(auctionId, printOnly = False):
+def getAlphaWinners(auctionId, printOnly = False, emailOnly = False):
 	if printOnly:
 		return User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True, upUser__email_only = False).distinct().order_by("last_name")
-	else:	
+	if emailOnly:	
+		return User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True, upUser__email_only = True).distinct().order_by("last_name")
+	if not emailOnly and not printOnly:
 		return User.objects.filter(bidUser__item__auction = auctionId, bidUser__winner=True).distinct().order_by("last_name")
-	
+
+
+
 	'''
 	cursor = connection.cursor()
 	cursor.execute("SELECT distinct au.id, au.last_name, au.first_name from audio_bid b, "+
