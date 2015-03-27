@@ -1320,25 +1320,25 @@ def getRunningBidTotal(request, auctionId):
 	index = 0
 	total = 0
 	logger.error("bids: %s" % bids)
- 	for bid in bids:
- 		if currentItemId != bid.item_id:
- 			#reset
- 			item = Item.objects.filter(id = bid.item_id)
- 			if len(item) > 0:
- 				quantity = int(item[0].quantity)
- 			else:
- 				quantity = 0
+	for bid in bids:
+		if currentItemId != bid.item_id:
+			#reset
+			item = Item.objects.filter(id = bid.item_id)
+			if len(item) > 0:
+				quantity = int(item[0].quantity)
+			else:
+				quantity = 0
 
- 			currentItemId = bid.item_id
- 			index = 0 			
+			currentItemId = bid.item_id
+			index = 0 			
 
- 		if index < quantity:
- 			total = total + bid.amount
- 			logger.error("bid: %s total: %s"  % (bid.amount, total))
- 		
- 		index = index + 1
- 	data["total"] = total
- 	return render_to_response('admin/audio/runningTotal.html', {"data":data}, context_instance=RequestContext(request))	
+		if index < quantity:
+			total = total + bid.amount
+			logger.error("bid: %s total: %s"  % (bid.amount, total))
+		
+		index = index + 1
+	data["total"] = total
+	return render_to_response('admin/audio/runningTotal.html', {"data":data}, context_instance=RequestContext(request))	
 
 
 def markWinners(auctionId):
@@ -1349,24 +1349,24 @@ def markWinners(auctionId):
 	bids = getOrderedBids(auctionId)
 	currentItemId = 0
 	index = 0
- 	for bid in bids:
- 		if currentItemId != bid.item_id:
- 			#reset
- 			item = Item.objects.filter(id = bid.item_id)
- 			if len(item) > 0:
- 				quantity = int(item[0].quantity)
- 			else:
- 				quantity = 0
+	for bid in bids:
+		if currentItemId != bid.item_id:
+			#reset
+			item = Item.objects.filter(id = bid.item_id)
+			if len(item) > 0:
+				quantity = int(item[0].quantity)
+			else:
+				quantity = 0
 
- 			currentItemId = bid.item_id
- 			index = 0 			
+			currentItemId = bid.item_id
+			index = 0 			
 
- 		if bid.winner != True and index < quantity:
- 			bid.winner = True
- 			bid.save()
- 		
- 		index = index + 1
- 	
+		if bid.winner != True and index < quantity:
+			bid.winner = True
+			bid.save()
+		
+		index = index + 1
+
 	return True
 
 @staff_member_required
@@ -1395,7 +1395,7 @@ def losers(request, auctionId):
 @staff_member_required
 def wonItems(request, auctionId):
 	data = {}
- 	getHeaderData(data, auctionId)
+	getHeaderData(data, auctionId)
 	return render_to_response('admin/audio/wonItems.html', {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required
@@ -1432,8 +1432,7 @@ def bulkConsignment(request, auctionId):
 def runReport(request, auctionId):
  	data = {}
  	getHeaderData(data, auctionId)
-
-	return render_to_response('admin/audio/report.html', {"data":data}, context_instance=RequestContext(request))
+ 	return render_to_response('admin/audio/report.html', {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required
 def test(request):

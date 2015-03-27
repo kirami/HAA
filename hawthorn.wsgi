@@ -13,9 +13,10 @@ def application(environ, start_response):
 import os
 import sys
 
-sys.path.append('/srv/hawthorn/hawthorn')
 
-os.environ['PYTHON_EGG_CACHE'] = '/srv/hawthorn/.python-egg'
+sys.path = ['/home/kirami/webapps/hawthorn/hawthorn', '/home/kirami/webapps/hawthorn/lib/python3.4'] + sys.path
+
+os.environ['PYTHON_EGG_CACHE'] = '/home/kirami/webapps/hawthorn/hawthorn/.python-egg'
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

@@ -254,20 +254,19 @@ class BulkConsignment(Form):
     	for selected in self.data.getlist("bcItemsSelected"):
             index = 1
             while index<=total:
-	    		min = self.data["min" + str(index)]
-	    		max = self.data["max" + str(index)]
-    	
-	    		if index == 1:
-	    			min = 0
-	    		
-	    		if index == 3:
-	    			max = None
+                min = self.data["min" + str(index)]
+                max = self.data["max" + str(index)]
+                if index == 1:
+                	min = 0
 
-	    		percent = self.data["percent"+ str(index)]
-	    		
-	    		item = Item.objects.get(id=selected)
-	    		Consignment.objects.create(item = item, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
-	    		index = index + 1
+                if index == 3:
+                	max = None
+
+                percent = self.data["percent"+ str(index)]
+
+                item = Item.objects.get(id=selected)
+                Consignment.objects.create(item = item, percentage = percent, minimum = min, maximum = max, consignor_id = consignor)
+                index = index + 1
 
 
     def clean(self):

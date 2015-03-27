@@ -14,7 +14,7 @@ class Auction(models.Model):
 	flat_locked = models.BooleanField(default = False)
 	name = models.CharField(max_length=200, blank=True, null=True)
 
-	def __unicode__(self):
+	def __str__(self):
 		return u"%s" % self.name
 
 class Invoice(models.Model):
@@ -34,7 +34,7 @@ class Invoice(models.Model):
 	discount = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 	discount_percent = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 
-	def __unicode__(self):
+	def __str__(self):
 		return u"%s - %s" % (self.user,  self.auction.name)
 
 	#on hold
@@ -47,7 +47,7 @@ class Payment(models.Model):
 	invoice = models.ForeignKey(Invoice, related_name = "paymentInvoice")
 	date_received = models.DateField()
 
-	def __unicode__(self):
+	def __str__(self):
 		return u"%s" % (self.invoice) 
 
 class Category(models.Model):
@@ -61,7 +61,7 @@ class Category(models.Model):
 
 
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 	class Meta:
@@ -72,28 +72,28 @@ class Label(models.Model):
 	abbreviation = models.CharField(max_length=100)
 	parent = models.CharField(max_length=100)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 class ItemType(models.Model):
 	name = models.CharField(max_length=200, default="")
 	notes = models.CharField(max_length=200, default="", null = True, blank = True)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
         
 class Item(models.Model):
 	#TODO fix requireds
 	label = models.ForeignKey(Label, null = True, blank=True)
-	artist = models.CharField(max_length=200, null = True, blank = True)
-	artist_two = models.CharField(max_length=200, null = True, blank = True)
-	name = models.CharField(max_length=200, default="")
-	name_two = models.CharField(max_length=200, null = True, blank = True)
-	notes = models.CharField(max_length=200, default="", null = True, blank = True)
+	artist = models.CharField(max_length=400, null = True, blank = True)
+	artist_two = models.CharField(max_length=400, null = True, blank = True)
+	name = models.CharField(max_length=400, default="")
+	name_two = models.CharField(max_length=400, null = True, blank = True)
+	notes = models.CharField(max_length=800, default="", null = True, blank = True)
 	record_number = models.CharField(max_length=100, null = True, blank = True)
 	record_number_two = models.CharField(max_length=100, null = True, blank = True)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
-	lot_id = models.IntegerField(null = True, blank=True, default=" ")
+	lot_id = models.IntegerField(null = True, blank=True)
 	category = models.ForeignKey(Category, related_name="itemCategory")
 	item_type = models.ForeignKey(ItemType, related_name="itemType")
 	condition = models.CharField(max_length=100, default="")
@@ -102,13 +102,13 @@ class Item(models.Model):
 	auction = models.ForeignKey(Auction)
 	thumbnail = models.FileField(upload_to='items/', null = True, blank=True)
 	image = models.FileField(upload_to='items/', null = True, blank=True)
-	prefix = models.CharField(max_length=200, null = True, blank = True)
+	prefix = models.CharField(max_length=600, null = True, blank = True)
 
 	
 	class Meta:
 		unique_together = (("auction", "lot_id"),)
 
-	def __unicode__(self):
+	def __str__(self):
 		return str(self.lot_id) + " " + self.name
 
 class Bid(models.Model):
@@ -120,7 +120,7 @@ class Bid(models.Model):
 	invoice = models.ForeignKey(Invoice, null = True, blank = True, on_delete=models.SET_NULL)
 
 
-	def __unicode__(self):
+	def __str__(self):
 		return unicode(self.user)
 	
 	class Meta:
@@ -143,7 +143,7 @@ class Address(models.Model):
 	class Meta:
 		verbose_name_plural = "Addresses"
 
-	def __unicode__(self):
+	def __str__(self):
 		return str(self.id) + "--"+self.address_one
 
 class UserProfile(models.Model):
@@ -160,15 +160,14 @@ class UserProfile(models.Model):
 	shipping_address = models.ForeignKey(Address, related_name="upShipping", blank=True, null=True, on_delete=models.SET_NULL)
 	billing_address = models.ForeignKey(Address, related_name="upBilling", blank=True, null=True, on_delete=models.SET_NULL)
 
-
-	def __unicode__(self):
-		return unicode(self.user)
+	def __str__(self):
+		return self.user
 
 class PrintedCatalog(models.Model):
 	user = models.ForeignKey(User, related_name="pcUser")
 	auction = models.IntegerField()
 
-	def __unicode__(self):
+	def __str__(self):
 		return unicode(self.user)
 	
 
@@ -179,7 +178,7 @@ class Consignor(models.Model):
 	email = models.CharField(max_length=100)
 	address = models.ForeignKey(Address, blank=True, null=True)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.first_name + " " + self.last_name
 
 class Consignment(models.Model):
@@ -189,7 +188,7 @@ class Consignment(models.Model):
 	minimum = models.DecimalField(max_digits=19, decimal_places=2)
 	maximum  = models.DecimalField(max_digits=19, decimal_places=2, blank  = True, null=True)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.item.name
 
 	class Meta:

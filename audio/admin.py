@@ -37,7 +37,7 @@ class InvoiceFilter(SimpleListFilter):
             return queryset.filter(shipped_date = None)
         if self.value() == 'Not Null':
             return queryset.filter(shipped_date__isnull = False)
-
+"""
 
 class CustomConsignmentModelForm(forms.ModelForm):
     class Meta:
@@ -45,7 +45,7 @@ class CustomConsignmentModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CustomConsignmentModelForm, self).__init__(*args, **kwargs)
         self.fields['item'].queryset = Item.objects.filter(consignedItem=None)
-
+"""
         
 
 class ConditionAdmin(admin.ModelAdmin):
