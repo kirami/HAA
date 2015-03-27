@@ -109,7 +109,7 @@ EMAIL_HOST_USER = 'kirajmd@gmail.com'
 EMAIL_HOST_PASSWORD = 'lfn1k1taKD'
 
 CA_TAX = 0.0975
-ITEMS_PER_PAGE = 20
+ITEMS_PER_PAGE = 5
 
 
 LOGGING = {
@@ -144,3 +144,4 @@ LOGGING = {
         },
     }
 }
+

@@ -38,6 +38,8 @@ def index(request):
 	c = RequestContext(request, {'foo': 'bar'})
 	return HttpResponse(t.render(c), content_type="text/html")
 
+
+
 def simpleForm(request):
 	form = None
 	data = None
@@ -460,9 +462,15 @@ def noAuction(request):
 			return redirect("catalog")
 	return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 
-def catalogByCategory(request, order):
+def catalogByCategory(request, order, auctionId = None):
 	data = {}
 	currentAuction = getCurrentAuction()
+
+	if request.user and request.user.is_staff and auctionId:
+		currentAuction = Auction.objects.get(pk = auctionId)
+	if not request.user or (not request.user.is_staff and auctionId):
+		return redirect("catalog")
+	
 	total = 1
 	bidDict = {}
 	msg = ""
@@ -564,14 +572,23 @@ def catalogByCategory(request, order):
 	except Exception as e:
 		logger.error("Error in catalogByCategory(): %s" % e)
 
-	return render_to_response("catalogByCategory.html", {"sort":sortGet, "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success, "firstLibraryKey": firstLibraryKey}, context_instance=RequestContext(request))
+	return render_to_response("catalogByCategory.html", {"sort":sortGet, "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict,  "number":page, "loggedIn":request.user.is_authenticated(), "success":success, "firstLibraryKey": firstLibraryKey}, context_instance=RequestContext(request))
 
 
-def catalog(request, msg= None):
+def catalog(request, auctionId = None):
 	
 	data = {}
 	now =  date.today()
+	
 	currentAuction = getCurrentAuction()
+
+	if request.user and request.user.is_staff and auctionId:
+		currentAuction = Auction.objects.get(pk = auctionId)
+	if not request.user or (not request.user.is_staff and auctionId):
+		return redirect("catalog")
+
+	
+	
 	total = 0
 	perPage = settings.ITEMS_PER_PAGE
 	categories = None
@@ -618,11 +635,11 @@ def catalog(request, msg= None):
 		order = "-artist"
 	elif order == "lotDesc":
 		order = "-lot_id"
-		return catalogByCategory(request, order)
+		return catalogByCategory(request, order, auctionId)
 	elif not category:
 		order = "lot_id"
 		sortGet = "lot_id"
-		return catalogByCategory(request, order)
+		return catalogByCategory(request, order, auctionId)
 
 
 	success = False
