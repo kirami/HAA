@@ -79,7 +79,7 @@ class ItemAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'lot_id', 'auction')
     search_fields = ['name', 'lot_id']
-    list_filter = ('auction', 'item_type')
+    list_filter = ( 'item_type', "auction",)
 
 class PrintedCatalogAdmin(admin.ModelAdmin):
 

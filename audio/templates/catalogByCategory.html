@@ -108,16 +108,53 @@
 					{%ifequal item.item_type.name "Book"%}
 						<div class="category" style="float:left; width:565px; margin-right:20px;"><u>{{item.name}}</u> by {{item.artist}}. {{item.notes}}</div>
 					{%else%}
-						<div class="category" style="float:left; width:105px">
+						
+						<div class="category" style="float:left;  margin-right:10px; width:565px">						<div style="float:left; width:95px">
+								{%if not item.label%}&nbsp;{%else%}
+								{{item.label.abbreviation}} {{item.record_number}}{%endif%}
+							</div>
+							<div style="float:left; width:240px">{{item.name}}  
+								<div>{%if item.notes%}<div style="float:left">{{item.notes}}</div>{%endif%}</div>
+							</div>
+							
+							<div style="float:left; width:230px;">{{item.artist}}</div>
+							
+						</div>
+
+						{%if item.name_two%}
+						<div class="clear"></div>
+						<div style="width:125px; float:left">&nbsp;</div>
+							<div class="category" style="float:left; width:565px;  margin-right:10px;">
+								<div style="float:left; width:95px">{%if item.record_number_two%}
+								{{item.label.abbreviation}} {{item.record_number_two}}{%else%}&nbsp;{%endif%}</div>
+								{%if item.name_two%}<div style="float:left; width:240px">{{item.name_two}}</div>{%endif%}
+								<div style="float:left; width:230px;">{%if item.artist_two%}{{item.artist_two}}{%endif%}</div>
+							</div>
+
+						{%endif%}
+
+						<!--
+
+						<div class="category" style="float:left; width:95px; margin-right:10px;">
 							{%if not item.label%}&nbsp;{%else%}
-							{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}{%endif%}</div>
-						<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
+							{{item.label.abbreviation}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.abbreviation}} {{item.record_number_two}}{%endif%}{%endif%}</div>
+						
+						<div class="category" style="float:left; width:240px;  margin-right:10px;">
+							<div>{{item.name}} </div>
+							{%if item.name_two%}<div style="margin-top:5px;">{{item.name_two}}</div>{%endif%}
+							{%if item.notes%}<div style="">{{item.notes}}</div>{%endif%}
+						</div>
+						
+
+
 						<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
+						-->
 					{%endifequal%}
+					<div class="clear"></div>
 				</div>
 
 
-
+<!--
 				<div style="float:left">
 			
 			{%if not loggedIn%}
@@ -152,6 +189,7 @@
 
 			
 		</div>
+		-->
 
 		<div class="clear"></div>
 
