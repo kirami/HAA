@@ -643,28 +643,28 @@ def getInvoiceData(auctionId, userId):
 
 def getHeaderData(data, auctionId):
 	winningBids = getWinningBids(auctionId)
- 	noBids = getNoBidItems(auctionId)
- 	losers = getLosers(auctionId)
- 	winners = getAlphaWinners(auctionId)
+	noBids = getNoBidItems(auctionId)
+	losers = getLosers(auctionId)
+	winners = getAlphaWinners(auctionId)
 
- 	data["auctionId"] = auctionId
- 	data['auction'] = Auction.objects.get(pk=auctionId)
- 	data["winners"] = winningBids
+	data["auctionId"] = auctionId
+	data['auction'] = Auction.objects.get(pk=auctionId)
+	data["winners"] = winningBids
 
- 	data["winnersCount"] = len(winners)
- 	data["losers"] = losers
- 	data["loserCount"] = len(losers)
- 	data["wonItems"] = getBidItems(auctionId)
+	data["winnersCount"] = len(winners)
+	data["losers"] = losers
+	data["loserCount"] = len(losers)
+	data["wonItems"] = getBidItems(auctionId)
 
- 	data["wonItemsCount"] = len(data["wonItems"])
- 	data["unsoldItems"] = noBids
- 	data["noBidItemsCount"] = len(noBids)
- 	sums = getSumWinners(auctionId)
- 	data["discount"] = getSumDiscount(auctionId)
- 	data ["preDiscount"] = sums["sum"]
- 	data["today"] = date.today()
- 	if len(sums) > 0:
- 		data["total"] = sums["sum"]	- data["discount"]
- 	else:
- 		data["total"] = 0
- 	return data
+	data["wonItemsCount"] = len(data["wonItems"])
+	data["unsoldItems"] = noBids
+	data["noBidItemsCount"] = len(noBids)
+	sums = getSumWinners(auctionId)
+	data["discount"] = getSumDiscount(auctionId)
+	data ["preDiscount"] = sums["sum"]
+	data["today"] = date.today()
+	if len(sums) > 0:
+		data["total"] = sums["sum"]	- data["discount"]
+	else:
+		data["total"] = 0
+	return data
