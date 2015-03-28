@@ -73,13 +73,13 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'US/Pacific'
 USE_I18N = True
-
 USE_L10N = True
+USE_TZ = False
 
-USE_TZ = True
+CA_TAX = 0.0975
+ITEMS_PER_PAGE = 20
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'audio', 'templates'),
@@ -87,6 +87,7 @@ TEMPLATE_DIRS = (
 
 STATICFILES_DIRS = (
     '/home/kirami/webapps/hawthorn/hawthorn/static/',
+    '/home/kirami/webapps/hawthorn/hawthorn/static/audio/css',
 )
 
 

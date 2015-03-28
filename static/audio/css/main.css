@@ -59,6 +59,12 @@ overflow: auto;
    margin-bottom: 10px;
 }
 
+.ruleHeader{
+   font-weight: bold;
+   text-decoration: underline;
+   color:red;
+}
+
 
 #header{
    padding-top:20px;
