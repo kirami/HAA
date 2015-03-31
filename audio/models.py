@@ -52,7 +52,7 @@ class Payment(models.Model):
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
-	description = models.CharField(max_length=250)
+	description = models.CharField(max_length=450)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2, null = True, blank = True)
 	auction = models.ForeignKey(Auction)
 	order_number = models.IntegerField(default=None)

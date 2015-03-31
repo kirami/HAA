@@ -29,6 +29,37 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
+@staff_member_required
+def testEmail(request):
+	#password = User.objects.make_random_password()
+	#user.set_password(password)
+	messages = []
+	user = request.user
+
+	emailData={}
+	emailData["user"] = user
+	#emailData["password"] = password	
+	#emailData["url"] = "http://haa/audio/accounts/confirm/" + str(profile.confirmation_code) + "/" + user.username
+	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
+	messages.append(msg)
+	#emailList.append(user.email)
+	#sendBulkEmail(messages)
+	from smtplib import SMTP
+	import smtplib
+	try:
+		s=smtplib.SMTP()
+		s.connect("smtp.gmail.com",465)
+		s.ehlo()
+		s.starttls()
+		s.ehlo()
+		s.login("kirajmd@gmail.com", "lfn1k1taKD")
+		s.sendmail("kirajmd@gmail.com", "kirajmd@gmail.com", msg)
+	except Exception as e:
+		logger.error(e)
+	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+
+
 @staff_member_required
 def printRecordLabels(request, auctionId, startingIndex = None):
 
@@ -1436,14 +1467,11 @@ def runReport(request, auctionId):
 
 @staff_member_required
 def test(request):
-	user = User.objects.get(id=9)
-	p = UserProfile.objects.get(user=user)
-	emailData={}
-	emailData["url"] = "http://haa/audio/confirm/" + str(p.confirmation_code) + "/" + user.username
-	logger.error("url %s" % emailData["url"])
-	emailData["user"]=user
-	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
-	sendEmail(msg)
+	items = Item.objects.filter(auction=1, lot_id=32).order_by("lot_id")
+	for item in items:
+		item.thumbnail = "items/32a.JPG"
+		item.image = "items/32a.JPG"
+		item.save()
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 @staff_member_required
