@@ -82,7 +82,7 @@ urlpatterns = patterns('',
     url(r'^accounts/passwordChangeDone/$', 
         'django.contrib.auth.views.password_change_done', {'template_name': 'changePasswordDone.html'}),
    
-
+    url(r'^admin/testEmail/$', admin_views.testEmail, name='testEmail'),
    url(r'^admin/test/', admin_views.test, name='test'),
 
     #for testing and setup only, comment out after done

@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load audio_extras %}
+
+{% block content %}
+<div id="itemPopup" title="Item Info"></div>
+
+<div style="margin-bottom:15px;">
+	
+	<div class="sideDiv">
+		<div style="font-weight:bold">Table of contents:</div>
+		<div class="leftMenu" id="" ><a href="/audio/catalog" style="{%if not category%}color:black{%endif%}">All</a></div>
+		
+		{%for cat in categories%}
+			<div class="leftMenu" id="category_{{cat.id}}" ><a href="?category={{cat.id}}" style="{%if category.id == cat.id %}color:black{%endif%}">{{cat}}</a></div>
+		{%endfor%}
+	</div>
+	
+	<div style="text-align:center; float:left; margin:0 auto; width:46%">
+		<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
+		{%if success%}<div class="successMsg">Your bid has been successfully submitted.</div>{%endif%}
+
+		<div class="" style="font-weight:bold; font-size:26px;
+		">
+			<div>"{{data.auction.name}}" Catalog:</div> 
+			<div style="font-size:18px;">Closes {{data.auction.end_date|date:"M d, Y" }}</div>
+			
+			{%if not loggedIn%}
+				<div class="successError">You must log in to bid.</div>
+			{%endif%}
+			
+		</div>
+
+		<div style="">Please review our <a  href="/audio/rules">rules page</a> before entering bids.</div>
+
+		<ul id="pagination" class="pagination-sm"></ul>
+	</div>
+	<div class="sideDiv" style="float:right">
+		<div style="font-weight:bold">Tips:</div>
+		<ul class="cat_tips">
+			<li>
+				<div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div></li>
+			{%if loggedIn%}
+			<li>
+				<div>Click <a href="/audio/catalog/comingAuction/">here</a> to enter bids manually.</div>
+			</li>
+			{%endif%}
+			<li>
+				<div>Click on an item's lot # for more information.</div>
+			</li>
+			<li><div>Click on the small image in the left column to enlarge it.</div></li>
+		</ul>
+	</div>
+
+	<div class="clear"></div>
+</div>
+
+<hr style="border:1px solid black">
+
+<!-- item table -->
+<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
+	{%if category%}
+		<div style="font-size:16px; margin-bottom:15px; "><u style="font-weight:bold">{{category.name}}</u>: {{category.description}} <u style="font-weight:bold; ">Minimum Bid: ${{category.min_bid}}</u></div>
+	{%endif%}
+	<div class="innerRight">
+		<div class="tableHeader" style="font-weight:bold">
+			<div class="left" style="width:55px;">&nbsp;</div>	
+			<div style="width:70px; " class='left clickable {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot:</div>
+			<div class="left" style="width:105px">Label & Rec#:</div>
+			<div  style="width:250px" id="nameHeader" class='left clickable {%if sort == "nameAsc"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "nameAsc"%}&#9650;{%else%}{%if sort == "nameDesc"%}&#9660;{%endif%}{%endif%} Title:</div>
+			<div  style="width:230px" id="artistHeader" class='left  clickable{%if sort == "artistAsc"%}orderAsc{%else%}{%if sort == "artistDesc"%}orderDesc{%endif%}{%endif%}'>{%if sort == "artistAsc"%}&#9650;{%else%}{%if sort == "artistDesc"%}&#9660;{%endif%}{%endif%} Artist:</div>
+			<div>Condition:</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	
+	{%block info%}{%endblock%}
+
+
+	<div class="clear"></div>	
+</div>
+
+
+<div style="text-align:center;"><ul id="pagination2" class="pagination-sm" ></ul></div>
+<div style="margin-top:20px;">&nbsp;</div>
+
+<div class="clear"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		 $('#pagination').twbsPagination({
+		        totalPages: {{total}},
+		        startPage:{{number}},
+		        onPageClick: function (event, page) {
+		        	
+		        	window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+		        }
+		    });
+
+		 	$('#pagination2').twbsPagination({
+		        totalPages: {{total}},
+		        startPage:{{number}},
+		        onPageClick: function (event, page) {
+
+		        	window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+		        }
+		    });
+
+		$("#lotIdHeader").click(function(){
+			if(!$(this).hasClass("orderAsc"))
+				window.location="?sort=lot_id{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+				
+		})
+
+		$("#nameHeader").click(function(){
+			if($(this).hasClass("orderAsc"))
+				window.location="?sort=nameDesc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+			else
+				window.location="?sort=nameAsc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+		})
+
+		$("#artistHeader").click(function(){
+			if($(this).hasClass("orderAsc"))
+				window.location="?sort=artistDesc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+			else
+				window.location="?sort=artistAsc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+		})
+
+		$(".headerLink").removeClass("headerActive")
+		$("#catalogLink").addClass("headerActive")
+
+		$( "#itemPopup" ).dialog({
+			resizable: false,
+			modal: true,
+			autoOpen: false, 
+			//position:[200,0],
+			width:"auto",
+			buttons: {
+				Ok: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
+		
+
+	})
+</script>
+
+{% endblock %}

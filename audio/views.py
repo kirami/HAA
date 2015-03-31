@@ -396,6 +396,7 @@ def userInfo(request):
 def flatFeeCatalog(request):
 	items = None
 	auction = getCurrentAuction()
+	data["auction"]=auction
 	
 	success = False
 	if request.GET.get("success"):
@@ -427,7 +428,7 @@ def flatFeeCatalog(request):
 			logger.error("error in catalog")
 			logger.error(e)
 		
-		return render_to_response('flatCatalog.html', {"catItems":items, "auctionId":auction.id, "success":success}, context_instance=RequestContext(request))
+		return render_to_response('flatCatalog.html', {"data":data,"catItems":items, "auctionId":auction.id, "success":success}, context_instance=RequestContext(request))
 	return redirect("profile")
 
 
@@ -470,7 +471,7 @@ def catalogByCategory(request, order, auctionId = None):
 		currentAuction = Auction.objects.get(pk = auctionId)
 	if not request.user or (not request.user.is_staff and auctionId):
 		return redirect("catalog")
-	
+	data["auction"]=currentAuction
 	total = 1
 	bidDict = {}
 	msg = ""
@@ -572,11 +573,11 @@ def catalogByCategory(request, order, auctionId = None):
 	except Exception as e:
 		logger.error("Error in catalogByCategory(): %s" % e)
 
-	return render_to_response("catalogByCategory.html", {"sort":sortGet, "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict,  "number":page, "loggedIn":request.user.is_authenticated(), "success":success, "firstLibraryKey": firstLibraryKey}, context_instance=RequestContext(request))
+	return render_to_response("catalogByCategory.html", {"data":data,"sort":sortGet, "category":category,"categories":categories,"total":total,"ordered":ordered, "auctionId":currentAuction.id, "bids": bidDict,  "number":page, "loggedIn":request.user.is_authenticated(), "success":success, "firstLibraryKey": firstLibraryKey}, context_instance=RequestContext(request))
 
 
 def catalog(request, auctionId = None):
-	
+	msg = ""
 	data = {}
 	now =  date.today()
 	
@@ -588,7 +589,7 @@ def catalog(request, auctionId = None):
 		return redirect("catalog")
 
 	
-	
+	data["auction"]=currentAuction
 	total = 0
 	perPage = settings.ITEMS_PER_PAGE
 	categories = None
@@ -686,7 +687,7 @@ def catalog(request, auctionId = None):
 		logger.error("error in catalog")
 		logger.error(e)
 		return redirect("catalog")
-	return render_to_response(template, {"sort":sortGet, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
+	return render_to_response(template, {"data":data, "sort":sortGet, "category":category,"categories":categories,"total":total,"catItems":items, "auctionId":currentAuctionId, "bids": bidDict, "msg":msg, "number":page, "loggedIn":request.user.is_authenticated(), "success":success}, context_instance=RequestContext(request))
 
 
 @login_required
