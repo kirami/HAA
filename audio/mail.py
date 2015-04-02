@@ -30,7 +30,7 @@ def getEmailMessage(to, subject, data, template, record = False):
 	data["domain"] = "haa/audio"
 	d = Context(data)
 	#TODO get email from settings
-	subject, from_email, to = subject, 'kirajmd@gmail.com', to
+	subject, from_email, to = subject, settings.DEFAULT_FROM_EMAIL, to
 	text_content = plaintext.render(d)
 	html_content = htmly.render(d)
 	msg = EmailMultiAlternatives(subject, text_content, from_email, [to])

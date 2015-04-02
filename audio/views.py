@@ -478,7 +478,12 @@ def catalogByCategory(request, order, auctionId = None):
 	success = False
 	items = None
 	perPage =  settings.ITEMS_PER_PAGE
-	page = int(request.GET.get("page", 1))
+	page = 1
+	try:
+		page = int(request.GET.get("page", 1))
+	except:
+		logger.error("bad page")
+
 	category = request.GET.get("category", None)
 	ordered = {}
 	categories = None
@@ -593,8 +598,12 @@ def catalog(request, auctionId = None):
 	total = 0
 	perPage = settings.ITEMS_PER_PAGE
 	categories = None
+	page = 1
+	try:
+		page = int(request.GET.get("page", 1))
+	except:
+		logger.error("bad page")
 
-	page = int(request.GET.get("page", 1))
 	category = request.GET.get("category", None)
 	order = request.GET.get("sort", 'lot_id')
 	sortGet= order

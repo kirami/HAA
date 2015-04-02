@@ -45,18 +45,21 @@ def testEmail(request):
 	messages.append(msg)
 	#emailList.append(user.email)
 	#sendBulkEmail(messages)
+	#sendEmail(msg)
+	
 	from smtplib import SMTP
 	import smtplib
 	try:
-		s=smtplib.SMTP()
-		s.connect("smtp.gmail.com",465)
-		s.ehlo()
-		s.starttls()
-		s.ehlo()
-		s.login("kirajmd@gmail.com", "lfn1k1taKD")
-		s.sendmail("kirajmd@gmail.com", "kirajmd@gmail.com", msg)
+		'''
+		s = SMTP()
+		s.connect('smtp.webfaction.com')
+		s.login('kirami','lfn1k1taWF')
+		s.sendmail("kirami@kirami.webfactional.com", user.email, msg)
+		'''
+		sendEmail(msg)
 	except Exception as e:
 		logger.error(e)
+	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 
