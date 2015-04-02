@@ -104,10 +104,12 @@ LOGIN_URL = "/audio/accounts/login/"
 MEDIA_ROOT = IMAGES_ROOT
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.webfaction.com'
+EMAIL_HOST_USER = 'kirami'
+EMAIL_HOST_PASSWORD = 'lfn1k1taWF'
+DEFAULT_FROM_EMAIL = 'kirami@kirami.webfactional.com'
+SERVER_EMAIL = 'kirami@kirami.webfactional.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'kirajmd@gmail.com'
-EMAIL_HOST_PASSWORD = 'lfn1k1taKD'
 
 CA_TAX = 0.0975
 ITEMS_PER_PAGE = 20

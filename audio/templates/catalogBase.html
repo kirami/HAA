@@ -32,7 +32,15 @@
 
 		<div style="">Please review our <a  href="/audio/rules">rules page</a> before entering bids.</div>
 
-		<ul id="pagination" class="pagination-sm"></ul>
+		<div>
+			<ul id="pagination" class="pagination-sm" style="margin-bottom:10px;"></ul>
+			<div>
+			<ul class="pagination-sm pagination" style="margin-top:10px">
+				<li class="page" style="float:left"><input type="text" id="jumpTo" style="width:40px; height:29px; margin-left:7px; border:1px solid #ddd; color:#999" value="#"></li>
+				<li class="page"><a id="jumpToLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Page</a></li>
+			</ul></div>
+
+		</div>
 	</div>
 	<div class="sideDiv" style="float:right">
 		<div style="font-weight:bold">Tips:</div>
@@ -63,12 +71,12 @@
 	{%endif%}
 	<div class="innerRight">
 		<div class="tableHeader" style="font-weight:bold">
-			<div class="left" style="width:55px;">&nbsp;</div>	
-			<div style="width:70px; " class='left clickable {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot:</div>
-			<div class="left" style="width:105px">Label & Rec#:</div>
-			<div  style="width:250px" id="nameHeader" class='left clickable {%if sort == "nameAsc"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "nameAsc"%}&#9650;{%else%}{%if sort == "nameDesc"%}&#9660;{%endif%}{%endif%} Title:</div>
-			<div  style="width:230px" id="artistHeader" class='left  clickable{%if sort == "artistAsc"%}orderAsc{%else%}{%if sort == "artistDesc"%}orderDesc{%endif%}{%endif%}'>{%if sort == "artistAsc"%}&#9650;{%else%}{%if sort == "artistDesc"%}&#9660;{%endif%}{%endif%} Artist:</div>
-			<div>Condition:</div>
+			<div class="left" style="width:{%if sort == 'lotAsc' or sort == 'lotDesc' %}50px{%else%}70px{%endif%};">&nbsp;</div>	
+			<div style="width:{%if sort == 'lotAsc' or sort == 'lotDesc' %}65px{%else%}45px{%endif%}; " class='left clickable {%if sort == "lotAsc"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lotAsc"%}&#9650;{%else%}{%if sort == "lotDesc"%}&#9660;{%endif%}{%endif%} Lot:</div>
+			<div class="left" style="width:110px">Label & Rec#:</div>
+			<div  style="width:190px; margin-right:7px;" id="nameHeader" class='left clickable {%if sort == "nameAsc"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "nameAsc"%}&#9650;{%else%}{%if sort == "nameDesc"%}&#9660;{%endif%}{%endif%} Title:</div>
+			<div  style="width:180px; margin-right:7px;" id="artistHeader" class='left  clickable {%if sort == "artistAsc"%}orderAsc{%else%}{%if sort == "artistDesc"%}orderDesc{%endif%}{%endif%}'>{%if sort == "artistAsc"%}&#9650;{%else%}{%if sort == "artistDesc"%}&#9660;{%endif%}{%endif%} Artist:</div>
+			<div style="float:left">Condition:</div>
 			<div class="clear"></div>
 		</div>
 	</div>
@@ -81,7 +89,15 @@
 </div>
 
 
-<div style="text-align:center;"><ul id="pagination2" class="pagination-sm" ></ul></div>
+<div style="text-align:center">
+			<ul id="pagination2" class="pagination-sm" style="margin-bottom:10px;"></ul>
+			<div>
+			<ul class="pagination-sm pagination" style="margin-top:10px">
+				<li class="page" style="float:left"><input type="text" id="jumpTo2" style="width:40px; height:29px; margin-left:7px; border:1px solid #ddd; color:#999" value="#"></li>
+				<li class="page"><a id="jumpToLink2" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Page</a></li>
+			</ul></div>
+
+		</div>
 <div style="margin-top:20px;">&nbsp;</div>
 
 <div class="clear"></div>
@@ -109,6 +125,9 @@
 		$("#lotIdHeader").click(function(){
 			if(!$(this).hasClass("orderAsc"))
 				window.location="?sort=lot_id{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
+
+			else
+				window.location="?sort=lotDesc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 				
 		})
 
@@ -142,7 +161,23 @@
 			}
 		});
 
-		
+		$("#jumpToLink").click(function(){
+			page = $("#jumpTo").val()
+			window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+		})
+
+		$("#jumpTo").focus(function(){
+			$("#jumpTo").val("")			
+		})
+
+		$("#jumpToLink2").click(function(){
+			page = $("#jumpTo2").val()
+			window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+		})
+
+		$("#jumpTo2").focus(function(){
+			$("#jumpTo2").val("")			
+		})
 
 	})
 </script>

@@ -20,7 +20,7 @@
 					{%endif%}
 				{%endif%}
 			</div> 
-			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{item.id}}">
+			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:45px" id="quickLook_{{item.id}}">
 
 				<div >{{item.lot_id}}</div>
 			</div> 
@@ -33,29 +33,31 @@
 				<div class="category" style="float:left; width:565px; margin-right:20px;"><u>{{item.name}}</u> by {{item.artist}}. {{item.notes}}</div>
 			{%else%}
 				
-				<div class="category" style="float:left;  margin-right:10px; width:565px">						
-					<div style="float:left; width:90px; margin-right:5px;">
+				<div class="category" style="float:left;  width:565px">						
+					<div style="float:left; width:105px; margin-right:7px;">
 						{%if not item.label%}&nbsp;{%else%}
 						{{item.label.abbreviation}} {{item.record_number}}{%endif%}
 					</div>
-					<div style="float:left; width:240px">•{{item.name}}  
+					<div style="float:left; width:190px; margin-right:7px;">•{{item.name}}  
 						<div>{%if item.notes%}<div style="float:left">{{item.notes}}</div>{%endif%}</div>
 					</div>
 					
-					<div style="float:left; width:230px;">{{item.artist}}</div>
-					
+					<div style="float:left; width:180px; margin-right:7px;">{{item.artist}}</div>
+					<div style="float:left;">{{item.condition}} {%if item.defect%}{{item.defect}} {%endif%}</div>
 				</div>
 
 				{%if item.name_two%}
 					<div class="clear"></div>
 					<div class="category" style="float:left; width:565px;  margin-right:10px; margin-top:5px;">
-						<div style="float:left; width:90px; margin-right:5px;">{%if item.record_number_two%}
+						<div style="float:left; width:105px; margin-right:5px;">{%if item.record_number_two%}
 						{{item.label.abbreviation}} {{item.record_number_two}}{%else%}&nbsp;{%endif%}</div>
-						{%if item.name_two%}<div style="float:left; width:240px">•{{item.name_two}}</div>{%endif%}
-						<div style="float:left; width:230px;">{%if item.artist_two%}{{item.artist_two}}{%endif%}</div>
+						{%if item.name_two%}<div style="float:left; width:190px; margin-right:7px;">•{{item.name_two}}</div>{%endif%}
+						<div style="float:left; width:180px; margin-right:7px">{%if item.artist_two%}{{item.artist_two}}{%endif%}</div>
+						
 					</div>
 
 				{%endif%}
+
 
 			{%endifequal%}
 			<div class="clear"></div>
@@ -69,19 +71,19 @@
 
 				{%if bids|get_item:item.id == None %}
 					
-					<div class="left" style="width:100px; margin-top:5px;">
+					<div class="left" style="width:85px; margin-top:5px;">
 						<div class="left" style="width:10px; margin-top:2px;">$</div>
 						<form autocomplete="off">
-						<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}" style="width:75px"></form>
+						<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}" style="width:60px"></form>
 					</div>
 					<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Enter Bid</button></div>
 				
 				{%else%}
 						
-					<div class="left" style="width:100px; margin-top:5px;">
+					<div class="left" style="width:85px; margin-top:5px;">
 						<div class="left" style="width:10px; margin-top:2px;">$</div>
 						<form autocomplete="off">
-						<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}" style="width:75px"></form>
+						<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}" style="width:60px"></form>
 					</div>
 					<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
 					
