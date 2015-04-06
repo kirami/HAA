@@ -49,21 +49,25 @@ def simpleForm(request):
 		
 		if request.method == "POST":
 			try:
-				addresses = Address.objects.filter(user=request.user)
-				up = UserProfile.objects.get(user = request.user)
-				if len(addresses) < 1:
-					return render_to_response('item.html', {"form":form, "success": False, "msg":"You must have an address on file to bid."}, context_instance=RequestContext(request))					
+				up  = UserProfile.objects.get(user=request.user)
+			
+				if not up.shipping_address or not up.billing_address:
+					logger.error("simpleForm: tried to bid without address")
+					return render_to_response('simpleForm.html', {"form":form, "success": False, "msg":"You must have an address on file to bid."}, context_instance=RequestContext(request))					
 				
 				if up.deadbeat:
-					return render_to_response('item.html', {"form":form, "success": False, "msg":"There is a problem with your account.  Please contact us if you'd like to bid"}, context_instance=RequestContext(request))					
+					logger.error("simpleForm: tried to bid while db")
+					return render_to_response('simpleForm.html', {"form":form, "success": False, "msg":"There is a problem with your account.  Please contact us if you'd like to bid"}, context_instance=RequestContext(request))					
 				
 				if up.quiet:
+					logger.error("simpleForm: tried to bid while quiet")
 					return HttpResponse(json.dumps({"success":False, "msg":"You're set to not receive any contact from us.  To bid please go to your profile and uncheck 'I want no contact' "}), content_type="application/json")	
 
 
 				form = BidSubmitForm(currentAuction.id, request.POST)
-			except:
-				return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
+			except Exception as e:
+				logger.error("simpleForm exception: %s" % e)
+				return render_to_response('simpleForm.html', {"form":form, "success": False}, context_instance=RequestContext(request))
 			
 			if form.is_valid():
 				bid = form.save(commit=False)
@@ -72,11 +76,14 @@ def simpleForm(request):
 				try:
 					bid.save()
 				except Exception as e:
-					if e[0] == 1062:
-						return render_to_response('item.html', {"form":form, "success": False, "msg":"You've already bid on this item.  Please go to your account to edit/delete"}, context_instance=RequestContext(request))					
-				return render_to_response('item.html', {"form":form, "success": True}, context_instance=RequestContext(request))
+					logger.error("simpleForm: dupe bid %s" % e)
+					#if e[0] == 1062:
+						#logger.error("simpleForm: dupe bid")
+					return render_to_response('simpleForm.html', {"form":form, "success": False, "msg":"You've already bid on this item.  Please go to your account to edit/delete"}, context_instance=RequestContext(request))					
+				return render_to_response('simpleForm.html', {"form":form, "success": True}, context_instance=RequestContext(request))
 			else:
-				return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
+				logger.error("simpleForm: form not valid")
+				return render_to_response('simpleForm.html', {"form":form, "success":False, "msg":"We could not save your bid."}, context_instance=RequestContext(request))
 
 		else:
 			if isSecondChance() or isBetweenSegments():
@@ -97,7 +104,7 @@ def simpleForm(request):
 			form = BidSubmitForm(auctionId = currentAuction.id)
 	else:
 		return redirect("catalog")
-	return render_to_response('item.html', {"form":form}, context_instance=RequestContext(request))
+	return render_to_response('simpleForm.html', {"form":form}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -793,7 +800,7 @@ def itemInfo(request, itemId):
 		data["item"]  = items[0]
 	return render_to_response('itemInfo.html', {"data":data}, context_instance=RequestContext(request))
 
-
+"""
 @login_required
 def showItem(request, auctionId, lotId):
 	if request.method == 'POST':
@@ -804,3 +811,4 @@ def showItem(request, auctionId, lotId):
 	else:
 		form = BidSubmitForm()
 	return render_to_response('item.html', {"form":form, "auctionId":auctionId}, context_instance=RequestContext(request))
+"""

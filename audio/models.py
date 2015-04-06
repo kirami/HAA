@@ -15,13 +15,13 @@ class Auction(models.Model):
 	name = models.CharField(max_length=200, blank=True, null=True)
 
 	def __str__(self):
-		return u"%s" % self.name
+		return  str(self.name)
 
 class Invoice(models.Model):
 	user = models.ForeignKey(User, related_name="userInvoice")
 	auction = models.ForeignKey(Auction)
 	invoiced_amount = models.DecimalField(max_digits=19, decimal_places=2)
-	invoice_date = models.DateField()
+	invoice_date = models.DateField(null = True, blank = True)
 	reminder_invoice_date = models.DateField(null = True, blank = True)
 	second_chance_invoice_amount = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 	second_chance_invoice_date= models.DateField(null = True, blank = True)
@@ -35,7 +35,7 @@ class Invoice(models.Model):
 	discount_percent = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 
 	def __str__(self):
-		return u"%s - %s" % (self.user,  self.auction.name)
+		return str("%s - %s" % (self.user,  self.auction.name))
 
 	#on hold
 
@@ -48,7 +48,7 @@ class Payment(models.Model):
 	date_received = models.DateField()
 
 	def __str__(self):
-		return u"%s" % (self.invoice) 
+		return str(self.invoice)
 
 class Category(models.Model):
 	name = models.CharField(max_length=100)
@@ -58,11 +58,8 @@ class Category(models.Model):
 	order_number = models.IntegerField(default=None)
 
 
-
-
-
 	def __str__(self):
-		return self.name
+		return str(self.name)
 
 	class Meta:
 		verbose_name_plural = "Categories"
@@ -80,7 +77,7 @@ class ItemType(models.Model):
 	notes = models.CharField(max_length=200, default="", null = True, blank = True)
 
 	def __str__(self):
-		return self.name
+		return str(self.name)
         
 class Item(models.Model):
 	#TODO fix requireds
@@ -161,14 +158,14 @@ class UserProfile(models.Model):
 	billing_address = models.ForeignKey(Address, related_name="upBilling", blank=True, null=True, on_delete=models.SET_NULL)
 
 	def __str__(self):
-		return self.user
+		return str(self.user)
 
 class PrintedCatalog(models.Model):
 	user = models.ForeignKey(User, related_name="pcUser")
 	auction = models.IntegerField()
 
 	def __str__(self):
-		return unicode(self.user)
+		return str(self.user)
 	
 
 
@@ -179,7 +176,7 @@ class Consignor(models.Model):
 	address = models.ForeignKey(Address, blank=True, null=True)
 
 	def __str__(self):
-		return self.first_name + " " + self.last_name
+		return str(self.first_name + " " + self.last_name)
 
 class Consignment(models.Model):
 	item = models.ForeignKey(Item, related_name="consignedItem")
@@ -189,7 +186,7 @@ class Consignment(models.Model):
 	maximum  = models.DecimalField(max_digits=19, decimal_places=2, blank  = True, null=True)
 
 	def __str__(self):
-		return self.item.name
+		return str(self.item.name)
 
 	class Meta:
 		unique_together = (("minimum", "item"), ("maximum", "item"),)

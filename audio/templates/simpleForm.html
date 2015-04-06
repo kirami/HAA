@@ -2,31 +2,31 @@
 
 
 {% block content %}
-
+<div style="margin-bottom:20px;">You can view, edit or delete your submitted bids <a href="/audio/accounts/bids">here</a></div>
 {%if success%}
 <div class="simpleSuccess">Your bid has been submitted successfully.</div>
+{%else%}
+<div style="color:red; font-size:18px;">{{msg}}</div>
+
 {%endif%}
 
+
+
+
+{%if msg%}
+
+{%endif%}
+
+<div id="simpleFormPage">
+  
  <form action="" method="post">
     {% csrf_token %}
       {{ form.as_p }}
       <input type="submit" value="Submit Bid" class="bidSubmitButton">
   </form>
 
+</div>
 
-  {% if form.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            <div class="alert alert-error">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-        <div class="alert alert-error">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
-{% endif %}
+
 
 {% endblock %}
