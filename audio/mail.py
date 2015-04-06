@@ -27,7 +27,7 @@ def getEmailMessage(to, subject, data, template, record = False):
 	htmly     = get_template('email/'+template+'.html')
 	#domain = Site.objects.get_current().domain
 	#TODO get from setting or something else 
-	data["domain"] = "haa/audio"
+	data["domain"] = settings.EMAIL_URL
 	d = Context(data)
 	#TODO get email from settings
 	subject, from_email, to = subject, settings.DEFAULT_FROM_EMAIL, to

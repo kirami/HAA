@@ -20,6 +20,8 @@ from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consigno
 from audio.utils import *
 from audio.mail import *
 
+from audio.views import send_registration_confirmation
+
 from datetime import datetime, date 
 import json, math, string, random, collections, csv
 
@@ -199,7 +201,7 @@ def filterAdminIndex(request):
 	if data["invoice"]:
 		
 		data["invoices"] = Invoice.objects.filter(auction = auctionId)
-		logger.error(data["invoices"])
+		#logger.error(data["invoices"])
 
 	if request.method == 'POST':
 		try:
@@ -574,23 +576,29 @@ def createUser(request):
 			#user = User.objects.get(email="")
 			password = User.objects.make_random_password()
 			user.set_password(password)
+			user.verified = True
 			user.save()
 			
 			#create address object for them.
+			"""
 			newAddress = Address.objects.create()
 			up = UserProfile.objects.get(user = user)
 			up.shipping_address = newAddress
 			up.billing_address = newAddress
 			up.save()
+			"""
 
 			sendEmailMsg = request.POST.get("sendEmail")
 			if sendEmailMsg:
 				try:
 					emailData={}
 					emailData["user"] = user
-					emailData["password"] = password	
+					emailData["password"] = password
+					#emailData["url"] = password		
 					msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
 					sendEmail(msg)
+
+					#send_registration_confirmation(user)
 				except Exception as e:
 					logger.error("error sending new user email: %s" % e)
 					return render_to_response('admin/audio/createUser.html', {"data":data, "success": False, "msg":e}, context_instance=RequestContext(request))
@@ -853,7 +861,7 @@ def endBlindAuction(request, auctionId):
 			existingInvoices = Invoice.objects.filter(user = user, auction = auction)
 			#existingInvoices = Invoice.objects.get_or_create(user = user, auction = auction)	
 			if len(existingInvoices) < 1:
-				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount, invoice_date = datetime.now())
+				invoice = Invoice.objects.create(user = user, auction = auction, invoiced_amount = invoicedAmount)
 			else:
 				invoice = existingInvoices[0]
 			if address.state == "CA":
@@ -863,7 +871,7 @@ def endBlindAuction(request, auctionId):
 				invoice.tax = tax
 
 			invoice.invoiced_amount = invoicedAmount 
-			invoice.invoice_date = datetime.now()
+			#invoice.invoice_date = datetime.now()
 			invoice.save()
 			
 
@@ -1093,6 +1101,12 @@ def printInvoices(request, auctionId, userId = None):
 		if userId != None:
 			data["invoices"][str(userId)] = getInvoiceData(auctionId, userId)
 			data["invoices"][str(userId)]["profile"] = UserProfile.objects.get(user = userId)
+			#save invoice date as today
+			invoice = data["invoices"][str(winner.id)]["invoice"]
+			if data["flat"]:
+				invoice.second_chance_invoice_date = datetime.now()
+			else:
+				invoice.invoice_date = datetime.now()
 		else:
 			if filter:
 				if data["flat"]:
@@ -1106,11 +1120,16 @@ def printInvoices(request, auctionId, userId = None):
 				else:
 					winners = getAlphaWinners(auctionId)
 
-			logger.error("winners: %s"  % winners)
+			#logger.error("winners: %s"  % winners)
 			for winner in winners:
 				data["invoices"][str(winner.id)] = getInvoiceData(auctionId, winner.id)
 				data["invoices"][str(winner.id)]["profile"] = UserProfile.objects.get(user = winner.id)
-
+				#save invoice date
+				invoice = data["invoices"][str(winner.id)]["invoice"]
+				if data["flat"]:
+					invoice.second_chance_invoice_date = datetime.now()
+				else:
+					invoice.invoice_date = datetime.now()
 		
 		getHeaderData(data, auctionId)
 		
@@ -1155,15 +1174,22 @@ def sendInvoices(request, auctionId = None, userId = None):
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner.id)
 		if profile and profile.email_only:
-			logger.error("winner: %s" % winner.id)
+			#logger.error("winner: %s" % winner.id)
 			
 			data = getInvoiceData(auctionId, winner.id)
-			logger.error("userId %s" % userId)
+			#logger.error("userId %s" % userId)
 			if userId:
 				if data["invoice"].second_chance_invoice_amount > 0:
 					data["isFlat"] = True	
+					data["invoice"].second_chance_invoice_date = datetime.now()
+
 					subject = "Updated invoice for Hawthorn's Antique Audio"
-			
+			else:
+				if isFlat:
+					data["invoice"].second_chance_invoice_date = datetime.now()
+				else:
+					data["invoice"].invoice_date = datetime.now()
+
 			msg = getEmailMessage(data["user"].email,subject, {"data":data}, "invoice", False)
 			messages.append(msg)
 				
@@ -1218,8 +1244,8 @@ def sendReminder(request):
 def sendAllConsignorReports(request):
 	d = request.POST
 	auctionId = d.get("auctionId")
-	logger.error("auction:")
-	logger.error(auctionId)
+	#logger.error("auction:")
+	#logger.error(auctionId)
 	template = "singleConsignorReport"
 	return consignorReport(request, auctionId, template)
 
@@ -1353,7 +1379,7 @@ def getRunningBidTotal(request, auctionId):
 	currentItemId = 0
 	index = 0
 	total = 0
-	logger.error("bids: %s" % bids)
+	#logger.error("bids: %s" % bids)
 	for bid in bids:
 		if currentItemId != bid.item_id:
 			#reset
@@ -1368,7 +1394,7 @@ def getRunningBidTotal(request, auctionId):
 
 		if index < quantity:
 			total = total + bid.amount
-			logger.error("bid: %s total: %s"  % (bid.amount, total))
+			#logger.error("bid: %s total: %s"  % (bid.amount, total))
 		
 		index = index + 1
 	data["total"] = total
@@ -1486,7 +1512,7 @@ def testItemInput(request, index, length):
 	auction = Auction.objects.get(pk=8)
 
 	try:
-		logger.error("index:%s,  length :%s" % (index, length))
+		#logger.error("index:%s,  length :%s" % (index, length))
 		while i < int(index) + int(length):
 			item = Item.objects.get_or_create(name="N"+str(i), condition = "x", auction  = auction, artist="A"+str(i), min_bid=2.0, label=label, category=category, lot_id = i)
 			#logger.error("item: %s" % item)

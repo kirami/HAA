@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url(r'^accounts/userInfo/$', views.userInfo, name='userInfo'),
     url(r'^catalog/comingAuction/$', views.noAuction, name='noAuction'),
     
-    url(r'^catalog/(?P<auctionId>\d+)/(?P<lotId>\d+)$', views.showItem, name='showItem'),
+   # url(r'^catalog/(?P<auctionId>\d+)/(?P<lotId>\d+)$', views.showItem, name='showItem'),
     url(r'^catalog/submitBid', views.submitBid, name='submitBid'),
 
     url(r'^catalog/simpleForm', views.simpleForm, name='simpleForm'),

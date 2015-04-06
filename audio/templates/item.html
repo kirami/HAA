@@ -10,12 +10,14 @@
 
 {%endif%}
 
+<div id="simpleFormPage">
+	
  <form action="" method="post">
     {% csrf_token %}
       {{ form.as_p }}
       <input type="submit" value="Submit Bid" class="bidSubmitButton">
   </form>
-
+</div>
 
 
 

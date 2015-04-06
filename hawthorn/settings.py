@@ -90,6 +90,7 @@ STATICFILES_DIRS = (
     '/home/kirami/webapps/hawthorn/hawthorn/static/audio/css',
 )
 
+EMAIL_URL = "http://kirami.webfactional.com/audio/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
