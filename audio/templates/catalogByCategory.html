@@ -1,7 +1,7 @@
 {% extends "catalogBase.html" %}
 
 {% block info %}
-
+ 
 
 	{%for key, value in ordered.items%}
 		
@@ -21,3 +21,15 @@
 
 
 {% endblock %}
+
+{%block extra%}
+<script type="text/javascript">
+
+
+	$(document).ready(function(){
+
+		$(".headerLink").removeClass("headerActive")
+		$("#catalogLink").addClass("headerActive")
+	})
+</script>
+{%endblock%}

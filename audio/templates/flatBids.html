@@ -1,13 +1,13 @@
-{% extends "base.html" %}
+{% extends "catalogBase.html" %}
 
 
-{% block content %}
-<div id="itemPopup" title="Item Info"></div>
+
+
 {%if ended%}
 	<div style="font-weight:bold; font-size:26px; text-align:center">You have no current bids.</div>
 {%else%}
 
-
+{% block top %}
 
 <div style="font-weight:bold; font-size:26px; text-align:center">Your current Set Sale bids:</div>
 	
@@ -25,49 +25,24 @@
 	{%endif%}
 
 	<hr style="border:1px solid black">
-	<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
-		<div class="innerRight">
-			<div class="tableHeader" style="font-weight:bold">
-				<div class="left" style="width:70px;">&nbsp;</div>	
-				<div style="width:55px; float:left;" id="lotIdHeader">Lot:</div>
-				<div class="left" style="width:105px">Label & Rec#:</div>
-				<div  style="width:250px; float:left;" id="nameHeader" > Name:</div>
-				<div  style="width:230px; float:left;" id="artistHeader" > Artist:</div>
-				
-				<div class="clear"></div>
-			</div>
-		</div>
 
-		{% for bid in bids %}
+{%endblock%}
 
-		<div class="catalogBox" style="">
-			<div style="margin-top:7px; float:left" class="tableBody">
-				<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
-				{%if item.image%}
-					{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
-					{%endif%}
-				{%else%}
-					{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
-					{%endif%}
-				{%endif%}
-				</div> 
-				<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{bid.item.id}}"><div >{{bid.item.lot_id}}</div></div> 
-				<div class="category" style="float:left; width:105px">{{bid.item.label.name}} {{bid.item.record_number}}{%if bid.item.record_number_two%}<br>{{bid.item.label.name}} {{bid.item.record_number_two}}{%endif%}</div>
-				<div class="category" style="float:left; width:250px">{{bid.item.name}} {%if bid.item.name_two%}<br>{{bid.item.name_two}}{%endif%}{%if bid.item.notes%}<br>{{bid.item.notes}}{%endif%}</div>
-				<div class="category" style="float:left; width:230px">{{bid.item.artist}}{%if bid.item.artist_two%}<br>{{bid.item.artist_two}}{%endif%}</div>
-			</div>
+{%block info%}
+
+	{% for bid in bids %}
+		{%with item=bid.item%}
+		{% include "innerCatalog.html" %}
+		{%endwith%}
+	
 		
-				<form class="left" method="POST" action="/audio/catalog/deleteBid">
-				 {% csrf_token %}
-					<input type ="hidden" name="itemId" value="{{bid.item.id}}">
-					<input type="submit" class="bidSubmitButton" value="Delete Bid">
-				</form>
-		</div>
-		{% endfor %}
-	</div>
+
+	{% endfor %}
+{%endblock%}
 
 {%endif%}
 
+{%block extra%}
 	<script type="text/javascript">
 
 
@@ -97,21 +72,14 @@
 	    		$( "#endAuction-confirm" ).dialog( "open" );
 	    	})
 
-		    $( "#itemPopup" ).dialog({
-				resizable: false,
-				modal: true,
-				autoOpen: false, 
-				//position:[200,0],
-				width:"auto",
-				buttons: {
-					Ok: function() {
-						$( this ).dialog( "close" );
-					}
-				}
-			});
+		    
 
   
 		})
 	</script>
 
-{% endblock %}
+	<style type="text/css">
+		#pageBottom{display: none;}
+	</style>
+	{%endblock%}
+

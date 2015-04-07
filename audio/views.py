@@ -300,7 +300,8 @@ def confirm(request, confirmation_code, username):
 
 @login_required
 def bids(request):
-	
+	data = {}
+	data["bidPage"] = True
 	if(request.user.is_authenticated()):
 		currentAuction = getCurrentAuction()
 		
@@ -324,17 +325,19 @@ def bids(request):
 			return redirect('noAuction')
 
 		if isSecondChance():
+			data["flat"] = True
 			if invoice == None or invoice.second_chance_invoice_amount == 0:
 				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date, user=request.user)
 				
-				return render_to_response('flatBids.html', {"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
+				return render_to_response('flatBids.html', { "loggedIn":True, "data":data,"success":success, "bids":bids, "endAuctionOption":True, "auctionId":currentAuctionId, "total":1 ,"number":1 }, context_instance=RequestContext(request))
 			else:
 				#They've already ended their auction.  Summary?
-					return render_to_response('flatBids.html', {"success":success, "bids":bids, "ended":True, "auctionId":currentAuctionId}, context_instance=RequestContext(request))
+				return redirect('noAuction')
+				#return render_to_response('flatBids.html', {"loggedIn":True,"data":data,"success":success, "bids":bids, "ended":True, "auctionId":currentAuctionId, "total":1 ,"number":1 }, context_instance=RequestContext(request))
 			
 
 		else:
-			return render_to_response('bids.html', {"success":success,"bids":bids}, context_instance=RequestContext(request))
+			return render_to_response('bids.html', {"loggedIn":True,"data":data,"success":success,"bids":bids,"total":1 ,"number":1 }, context_instance=RequestContext(request))
 	else:
 		return redirect("profile")
 
@@ -408,6 +411,7 @@ def flatFeeCatalog(request):
 	auction = getCurrentAuction()
 	data = {}
 	data["auction"]=auction
+	data["flat"] = True
 	
 	success = False
 	if request.GET.get("success"):
@@ -425,7 +429,7 @@ def flatFeeCatalog(request):
 			if len(invoices) > 0:
 				invoice = invoices[0]
 				if invoice.second_chance_invoice_amount > 0:
-					return redirect("auctionSummaries")
+					return redirect("noAuction")
 				
 			bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
 			if len(bids) < 1:	
@@ -461,7 +465,13 @@ def noAuction(request):
 						return render_to_response('noAuction.html', data, context_instance=RequestContext(request))	
 
 					elif len(bids) > 0:	
-						
+						invoices = Invoice.objects.filter(user = request.user, auction = currentAuction)
+						invoice = None
+						#if user ended their auction and got an invoice
+						if len(invoices) > 0:
+							invoice = invoices[0]
+							if invoice.second_chance_invoice_amount > 0:
+								return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 						return redirect("flatFeeCatalog")
 				else:
 					return redirect("catalog")
@@ -798,6 +808,10 @@ def deleteBid(request):
 		instance.delete()
 
 	logger.error("path : %s" % request.META.get('PATH_INFO'))
+	
+	if data.get("bidPage", False):
+		return redirect("bids") 
+
 	if isSecondChance():
 		return redirect("bids")
 	if(request.META.get('PATH_INFO') == "/audio/catalog/deleteBid"):

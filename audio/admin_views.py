@@ -988,7 +988,7 @@ def endFlatAuction(request, auctionId, userId = None):
 	if userId and email:
 		data["invoice"]=invoice
 		data["user"] = User.objects.get(pk=userId)
-		msg = getEmailMessage(settings.EMAIL_HOST_USER ,"User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)
+		msg = getEmailMessage(settings.DEFAULT_FROM_EMAIL ,"User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)
 		msg.send()	
 
 	if int(userId) == int(request.user.id):
@@ -1073,7 +1073,7 @@ def sendLoserLetters(request, auctionId):
 			messages.append(msg)
 
 	if template :
-		logger.error("sending msgs")
+		logger.error("sending msgs ")
 		sendBulkEmail(messages)
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 

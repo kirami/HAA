@@ -1,48 +1,35 @@
-{% extends "base.html" %}
+{% extends "catalogBase.html" %}
 
 
-{% block content %}
 
+{% block top %}
+	{%if not bids%}
+		<div>You have no bids currently, visit our <a href="../../catalog">catalog</a> to bid!</div>
+	{%else%}
+		{%if success%}<div class="successMsg" style="text-align:center">Your bid has been successfully submitted.</div>{%endif%}
+	<DIV style="text-align:center; font-size:26px; font-weight:bold; margin-bottom:10px;">Your current bids:</DIV>
+	{%endif%}
+{%endblock%}
 
 {%if bids%}
-<div id="itemPopup" title="Item Info"></div>
-{%if success%}<div class="successMsg" style="text-align:center">Your bid has been successfully submitted.</div>{%endif%}
-<div style="font-weight:bold; font-size:26px; text-align:center; margin-bottom:10px;">Your current bids:</div>
-<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
-<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
-	<div class="innerRight">
-		<div class="tableHeader" style="font-weight:bold">
-			<div class="left" style="width:70px;">&nbsp;</div>	
-			<div style="width:55px; float:left;" id="lotIdHeader">Lot:</div>
-			<div class="left" style="width:105px">Label & Rec#:</div>
-			<div  style="width:250px; float:left;" id="nameHeader" > Name:</div>
-			<div  style="width:230px; float:left;" id="artistHeader" > Artist:</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
+	{%block info%}
+
+		{% for bid in bids %}
+			{%with item=bid.item%}
+				{% include "innerCatalog.html" %}
+			{%endwith%}
+
+		{% endfor %}
+	{%endblock%}
+
+{%else%}
+	{%block table%}{%endblock%}
+{%endif%}
 
 
 
-	{% for bid in bids %}
 
-		<div class="catalogBox" style="">
-			<div style="margin-top:7px; float:left" class="tableBody">
-				<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
-				{%if item.image%}
-					{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{bid.item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{bid.item.thumbnail}}" width="50px" height="50px"></a>
-					{%endif%}
-				{%else%}
-					{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{bid.item.thumbnail}}" width="50px" height="50px">
-					{%endif%}
-				{%endif%}
-				</div> 
-				<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{bid.item.id}}"><div >{{bid.item.lot_id}}</div></div> 
-				<div class="category" style="float:left; width:105px">{{bid.item.label.name}} {{bid.item.record_number}}{%if bid.item.record_number_two%}<br>{{bid.item.label.name}} {{bid.item.record_number_two}}{%endif%}</div>
-				<div class="category" style="float:left; width:250px">{{bid.item.name}} {%if bid.item.name_two%}<br>{{bid.item.name_two}}{%endif%}{%if bid.item.notes%}<br>{{bid.item.notes}}{%endif%}</div>
-				<div class="category" style="float:left; width:230px">{{bid.item.artist}}{%if bid.item.artist_two%}<br>{{bid.item.artist_two}}{%endif%}</div>
-			</div>
-
+		<!--
 
 		<div class="left" style="width:100px; margin-top:5px;">
 			<div class="left" style="width:10px; margin-top:2px;">$</div>
@@ -57,57 +44,25 @@
 			<input type="submit" class="bidSubmitButton" value="Delete Bid">
 		</form>
 
-<!--			
-		<div class="left" style="margin-top:7px;">{{bid.item.lot_id}}</div>
-		<div class="left" style="margin-top:7px;">{{bid.item.name}}</div>
-		<div class="left" style="margin-top:7px;">{{bid.item.artist}}</div>
-
-
-		<div class="left" style="width:175px; margin-top:5px;">
-			<div class="left" style="width:10px; margin-top:2px;">$</div>
-			<form autocomplete="off">
-			<input type="text" value="{{ bid.amount }}" id="bidAmount_{{bid.item.id}}"></form>
-		</div>
-		<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{bid.item.id}})">Update Bid</button></div>
-				
-
-		<form class="left" method="POST" action="/audio/catalog/deleteBid">
-		 {% csrf_token %}
-			<input type ="hidden" name="itemId" value="{{bid.item.id}}">
-			<input type="submit" class="bidSubmitButton" value="Delete Bid">
-		</form>
-		<div class="clear"></div>-->
-	{% endfor %}
 	</div>
+	-->
 	
 
-{%else%}
-<div>You have no bids currently, visit our <a href="../../catalog">catalog</a> to bid!</div>
-{%endif%}
+
+{%block extra%}
+	<script type="text/javascript">
 
 
-<script type="text/javascript">
-	$(document).ready(function(){
+		$(document).ready(function(){
 
-		
 			$(".headerLink").removeClass("headerActive")
 			$("#accountLink").addClass("headerActive")
 
-		$( "#itemPopup" ).dialog({
-			resizable: false,
-			modal: true,
-			autoOpen: false, 
-			//position:[200,0],
-			width:"auto",
-			buttons: {
-				Ok: function() {
-					$( this ).dialog( "close" );
-				}
-			}
-		});
-	})
+			
+		})
+	</script>
 
-
-</script>
-
-{% endblock %}
+	<style type="text/css">
+		#pageBottom{display: none;}
+	</style>
+	{%endblock%}
