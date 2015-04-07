@@ -300,7 +300,7 @@ def confirm(request, confirmation_code, username):
 
 @login_required
 def bids(request):
-	logger.error("bids")
+	
 	if(request.user.is_authenticated()):
 		currentAuction = getCurrentAuction()
 		
@@ -320,6 +320,9 @@ def bids(request):
 		if len(invoices) > 0:
 			invoice = invoices[0]
 			
+		if isBetweenSegments():
+			return redirect('noAuction')
+
 		if isSecondChance():
 			if invoice == None or invoice.second_chance_invoice_amount == 0:
 				bids = Bid.objects.filter(item__auction = currentAuctionId, date__gt = currentAuction.end_date, user=request.user)
@@ -403,6 +406,7 @@ def userInfo(request):
 def flatFeeCatalog(request):
 	items = None
 	auction = getCurrentAuction()
+	data = {}
 	data["auction"]=auction
 	
 	success = False
@@ -435,7 +439,7 @@ def flatFeeCatalog(request):
 			logger.error("error in catalog")
 			logger.error(e)
 		
-		return render_to_response('flatCatalog.html', {"data":data,"catItems":items, "auctionId":auction.id, "success":success}, context_instance=RequestContext(request))
+		return render_to_response('flatCatalog.html', {"loggedIn": True,"data":data,"catItems":items, "auctionId":auction.id, "success":success, "total":1 ,"number":1 , "flat":True}, context_instance=RequestContext(request))
 	return redirect("profile")
 
 
@@ -463,7 +467,7 @@ def noAuction(request):
 					return redirect("catalog")
 			except:
 				return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
-		elif isSecondChance():
+		elif isSecondChance() or isBetweenSegments():
 			return render_to_response('noAuction.html', data, context_instance=RequestContext(request))
 		
 		else: 
@@ -476,8 +480,10 @@ def catalogByCategory(request, order, auctionId = None):
 
 	if request.user and request.user.is_staff and auctionId:
 		currentAuction = Auction.objects.get(pk = auctionId)
-	if not request.user or (not request.user.is_staff and auctionId):
-		return redirect("catalog")
+	
+	#if not request.user or (not request.user.is_staff and auctionId):
+	#	return redirect("catalog")
+	
 	data["auction"]=currentAuction
 	total = 1
 	bidDict = {}
@@ -533,25 +539,25 @@ def catalogByCategory(request, order, auctionId = None):
 				firstLibraryKey = item.category.order_number
 
 			if item.category.order_number not in ordered:
-				logger.error("adding ordered: %s" % item.category.order_number)
+				#logger.error("adding ordered: %s" % item.category.order_number)
 				ordered[int(item.category.order_number)]= []
 				ordered[int(item.category.order_number)].append(item)
 				#ordered[item.category.order_number]["category"].append(item.category)
 			else:
 				ordered[int(item.category.order_number)].append(item)
 
-		logger.error("after loop %s" % ordered)
+		#logger.error("after loop %s" % ordered)
 		
 		
 		
 		od = collections.OrderedDict(sorted(ordered.items()))
-		logger.error("after first sort %s" % od)
+		#logger.error("after first sort %s" % od)
 		if order == "-lot_id":
 			items = od.items()  # list(od.items()) in Python3
 			items.reverse()
 			od = collections.OrderedDict(items)
 			#od = items
-			logger.error("after reverse %s" % od)
+			#logger.error("after reverse %s" % od)
 
 
 
@@ -572,7 +578,7 @@ def catalogByCategory(request, order, auctionId = None):
 		'''
 		
 		#logger.error(ordered)
-
+		bids = []
 		if(request.user.is_authenticated()):
 			bids = Bid.objects.filter(user = request.user, item__auction = currentAuction.id)
 		
@@ -597,8 +603,9 @@ def catalog(request, auctionId = None):
 
 	if request.user and request.user.is_staff and auctionId:
 		currentAuction = Auction.objects.get(pk = auctionId)
-	if not request.user or (not request.user.is_staff and auctionId):
-		return redirect("catalog")
+	#why???
+	#if not request.user or (not request.user.is_staff and auctionId):
+	#	return redirect("catalog")
 
 	
 	data["auction"]=currentAuction
@@ -621,15 +628,24 @@ def catalog(request, auctionId = None):
 
 		currentAuctionId = currentAuction.id
 	try:
+		logger.info("1")
 		#if after close but in 2nd chance
 		if isSecondChance() or isBetweenSegments():
+			logger.info("2")
 			
 			#only allow winners to bid (so only add on to won shipments)
-			bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
-			if len(bids) < 1:
+			logger.info("user: %s" % request.user)
+			if request.user.is_authenticated():
+				bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
+				logger.info("bids")
+				if len(bids) < 1:
+					logger.info("3")
+					return redirect("noAuction")
+			else:	
 				return redirect("noAuction")
 			
 			if isBetweenSegments():
+				logger.info("4")
 				return render_to_response('inBetween.html', data, context_instance=RequestContext(request))	
 			return redirect("flatFeeCatalog")
 	except Exception as e:

@@ -576,8 +576,12 @@ def createUser(request):
 			#user = User.objects.get(email="")
 			password = User.objects.make_random_password()
 			user.set_password(password)
-			user.verified = True
+			
 			user.save()
+
+			up = UserProfile.objects.get(user = user)
+			up.verified = True
+			up.save()
 			
 			#create address object for them.
 			"""
@@ -1085,7 +1089,7 @@ def getInvoices(request, auctionId, userId = None, printIt = None):
 			data = getInvoiceData(auctionId, userId)
 			getHeaderData(data, auctionId)
 	except Exception as e:
-		logger.error("Error in getInvoices: %e" % e)	
+		logger.error("Error in getInvoices: %s" % e)	
 	return render_to_response(invoiceTemplate, {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required

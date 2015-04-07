@@ -622,12 +622,9 @@ def gatherInfoFromInvoice(data, invoice, balance = None):
 def getInvoiceData(auctionId, userId):
 	data = {}
 	#balances = getUnbalancedUsers(userId = userId)
-	balances = getUnbalancedUsersByAuction(userId = userId)
-	balance = 0
+	#balances = getUnbalancedUsersByAuction(userId = userId)
+	balance = getInvoiceInfoByUser(userId)["sum"] - getPaymentInfoByUser(userId)["sum"]
 
-	if len(balances) > 0:
-		data["balanceData"] = balances[0]
-		balance = balances[0]["iSum"] - balances[0]["pSum"]
 		
 	data["info"]=getSumWinners(auctionId, userId)
 	invoices = Invoice.objects.filter(auction = auctionId, user = userId)

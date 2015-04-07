@@ -2,6 +2,9 @@
 {% load audio_extras %}
 
 {% block content %}
+
+{%block top%}
+
 <div id="itemPopup" title="Item Info"></div>
 
 <div style="margin-bottom:15px;">
@@ -64,8 +67,12 @@
 
 <hr style="border:1px solid black">
 
+{%endblock%}
+
+
+{%block table%}
 <!-- item table -->
-<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="left">
+<div id="tableRight" style="margin-left:auto; margin-right:auto; " class="">
 	{%if category%}
 		<div style="font-size:16px; margin-bottom:15px; "><u style="font-weight:bold">{{category.name}}</u>: {{category.description}} <u style="font-weight:bold; ">Minimum Bid: ${{category.min_bid}}</u></div>
 	{%endif%}
@@ -87,9 +94,9 @@
 
 	<div class="clear"></div>	
 </div>
+{%endblock%}
 
-
-<div style="text-align:center">
+<div style="text-align:center" id="pageBottom">
 			<ul id="pagination2" class="pagination-sm" style="margin-bottom:10px;"></ul>
 			<div>
 			<ul class="pagination-sm pagination" style="margin-top:10px">
@@ -102,8 +109,15 @@
 
 <div class="clear"></div>
 
+
+
+{%block script%}
+
 <script type="text/javascript">
 	$(document).ready(function(){
+		 	
+		 if({{total}} > 1){
+
 		 $('#pagination').twbsPagination({
 		        totalPages: {{total}},
 		        startPage:{{number}},
@@ -121,6 +135,8 @@
 		        	window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
 		        }
 		    });
+
+		 }
 
 		$("#lotIdHeader").click(function(){
 			if(!$(this).hasClass("orderAsc"))
@@ -179,7 +195,14 @@
 			$("#jumpTo2").val("")			
 		})
 
+
+
 	})
 </script>
 
 {% endblock %}
+
+{%block extra%}
+{%endblock%}
+
+{%endblock%}
