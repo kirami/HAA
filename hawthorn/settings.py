@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'audio',
+    'django_extensions',
     #'south',
 )
 
@@ -115,6 +116,14 @@ EMAIL_PORT = 587
 CA_TAX = 0.0975
 ITEMS_PER_PAGE = 20
 
+
+SHELL_PLUS_POST_IMPORTS = (
+
+    ('audio.utils', '*'),
+    ('audio.mail', '*'),
+    ('audio.dropdowns', '*'),
+    ('datetime', '*'),
+)
 
 LOGGING = {
     'version': 1,

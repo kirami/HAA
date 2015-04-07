@@ -1,32 +1,9 @@
-{% extends "base.html" %}
-{% load audio_extras %}
+{% extends "catalogBase.html" %}
 
-{% block content %}
-<!--
-	<div id="msg" style="color:red; font-weight:bold; font-size:18px; text-align:center;"></div>
-	{%if success%}<div class="successMsg" style="text-align:center">Your bid has been successfully submitted.</div>{%endif%}
 
-{%if not catItems%}
-	<div style="margin-bottom:10px; text-align:center" class="header">The blind auction has ended.  There are no unsold items for this auction.</div>
 
-{%else%}
+{%block top%}
 
-<div id="endAuction-confirm" title="Please Confirm">Are you sure you want to end your auction?  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
-
-	<div style="margin-bottom:10px; text-align:center" class="header" >
-	The blind auction has ended.  These items were not sold.<br>
-	</div>
-	<div style="text-align:center">Please review our rules page before entering bids.  Click <a href="/audio/rules">here</a></div>
-	<div style="text-align:center; font-size:16px;">See your current set price bids <a href="/audio/accounts/bids">here</a>.</div>
-
-	<div style="margin-bottom:20px; text-align:center">
-		<div>Click "End my auction" button to close your bidding for this auction and we will start preparing your items to ship.</div>
-		<div><button class="button" id="EMA_BTN">End my auction</button></div>
-		
-		<div id="endAuctionMsg"></div>
-	</div>
-
-	-->
 <div id="endAuction-confirm" title="Please Confirm">Are you sure you want to end your auction?  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
 <div id="itemPopup" title="Item Info"></div>
 
@@ -80,54 +57,22 @@
 
 <hr style="border:1px solid black">
 
+{%endblock%}
 
 
-<div style="margin-left:auto; margin-right:auto; width:910px">
-
-	<div class="innerRight">
-		<div class="tableHeader" style="font-weight:bold">
-			<div class="left" style="width:70px;">&nbsp;</div>	
-			<div style="width:55px;" class='left clickable {%if sort == "lot_id"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lot_id"%}&#9650;{%endif%} Lot:</div>
-			<div class="left" style="width:105px">Label & Rec#:</div>
-			<div  style="width:250px" id="nameHeader" class='left clickable {%if sort == "nameAsc"%}orderAsc{%else%}{%if sort == "-name"%}orderDesc{%endif%}{%endif%}'>{%if sort == "nameAsc"%}&#9650;{%else%}{%if sort == "nameDesc"%}&#9660;{%endif%}{%endif%} Title:</div>
-			<div  style="width:230px" id="artistHeader" class='left  clickable{%if sort == "artistAsc"%}orderAsc{%else%}{%if sort == "artistDesc"%}orderDesc{%endif%}{%endif%}'>{%if sort == "artistAsc"%}&#9650;{%else%}{%if sort == "artistDesc"%}&#9660;{%endif%}{%endif%} Artist:</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
 
 
+
+	{%block info%}
 	{%for item in catItems%}
-	<div class="catalogBox" style="{%if True%}{%endif%}">
-		<div style="margin-top:7px; float:left" class="tableBody">
-			<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
-			{%if item.image%}
-				{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
-				{%endif%}
-			{%else%}
-				{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
-				{%endif%}
-			{%endif%}
-			</div> 
-			<div class="quickLook" title="Min Bid: ${{item.min_bid}}" style="float:left; width:55px" id="quickLook_{{item.id}}"><div >{{item.lot_id}}</div></div> 
-			<div class="category" style="float:left; width:105px">{{item.label.name}} {{item.record_number}}{%if item.record_number_two%}<br>{{item.label.name}} {{item.record_number_two}}{%endif%}</div>
-			<div class="category" style="float:left; width:250px">{{item.name}} {%if item.name_two%}<br>{{item.name_two}}{%endif%}{%if item.notes%}<br>{{item.notes}}{%endif%}</div>
-			<div class="category" style="float:left; width:230px">{{item.artist}}{%if item.artist_two%}<br>{{item.artist_two}}{%endif%}</div>
-		</div>
-		<div style="float:left">
-				<input type ="hidden" name="itemId" value="{{item.id}}">
-				<button onclick="submitBid({{item.id}})" class="button">Enter ${{item.min_bid|floatformat:0}} Bid</button>
-			</form>
-		</div>
-
-		<div class="clear"></div>	
-	</div>
-
+		{% include "innerCatalog.html" %}
 	{%endfor%}
+	{% endblock %}
 	
-</div>
-	{%endif%}
 
+
+
+{%block extra%}
 	<script type="text/javascript">
 
 
@@ -150,28 +95,15 @@
 				}
 			});
 
-		    
-
-
-		    $(".headerLink").removeClass("headerActive")
-			$("#catalogLink").addClass("headerActive")
-
-			$( "#itemPopup" ).dialog({
-				resizable: false,
-				modal: true,
-				autoOpen: false, 
-				//position:[200,0],
-				width:"auto",
-				buttons: {
-					Ok: function() {
-						$( this ).dialog( "close" );
-					}
-				}
-			});
-
+			
 
 		})
+
+		
 	</script>
 
+	<style type="text/css">
+	#pageBottom{display: none;}
+	</style>
+	{%endblock%}
 
-{% endblock %}

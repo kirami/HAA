@@ -2,6 +2,7 @@
  
 {%block info%}
 
+
 <h1 style="margin-top:30px;">Report for user: {{data.user.first_name}} {{data.user.last_name}} Auction: {{data.auction}}</h1>
 
  <div id="invoiceEmail-confirm" title="Please Confirm">Are you sure you want to email this invoice to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>
@@ -28,7 +29,7 @@
 		<div class="maxBidItem">{{winner.item.lot_id}}</div>
 		<div class="maxBidItem">{{winner.item.name}}</div>
 		<div class="maxBidItem">{{winner.item.artist}}</div>
-		<div class="maxBidItem">{{winner.amount}}</div>
+		<div class="maxBidItem">${{winner.amount}}</div>
 		<div class="clear"></div>
 	{%endfor%}
 
