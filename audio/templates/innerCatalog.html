@@ -70,40 +70,74 @@
 			{%else%}
 
 
-				{%if flat%}
+				{%if data.flat%}
 
+					<!-- Flat bids page -->
+					{%if data.bidPage%}
+					<form class="left" method="POST" action="/audio/catalog/deleteBid" style="margin-left:30px;">
+					 {% csrf_token %}
+						<input type ="hidden" name="itemId" value="{{bid.item.id}}">
+						<input type="submit" class="bidSubmitButton" value="Delete Bid">
+					</form>
+					
+					{%else%}
+
+					<!-- Flat catalog page-->
 					<div style="float:left; margin-left:30px;">
 						<input type ="hidden" name="itemId" value="{{item.id}}">
 						<button onclick="submitBid({{item.id}})" class="button">Enter ${{item.min_bid|floatformat:0}} Bid</button>
 					
 					</div>
 
+					{%endif%}
+
 				{%else%}	
 
-					{%if bids|get_item:item.id == None %}
-						
-						<div class="left" style="width:85px; margin-top:5px;">
+					<!-- blind bids page -->
+					{%if data.bidPage%}
+
+						<div class="left" style="width:100px; margin-top:5px;">
 							<div class="left" style="width:10px; margin-top:2px;">$</div>
 							<form autocomplete="off">
-							<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}" style="width:60px"></form>
+
+							<input type="text" value="{{ bid.amount }}" id="bidAmount_{{bid.item.id}}" style="width:75px"></form>
 						</div>
-						<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Enter Bid</button></div>
-					
-					{%else%}
-							
-						<div class="left" style="width:85px; margin-top:5px;">
-							<div class="left" style="width:10px; margin-top:2px;">$</div>
-							<form autocomplete="off">
-							<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}" style="width:60px"></form>
-						</div>
-						<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
+						<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{bid.item.id}})">Update Bid</button></div>
 						
 						<form class="left" method="POST" action="/audio/catalog/deleteBid">
-						 	{% csrf_token %}
-							<input type ="hidden" name="itemId" value="{{item.id}}">
+						 {% csrf_token %}
+							<input type ="hidden" name="itemId" value="{{bid.item.id}}">
+							<input type="hidden" name="bidPage" value="true">
 							<input type="submit" class="bidSubmitButton" value="Delete Bid">
 						</form>
 
+					{%else%}
+
+						{%if bids|get_item:item.id == None %}
+							
+							<div class="left" style="width:85px; margin-top:5px;">
+								<div class="left" style="width:10px; margin-top:2px;">$</div>
+								<form autocomplete="off">
+								<input type="text" name="bidAmount_{{item.id}}" value="" id="bidAmount_{{item.id}}" style="width:60px"></form>
+							</div>
+							<div class="left" style="width:100px;"><button onclick="submitBid({{item.id}})" class="button" >Enter Bid</button></div>
+						
+						{%else%}
+								
+							<div class="left" style="width:85px; margin-top:5px;">
+								<div class="left" style="width:10px; margin-top:2px;">$</div>
+								<form autocomplete="off">
+								<input type="text" value="{{ bids|get_item:item.id }}" id="bidAmount_{{item.id}}" style="width:60px"></form>
+							</div>
+							<div class="left" style="width:100px;"><button class="button" value="Update Bid" onclick="submitBid({{item.id}})">Update Bid</button></div>
+							
+							<form class="left" method="POST" action="/audio/catalog/deleteBid">
+							 	{% csrf_token %}
+								<input type ="hidden" name="itemId" value="{{item.id}}">
+								<input type="submit" class="bidSubmitButton" value="Delete Bid">
+							</form>
+
+						{%endif%}
 					{%endif%}
 				{%endif%}
 			{%endif%}

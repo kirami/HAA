@@ -2,10 +2,10 @@
 {% load audio_extras %}
 
 {% block content %}
-
+<div id="itemPopup" title="Item Info"></div>
 {%block top%}
 
-<div id="itemPopup" title="Item Info"></div>
+
 
 <div style="margin-bottom:15px;">
 	
@@ -77,7 +77,7 @@
 		<div style="font-size:16px; margin-bottom:15px; "><u style="font-weight:bold">{{category.name}}</u>: {{category.description}} <u style="font-weight:bold; ">Minimum Bid: ${{category.min_bid}}</u></div>
 	{%endif%}
 	<div class="innerRight">
-		<div class="tableHeader" style="font-weight:bold">
+		<div class="tableHeader" style="font-weight:bold; margin-bottom:10px">
 			<div class="left" style="width:{%if sort == 'lotAsc' or sort == 'lotDesc' %}50px{%else%}70px{%endif%};">&nbsp;</div>	
 			<div style="width:{%if sort == 'lotAsc' or sort == 'lotDesc' %}65px{%else%}45px{%endif%}; " class='left clickable {%if sort == "lotAsc"%}orderAsc{%endif%}' id="lotIdHeader">{%if sort == "lotAsc"%}&#9650;{%else%}{%if sort == "lotDesc"%}&#9660;{%endif%}{%endif%} Lot:</div>
 			<div class="left" style="width:110px">Label & Rec#:</div>
@@ -161,8 +161,7 @@
 				window.location="?sort=artistAsc{%if category%}&category={{category.id}}{%endif%}{%if page%}&page={{page}}{%endif%}"
 		})
 
-		$(".headerLink").removeClass("headerActive")
-		$("#catalogLink").addClass("headerActive")
+
 
 		$( "#itemPopup" ).dialog({
 			resizable: false,
