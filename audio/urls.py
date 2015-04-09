@@ -10,6 +10,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
+    
     url(r'^accounts/login/$',  login),
     #url(r'^accounts/changePassword/$',  password_change,  {'template_name': 'changePassword.html'}),
 
