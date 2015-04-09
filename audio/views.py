@@ -502,6 +502,7 @@ def catalogByCategory(request, order, auctionId = None):
 	items = None
 	perPage =  settings.ITEMS_PER_PAGE
 	page = 1
+	jumpLotId = request.GET.get("jump", None)
 	try:
 		page = int(request.GET.get("page", 1))
 	except:
@@ -522,8 +523,19 @@ def catalogByCategory(request, order, auctionId = None):
 	
 	try:
 		
+		
 		items = Item.objects.filter(auction=currentAuction).order_by(order)
+
+		if jumpLotId:
+
+			page = math.floor(int(jumpLotId) / 20) + 1
+			logger.error("page %s" % page)
+
 		total = math.ceil(float(len(items))/perPage)
+		
+		if page > total:
+			page = 1
+
 		items = items[perPage*(page-1):(perPage*page)]
 		#logger.error(items)
 
@@ -740,6 +752,10 @@ def submitBid(request):
 		now = date.today()
 		data = request.POST
 		bidAmount = data.get("bidAmount")
+
+		if not bidAmount:
+			return HttpResponse(json.dumps({"success":False, "msg":"You must enter a bid amount."}), content_type="application/json")	
+
 		try:
 			profile  = UserProfile.objects.get(user=request.user)
 			

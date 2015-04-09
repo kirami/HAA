@@ -24,7 +24,7 @@
 
 		<div class="" style="font-weight:bold; font-size:26px;
 		">
-			<div>"{{data.auction.name}}" Catalog:</div> 
+			<div>"{{data.auction.name}}" Catalog</div> 
 			<div style="font-size:18px;">Closes {{data.auction.end_date|date:"M d, Y" }}</div>
 			
 			{%if not loggedIn%}
@@ -34,22 +34,24 @@
 		</div>
 
 		<div style="">Please review our <a  href="/audio/rules">rules page</a> before entering bids.</div>
-
+		{%if total > 1%}
 		<div>
 			<ul id="pagination" class="pagination-sm" style="margin-bottom:10px;"></ul>
 			<div>
 			<ul class="pagination-sm pagination" style="margin-top:10px">
 				<li class="page" style="float:left"><input type="text" id="jumpTo" style="width:40px; height:29px; margin-left:7px; border:1px solid #ddd; color:#999" value="#"></li>
 				<li class="page"><a id="jumpToLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Page</a></li>
+				<li class="page"><a id="jumpToLotLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Lot Id</a></li>
 			</ul></div>
 
 		</div>
+		{%endif%}
 	</div>
 	<div class="sideDiv" style="float:right">
 		<div style="font-weight:bold">Tips:</div>
 		<ul class="cat_tips">
 			<li>
-				<div style="font-size:14px;">You can sort by lot ID, name or artist by clicking on the corresponding header</div></li>
+				<div style="font-size:14px;">You can sort by lot ID, title or artist by clicking on the corresponding header</div></li>
 			{%if loggedIn%}
 			<li>
 				<div>Click <a href="/audio/catalog/simpleForm/">here</a> to enter bids manually.</div>
@@ -96,19 +98,21 @@
 </div>
 {%endblock%}
 
+{%if total > 1%}
 <div style="text-align:center" id="pageBottom">
 			<ul id="pagination2" class="pagination-sm" style="margin-bottom:10px;"></ul>
 			<div>
 			<ul class="pagination-sm pagination" style="margin-top:10px">
 				<li class="page" style="float:left"><input type="text" id="jumpTo2" style="width:40px; height:29px; margin-left:7px; border:1px solid #ddd; color:#999" value="#"></li>
 				<li class="page"><a id="jumpToLink2" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Page</a></li>
+				<li class="page"><a id="jumpToLotLink2" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Lot Id</a></li>
 			</ul></div>
 
 		</div>
 <div style="margin-top:20px;">&nbsp;</div>
 
+{%endif%}
 <div class="clear"></div>
-
 
 
 {%block script%}
@@ -116,7 +120,13 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		 	
+		 jump = $.urlParam("jump")
+		 if (jump)
+		 	console.log(jump)
+
 		 if({{total}} > 1){
+
+
 
 		 $('#pagination').twbsPagination({
 		        totalPages: {{total}},
@@ -192,6 +202,16 @@
 
 		$("#jumpTo2").focus(function(){
 			$("#jumpTo2").val("")			
+		})
+
+		$("#jumpToLotLink").click(function(){
+			lotId = $("#jumpTo").val()
+			window.location="?jump="+lotId+"{%if category%}&category={{category.id}}{%endif%}#lot" + lotId
+		})
+
+		$("#jumpToLotLink2").click(function(){
+			lotId = $("#jumpTo2").val()
+			window.location="?jump="+lotId+"{%if category%}&category={{category.id}}{%endif%}#lot" + lotId
 		})
 
 

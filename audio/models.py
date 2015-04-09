@@ -87,6 +87,7 @@ class Item(models.Model):
 	name = models.CharField(max_length=400, default="")
 	name_two = models.CharField(max_length=400, null = True, blank = True)
 	notes = models.CharField(max_length=800, default="", null = True, blank = True)
+	notes_two = models.CharField(max_length=800, default="", null = True, blank = True)
 	record_number = models.CharField(max_length=100, null = True, blank = True)
 	record_number_two = models.CharField(max_length=100, null = True, blank = True)
 	min_bid = models.DecimalField(max_digits=19, decimal_places=2)
