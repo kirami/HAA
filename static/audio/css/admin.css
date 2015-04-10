@@ -1,0 +1,44 @@
+.reportTable{
+	margin-top: 20px;
+}
+
+.reportTable span{
+	margin-left: 10px;
+}
+
+.reportTable .maxBidItem{
+	float: left;
+	margin-right: 20px;
+	width: 120px;
+}
+
+.maxBidItemTitle{
+	font-size:16px;
+}
+
+#id_bcItemsAvailable, #id_bcItemsSelected{
+	width: 400px;
+}
+
+.rightBox,.leftBox, .arrowButtons{
+	float:left;
+}
+
+.arrowButtons{
+	margin:35px 20px;
+}
+
+#id_consignors{
+	margin-bottom: 30px;
+}
+
+.successMsg{
+	color:green;
+	font-size:18px;
+}
+
+
+.successError{
+	color:red;
+	font-size:18px;
+}
