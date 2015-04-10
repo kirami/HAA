@@ -87,10 +87,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'audio', 'templates'),
 )
 
-STATICFILES_DIRS = (
-    '/home/kirami/webapps/hawthorn/hawthorn/static/',
-    '/home/kirami/webapps/hawthorn/hawthorn/static/audio/css',
-)
+
 
 EMAIL_URL = "http://kirami.webfactional.com/audio/"
 
