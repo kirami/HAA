@@ -80,6 +80,7 @@ class ItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'lot_id', 'auction')
     search_fields = ['name', 'lot_id']
     list_filter = ( 'item_type', "auction",)
+    save_on_top = True
 
 class PrintedCatalogAdmin(admin.ModelAdmin):
 

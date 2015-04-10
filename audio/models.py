@@ -13,6 +13,7 @@ class Auction(models.Model):
 	blind_locked = models.BooleanField(default = False)
 	flat_locked = models.BooleanField(default = False)
 	name = models.CharField(max_length=200, blank=True, null=True)
+	description = models.TextField( default="", null = True, blank = True)
 
 	def __str__(self):
 		return  str(self.name)

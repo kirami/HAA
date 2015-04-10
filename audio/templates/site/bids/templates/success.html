@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Your Bids Have Been Submitted</title>
+<script language="Javascript" type="text/javascript">
+// <![CDATA[
+/*
+This script is written by Eric (Webcrawl@usa.net)
+For full source code, installation instructions,
+100's more DHTML scripts, and Terms Of
+Use, visit dynamicdrive.com
+*/
+
+function printit(){  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+// ]]>
+</script>
+</head>
+<body>
+<h1><font face="Arial">Success!</font></h1>
+<p><font face="Arial">Thank you for submitting your bids.</font></p>
+<p><font face="Arial">Invoices for all winning bidders will be sent about a week after the closing date.<br>  
+Also, all bidders will  receive a report of the winning bid for each record that they bid on but did not win.</p>  
+<p><font face="Arial">Here is the information you submitted - please print a copy for your records:&nbsp; 
+<script language="Javascript" type="text/javascript">
+// <![CDATA[
+/*var NS = (navigator.appName == "Netscape");*/
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('<input type=button value="Click to print" name="Print" onClick="printit()">');
+}
+// ]]>
+</script>
+</font></p> 
+<table border="0" bgcolor="#C0C0C0" cellspacing="1" cellpadding="10">
+    <tr>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">Your Name:</font></td> 
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">$FIRST_NAME $LAST_NAME</font></td>
+    </tr>
+    <tr>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">Your Email Address:</font></td> 
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">$email</font></td>
+    </tr>
+    <tr>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">Your Phone Number:</font></td>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">$PHONE</font></td>
+    </tr>
+    <tr>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">Your Address:</font></td>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">$ADDRESS1, $ADDRESS2<br>
+          $CITY, $STATE&nbsp; $ZIP<br>$COUNTRY</font></td> 
+    </tr>
+    <tr>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">Comments:</font></td>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">$COMMENTS</font></td>
+    </tr>
+    <tr>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">Your Bids:</font></td>
+        <td bgcolor="#FFFFFF" valign="top"><font face="Arial">LOT#________RECORD#________BID AMT</font><br><font face="Arial">$MYBIDS</font></td>
+    </tr>
+</table>
+<p />
+
+&nbsp;
+</body>
+</html>
