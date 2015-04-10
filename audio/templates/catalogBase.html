@@ -3,6 +3,7 @@
 
 {% block content %}
 <div id="itemPopup" title="Item Info"></div>
+<div id="auctionDescription" title="Auction Info">{{data.auction.description}}</div>
 {%block top%}
 
 
@@ -18,20 +19,22 @@
 		{%endfor%}
 	</div>
 	
-	<div style="text-align:center; float:left; margin:0 auto; width:46%">
+	<div style="text-align:center; float:left; margin:0 auto; width:44%">
 		<div id="msg" style="color:red; font-weight:bold; font-size:18px;"></div>
 		{%if success%}<div class="successMsg">Your bid has been successfully submitted.</div>{%endif%}
 
 		<div class="" style="font-weight:bold; font-size:26px;
 		">
 			<div>"{{data.auction.name}}" Catalog</div> 
-			<div style="font-size:18px;">Closes {{data.auction.end_date|date:"M d, Y" }}</div>
+			<div style="font-size:18px;">Closes {{data.auction.end_date|date:"M d, Y" }}  <a style="margin-left:10px; cursor:pointer" id="moreAuctionInfo">More Info</a></div>
 			
 			{%if not loggedIn%}
 				<div class="successError">You must log in to bid.</div>
 			{%endif%}
 			
 		</div>
+
+
 
 		<div style="">Please review our <a  href="/audio/rules">rules page</a> before entering bids.</div>
 		{%if total > 1%}
@@ -41,7 +44,7 @@
 			<ul class="pagination-sm pagination" style="margin-top:10px">
 				<li class="page" style="float:left"><input type="text" id="jumpTo" style="width:40px; height:29px; margin-left:7px; border:1px solid #ddd; color:#999" value="#"></li>
 				<li class="page"><a id="jumpToLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Page</a></li>
-				<li class="page"><a id="jumpToLotLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Lot Id</a></li>
+				<li class="page"><a id="jumpToLotLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Lot #</a></li>
 			</ul></div>
 
 		</div>
@@ -50,6 +53,7 @@
 	<div class="sideDiv" style="float:right">
 		<div style="font-weight:bold">Tips:</div>
 		<ul class="cat_tips">
+			<li><div>You can view, edit or delete your submitted bids <a href="/audio/accounts/bids">here</a></div></li>
 			<li>
 				<div style="font-size:14px;">You can sort by lot ID, title or artist by clicking on the corresponding header</div></li>
 			{%if loggedIn%}
@@ -66,7 +70,6 @@
 
 	<div class="clear"></div>
 </div>
-
 <hr style="border:1px solid black">
 
 {%endblock%}
@@ -105,7 +108,7 @@
 			<ul class="pagination-sm pagination" style="margin-top:10px">
 				<li class="page" style="float:left"><input type="text" id="jumpTo2" style="width:40px; height:29px; margin-left:7px; border:1px solid #ddd; color:#999" value="#"></li>
 				<li class="page"><a id="jumpToLink2" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Page</a></li>
-				<li class="page"><a id="jumpToLotLink2" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Lot Id</a></li>
+				<li class="page"><a id="jumpToLotLink2" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Lot #</a></li>
 			</ul></div>
 
 		</div>
@@ -186,6 +189,19 @@
 			}
 		});
 
+		$( "#auctionDescription" ).dialog({
+			resizable: false,
+			modal: true,
+			autoOpen: false, 
+			//position:[200,0],
+			width:500,
+			buttons: {
+				Ok: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+
 		$("#jumpToLink").click(function(){
 			page = $("#jumpTo").val()
 			window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
@@ -214,6 +230,9 @@
 			window.location="?jump="+lotId+"{%if category%}&category={{category.id}}{%endif%}#lot" + lotId
 		})
 
+		$("#moreAuctionInfo").click(function(){
+			$( "#auctionDescription" ).dialog("open", "position", "center");
+		})
 
 
 	})

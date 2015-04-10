@@ -27,6 +27,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#FORCE_SCRIPT_NAME = '/admin'
 
 # Application definition
 

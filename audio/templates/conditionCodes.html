@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load audio_extras %}
+
+{% block content %}
+
+
+<div style="text-align:center; font-size:18px; margin-bottom:20px;">
+	<div class="rulesHeaderItem">
+		<a href="/audio/rules">Rules</a> 
+	</div>
+	<div class="rulesHeaderItem"><span>Condition Codes</span> </div>
+	<div class="rulesHeaderItem"> <a href="/audio/labelAbbreviations">Label Abbreviations</a></div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+<div style=" margin: 0 40px; margin-bottom:40px;">
+	
+	
+
+
+	<div style="margin-top:15px;">
+		<div style="font-weight:bold; text-align:center; margin-bottom:10px;">GRADING AND CONDITION CODES</div> 
+
+		<div>All records are graded in the following manner.  The record is assigned an <span style="text-decoration:underline">overall condition</span> grade, and then it is examined again for any <u>specific defects</u>.  All records are graded by sight, with aural grading used in uncertain cases.  We grade conservatively, but if you feel a record does not meet its assigned grade, let us know.  Your satisfaction is guaranteed.  <span class="ruleHeader">Sorry, no adjustments on items graded “poor”.</span>
+		</div>
+	</div>
+
+	<div style="margin-top:15px;">
+		<div style="text-decoration:underline; margin-bottom:5px; font-weight:bold">These grading codes apply to the overall condition of the record:</div>
+		<div>e = excellent, nearly new, minor defects only, plays loud and clear.</div>
+		<div>v = very good, above average, a little wear and a few scuffs, plays well.</div>
+		<div>g = good, average for its age, audible scratches and wear, plays OK but noisy. </div>
+		<div>f = fair, below average, heavy wear or scratches, plays with difficulty.</div>
+		<div>p = poor, barely playable if at all, offered for visual interest only.</div>
+		<div>(+) = a little better (-) = a little worse</div>
+	</div>
+
+	<div style="margin-top:15px;">
+		<div style="text-decoration:underline; margin-bottom:5px; font-weight:bold">These grading codes apply to specific defects, regardless of overall condition:</div>
+		<div style="font-style:italic; margin-bottom">The following defects are cosmetic only, and are not audible:</div>
+		<div style="margin-left:20px;">
+			<div class="ruleFirst">
+				<div>sol - sticker on label</div>
+				<div>ldm - label damaged</div> 
+			</div>
+			<div class="ruleSecond">
+				<div>wol - writing on label</div>
+				<div>ulc - under label crack</div>
+			</div> 
+			<div class="rulesThird">
+				<div>nrl - needle run on label</div> 
+				<div>shf - spindle hole flake</div>
+			</div>	
+		</div>
+	</div>
+
+	<div style="margin-top:15px;">
+		<div style="font-style:italic">The following defects may cause an audible sound but should not affect tracking:</div>
+		<div style="margin-left:20px;">
+			<div class="ruleFirst">
+				<div>lam - lamination crack</div>	
+				<div>gry - grey grooves</div>	
+				<div>scr - scratch</div>	
+				<div>ndr - needle run</div>	
+			</div>
+			<div class="ruleSecond">
+				<div>hlc - hairline crack </div>	
+				<div>grn - grainy surface </div>	
+				<div>bbl - pressing bubble </div>	
+				<div>wdm - water damage</div>	
+			</div> 
+			<div class="rulesThird">
+				<div>crk - crack</div>	
+				<div>hdm - heat damage </div>	
+				<div>rst - rough start</div>	
+				<div>scf - scuff</div>	
+			</div>	
+		</div>
+	</div>
+
+	<div style="margin-top:15px;">
+		<div style="font-style:italic">The following defects may cause mistracking, repeating or skipping grooves:</div>
+		<div style="margin-left:20px;">
+			<div class="ruleFirst">
+				<div>rch - rim chip </div>
+				<div>rcr - radial crack </div>
+			</div>
+			<div class="ruleSecond">
+				<div>rfl - rim flake</div>
+				<div>pit - pit or needle drop</div>		
+			</div> 
+			<div class="rulesThird">
+				<div>wrp - warp</div>
+				<div>sco - scored grooves</div>
+			</div>	
+		</div>
+	</div>
+
+	<div style="margin-top:15px;">
+		<div style="font-style:italic">The following defects apply to cylinder records only:</div>
+		<div style="margin-left:20px;">
+			<div class="ruleFirst">
+				<div>spl - split</div>
+			</div>
+			<div class="ruleSecond">
+				<div>pls - plaster missing</div>	
+			</div> 
+			<div class="rulesThird">
+				<div>mld - mold</div>
+			</div>	
+		</div>
+	</div>
+
+	<div style="margin-top:15px;">
+		<div style="font-style:italic">These suffix codes indicate the extent of the defect:</div>
+		<div style="margin-left:20px;">
+			<div class="ruleFirst">
+				<div>s(1) - side (1) </div>
+				<div>pot - potential </div>
+			</div>
+			<div class="ruleSecond">
+				<div>(1)" - (1) inch</div>	
+				<div>ntg - not to grooves</div>
+			</div> 
+			<div class="rulesThird">
+				<div>(1)g - (1) groove</div>
+				<div>nap - not affecting play</div>
+			</div>	
+		</div>
+	</div>
+
+	<div style="margin-top:15px;">
+		<div style="font-style:italic">The following cosmetic defects apply to albums, sleeves and covers:</div>
+		<div style="margin-left:20px;">
+			<div class="ruleFirst">
+				<div>soc - sticker on cover </div>
+				<div>scs - split cover seam </div>
+			</div>
+			<div class="ruleSecond">
+				<div>woc - writing on cover</div>
+				<div>adm - album damaged </div>
+			</div> 
+			<div class="rulesThird">
+				<div>toc - tape on cover </div>
+				<div>sub - substitute album</div>
+			</div>	
+		</div>
+	</div>
+
+	
+	<div style="margin-top:15px;">Double face records reissued from earlier single face issues will show the original single face numbers, when known, in parenthesis after the listing. <b>Example: (sf 1234/1235)</b>.</div>
+		
+	<div style="margin-top:15px;">Records reissued on a different label will show the original label and number, when known, in parenthesis after the listing. <b>Example: (Victor 1234/1235)</b>.</div>
+
+	<div style="margin-top:15px;">We occasionally add a little information to a listing when there is something unique or special about a record.  Please feel free to contact us if you need any further information about any item in the auction.</div>
+
+
+	<div style="margin-top:20px;">Please visit our website and turn to the <a href="/recauc.html">Record Auctions</a> page for more detailed information.</div>
+
+</div>
+
+{% endblock %}

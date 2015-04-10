@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load audio_extras %}
+
+{% block content %}
+
+
+<div style="text-align:center; font-size:18px; margin-bottom:20px;">
+	<div class="rulesHeaderItem">
+		<a href="/audio/rules">Rules</a> 
+	</div>
+	<div class="rulesHeaderItem"><a href="/audio/conditionCodes">Condition Codes</a> </div>
+	<div class="rulesHeaderItem"> <span >Label Abbreviations</span></div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+<div style="margin-bottom:40px; text-align:center">
+	
+
+	<div style="margin-top:15px;">
+		<div class="rulesFirst">
+			<div style="display:inline-block; text-align:left">
+				<div style="text-decoration:underline; font-weight:bold">Victor</div>
+				
+				<div>VicPD - pre-dog label </div>
+				<div>VicMon - Monarch</div>
+				<div>VicDlx - DeLuxe</div>
+				<div>VicGP - Grand Prize </div>
+				<div>VicGPI - Gr. Prize Import </div>
+				<div>VicPat - patents label </div>
+				<div>Victor - acoustic label </div>
+				<div>VicScr - Victor scroll label </div>
+				<div>VlaScr - Victrola scroll label </div>
+				<div>VicCir - circular label</div>
+				<div>RCA - RCA Victor</div>
+			</div>
+		</div>
+		<div class="rulesSecond">
+			<div style="display:inline-block; text-align:left">
+				<div style="text-decoration:underline; font-weight:bold">Columbia</div> 
+				<div>ColBS - black & silver </div> 
+				<div>ColGP - Grand Prize </div> 
+				<div>ColMN - Magic Notes</div> 
+				<div>Col - acoustic label </div> 
+				<div>ColBan - banner label </div> 
+				<div>ColFlag - flag label </div> 
+				<div>ColViva - Viva-Tonal </div> 
+				<div>ColBW - blue wax pressing </div> 
+				<div>ColFR - Full Range label </div> 
+				<div>ColPW - pre-war label </div> 
+				<div>ColCBS - CBS label</div> 
+			</div>
+		</div> 
+		<div class="rulesThird">
+			<div style="display:inline-block; text-align:left">
+				<div style="text-decoration:underline; font-weight:bold">Gramophone</div>	
+				<div>G&T - Gram. & Typewriter </div>	
+				<div>GramPD - pre-dog label </div>	
+				<div>GramCon - Concert label </div>	
+				<div>GramMon - Monarch label </div>	
+				<div>DPG - Disque Pour Gram. </div>	
+				<div>DiscG - Disco Gramophono </div>	
+				<div>SchG - Schallplatt Gram. </div>	
+				<div>HMV - His Masters Voice </div>	
+				<div>HMV2 - HMV Catalog #2 </div>	
+				<div>VDP - Voce del Padrone </div>	
+				<div>VDM - Voix de son Matrie</div>	
+			</div>
+		</div>	
+	</div>
+	<div class="clear"></div>
+	<div style="margin-top:10px; ">NOTE: These codes apply to Victor recordings only: (A) - A stamper (Z) - Z shellac</div>
+	
+	<div style="margin-top:15px;">
+		<div class="rulesFirst">
+			<div style="display:inline-block; text-align:left">
+				<div style="text-decoration:underline; font-weight:bold">Other Labels:</div>
+				<div>B&W - Black & White</div>
+				<div>BRS - British Rhythm Soc. </div>
+				<div>Blbd - Bluebird</div>
+				<div>BlbdBf - Buff Bluebird </div>
+				<div>BlbdSt - Staff Bluebird </div>
+				<div>Bruns - Brunswick </div>
+				<div>BrunsBS - Black/Silver </div>
+				<div>BrunsP - Brunswick Polydor</div> 
+				<div>Comm - Commodore </div>
+				<div>Conq - Conqueror</div>
+				<div>CRS - Coll. Rec. Society </div>
+				<div>DeccaSB - Decca Sunburst </div>
+				<div>DGG - Deutsche Gram. </div>
+				<div>EdBell - Edison Bell</div>
+			</div>
+		</div>
+		<div class="rulesSecond">
+			<br>
+			<div style="display:inline-block; text-align:left">
+				<div>Fono - Fonotipia</div>
+				<div>FonoCol - Fono/Columbia </div>
+				<div>GTJ - Good Time Jazz </div>
+				<div>Gramm - Grammophon </div>
+				<div>HistMast - Historic Master </div>
+				<div>HisRS - Historic Rec. Soc. </div>
+				<div>HJCA - Hot Jazz Club </div>
+				<div>HotRS - Hot Record Soc. </div>
+				<div>HOW - Hit of the Week </div>
+				<div>IRCC - Int. Rec. Col. Club </div>
+				<div>JoeDav - Joe Davis</div>
+				<div>LW - Little Wonder</div>
+				<div>NGS - Nat. Gram. Society </div>
+				<div>NML - Nat. Music Lovers</div>
+			</div>
+		</div> 
+		<div class="rulesThird">
+			<br>
+			<div style="display:inline-block; text-align:left">
+				<div>OpDisc - Opera Disc </div>
+				<div>Para - Paramount</div>
+				<div>Parlo - Parlophone </div>
+				<div>PatheA - Pathe Actuelle </div>
+				<div>Silver - Silvertone</div>
+				<div>Spec - Specialty</div>
+				<div>Symp - Symposium</div>
+				<div>Tech - Technichord</div>
+				<div>Tele - Telefunken </div>
+				<div>VelTone - Velvet Tone </div>
+				<div>Voc - Vocalion</div>
+				<div>VocB - Vocalion blue label </div>
+				<div>VocRW - Voc Red Wax </div>
+				<div>Zono - Zonophone</div>
+			</div>
+		</div>	
+	</div>
+	<div class="clear"></div>
+	<div style="margin-top:30px;">Please visit our website and turn to the <a href="/recauc.html">Record Auctions</a> page for more detailed information.</div>
+
+</div>
+
+{% endblock %}

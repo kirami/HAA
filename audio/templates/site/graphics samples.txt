@@ -1,0 +1,57 @@
+Colored bar highlighting auctions on What's New Page:
+
+
+<CENTER><IMG SRC="bar15.gif"></CENTER><BR>
+	<H3 ALIGN=CENTER><FONT COLOR=blue>FALL CLEANING</FONT></H3>
+<CENTER><IMG SRC="bar15.gif"></CENTER><BR><P>
+
+
+
+"Click here" format to jump to another page:
+
+<P><A HREF="highlites.html"><FONT COLOR=RED>Click here </A></FONT>
+	for a picture gallery of some of the goodies on this new auction.</P>
+
+
+
+Bulleted list:
+
+<UL>
+	<LI>Early labels
+	<LI>Personality
+	<LI>Bands
+	<LI>Instrumentals
+	<LI>Christmas
+	<LI>Childrens
+	<LI>Rock and R&B
+	<LI>Jazz
+	<LI>Blues
+	<LI>Hillbilly
+	<LI>Paper items
+	<LI>Advertising
+	<LI>Many, many more.</UL>
+
+
+
+
+
+Phonograph pictures page:
+
+
+As you can see, we are a little short on inventory right now - more people are buying phonographs than ever before.  Wait until after our outdoor show season, when we will have more time for restorations for our shops.<BR><BR> To view a larger picture of any phonograph, simply click on it. To get back here, click your "back" arrow.<BR><BR>
+
+<u>Antique Plaza - Rancho Cordova</u><br><BR>
+
+<CENTER><A HREF="malls/sonora1.jpg"><IMG SRC="malls/sonora1thumb.jpg"></A> <A HREF="malls/sonora2.jpg"><IMG SRC="malls/sonora2thumb.jpg"></A><BR>Sonora Grand<BR><BR></CENTER>
+
+<UL><LI>Sorry - this one just sold, but keep an eye on this spot to see what we will have here in the near future.</UL><BR>
+
+<u>Antique Trove - Roseville</u><BR><BR>
+
+<center><A HREF="malls/vic1.jpg"><IMG SRC="malls/vic1thumb.jpg"></A> <A HREF="malls/vic2.jpg"><IMG SRC="malls/vic2thumb.jpg"></A><BR>Victrola XVI Electric<BR><BR></center>
+
+<UL><LI>This is a fine example of a hard to find Victrola.  Finish is a bit faded, but all gold plated hardware is in good shape, and the electric motor runs well.  The reproducer has been rebuilt, so the machine plays and sounds like new.  $795.00</UL><BR><BR>	
+
+<CENTER><A HREF="malls/col1.jpg"><IMG SRC="malls/col1thumb.jpg"></A> <A HREF="malls/col2.jpg"><IMG SRC="malls/col2thumb.jpg"></A><BR>Columbia "Premium" Phonograph<BR><BR></CENTER>
+
+<UL><LI>Here is one of the many Columbia products that were intended for the mail order market.  There is no mention of the Columbia name, (or any other, for that matter) except on the reproducer itself.  Case is good, with a few small veneer chips on the top.  All parts are original, except the crank.  Motor and reproducer rebuilt, plays well.  $795.00</UL><BR><BR>

@@ -22,11 +22,33 @@ import logging
 import json, math, string, random, collections
 
 
+from django.views.generic import TemplateView
+from django.template import TemplateDoesNotExist
+from django.http import Http404
+
 
 
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+class StaticView(TemplateView):
+    def get(self, request, page, *args, **kwargs):
+        
+        self.template_name = "site/" +page
+        logger.error("page %s" % page)
+        response = super(StaticView, self).get(request, *args, **kwargs)
+        try:
+            return response.render()
+        except TemplateDoesNotExist:
+            self.template_name = page
+            response = super(StaticView, self).get(request, *args, **kwargs)
+            try:
+            	return response.render()
+            except TemplateDoesNotExist:
+            	raise Http404()
+
 
 def test(request):
 	data = {}
@@ -34,7 +56,7 @@ def test(request):
 
 
 def index(request):
-	t = loader.get_template('home.html')
+	t = loader.get_template('site/index.html')
 	c = RequestContext(request, {'foo': 'bar'})
 	return HttpResponse(t.render(c), content_type="text/html")
 
@@ -309,7 +331,7 @@ def bids(request):
 			return redirect('noAuction')
 
 		currentAuctionId = currentAuction.id
-		bids = Bid.objects.filter(item__auction = currentAuctionId, user= request.user)
+		bids = Bid.objects.filter(item__auction = currentAuctionId, user= request.user).order_by("item__lot_id")
 		#logger.error("bids: %s" % bids)
 		#logger.error("user: %s" % request.user)
 

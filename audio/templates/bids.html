@@ -4,7 +4,7 @@
 
 {% block top %}
 	{%if not bids%}
-		<div>You have no bids currently, visit our <a href="../../catalog">catalog</a> to bid!</div>
+		<div style="text-align:center; font-size:26px; font-weight:bold;">You have no bids currently, visit our <a href="../../catalog">catalog</a> to bid!</div>
 	{%else%}
 		{%if success%}<div class="successMsg" style="text-align:center">Your bid has been successfully submitted.</div>{%endif%}
 	<DIV style="text-align:center; font-size:26px; font-weight:bold; margin-bottom:10px;">Your current bids:</DIV>
@@ -12,7 +12,11 @@
 {%endblock%}
 
 {%if bids%}
+
+	{%block table%}
+
 	{%block info%}
+	
 
 		{% for bid in bids %}
 			{%with item=bid.item%}
@@ -20,13 +24,11 @@
 			{%endwith%}
 
 		{% endfor %}
+
+	{%endblock%}
 	{%endblock%}
 
-{%else%}
-	{%block table%}{%endblock%}
 {%endif%}
-
-
 
 
 		<!--

@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from audio import views
 from audio import admin_views
+from django.views.generic import TemplateView
 admin.autodiscover()
 
 
@@ -92,6 +93,9 @@ urlpatterns = patterns('',
 	url(r'^audio/', include('audio.urls')),
     #url(r'^/', {'template_name': 'home.html'}),
     url(r'^$', views.index, name='index'),
+
+    url(r'^(?P<page>.+\.html)$', views.StaticView.as_view()),
+    
 
 
 
