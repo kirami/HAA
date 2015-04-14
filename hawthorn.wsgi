@@ -14,9 +14,9 @@ import os
 import sys
 
 
-sys.path = ['/home/kirami/webapps/hawthorn/hawthorn', '/home/kirami/webapps/hawthorn/lib/python3.4'] + sys.path
+sys.path = ['/home/kirami/webapps/dev/hawthorn', '/home/kirami/webapps/dev/lib/python3.4'] + sys.path
 
-os.environ['PYTHON_EGG_CACHE'] = '/home/kirami/webapps/hawthorn/hawthorn/.python-egg'
+os.environ['PYTHON_EGG_CACHE'] = '/home/kirami/webapps/dev/hawthorn/.python-egg'
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

@@ -1,4 +1,9 @@
 importData.csv
 *.log
 *.pyc
+*.wsgi
+
+
+/hathorn/settings.py
+
 /static/audio/images/*

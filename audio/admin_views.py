@@ -364,11 +364,16 @@ def printLabels(request, auctionId, labelType=None):
 
 		if labelType == "Courtesy":
 			users, addresses = getCourtesyBidders()
-		
-		data["addresses"] = addresses	
+		if labelType == "custom":
+			
+			profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False)
+
+
+
+		data["profiles"] = profiles	
 	else:
 		users, addresses = getNonActiveUsers(auctionId)
-		data["addresses"] = addresses
+		data["profiles"] = profiles
 
 	data["auctionId"]=auctionId
 		
@@ -431,11 +436,11 @@ def importUserCSV(request):
 	data = {}
 	i=0
 	errors={}
-	with open("/srv/hawthorn/HAA-addresses.csv") as f:
+	with open("/home/kirami/webapps/dev/hawthorn/HAA-addresses-fixed.csv") as f:
 		reader = csv.reader(f)
 		for row in reader:
 
-			if i<20:
+			if i>0:
 				try:
 					
 					zip = row[0]
@@ -465,16 +470,16 @@ def importUserCSV(request):
 					password = User.objects.make_random_password()
 					if i>0:
 						
-						if not email:
+						if not email or len(email) > 30:
 							user,created = User.objects.get_or_create(username=firstName+lastName)	
 							if not created:
-								logger.error("User username NOT created but retrieved: %s" % firstName+lastName)
+								logger.info("User username NOT created but retrieved: %s" % firstName+lastName)
 
 						else:
 							user,created = User.objects.get_or_create(email=email)
 							user.username=email 
 							if not created:
-								logger.error("User email NOT created but retrieved: %s" % email)
+								logger.info("User email NOT created but retrieved: %s" % email)
 					
 						
 						user.set_password(password)
@@ -517,8 +522,8 @@ def importUserCSV(request):
 							country = country.title()
 						
 						addressObj.country = country
-						logger.error("country %s" % country)
-						logger.error("address country: %s" % addressObj.country)
+						#logger.error("country %s" % country)
+						#logger.error("address country: %s" % addressObj.country)
 						if pc:
 							addressObj.postal_code = pc
 						addressObj.save()
@@ -556,6 +561,7 @@ def importUserCSV(request):
 					
 					logger.error("Error creating user: %s" % e)
 					errors[i]=email +" "+ firstName+lastName
+					return errors
 			i=i+1
 	
 	logger.error("These users had issues: %s" % errors)

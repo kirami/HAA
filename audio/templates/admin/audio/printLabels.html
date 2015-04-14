@@ -28,7 +28,7 @@ padding: 0.05in;
 overflow: hidden;
 }
 td.separator {
-width: 0.12in;
+width: 0.2in;
 }
 * { font-family: sans-serif; }
 td h1, td h2, td p { font-size: 12px; }
@@ -39,15 +39,16 @@ td h1, td h2, td p { font-size: 12px; }
 <body>
 
 <table>
-{%for address in data.addresses%}
-	{%if address.country == "USA" %}
+{%for profile in data.profiles%}
+	{%with address=profile.billing_address%}
+    {%if address.country == "USA" %}
 	
         {% ifequal forloop.counter0|modulo:3 0 %}
 
         <tr>
         {%endifequal%}
 
-        <td >{{address.user.first_name}} {{address.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{{address.city}} {{address.state}}, {{address.zipcode}}</td>
+        <td >{{profile.user.first_name}} {{profile.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{%if address.address_three%}{{address.address_three}}<br>{%endif%}{{address.city}} {{address.state}}, {{address.zipcode}}</td>
 
         {% ifequal forloop.counter0|modulo:3 0 %}
         <td class="separator" />
@@ -70,7 +71,7 @@ td h1, td h2, td p { font-size: 12px; }
             <tr>
             {%endifequal%}
 
-            <td >{{address.user.first_name}} {{address.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{%if address.address_three%}{{address.address_three}}<br>{%endif%}{{address.city}} {%if address.province%}{{address.province}}{%endif%} {{address.postal_code}}<br>{{address.country}}</td>
+            <td >{{profile.user.first_name}} {{profile.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{%if address.address_three%}{{address.address_three}}<br>{%endif%}{{address.city}} {%if address.province%}{{address.province}}{%endif%} {{address.postal_code}}<br>{{address.country}}</td>
 
             {% ifequal forloop.counter0|modulo:3 0 %}
             <td class="separator" />
@@ -86,6 +87,7 @@ td h1, td h2, td p { font-size: 12px; }
 
 
     {%endif%}
+    {%endwith%}
 {%endfor%}
 </table>
 

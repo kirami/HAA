@@ -21,11 +21,11 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 SECRET_KEY = '_p!o4c12#x3v8$cor#&vdpxddi1933e5q)9y0n@jp4@9es9!=d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["dev.kirami.webfactional.com"]
 
 #FORCE_SCRIPT_NAME = '/admin'
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'audio',
     'django_extensions',
+    'easy_thumbnails',
     #'south',
 )
 
@@ -64,7 +65,7 @@ WSGI_APPLICATION = 'hawthorn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hawthorn',
+        'NAME': 'dev',
         'USER': 'kirami',
         'PASSWORD':'lfn1k1taWF',
     }
@@ -87,17 +88,25 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'audio', 'templates'),
 )
 
-STATICFILES_DIRS = (
-    '/home/kirami/webapps/hawthorn/hawthorn/static/',
-)
 
 EMAIL_URL = "http://kirami.webfactional.com/audio/"
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (50, 50), 'crop': True},
+    },
+}
+
+STATICFILES_DIRS = (
+    '/home/kirami/webapps/dev/hawthorn/static/',
+)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 ADMIN_MEDIA_PREFIX = '/static/admin/'
-STATIC_URL = 'http://kirami.webfactional.com/static/'
-STATIC_ROOT = '/home/kirami/webapps/static/'
+STATIC_URL = 'http://dev.kirami.webfactional.com/static/'
+STATIC_ROOT = '/home/kirami/webapps/static_dev/'
 IMAGES_ROOT = STATIC_ROOT + "audio/images/"
 IMAGES_URL = STATIC_URL + "audio/images"
 
@@ -141,7 +150,7 @@ LOGGING = {
         'file': {
         'level': 'INFO',
         'class': 'logging.FileHandler',
-        'filename': '/home/kirami/webapps/hawthorn/hawthorn/logs/debug.log',
+        'filename': '/home/kirami/webapps/dev/hawthorn/logs/debug.log',
         'formatter': 'verbose'
         },
     },

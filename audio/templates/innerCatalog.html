@@ -1,4 +1,5 @@
 {% load audio_extras %}
+{% load thumbnail %}
 
 	{%if item.prefix%}
 		<div style="font-style:italic; margin-top:5px;">{{item.prefix}}</div>
@@ -13,10 +14,10 @@
 		<div style="float:left">
 			<div class="catalogItem" style="float:left; width:50px; height:50px; margin-right:20px">
 				{%if item.image%}
-					{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px"></a>
+					{%if item.thumbnail%}<a href="{{STATIC_URL}}audio/images/{{item.image}}" target="_blank"><img src="{{STATIC_URL}}audio/images/{{ item.image|thumbnail_url:'avatar' }}" width="50px" height="50px"></a>
 					{%endif%}
 				{%else%}
-					{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{item.thumbnail}}" width="50px" height="50px">
+					{%if item.thumbnail%}<img src="{{STATIC_URL}}audio/images/{{ item.image|thumbnail_url:'avatar' }}" width="50px" height="50px">
 					{%endif%}
 				{%endif%}
 			</div> 

@@ -100,7 +100,11 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'order_number', )
     list_filter = ('auction', )
 
-
+class UserProfileAdmin(admin.ModelAdmin):
+    #form = CustomConsignmentModelForm
+    search_fields = ['user__email', "user__username"]
+    list_filter = ('deadbeat', 'email_only', 'quiet', 'pdf_list',)
+    #list_filter("deadbeat", )
 
 admin.site.register(Auction)
 admin.site.register(Category, CategoryAdmin)
@@ -109,7 +113,7 @@ admin.site.register(Bid, BidAdmin)
 admin.site.register(Address)
 admin.site.register(Label)
 admin.site.register(ItemType)
-admin.site.register(UserProfile)
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Payment)
 admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(Consignor)
