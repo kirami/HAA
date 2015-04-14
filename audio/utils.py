@@ -25,6 +25,10 @@ def adjustLotIdsUtil(auctionId, index, increment = True):
 		order = "asc"
 		op = "-"
 
+	#NEW
+	Item.objects.filter(lot_id__gte=index, auction=auctionId).update(lot_id=F('lot_id')+1)
+
+
 	cursor = connection.cursor()
 	cursor.execute("update audio_item set lot_id = lot_id "+op+" 1 where auction_id = "+str(auctionId)+" and lot_id >= "+str(index)+" order by lot_id " + order)
 	row = dictfetchall(cursor)
@@ -87,17 +91,21 @@ def isSecondChance():
 def usersWithoutAddress():
 	return User.objects.filter(address=None)
 
+def excludeFromEmails():
+	return User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True) | Q(upUser__deadBeat=True))
 
 #users with no bids	
 def getNewUsers(auction, emailOnly = False, excludeEbay = True):
 	users = User.objects.filter(bidUser__isnull=True, is_staff = False, date_joined__gt = auction.end_date)
 	if excludeEbay:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True) | Q(upUser__deadBeat=True))
 	
 	else:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+		admin = excludeFromEmails()
 
 	all = set(users) - set(admin)
+
+
 	#exlude = User.objects.
 	#users = User.objects.raw('select a.id from auth_user a where a.id not in (select b.user_id from audio_bid b);')
 
