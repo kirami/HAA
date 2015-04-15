@@ -1,10 +1,11 @@
-from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, User, UserProfile, Auction, PrintedCatalog
+from audio.models import Address, Item, Bid, Invoice, Payment, Consignor, Consignment, User, UserProfile, Auction, PrintedCatalog
 from django.db import connection
 from django.db.models import Sum, Q
 from django.conf import settings
 from decimal import Decimal
 
 from datetime import datetime, date
+from django.db import transaction
 
 
 import logging
@@ -16,22 +17,25 @@ def saveImg(fileData):
 	with open(settings.IMAGES_ROOT +'items/'+fileData.name, 'wb+') as destination:
 		for chunk in fileData.chunks():
 			destination.write(chunk)
-
+@transaction.commit_manually
 def adjustLotIdsUtil(auctionId, index, increment = True):
 	if increment:
-		order = "desc"
+		order = "-lot_id"
 		op = "+"
 	else:
-		order = "asc"
+		order = "lot_id"
 		op = "-"
 
 	#NEW
-	Item.objects.filter(lot_id__gte=index, auction=auctionId).update(lot_id=F('lot_id')+1)
+	items = Item.objects.filter(lot_id__gte=index, auction=auctionId).order_by(order)
 
-
-	cursor = connection.cursor()
-	cursor.execute("update audio_item set lot_id = lot_id "+op+" 1 where auction_id = "+str(auctionId)+" and lot_id >= "+str(index)+" order by lot_id " + order)
-	row = dictfetchall(cursor)
+	for entry in items:
+		if increment:
+			entry.lot_id += 1
+		else:
+			entry.lot_id -= 1
+		entry.save()
+	transaction.commit()
 
 #auctions for a user where they won something.
 def getWonAuctions(userId):
@@ -117,10 +121,10 @@ def getCurrentUsers(auctionId, excludeEmailOnly = False, excludePDF = False, exc
 	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
 	
 	if excludeEbay:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True)| Q(upUser__deadBeat=True))
 	
 	else:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__deadBeat=True))
 	
 	combined = set(users) | set(printed)
 	
@@ -153,10 +157,10 @@ def getNonCurrentUsers(auctionId, emailOnly = False, printedOnly = False, exclud
 
 	users = User.objects.filter(bidUser__item__auction__gt = int(auctionId)-5 ).exclude(bidUser__item__auction__gt = int(auctionId)-4).distinct()
 	if excludeEbay:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True)| Q(upUser__deadBeat=True))
 	
 	else:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__deadBeat=True))
 	
 	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
 	combined = set(users) - set(admin) - set(printed)
@@ -183,10 +187,10 @@ def getNonActiveUsers(auctionId, emailOnly = False, printedOnly = False, exclude
 	users = User.objects.filter(bidUser__isnull=False).exclude(bidUser__item__auction__gt = int(auctionId)-5).distinct()
 	
 	if excludeEbay:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True))
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__ebay=True)| Q(upUser__deadBeat=True))
 	
 	else:
-		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True))
+		admin = User.objects.filter(Q(is_staff=True) | Q(upUser__quiet=True)| Q(upUser__deadBeat=True))
 
 	printed = User.objects.filter(pcUser__auction__lte = auctionId, pcUser__auction__gt=(int(auctionId)-3))
 	combined = set(users) - set(admin) - set(printed)
@@ -218,8 +222,11 @@ def getBidders(auctionId):
 
 
 def getLosers(auctionId):
-	#Bid.objects.filter(auction=auctionId && winner = False)
-	return list(Bid.objects.raw('select b.* from audio_bid b, audio_item i where i.id = b.item_id and i.auction_id = '+str(auctionId)+' group by user_id HAVING COUNT(CASE WHEN winner=1 THEN 1 ELSE NULL END) <1;'))
+	
+	losers = Bid.objects.filter(item__auction=auctionId, winner = False).distinct().values_list("user", flat=True)
+	winners = Bid.objects.filter(item__auction=auctionId, winner = True).distinct().values_list("user", flat=True)
+	return UserProfile.objects.filter(user__in=set(losers) - set(winners))
+	
 
 #returns ALL items in db with no bids ever.
 def getNoBidItems(auctionId, orderByName = False):
@@ -338,6 +345,7 @@ def getNonConsignedItems():
 
 #get consigned items won in certain auction by consignor
 def getConsignmentWinners(consignorId = None, auctionId = None):
+	
 	cursor = connection.cursor()
 	sql = "select * from audio_bid b, audio_consignment c, audio_item i, audio_invoice ii where b.winner = true \
 	and b.item_id = c.item_id and c.item_id = i.id and ii.id=b.invoice_id"
@@ -372,23 +380,22 @@ def getLoserConsignors(auctionId):
 	all = Consignor.objects.filter(consignmentConsignor__item__auction = auctionId).distinct()
 	return set(ids) ^ set(all)
 	
-
+#returns consignor (id only) with won item
 def getWinnerConsignors(auctionId):
-	#ids = Item.objects.filter(bidItem__isnull=False, auction=auctionId, consignedItem__isnull=False).distinct()
-	#Consignor.objects.filter(consignmentConsignor__in=set(ids)).distinct()
+	ids = Item.objects.filter(bidItem__isnull=False, auction=auctionId, consignedItem__isnull=False).distinct()
+	
+	return Consignment.objects.filter(item__in=set(ids)).distinct().values_list("consignor", flat=True)
 
+	"""
 	return list(Consignor.objects.raw('select cc.* from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i \
 		where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
 	' and c.item_id = i.id and c.consignor_id = cc.id group by consignor_id'))
 	
-def getWinnerConsignorIds(auctionId):
-	return list(Consignor.objects.raw('select cc.id from audio_consignment  c, audio_consignor cc, audio_bid b, audio_item i \
-		where i.id = b.item_id and i.auction_id = '+str(auctionId)+ \
-	' and c.item_id = i.id and c.consignor_id = cc.id group by consignor_id')) 
-
+	"""
 #--------------------------
 
 def getUnbalancedUsersByAuction(auctionId = None, userId = None):
+	"""
 	cursor = connection.cursor()
 	sql = "SELECT user_id, invoiced, sum(invoiced) as iSum, auction_id, payments, sum(payments) as pSum, invoiced - payments AS balance \
 	FROM \
@@ -411,8 +418,11 @@ def getUnbalancedUsersByAuction(auctionId = None, userId = None):
 	cursor.execute(sql)
 	row = dictfetchall(cursor)
 	return row
+	"""
+	return
 
 def getUnbalancedUsers(userId = None):
+	"""
 	cursor = connection.cursor()
 	sql = "SELECT user_id, coalesce(payments,0) as payments, invoiced, invoiced - coalesce(payments,0) as balance, auction_id \
     FROM(select sum(amount) as payments, it.user_id, invoiced, auction_id from audio_payment p \
@@ -426,6 +436,8 @@ def getUnbalancedUsers(userId = None):
 	cursor.execute(sql)
 	row = dictfetchall(cursor)
 	return row
+	"""
+	return
 
 def getAlphaWinners(auctionId, printOnly = False, emailOnly = False):
 	if printOnly:
