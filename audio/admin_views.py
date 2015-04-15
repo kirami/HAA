@@ -394,7 +394,7 @@ def importUserEmail(request):
 			users = User.objects.filter(id__gte=firstId)
 			for user in users:
 				profile = UserProfile.objects.get(user = user)
-				if user.is_active and profile.email_only:
+				if user.is_active and profile.email_only and not profile.quiet and not profile.deadbeat:
 					
 					if user.email:
 						password = User.objects.make_random_password()
@@ -1059,6 +1059,14 @@ def invoices(request, auctionId):
 		data["auction"] = auctions[0]
 	return render_to_response('admin/audio/invoiceAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
+def notExcluded(up, emailOnly=False):
+	if emailOnly:
+		return not up.quiet and not up.deadbeat and up.email_only
+	else:	
+		return not up.quiet and not up.deadbeat
+
+
+
 @staff_member_required
 def sendLoserLetters(request, auctionId):
 	losers = getLosers(auctionId)
@@ -1069,12 +1077,9 @@ def sendLoserLetters(request, auctionId):
 	#logger.error("losers:")
 	for loser in losers:
 
-		logger.error("loser %s" % loser)
-		profile = UserProfile.objects.get(user_id = loser.user_id)
-		user = User.objects.get(id = loser.user_id )
 		data["winningBids"] = getWinningBidsFromLosers(auctionId, user.id)
-		
-		if profile and profile.email_only:
+		data["profile"] = loser
+		if notExcluded(loser, emailOnly = True):
 			msg = getEmailMessage(user.email,"Hawthorn Antique Audio Auction results",{"data":data}, template, False)
 			messages.append(msg)
 
@@ -1297,7 +1302,7 @@ def consignorReport(request, auctionId, template = None):
 		
 		consignors = getWinnerConsignors(auctionId = auctionId)
 		for consignor in consignors:
-			consignorId = consignor.id
+			consignorId = consignors
 			if consignorId not in usedConsignors:
 				#logger.error("consignor: %s" % consignorId)
 				consignor = Consignor.objects.get(id = consignorId)
