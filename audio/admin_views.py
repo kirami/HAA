@@ -43,21 +43,14 @@ def testEmail(request):
 	emailData["user"] = user
 	#emailData["password"] = password	
 	#emailData["url"] = "http://haa/audio/accounts/confirm/" + str(profile.confirmation_code) + "/" + user.username
-	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
+	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newSystem")
 	messages.append(msg)
 	#emailList.append(user.email)
 	#sendBulkEmail(messages)
 	#sendEmail(msg)
-	
-	from smtplib import SMTP
-	import smtplib
+
 	try:
-		'''
-		s = SMTP()
-		s.connect('smtp.webfaction.com')
-		s.login('kirami','lfn1k1taWF')
-		s.sendmail("kirami@kirami.webfactional.com", user.email, msg)
-		'''
+
 		sendEmail(msg)
 	except Exception as e:
 		logger.error(e)
@@ -403,7 +396,7 @@ def importUserEmail(request):
 						emailData["user"] = user
 						emailData["password"] = password	
 						emailData["url"] = "http://haa/audio/accounts/confirm/" + str(profile.confirmation_code) + "/" + user.username
-						msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newUser")
+						msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newSystem")
 						messages.append(msg)
 						emailList.append(user.email)
 
