@@ -37,7 +37,7 @@ class StaticView(TemplateView):
     def get(self, request, page, *args, **kwargs):
         
         self.template_name = "site/" +page
-        logger.error("page %s" % page)
+        #logger.info("page %s" % page)
         response = super(StaticView, self).get(request, *args, **kwargs)
         try:
             return response.render()
@@ -268,7 +268,7 @@ def verifyEmail(request):
 		data = {}
 		data["user"] = request.user
 		data["resent"]=True
-		logger.error("resent")
+		#logger.info("resent")
 		return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
 	else:
 		return redirect("profile")	
@@ -288,7 +288,7 @@ def resetPassword(request):
 			password = User.objects.make_random_password()
 			user.set_password(password)
 			user.save()
-			logger.error("user: %s" %user.email)
+			#logger.info("user: %s" %user.email)
 			emailData={}
 			emailData["user"] = user
 			emailData["password"] = password	
@@ -298,7 +298,7 @@ def resetPassword(request):
 			logger.error("Error reseting password: %s" % e)
 			data["errorMsg"]="Something went wrong.  Please contact us."
 			return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))	
-		logger.error("true")
+		
 		data["success"]=True
 		return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))	
 	
@@ -555,7 +555,7 @@ def catalogByCategory(request, order, auctionId = None):
 		if jumpLotId:
 
 			page = math.floor(int(jumpLotId) / 20) + 1
-			logger.error("page %s" % page)
+			#logger.info("page %s" % page)
 
 		total = math.ceil(float(len(items))/perPage)
 		
@@ -702,7 +702,7 @@ def catalog(request, auctionId = None):
 
 	template = "catalog.html"
 
-	logger.error
+	
 	if order == "nameAsc":
 		order = "name"
 
@@ -849,7 +849,7 @@ def deleteBid(request):
 		instance = Bid.objects.get(user=request.user, item_id=itemId)
 		instance.delete()
 
-	logger.error("path : %s" % request.META.get('PATH_INFO'))
+	#logger.info("path : %s" % request.META.get('PATH_INFO'))
 	
 	if data.get("bidPage", False):
 		return redirect("bids") 
