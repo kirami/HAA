@@ -1,9 +1,28 @@
-{% extends "email/baseEmail.html" %}
- 
-
 {%block content%}
 
-{%if data.user.first_name%}Hello {{data.user.first_name}} {{data.user.last_name}}{%else%}Hello!{%endif%}
+{%if data.user.first_name%}Hello {{data.user.first_name}} {{data.user.last_name}}!{%else%}Hello!{%endif%}
 
+
+We would like to tell you about a new record auction that is like nothing you have ever seen before.  We have developed an entirely new format for viewing our auction catalog and placing bids plus we've added some new features as well.  With our new system you can:
+
+	Browse the catalog, which includes sorting and filtering options.
+	Place new bids.
+	View, edit or delete bids (you can do this until the close of the auction!)
+	Maintain your contact information.
+	Adjust settings on how you'd like us to contact you.
+	View past items won (starting from this test auction).
+
+
+We call it our Direct Bid program, and it is extremely easy to use, completely foolproof, and a whole lot of fun.  We’re introducing this new format with a small test auction, and we really hope you will participate.  There are only 50 records on this auction, but we have chosen some interesting and unique discs that should appeal to a wide variety of collectors.  Your bids are most welcome, but even if you don’t bid we would like to hear from you.  What do you think of the new format?   Any comments or suggestions?  Any bugs in the program?  Is it easy for you to use?  This is a test auction, so the more feedback we get, the better the next version will be.  So please take a moment to look over this short list of records and hopefully you’ll find a few to bid on.  But even if you don’t bid, we hope to hear from you with your comments and suggestions.  You can view this unique auction at: www.thoseoldrecords.com/audio/catalog
+
+
+We've created an account for you!  You must be logged in to bid.  You can change these settings at anytime
+Your login information:
+Username: {{data.user.username}}
+Temporary password: {{data.password}}
+
+Please change your password by going to www.thoseoldrecords.com/audio/accounts/changePassword/
+
+Thank you so much and we look forward to hearing from you!
 
 {%endblock%}

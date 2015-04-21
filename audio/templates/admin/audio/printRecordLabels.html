@@ -47,8 +47,8 @@ td h1, td h2, td p { font-size: 12px; }
         <tr>
     {%endifequal%}
 
-    <td><span style="font-size:14px; font-weight:bold;margin-right:10px;">{{item.lot_id}}</span>a:{{data.auction.id}} Hawthorn's Antique Audio<br>
-    {{item.label.name}} {%if item.record_number%}{{item.record_number}}{%endif%} ${{item.min_bid}}<br>
+    <td><span style="font-size:14px; font-weight:bold;margin-right:10px;">{{item.lot_id}}</span>a:{{data.auction.id}} <br>
+    {{item.label.name}} {%if item.record_number%}{{item.record_number}}{%endif%}<br>
     {{item.condition}} {{item.defect}}<br>
     <span style="max-width:200px;">{{item.notes}}</span>
     </td>
