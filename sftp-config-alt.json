@@ -15,11 +15,11 @@
     "confirm_overwrite_newer": false,
     
     "host": "web482.webfaction.com",
-    "user": "dev",
-    "password": "lfn1k1taWF",
+    "user": "kirami",
+    //"password": "password",
     //"port": "22",
     
-    "remote_path": "/home/kirami/webapps/dev/hawthorn",
+    "remote_path": "/home/kirami/webapps/hawthorn/hawthorn",
     "ignore_regexes": [
         "\\.sublime-(project|workspace)", "sftp-config(-alt\\d?)?\\.json",
         "sftp-settings\\.json", "/venv/", "\\.svn/", "\\.hg/", "\\.git/",
@@ -31,7 +31,7 @@
     //"extra_list_connections": 0,
 
     "connect_timeout": 30,
-    //"ssh_key_file": "~/.ssh/wf_id_dsa",
+    "ssh_key_file": "~/.ssh/wf_id_dsa",
     //"keepalive": 120,
     //"ftp_passive_mode": true,
     //"ftp_obey_passive_host": false,
