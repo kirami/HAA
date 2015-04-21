@@ -77,8 +77,8 @@ urlpatterns = patterns('',
     url(r'^admin/adjustLotIds/(?P<auctionId>\d+)/$', admin_views.adjustLotIds, name='adjustLotIds'),
     url(r'^admin/printRecordLabels/(?P<auctionId>\d+)/(?P<startingIndex>\d+)/$', admin_views.printRecordLabels, name='printRecordLabels'),
     url(r'^admin/printRecordLabels/(?P<auctionId>\d+)/$', admin_views.printRecordLabels, name='printRecordLabels'),
-
-
+    url(r'^admin/printLetters/(?P<template>\w+)/(?P<auctionId>\d+)/$', admin_views.printLetters, name='printLetters'),
+    url(r'^admin/printLetters/(?P<template>\w+)/$', admin_views.printLetters, name='printLetters'),
     
     url(r'^accounts/passwordChangeDone/$', 
         'django.contrib.auth.views.password_change_done', {'template_name': 'changePasswordDone.html'}),

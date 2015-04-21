@@ -339,6 +339,24 @@ def addItem(request):
 	data["form"] = form
 	return render_to_response('admin/audio/addItem.html', {"data":data, "success": success, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 
+@staff_member_required
+def printLetters(request, template, auctionId=None):
+	data = {}
+	profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False).order_by("user__last_name")
+	#profiles = UserProfile.objects.filter(id__gt=9)
+	updated = []
+	for profile in profiles:
+		user = profile.user
+
+		emailData = {}
+		emailData["password"] = user.username + str(profile.id)
+		emailData["profile"] = profile 
+		updated.append(emailData)
+
+	
+	data["profiles"] = updated
+	return render_to_response('admin/audio/coverLetter.html', {"data":data, "success": False}, context_instance=RequestContext(request))
+
 
 @staff_member_required
 def printLabels(request, auctionId, labelType=None):
@@ -359,7 +377,7 @@ def printLabels(request, auctionId, labelType=None):
 			users, addresses = getCourtesyBidders()
 		if labelType == "custom":
 			
-			profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False)
+			profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False).order_by("user__last_name")
 
 
 
@@ -382,19 +400,17 @@ def importUserEmail(request):
 		emailList = []
 		noEmailList = []
 		#pull only auth user ids greater than this.  Will most likely be the first user's id that was imported 
-		firstId = 1209
+		firstId = 5
 		try:
 			users = User.objects.filter(id__gte=firstId)
 			for user in users:
 				profile = UserProfile.objects.get(user = user)
-				if user.is_active and profile.email_only and not profile.quiet and not profile.deadbeat:
+				if notExcluded(profile):
 					
 					if user.email:
-						password = User.objects.make_random_password()
-						user.set_password(password)
 						emailData={}
 						emailData["user"] = user
-						emailData["password"] = password	
+						emailData["password"] = user.username + str(profile.id)	
 						emailData["url"] = "http://haa/audio/accounts/confirm/" + str(profile.confirmation_code) + "/" + user.username
 						msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newSystem")
 						messages.append(msg)

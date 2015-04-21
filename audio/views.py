@@ -55,6 +55,10 @@ def test(request):
 	return render_to_response('contact.html', {"data":data}, context_instance=RequestContext(request))
 
 
+
+def audio(request):
+	return redirect("index")
+
 def index(request):
 	t = loader.get_template('site/index.html')
 	c = RequestContext(request, {'foo': 'bar'})
@@ -252,7 +256,7 @@ def register(request):
 def send_registration_confirmation(user):
 	p = UserProfile.objects.get(user=user)
 	emailData={}
-	emailData["url"] = "http://haa/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
+	emailData["url"] = "http://thoseoldrecoreds.com/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
 	emailData["user"]=user
 	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
 	sendEmail(msg)
