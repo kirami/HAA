@@ -1,0 +1,9 @@
+{% extends "email/baseEmail.html" %}
+ 
+
+{%block content%}
+
+{%if data.user.first_name%}Hello {{data.user.first_name}} {{data.user.last_name}}{%else%}Hello!{%endif%}
+
+
+{%endblock%}
