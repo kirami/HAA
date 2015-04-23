@@ -51,7 +51,7 @@ urlpatterns = patterns('',
 
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
-
+    url(r'^tom/$',  TemplateView.as_view(template_name='tom.html')),
     url(r'^rules/$',  TemplateView.as_view(template_name='rules.html')),
     url(r'^conditionCodes/$',  TemplateView.as_view(template_name='conditionCodes.html')),
     url(r'^labelAbbreviations/$',  TemplateView.as_view(template_name='labelAbbreviations.html')),
