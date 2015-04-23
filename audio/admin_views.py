@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
+
 @staff_member_required
 def testEmail(request):
 	#password = User.objects.make_random_password()
@@ -54,6 +55,7 @@ def testEmail(request):
 		sendEmail(msg)
 	except Exception as e:
 		logger.error(e)
+		return HttpResponse(json.dumps({"success":True, "error":str(e)}), content_type="application/json")
 	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 

@@ -115,10 +115,10 @@ MEDIA_ROOT = IMAGES_ROOT
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.webfaction.com'
-EMAIL_HOST_USER = 'kirami'
-EMAIL_HOST_PASSWORD = 'lfn1k1taWF'
-DEFAULT_FROM_EMAIL = 'kirami@kirami.webfactional.com'
-SERVER_EMAIL = 'kirami@kirami.webfactional.com'
+EMAIL_HOST_USER = 'haamail'
+EMAIL_HOST_PASSWORD = 'victor6'
+DEFAULT_FROM_EMAIL = 'webmaster@thoseoldrecords.com'
+SERVER_EMAIL = 'webmaster@thoseoldrecords.com'
 EMAIL_PORT = 587
 
 CA_TAX = 0.0975
