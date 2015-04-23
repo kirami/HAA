@@ -21,11 +21,11 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 SECRET_KEY = '_p!o4c12#x3v8$cor#&vdpxddi1933e5q)9y0n@jp4@9es9!=d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["thoseoldrecords.com", "kirami.webfactional.com"]
 
 #FORCE_SCRIPT_NAME = '/admin'
 
@@ -115,10 +115,10 @@ MEDIA_ROOT = IMAGES_ROOT
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.webfaction.com'
-EMAIL_HOST_USER = 'kirami'
-EMAIL_HOST_PASSWORD = 'lfn1k1taWF'
-DEFAULT_FROM_EMAIL = 'kirami@kirami.webfactional.com'
-SERVER_EMAIL = 'kirami@kirami.webfactional.com'
+EMAIL_HOST_USER = 'haamail'
+EMAIL_HOST_PASSWORD = 'victor6'
+DEFAULT_FROM_EMAIL = 'webmaster@thoseoldrecords.com'
+SERVER_EMAIL = 'webmaster@thoseoldrecords.com'
 EMAIL_PORT = 587
 
 CA_TAX = 0.0975
