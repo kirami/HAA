@@ -1,43 +1,38 @@
-<HTML>
-<HEAD>
-<TITLE>Hawthorn's Antique Audio</TITLE>
-<META  name="description" content="We are dealers in Antique 78 
-rpm records and Edison cylinders, hand wound Victrolas and other 
-phongraphs, and sheet music.  Also, Victor, Columbia and Brunswick.">
-<META  name="keywords" content="thoseoldrecords, those old records, Antique, antique, 78 rpm records, Records, records, cylinder records, cylinders, Edison cylinders, hand wound phonographs, Phonographs, Sheet music, Victor, Victrola, Columbia, Brunswick, Sonora, Edison, Pathe, Diamond Disc, appraisals, 
-Appraisals, auctions, Auctions, record auction, Hawthorn, Tom Hawthorn, Hawthorn's Antique Audio">
 
-</HEAD>
-
-<BODY BACKGROUND="/static/audio/images/site/10ligh04.jpg">
+{% extends "base.html" %}
 
 
-
-
-
-<CENTER><NOBR><IMG SRC="/static/audio/images/site/phono.gif"><IMG SRC="/static/audio/images/site/haa.gif" ALT="Hawthorn's Antique Audio">
-<IMG SRC="/static/audio/images/site/record.gif"></NOBR></CENTER>
-
-<P><CENTER><IMG SRC="/static/audio/images/site/hmv.gif"></CENTER>
+{%block headerMenu%}
+<div style="background:#666; height:50px; ">
+	
+	<div class="innerSubHeader">
+		
+		
+			<div class="subMenuBox"><a A HREF="new.html">What's New</a></div>
+			<div class="subMenuBox"><a A HREF="/static/audio/pdf/A144 auction PDF.pdf">Latest Auction PDF</a></div>
+			<div class="subMenuBox" style="padding:0px;"><a A HREF="http://search.ebay.com/_W0QQsassZhawthornsantiqueaudio"><img src="{{STATIC_URL}}audio/images/site/ebay_2.png" width="75" height="50"> eBay Listings</a></div>
+			<div class="subMenuBox"><a A HREF="/static/audio/pdf/ebay auction 22 PDF.pdf">Printable eBay Listings</a></div>
+	
+		
+	</div>
 
 
 
-<P>Welcome to our Web Site!  We are dealers in vintage 78 rpm records, sheet music and antique phonographs.  Our goal is to offer a wide selection of quality  phonographs, records, sheet music and related accessories to collectors worldwide.  We publish frequent mail auction lists of 
+</div>
+<div class="clear"></div>
+{%endblock%}
+
+{%block content%}
+
+
+
+<div style="text-align:center; margin-bottom:10px;"><IMG  SRC="/static/audio/images/site/hmv.gif"/></div>
+
+<div style="margin:20 0px">Welcome to our Web Site!  We are dealers in vintage 78 rpm records, sheet music and antique phonographs.  Our goal is to offer a wide selection of quality  phonographs, records, sheet music and related accessories to collectors worldwide.  We publish frequent mail auction lists of 
 early 78's, cylinders, and other collectable records.  In addition, we have 
-a retail location in the Sacramento, California area.  Please scroll down to look over our list of services. For more details, click on any that may interest you.</P>
-
-<P><A HREF="new.html"><FONT COLOR=BLUE>Click here</A></FONT> for information about our current and future record auctions.</P>
+a retail location in the Sacramento, California area.  Please scroll down to look over our list of services. For more details, click on any that may interest you.</div>
 
 
-<P><A HREF="/static/audio/pdf/A144 auction PDF.pdf"><FONT COLOR=BLUE>Click Here</A></FONT> to see the catalog for the latest auction.</P>
-
-
-<P><A HREF="http://search.ebay.com/_W0QQsassZhawthornsantiqueaudio"><FONT COLOR=BLUE>Click here</A></FONT> to see our current eBay listings.</P>
-
-
-<P><A HREF="/static/audio/pdf/ebay auction 22 PDF.pdf"><FONT COLOR=BLUE>Click here</A></FONT> for a printable copy of our upcoming eBay listings.</P>
-
-<P>Scroll down for more...</P>
 
 
 
@@ -51,15 +46,15 @@ a retail location in the Sacramento, California area.  Please scroll down to loo
 	<TD ALIGN=CENTER><NOBR><B><A HREF="recauc.html">Record Mail 	Auctions</A></B></NOBR></TD>
 	<TD>We regularly offer a wide selection of historical, personality, jazz, 
 	dance band, ragtime, country, classical, ethnic, and many other collectable
-	78 rpm records from 1900 to 1950. We also have cylinders and Edison discs. <A HREF="/static/audio/pdf/A144 auction PDF.pdf"><FONT COLOR=BLUE>Click Here</A></FONT> to see the catalog for the latest auction.  </TD>
+	78 rpm records from 1900 to 1950. We also have cylinders and Edison discs. <A HREF="/static/audio/pdf/A144 auction PDF.pdf">Click Here</A> to see the catalog for the latest auction.  </TD>
 </TR>
 <TR>
 	<TD ALIGN=CENTER><a href="/audio/catalog"><b>Online Catalog</b></a><br><span style="color:red">*New*</span></TD>
 	<TD>We now have our entire catalog in a new online webapp!  Now you can submit/edit/delete bids online! <a href="/audio/catalog">Click here</a> to access this new feature.</TD>
 </TR>
 <TR>
-	<TD ALIGN=CENTER><NOBR><B><A HREF="http://search.ebay.com/_W0QQsassZhawthornsantiqueaudio">eBay 		Auctions</A></B></NOBR></TD>
-	<TD>Click on this page to see what we currently have listed on eBay.  You'll find rare 	and 	unusual cylinders and 78s, vintage sheet music, phonograph parts and accessories, paper and 		advertising items and much more.  <A HREF="/static/audio/pdf/ebay auction 22 PDF.pdf"><FONT COLOR=BLUE>Click 		here</A></FONT> for a printable copy of our upcoming eBay listings.    </TD>
+	<TD ALIGN=CENTER><NOBR><B><A HREF="http://search.ebay.com/_W0QQsassZhawthornsantiqueaudio">eBay Auctions</A></B></NOBR></TD>
+	<TD>Click on this page to see what we currently have listed on eBay.  You'll find rare 	and 	unusual cylinders and 78s, vintage sheet music, phonograph parts and accessories, paper and 		advertising items and much more.  <A HREF="/static/audio/pdf/ebay auction 22 PDF.pdf">Click here</A> for a printable copy of our upcoming eBay listings.    </TD>
 </TR>
 <TR>
 	<TD ALIGN=CENTER><NOBR><B><A HREF="recsup.html">Record 	Supplies</A></B></NOBR></TD>
@@ -68,28 +63,28 @@ a retail location in the Sacramento, California area.  Please scroll down to loo
 	for wind-up phonographs.</TD>
 </TR>
 <TR>
-	<TD ALIGN=CENTER><NOBR><B><A HREF="recsale.html">Records For 	Sale</A></B></NOBR></TD>
+	<TD ALIGN=CENTER><NOBR><B><A HREF="recsale.html">Records For Sale</A></B></NOBR></TD>
 	<TD>You'll find a variety of 78s, 45s and LPs in our retail 
 	location, with many at bargain prices.  Inventory is 
 	continually changing as new records are frequently added.  Sorry, no lists available.</TD>
 </TR>
 <TR>
 	<TD ALIGN=CENTER><NOBR><B><A HREF="phonosale.html">Phonographs for Sale</A></B></NOBR></TD>
-	<TD>A current listing of wind-up phonographs and music boxes offered for sale is featured on this page.  Most 	machines are restored to good playing condition, but be sure to check our "Bargain Basement" for project and parts phonographs.<FONT COLOR=Red>This page updated on November 4, 2013</COLOR></TD>
+	<TD>A current listing of wind-up phonographs and music boxes offered for sale is featured on this page.  Most 	machines are restored to good playing condition, but be sure to check our "Bargain Basement" for project and parts phonographs. <FONT COLOR=Red>This page updated on November 4, 2013</COLOR></TD>
 <TR>
 
-	<TD ALIGN=CENTER><NOBR><B><A HREF="phonorep.html">Phonograph 			Repair</A></B></NOBR></TD>
+	<TD ALIGN=CENTER><NOBR><B><A HREF="phonorep.html">Phonograph Repair</A></B></NOBR></TD>
 	<TD>Soundbox (reproducer) repair for most types of wind-up 
 	phonographs at reasonable prices.  Service by mail or appointment only; all repairs
 	are guaranteed.</TD>
 </TR>
 <TR>
-	<TD ALIGN=CENTER><NOBR><B><A HREF="sheetmusc.html">Sheet Music for 			Sale</A></B></NOBR></TD>
+	<TD ALIGN=CENTER><NOBR><B><A HREF="sheetmusc.html">Sheet Music for Sale</A></B></NOBR></TD>
 	<TD>A good selection of standard popular tunes from 1900 to 1950 is available 
 	at our retail location.  The more collectable pieces can be found on our record auctions.</TD>
 </TR>
 <TR>
-	<TD ALIGN=CENTER><NOBR><B><A HREF="appraisal.html">Professional 			Appraisals</A></B></NOBR></TD>
+	<TD ALIGN=CENTER><NOBR><B><A HREF="appraisal.html">Professional Appraisals</A></B></NOBR></TD>
 	<TD>Written appraisals for tax, insurance or estate purposes 
 	on collections of 78 rpm records, phonographs, and related items.  Over 30 years of appraisal experience, references upon request.</TD>
 </TR>
@@ -98,11 +93,11 @@ a retail location in the Sacramento, California area.  Please scroll down to loo
 	<TD>We have a booth stocked with records and sheet musicin one of the largest antique malls in the Sacramento, California area.  The mall is open daily and features an excellent selection of general antiques.</TD>
 </TR>
 <TR>
-	<TD COLSPAN=2 ALIGN=CENTER><B><FONT SIZE=+2 COLOR=RED>Additional 		Information</FONT></B></TD>
+	<TD COLSPAN=2 ALIGN=CENTER><B><FONT SIZE=+2 COLOR=RED>Additional Information</FONT></B></TD>
 </TR>
 <TR>
 	<TD ALIGN=CENTER><NOBR><B><A HREF="new.html">What's New?</A></B></NOBR></TD>
-	<TD>Click on this page to see items on our current auction, previews of coming attractions and shows, or 	other interesting things we may have to share.   	<Font color=red>This page updated on December 27, 2014.</color></TD>
+	<TD>Click on this page to see items on our current auction, previews of coming attractions and shows, or 	other interesting things we may have to share. This page updated on December 27, 2014.</TD>
 </TR>
 <TR>
 	<TD ALIGN=CENTER><NOBR><B><A HREF="faq.html">FAQ</A></B></NOBR></TD>
@@ -128,7 +123,7 @@ a retail location in the Sacramento, California area.  Please scroll down to loo
 </TR>
 </TABLE>
 
-<P>Please contact us if we can help you with any part 
+<P style="text-align:center; margin-top:20px;">Please contact us if we can help you with any part 
 of this fascinating hobby.  You can reach us at:<BR><BR>
 
 <CENTER>
@@ -151,7 +146,7 @@ Click here to <A HREF="mailto:hawthorn@thoseoldrecords.com">e-mail us.</A></CENT
 
 <CENTER><IMG SRC="/static/audio/images/site/bar15.gif"><BR><BR>
 
-<center><p><table cellpadding=3 cellspacing=3><tr><td width=30% align=left> <table border=5 cellpadding=5> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&id=164&prev" target="_top">Previous page</a> </td></tr> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&id=164&next" target="_top">Next page</a></td></tr> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?random&ring=phonograph" target="_top">Random page</a> </td></tr></table></td> <td width=40% bgcolor=white><font size=2 color=green> <b><center>THIS WEBSITE IS PART OF <br></font> <font color=red><img src=ring2.gif alt="The Phonograph Ring"></font> <font color=green><p>-- want to <a href="http://www.webring.com/cgi-bin/webring?ring=phonograph;home">join</a>?<br> <font size=1>The Phonograph Ring welcomes sites dealing with early phonographs, gramophones, cylinders, 78s and recorded sound in general. If your site fits this description, consider joining up! </font></b></td><td width=30% align=right> <table border=5 cellpadding=5 ><tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&id=164&next5" target="_top">Next 5</a> </td></tr> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&list" target="_top">All pages</a> </td></tr><tr> <td bgcolor=silver> <a href="http://www.webring.com/cgi-bin/webring?ring=phonograph;home" target="_top">Home page</a></td></tr></table></td></tr></table> 
+<center><p><table cellpadding=3 cellspacing=3><tr><td width=30% align=left> <table border=5 cellpadding=5> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&id=164&prev" target="_top">Previous page</a> </td></tr> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&id=164&next" target="_top">Next page</a></td></tr> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?random&ring=phonograph" target="_top">Random page</a> </td></tr></table></td> <td width=40% bgcolor=white><font size=2 color=green> <b><center>THIS WEBSITE IS PART OF <br></font> <font color=red><img src="/static/audio/images/site/ring2.gif" alt="The Phonograph Ring"></font> <font color=green><p>-- want to <a href="http://www.webring.com/cgi-bin/webring?ring=phonograph;home">join</a>?<br> <font size=1>The Phonograph Ring welcomes sites dealing with early phonographs, gramophones, cylinders, 78s and recorded sound in general. If your site fits this description, consider joining up! </font></b></td><td width=30% align=right> <table border=5 cellpadding=5 ><tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&id=164&next5" target="_top">Next 5</a> </td></tr> <tr><td bgcolor=silver> <a href="http://www.webring.org/cgi-bin/webring?ring=phonograph&list" target="_top">All pages</a> </td></tr><tr> <td bgcolor=silver> <a href="http://www.webring.com/cgi-bin/webring?ring=phonograph;home" target="_top">Home page</a></td></tr></table></td></tr></table> 
 <BR>
 
 <CENTER><IMG SRC="/static/audio/images/site/bar15.gif"><BR><BR>
@@ -159,7 +154,8 @@ Click here to <A HREF="mailto:hawthorn@thoseoldrecords.com">e-mail us.</A></CENT
 
 </CENTER>
 
+<div style="margin-bottom:40px;">
+<A HREF="#">Return to top of page</A> 
+</div>
 
-<A>Return to </a> <A HREF="#">top of page</A> 
-</BODY>
-</HTML>
+{%endblock%}

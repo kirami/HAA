@@ -22,6 +22,12 @@ body{
    float: right;
 }
 
+
+.subMenuBox{
+   float:left;
+   color:white;
+}
+
 .clickable{
    cursor: pointer;
 }
