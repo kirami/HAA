@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+
+<script type="text/javascript"></script>
+
+{%block headerMenu%}
+<div style="background:#666; height:35px; ">
+	
+	<div class="innerSubHeader">
+
+		<ul class="myMenu">
+			<li><a href="#">For Sale</a>
+		    	<ul>
+		    		<li><A HREF="recauc.html">Record Auctions</A></li>
+					<li><A HREF="recsup.html">Record Supplies</A></li>
+					<li><A HREF="recsale.html">Records for Sale</A></li>
+					<li><A HREF="phonosale.html">Phonographs for Sale</A></li>
+					<li><A HREF="sheetmusc.html">Sheet Music for Sale</A></li>
+					<li><A HREF="retail.html">Retail Locations</A></li>
+		        </ul>
+		    </li>
+		    <li><a href="#">Services</a>
+		    	<ul>
+		        	<li><A HREF="phonorep.html">Phonograph Repair</A></li>
+		            <li><A HREF="appraisal.html">Appraisals</A></li>
+
+		        </ul>
+		    </li>
+		    <li><a href="#">FAQ</a>
+		       <ul>
+		        	<li><A HREF="faq.html">FAQ</A></li>
+		            <li><A HREF="buyrec.html">What Do We Buy?</A></li>
+		        </ul>
+		    </li>
+		    <li><a href="#">About Us</a>
+			    <ul><li><A HREF="contact.html">Contact Us</A></li>
+			   		<li><A HREF="testimonials.html">Unsolicited Testimonials</A></li> 	
+			   		<li><A HREF="scenes.html">Behind the Scenes</A></li>
+			    </ul>
+		    </li>
+		</ul>
+	</div>
+
+
+
+</div>
+<div class="clear"></div>
+{%endblock%}
+
+
+
+{%block content%}
+
+
+{%block inner%}
+{%endblock%}
+
+{%block extra%}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.myMenu > li').bind('mouseover', openSubMenu);
+		$('.myMenu > li').bind('mouseout', closeSubMenu);
+		
+		function openSubMenu() {
+			$(this).find('ul').css('visibility', 'visible');	
+		};
+		
+		function closeSubMenu() {
+			$(this).find('ul').css('visibility', 'hidden');	
+		};
+				   
+	});
+</script>
+{%endblock%}
+
+{%endblock%}
