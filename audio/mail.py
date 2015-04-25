@@ -33,7 +33,7 @@ def getEmailMessage(to, subject, data, template, record = False):
 	subject, from_email, to = subject, settings.DEFAULT_FROM_EMAIL, to
 	text_content = plaintext.render(d)
 	html_content = htmly.render(d)
-	msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+	msg = EmailMultiAlternatives(subject, text_content, "Hawthorn's Antique Audio <"+from_email+">", [to])
 	msg.attach_alternative(html_content, "text/html")
 
 	if record:

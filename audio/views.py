@@ -256,7 +256,7 @@ def register(request):
 def send_registration_confirmation(user):
 	p = UserProfile.objects.get(user=user)
 	emailData={}
-	emailData["url"] = "http://thoseoldrecoreds.com/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
+	emailData["url"] = "http://thoseoldrecords.com/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
 	emailData["user"]=user
 	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
 	sendEmail(msg)
@@ -676,7 +676,7 @@ def catalog(request, auctionId = None):
 
 		currentAuctionId = currentAuction.id
 	try:
-		logger.info("1")
+		#logger.info("1")
 		#if after close but in 2nd chance
 		if isSecondChance() or isBetweenSegments():
 			logger.info("2")

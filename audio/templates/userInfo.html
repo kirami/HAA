@@ -7,6 +7,8 @@
 <div class="simpleSuccess">You have successfully updated your login information.</div>
 {%endif%}
 
+<div>Please note your login information is case sensitive</div>
+
  <form action="" method="post" autocomplete="off">
     {% csrf_token %}
       {{ form.as_p }}
