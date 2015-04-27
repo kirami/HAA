@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     
     url(r'^accounts/login/$',  login),
     #url(r'^accounts/changePassword/$',  password_change,  {'template_name': 'changePassword.html'}),
-
+    #url(r'^accounts/login/$','django.contrib.auth.views.login',name='login',kwargs={'template_name': 'login.html'}),
+    
    
 
     url(r'^accounts/changePassword/$', 
