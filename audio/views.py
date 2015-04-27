@@ -65,7 +65,7 @@ def index(request):
 	return HttpResponse(t.render(c), content_type="text/html")
 
 
-
+@login_required
 def simpleForm(request):
 	form = None
 	data = {}
