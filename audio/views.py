@@ -68,9 +68,10 @@ def index(request):
 
 def simpleForm(request):
 	form = None
-	data = None
+	data = {}
 	now = date.today()
 	currentAuction = getCurrentAuction()
+	data["auction"] = currentAuction
 	if(request.user.is_authenticated()):
 		
 		if request.method == "POST":
@@ -130,7 +131,7 @@ def simpleForm(request):
 			form = BidSubmitForm(auctionId = currentAuction.id)
 	else:
 		return redirect("catalog")
-	return render_to_response('simpleForm.html', {"form":form}, context_instance=RequestContext(request))
+	return render_to_response('simpleForm.html', {"form":form, "data": data}, context_instance=RequestContext(request))
 
 
 @login_required
