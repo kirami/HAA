@@ -5,10 +5,30 @@
 
 {%for data in data.profiles%}
 
-<div style="margin-bottom:10px;">{%if data.profile.user.first_name%}Hello {{data.profile.user.first_name}} {{data.profile.user.last_name}}!{%else%}Hello!{%endif%}</div>
+<div style="width:100%">
+	
+	<div style="text-align:center; float:left; margin:0 auto; margin-left:100px; ">
+		<div style="float:left"><img src="/static/audio/images/site/phono.gif"></div>
+		<div style="float:left">
+			<div><b>Tom Hawthorn</b></div>
+			<div>Hawthorn’s Antique Audio</div>
+			<div>77 Columbia Avenue</div>
+			<div>Roseville, CA 95678 USA</div>
+			<div>Phone or Fax: (916) 773-4727</div>
+			<div>Email: hawthorn@thoseoldrecords.com</div>
+		</div>
+		<div style="float:left"><img src="/static/audio/images/site/record.gif"></div>
+	</div>
+	
+</div>
+<div style="clear:both"></div>
+<div style="float:right; margin-top:20px; margin-right:20px;">April 27, 2015</div>
+<div style="clear:both"></div>
+
+<div style="margin-bottom:10px; margin-top:50px;">{%if data.profile.user.first_name%}Hello {{data.profile.user.first_name}} {{data.profile.user.last_name}}!{%else%}Hello!{%endif%}</div>
 
 <div>
-We would like to tell you about a new record auction that is like nothing you have ever seen before.  We have developed an entirely new format for viewing our auction catalog and placing bids plus we've added some new features as well.  With our new system you can:
+We would like to tell you about a new record auction that is like nothing you have ever seen before.  We have developed an entirely new format for viewing our auction catalog and placing bids ONLINE plus we've added some new features as well.  With our new system you can:
 <ul>
 	<li>Browse the catalog, which includes sorting and filtering options.</li>
 	<li>Place new bids.</li>
@@ -18,8 +38,9 @@ We would like to tell you about a new record auction that is like nothing you ha
 	<li>View past items won (starting from this test auction).</li>
 </ul>
 
-We call it our Direct Bid program, and it is extremely easy to use, completely foolproof, and a whole lot of fun.  We’re introducing this new format with a small test auction, and we really hope you will participate.  There are only 50 records on this auction, but we have chosen some interesting and unique discs that should appeal to a wide variety of collectors.  Your bids are most welcome, but even if you don’t bid we would like to hear from you.  What do you think of the new format?   Any comments or suggestions?  Any bugs in the program?  Is it easy for you to use?  This is a test auction, so the more feedback we get, the better the next version will be.  So please take a moment to look over this short list of records and hopefully you’ll find a few to bid on.  But even if you don’t bid, we hope to hear from you with your comments and suggestions.  You can view this unique auction at: <a href="thoseoldrecords.com/audio/catalog">thoseoldrecords.com/audio/catalog</a></div>
+We call it our Direct Bid program, and it is extremely easy to use, completely foolproof, and a whole lot of fun.  We’re introducing this new format with a small test auction, and we really hope you will participate.  There are only 50 records on this auction, but we have chosen some interesting and unique discs that should appeal to a wide variety of collectors.  Your bids are most welcome, but even if you don’t bid we would like to hear from you.  What do you think of the new format?   Any comments or suggestions?  Any bugs in the program?  Is it easy for you to use?  This is a test auction, so the more feedback we get, the better the next version will be.  So please take a moment to look over this short list of records and hopefully you’ll find a few to bid on.  But even if you don’t bid, we hope to hear from you with your comments and suggestions.  We've enclosed a paper copy of the auction catalog for your reference.  You can view the online catalog at: thoseoldrecords.com/audio/catalog.  Take a look and let us know what you think.</div>
 
+<div style="margin-top:10px;"><span style="text-decoration:underline">Don't use a computer or email?</span>  No problem, just let us know that you would like to receive paper catalogs of future auctions by mail, and submit your bids by mail, phone or fax.  And we welcome your mail in bids on this test auction.</div>
 
 <div style="margin-top:10px;">We've created an account for you!  You must be logged in to bid.</div>
 <div>Your login information:</div>
@@ -31,7 +52,7 @@ We call it our Direct Bid program, and it is extremely easy to use, completely f
 
 <div style="margin-top:10px;">Thank you so much and we look forward to hearing from you!</div>
 
-<div>Hawthorn's Antique Audio</div>
+<div style="margin-top:10px;">Hawthorn's Antique Audio</div>
 <span style="page-break-before: always;"> </span>
 
 {%endfor%}
