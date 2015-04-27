@@ -1,19 +1,27 @@
 
 {% extends "base.html" %}
+<img src="{{STATIC_URL}}audio/images/site/ebay_2.png" width="75" height="50"> 
 
 
 {%block headerMenu%}
-<div style="background:#666; height:50px; ">
+<div style="background:#666; height:35px; ">
 	
 	<div class="innerSubHeader">
-		
-		
-			<div class="subMenuBox"><a A HREF="new.html">What's New</a></div>
-			<div class="subMenuBox"><a A HREF="/static/audio/pdf/A144 auction PDF.pdf">Latest Auction PDF</a></div>
-			<div class="subMenuBox" style="padding:0px;"><a A HREF="http://search.ebay.com/_W0QQsassZhawthornsantiqueaudio"><img src="{{STATIC_URL}}audio/images/site/ebay_2.png" width="75" height="50"> eBay Listings</a></div>
-			<div class="subMenuBox"><a A HREF="/static/audio/pdf/ebay auction 22 PDF.pdf">Printable eBay Listings</a></div>
-	
-		
+
+		<ul class="myMenu">
+			<li><a style="padding:0.5em 4em" HREF="new.html">What's New</a>
+		    	
+		    </li>
+		    <li><a style="padding:0.5em 4em"  HREF="/static/audio/pdf/A144 auction PDF.pdf">Latest Auction PDF</a>
+		    	
+		    </li>
+		    <li><a  style="padding:0.5em 4em" HREF="http://search.ebay.com/_W0QQsassZhawthornsantiqueaudio"><img src="{{STATIC_URL}}audio/images/site/ebay_3.png" width="75" height="50"> Listings</a>
+		      
+		    </li>
+		    <li><a style="padding:0.5em 4em"  HREF="/static/audio/pdf/ebay auction 22 PDF.pdf">Printable eBay Listings</a>
+			    
+		    </li>
+		</ul>
 	</div>
 
 
@@ -21,6 +29,7 @@
 </div>
 <div class="clear"></div>
 {%endblock%}
+
 
 {%block content%}
 
