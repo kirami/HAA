@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 UserAdmin.list_display = ('email', 'username', 'first_name', 'last_name', 'is_active', 'date_joined', 'last_login')
-
+UserAdmin.save_on_top = True
 
 class InvoiceFilter(SimpleListFilter):
     title="No Shipping"
