@@ -47,8 +47,16 @@
 				<li class="page"><a id="jumpToLotLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Go to Lot #</a></li>
 			</ul></div>
 
+
 		</div>
 		{%endif%}
+		<div style="margin-top:0px;">
+		
+			<ul class="pagination-sm pagination" style="margin-top:10px">
+				<li class="page" style="float:left"><input type="text" id="searchInput" style="width:140px; height:29px; margin-left:7px; border:1px solid #ddd; color:#999" value=""></li>
+				<li class="page"><a id="searchBox" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Search</a></li>
+			</ul>	
+		</div>
 	</div>
 	<div class="sideDiv" style="float:right">
 		<div style="font-weight:bold">Tips:</div>
@@ -58,7 +66,7 @@
 				<div style="font-size:14px;">You can sort by lot ID, title or artist by clicking on the corresponding header</div></li>
 			{%if loggedIn%}
 			<li>
-				<div>Click <a href="/audio/catalog/simpleForm/">here</a> to enter bids manually.</div>
+				<div>Use the <a href="/audio/catalog/simpleForm/">simple bid form</a> to enter bids manually.</div>
 			</li>
 			{%endif%}
 			<li>
@@ -70,6 +78,9 @@
 
 	<div class="clear"></div>
 </div>
+{%if data.search%}
+<div style="font-size:16px;"><b>Showing resuts for search: "{{data.search}}"</b></div>
+{%endif%}
 <hr style="border:1px solid black">
 
 {%endblock%}
@@ -232,6 +243,11 @@
 
 		$("#moreAuctionInfo").click(function(){
 			$( "#auctionDescription" ).dialog("open", "position", "center");
+		})
+
+		$("#searchBox").click(function(){
+			lotId = $("#searchInput").val()
+			window.location="?search="+lotId+"{%if category%}&category={{category.id}}{%endif%}"
 		})
 
 
