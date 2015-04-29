@@ -25,7 +25,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = ["dev.kirami.webfactional.com"]
+ALLOWED_HOSTS = ["dev.kirami.webfactional.com", "www.dev.kirami.webfactional.com"]
 
 #FORCE_SCRIPT_NAME = '/admin'
 

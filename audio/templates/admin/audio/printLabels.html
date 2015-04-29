@@ -71,7 +71,7 @@ td h1, td h2, td p { font-size: 12px; }
             <tr>
             {%endifequal%}
 
-            <td >{{profile.user.first_name}} {{profile.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{%if address.address_three%}{{address.address_three}}<br>{%endif%}{{address.city}} {%if address.province%}{{address.province}}{%endif%} {{address.postal_code}}<br>{{address.country}}</td>
+            <td >{{profile.user.first_name}} {{profile.user.last_name}}<br>{{address.address_one}}<br> {%if address.address_two%}{{address.address_two}}<br>{%endif%}{%if address.address_three%}{{address.address_three}}<br>{%endif%}{{address.city}} {%if address.province%}{{address.province}}{%endif%} {%if address.postal_code%}{{address.postal_code}}{%endif%}<br>{{address.country}}</td>
 
             {% ifequal forloop.counter0|modulo:3 0 %}
             <td class="separator" />
