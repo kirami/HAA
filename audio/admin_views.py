@@ -344,7 +344,10 @@ def addItem(request):
 @staff_member_required
 def printLetters(request, template, auctionId=None):
 	data = {}
-	profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False).order_by("user__last_name")
+	#profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False).order_by("user__last_name")
+	num = [1092, 1110, 1144, 1125, 1153, 1136, 1198, 1199, 1207, 1181, 1182, 1234, 1244, 1242, 1233, 1214, 1232, 1228, 1213, 1273, 1267, 1320, 1334, 1380, 1372, 1368, 1364, 1355, 1412, 1406, 1415, 1421, 1433, 1397, 1403, 1413, 1470, 1481, 1479, 1474, 1447, 1464, 1525, 1520, 1492, 1537, 1557, 1568, 1567, 1555, 1605, 1613, 1599, 1626, 1647, 1661, 1641, 1638, 1692, 1669, 1686, 1697, 1713, 1744, 1743, 1774, 1789, 1759, 1821, 1804, 1798, 1877, 1862, 1857, 1875, 1876, 1866, 1914, 1910, 1893, 1895, 1905, 1968, 1970, 1940, 1952, 2010, 2003, 2006, 1994, 1992, 1999, 2043, 2032, 2041, 2092, 2073, 2089, 2064, 2077, 2114, 2149, 2122, 2150, 2130, 2154, 1634]
+	profiles = UserProfile.objects.filter(user__in=set(num)).order_by("user__last_name")
+	
 	#profiles = UserProfile.objects.filter(id__gt=9)
 	updated = []
 	for profile in profiles:
@@ -379,8 +382,9 @@ def printLabels(request, auctionId, labelType=None):
 			users, addresses = getCourtesyBidders()
 		if labelType == "custom":
 			
-			profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False).order_by("user__last_name")
-
+			num = [1092, 1110, 1144, 1125, 1153, 1136, 1198, 1199, 1207, 1181, 1182, 1234, 1244, 1242, 1233, 1214, 1232, 1228, 1213, 1273, 1267, 1320, 1334, 1380, 1372, 1368, 1364, 1355, 1412, 1406, 1415, 1421, 1433, 1397, 1403, 1413, 1470, 1481, 1479, 1474, 1447, 1464, 1525, 1520, 1492, 1537, 1557, 1568, 1567, 1555, 1605, 1613, 1599, 1626, 1647, 1661, 1641, 1638, 1692, 1669, 1686, 1697, 1713, 1744, 1743, 1774, 1789, 1759, 1821, 1804, 1798, 1877, 1862, 1857, 1875, 1876, 1866, 1914, 1910, 1893, 1895, 1905, 1968, 1970, 1940, 1952, 2010, 2003, 2006, 1994, 1992, 1999, 2043, 2032, 2041, 2092, 2073, 2089, 2064, 2077, 2114, 2149, 2122, 2150, 2130, 2154, 1634]
+			profiles = UserProfile.objects.filter(user__in=set(num)).order_by("user__last_name")
+	
 
 
 		data["profiles"] = profiles	
@@ -1523,12 +1527,15 @@ def runReport(request, auctionId):
 
 @staff_member_required
 def test(request):
-	items = Item.objects.filter(auction=1, lot_id=32).order_by("lot_id")
-	for item in items:
-		item.thumbnail = "items/32a.JPG"
-		item.image = "items/32a.JPG"
-		item.save()
-	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+	num = [1092, 1110, 1144, 1125, 1153, 1136, 1198, 1199, 1207, 1181, 1182, 1234, 1244, 1242, 1233, 1214, 1232, 1228, 1213, 1273, 1267, 1320, 1334, 1380, 1372, 1368, 1364, 1355, 1412, 1406, 1415, 1421, 1433, 1397, 1403, 1413, 1470, 1481, 1479, 1474, 1447, 1464, 1525, 1520, 1492, 1537, 1557, 1568, 1567, 1555, 1605, 1613, 1599, 1626, 1647, 1661, 1641, 1638, 1692, 1669, 1686, 1697, 1713, 1744, 1743, 1774, 1789, 1759, 1821, 1804, 1798, 1877, 1862, 1857, 1875, 1876, 1866, 1914, 1910, 1893, 1895, 1905, 1968, 1970, 1940, 1952, 2010, 2003, 2006, 1994, 1992, 1999, 2043, 2032, 2041, 2092, 2073, 2089, 2064, 2077, 2114, 2149, 2122, 2150, 2130, 2154, 1634]
+	profiles = UserProfile.objects.filter(user__in=set(num))
+	for profile in profiles:
+		if "@" in profile.user.username and profile.user.email == "":
+			profile.user.username = profile.user.first_name + profile.user.last_name 
+			profile.email_only = False
+			profile.user.save()
+			profile.save()
+	return HttpResponse(json.dumps({"success":True, "users":str(list(profiles))}), content_type="application/json")
 
 @staff_member_required
 #add many test items quickly
