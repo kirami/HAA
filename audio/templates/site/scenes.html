@@ -1,134 +1,271 @@
-
-<HTML>
-
-<HEAD>
-<TITLE>Hawthorn's Antique Audio - Behind the Scenes</TITLE>
-</HEAD><A name="#"></A>
-
-<BODY BACKGROUND="/static/audio/images/site/10ligh04.jpg">
-<CENTER><NOBR><IMG SRC="/static/audio/images/site/phono.gif"><IMG SRC="/static/audio/images/site/haa.gif"><IMG SRC="/static/audio/images/site/record.gif"></NOBR></CENTER>
+{%extends "siteBase.html"%}
+{%block inner%}
+<style type="text/css">
+.leftPic{
+float:left;
+width: 400px;
+}
+.rightPic{
+float: right;
+width: 400px;
+}
+.scenesBox{
+margin-top:50px;
+}
+.leftPic div, .rightPic div{
+margin-top:10px;
+}
+</style>
+<H1 ALIGN=CENTER><FONT COLOR=RED>Behind the Scenes</FONT></H1>
+<CENTER>Here are some photos and ramblings of a personal nature, just for fun.</CENTER><BR>
 <BR>
-
-<TABLE WIDTH=100%>
-<TR VALIGN=TOP>
-	<TD ROWSPAN=2><NOBR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="index.html">Home</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="recauc.html">Record Auctions</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="recsup.html">Record Supplies</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="recsale.html">Records for Sale</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="phonosale.html">Phonographs for Sale</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="phonorep.html">Phonograph Repair</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="sheetmusc.html">Sheet Music for Sale</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="appraisal.html">Appraisals</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="retail.html">Retail Locations</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="faq.html">FAQ</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="buyrec.html">What Do We Buy?</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="links.html">Links</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="testimonials.html">Unsolicited Testimonials</A><BR>
-	&nbsp<IMG SRC="/static/audio/images/site/arrow.gif"><A HREF="scenes.html">Behind the Scenes</A><BR>
-
-
-</NOBR>
-	<P ALIGN=CENTER>Mailing Address:<BR> 244 Folsom Road<BR> Roseville, CA 95678 USA<BR>
-	<BR> Telephone:<BR> (916) 773-4727<BR> (10 AM to 6 PM Pacific Time, 
-	Tuesday thru Saturday)<BR><BR> Fax:<BR> (916) 773-4727<BR> 
-	(24 hours, every day)<BR><BR>Click here to <A HREF="mailto:hawthorn@thoseoldrecords.com">
-	e-mail us.</A></CENTER></P></TD>
-	
-	<TD ROWSPAN=2 WIDTH=20></TD>
-	<TD><H1 ALIGN=CENTER><FONT COLOR=RED>Behind the Scenes</FONT></H1>
-	<CENTER>Here are some photos and ramblings of a personal nature, just for fun.</CENTER><BR>
-	<BR>
-	
-	
-<CENTER>
-<IMG SRC="/static/audio/images/site/scenes/new home.jpg"><BR>
-New Home of Hawthorn's Antique Audio<BR>
-244 Folsom Road, Roseville, CA - come visit!<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/78rpms.jpg"><BR>
-My custom license plate for my car<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/kid.jpg"><BR>
-Yep, that's me - about 3 years old and<BR>
-I have no idea what the record is<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/article.jpg"><BR>
-This is me again - 1966, 20 years old<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/entertaining clients.jpg"><BR>
-It's always fun to meet new customers<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Gold Rush Days 107.jpg"><BR>
-Collector friend Scott Corbett is having fun too<BR><BR>
-<IMG sRC="/static/audio/images/site/scenes/Victorian Christmas.jpg"><BR>
-I always enjoy Christmas<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/museum.jpg"><BR>
-Tom in a corner of his museum<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/office.jpg"><BR>
-The office, where Tom is typing another auction list<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/shipping room.jpg"><BR>
-Here's the shipping room, and I'm packing your parcel of records<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Gail.jpg"><BR>
-This is Gail, who is an incredible help with the packing and shipping,
-as well as bid entry, auction typing, and just about everything else.<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/store4.jpg"><BR>
-Restocking records in the store at the Antique Trove<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/store6.jpg"><BR>
-New records for the wall displays<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/warehouse1.jpg"><BR>
-The warehouse - picking out some records for a future auction<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/warehouse2.jpg"><BR>
-Miles of aisles of records in the warehouse<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/warehouse3.jpg"><BR>
-Still more unsorted records in the warehouse<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/ARSC 2008.jpg"><BR>
-Left to right:  Paul Collenette, Martin Fisher, Tom Hawthorn,
-Kurt Nauck, Bill Klinger, Anna Marie Manuel, Virginia Hawthorn,
-and Kurt Nauck Sr. - ARSC Conference, Palo Alto CA, 2008<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Virginia City 2009.jpg"><BR>
-Tom and fellow collector/dealer Scott Corbett ask<BR>
-"How much is that doggie in the window?"<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Sherman.jpg"><BR>
-Scott Corbett, Mike Sherman, Tom Hawthorn, Mike Khanchalian, Charlie Hummel - 2010<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Mike.jpg"><BR>
-Mike Khanchalian repairing the only known Columbia Multiplex cylnder<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Hummel.jpg"><BR>
-Charlie Hummel showing the one remaining Columbia Multiplex cylinder mechanism<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Caps.jpg"><BR>
-Our booth at the 2010 CAPS Phonograph Show in Buena Park, CA<BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/ARSC1.jpg"><BR>
-Kurt Nauck, Tom Hawthorn, Scott Corbett listen to a story told by Randy Morris - ARSC 2010<BR><BR>
-
-
-</CENTER>
-
-
-<TD ROWSPAN=2 WIDTH=20></TD>
-	<TD><H1 ALIGN=CENTER><FONT COLOR=RED>Where Do Your Records Come From?</FONT></H1>
-	<CENTER>We don't have a record tree growing in the backyard, so we have to go out and find the records we list on our auctions.  Here are some pictures of collections we recently purchased so you can see what we have to go through to bring you the records you see on our auctions.</CENTER><BR>
-	<BR>
-
-<IMG SRC="/static/audio/images/site/scenes/Minnik 1.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Minnik 2.jpg"><BR><BR>	
-<IMG SRC="/static/audio/images/site/scenes/Minnik 3.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Minnik 4.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Minnik 5.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Minnik 6.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Minnik 7.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Minnik 8.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 01.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 02.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 03.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 04.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 05.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 06.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 07.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 08.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 09.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/olmsted 10.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 11.jpg"><BR><BR>
-<IMG SRC="/static/audio/images/site/scenes/Olmsted 12.jpg"><BR><BR>
-
-
-</TABLE>
-
-
-<A>Return to <A HREF="#">top of page</A> 
-</BODY>
-</HTML>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/new home.jpg"/>
+        <div>
+            New Home of Hawthorn's Antique Audio<br>
+            244 Folsom Road, Roseville, CA - come visit!
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/78rpms.jpg"/>
+        <div>
+            My custom license plate for my car
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/kid.jpg">
+        <div>
+            Yep, that's me - about 3 years old and<BR>
+            I have no idea what the record is
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/article.jpg">
+        <div>
+            This is me again - 1966, 20 years old
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/entertaining clients.jpg">
+        <div>
+            It's always fun to meet new customers
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/Gold Rush Days 107.jpg">
+        <div>
+            Collector friend Scott Corbett is having fun too
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG sRC="/static/audio/images/site/scenes/Victorian Christmas.jpg">
+        <div>
+            I always enjoy Christmas
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/museum.jpg">
+        <div>
+            Tom in a corner of his museum
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/office.jpg">
+        <div>
+            The office, where Tom is typing another auction list
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/shipping room.jpg">
+        <div>
+            Here's the shipping room, and I'm packing your parcel of records
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/Gail.jpg">
+        <div>
+            This is Gail, who is an incredible help with the packing and shipping,
+            as well as bid entry, auction typing, and just about everything else.
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/store4.jpg">
+        <div>
+            Restocking records in the store at the Antique Trove
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/store6.jpg">
+        <div>
+            New records for the wall displays
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/warehouse1.jpg">
+        <div>
+            The warehouse - picking out some records for a future auction
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/warehouse2.jpg">
+        <div>
+            Miles of aisles of records in the warehouse
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/warehouse3.jpg">
+        <div>
+            Still more unsorted records in the warehouse
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/ARSC 2008.jpg">
+        <div>
+            Left to right:  Paul Collenette, Martin Fisher, Tom Hawthorn,
+            Kurt Nauck, Bill Klinger, Anna Marie Manuel, Virginia Hawthorn,
+            and Kurt Nauck Sr. - ARSC Conference, Palo Alto CA, 2008
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/Virginia City 2009.jpg">
+        <div>
+            Tom and fellow collector/dealer Scott Corbett ask<BR>
+            "How much is that doggie in the window?"
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/Sherman.jpg">
+        <div>
+            Scott Corbett, Mike Sherman, Tom Hawthorn, Mike Khanchalian, Charlie Hummel - 2010
+        </div>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/Mike.jpg">
+        <div>
+            Mike Khanchalian repairing the only known Columbia Multiplex cylnder
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/Hummel.jpg"><BR>
+        Charlie Hummel showing the one remaining Columbia Multiplex cylinder mechanism
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/Caps.jpg"><BR>
+        Our booth at the 2010 CAPS Phonograph Show in Buena Park, CA
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox" style="margin-bottom:50px">
+    <IMG SRC="/static/audio/images/site/scenes/ARSC1.jpg">
+    <div>
+        Kurt Nauck, Tom Hawthorn, Scott Corbett listen to a story told by Randy Morris - ARSC 2010
+    </div>
+</div>
+<H1 ALIGN=CENTER><FONT COLOR=RED>Where Do Your Records Come From?</FONT></H1>
+<CENTER>We don't have a record tree growing in the backyard, so we have to go out and find the records we list on our auctions.  Here are some pictures of collections we recently purchased so you can see what we have to go through to bring you the records you see on our auctions.</CENTER><BR>
+<BR>
+<div class="scenesBox">
+    <div class="leftPic">
+        <IMG SRC="/static/audio/images/site/scenes/Minnik 1.jpg"/>
+    </div>
+    <div class="rightPic">
+        <IMG SRC="/static/audio/images/site/scenes/Minnik 2.jpg"/>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Minnik 3.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Minnik 4.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Minnik 5.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Minnik 6.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Minnik 7.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Minnik 8.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 01.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 02.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 03.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 04.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 05.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 06.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 07.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 08.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 09.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 10.jpg"></div>
+</div>
+<div class="clear"></div>
+<div class="scenesBox">
+    <div class="leftPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 11.jpg"></div>
+    <div class="rightPic">
+    <IMG SRC="/static/audio/images/site/scenes/Olmsted 12.jpg"></div>
+</div>
+<div class="clear"></div>
+<div style="margin:25px 0px;"><A>Return to <A HREF="#">top of page</A></div>
+{%endblock%}
