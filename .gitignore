@@ -2,7 +2,7 @@ importData.csv
 *.log
 *.pyc
 *.wsgi
-
+settings.py
 
 /hathorn/settings.py
 

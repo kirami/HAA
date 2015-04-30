@@ -21,11 +21,11 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 SECRET_KEY = '_p!o4c12#x3v8$cor#&vdpxddi1933e5q)9y0n@jp4@9es9!=d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["www.thoseoldrecords.com","www.kirami.webfactional.com","thoseoldrecords.com", "kirami.webfactional.com"]
 
 #FORCE_SCRIPT_NAME = '/admin'
 
@@ -99,7 +99,7 @@ THUMBNAIL_ALIASES = {
 }
 
 
-EMAIL_URL = "http://kirami.webfactional.com/audio/"
+EMAIL_URL = "http://thoseoldrecords.com/audio/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
