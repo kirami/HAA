@@ -21,9 +21,9 @@ LOGIN_REDIRECT_URL = "/audio/accounts/profile"
 SECRET_KEY = '_p!o4c12#x3v8$cor#&vdpxddi1933e5q)9y0n@jp4@9es9!=d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ["dev.kirami.webfactional.com"]
 
@@ -88,7 +88,9 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'audio', 'templates'),
 )
 
+
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 EMAIL_URL = "http://kirami.webfactional.com/audio/"
 
 THUMBNAIL_ALIASES = {

@@ -402,7 +402,7 @@ def importUserEmail(request):
 		emailList = []
 		noEmailList = []
 		#pull only auth user ids greater than this.  Will most likely be the first user's id that was imported 
-		firstId = 5
+		firstId = 2009
 		try:
 			users = User.objects.filter(id__gte=firstId)
 			for user in users:
@@ -413,7 +413,7 @@ def importUserEmail(request):
 						emailData={}
 						emailData["user"] = user
 						emailData["password"] = user.username + str(profile.id)	
-						emailData["url"] = "http://haa/audio/accounts/confirm/" + str(profile.confirmation_code) + "/" + user.username
+						emailData["url"] = "http://thoseoldrecords.com/audio/accounts/confirm/" + str(profile.confirmation_code) + "/" + user.username
 						msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "newSystem")
 						messages.append(msg)
 						emailList.append(user.email)
@@ -425,6 +425,7 @@ def importUserEmail(request):
 			logger.error("user ids without email: %s" % noEmailList)
 			data["emailList"] =  emailList
 			data["problemEmails"] = noEmailList
+			logger.info("length emails : %s" % str(len(messages)))
 			#sendBulkEmail(messages)
 		except Exception as e:
 			logger.error("error sending new user emails: %s" % e)

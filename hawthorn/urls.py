@@ -91,11 +91,11 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^audio/', include('audio.urls')),
-    #url(r'^/', {'template_name': 'home.html'}),
+
     url(r'^$', views.index, name='index'),
 
     url(r'^(?P<page>.+\.html)$', views.StaticView.as_view()),
-    
+    url(r'^bids/$',  TemplateView.as_view(template_name='oldBids.html')),
 
 
 

@@ -65,12 +65,13 @@ def index(request):
 	return HttpResponse(t.render(c), content_type="text/html")
 
 
-
+@login_required
 def simpleForm(request):
 	form = None
-	data = None
+	data = {}
 	now = date.today()
 	currentAuction = getCurrentAuction()
+	data["auction"] = currentAuction
 	if(request.user.is_authenticated()):
 		
 		if request.method == "POST":
@@ -130,7 +131,7 @@ def simpleForm(request):
 			form = BidSubmitForm(auctionId = currentAuction.id)
 	else:
 		return redirect("catalog")
-	return render_to_response('simpleForm.html', {"form":form}, context_instance=RequestContext(request))
+	return render_to_response('simpleForm.html', {"form":form, "data": data}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -256,7 +257,7 @@ def register(request):
 def send_registration_confirmation(user):
 	p = UserProfile.objects.get(user=user)
 	emailData={}
-	emailData["url"] = "http://thoseoldrecoreds.com/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
+	emailData["url"] = "http://thoseoldrecords.com/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
 	emailData["user"]=user
 	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
 	sendEmail(msg)
@@ -676,7 +677,7 @@ def catalog(request, auctionId = None):
 
 		currentAuctionId = currentAuction.id
 	try:
-		logger.info("1")
+		#logger.info("1")
 		#if after close but in 2nd chance
 		if isSecondChance() or isBetweenSegments():
 			logger.info("2")
