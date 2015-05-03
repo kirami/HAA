@@ -25,7 +25,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = ["dev.kirami.webfactional.com"]
+ALLOWED_HOSTS = ["www.thoseoldrecords.com","www.kirami.webfactional.com","thoseoldrecords.com", "kirami.webfactional.com"]
 
 #FORCE_SCRIPT_NAME = '/admin'
 
@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'audio',
     'django_extensions',
-    'easy_thumbnails',
+    'easy_thumbnails'
     #'south',
 )
 
@@ -65,7 +65,7 @@ WSGI_APPLICATION = 'hawthorn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dev',
+        'NAME': 'hawthorn',
         'USER': 'kirami',
         'PASSWORD':'lfn1k1taWF',
     }
@@ -88,8 +88,9 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'audio', 'templates'),
 )
 
-
-EMAIL_URL = "http://kirami.webfactional.com/audio/"
+STATICFILES_DIRS = (
+    '/home/kirami/webapps/hawthorn/hawthorn/static/',
+)
 
 THUMBNAIL_ALIASES = {
     '': {
@@ -97,16 +98,14 @@ THUMBNAIL_ALIASES = {
     },
 }
 
-STATICFILES_DIRS = (
-    '/home/kirami/webapps/dev/hawthorn/static/',
-)
 
+EMAIL_URL = "http://thoseoldrecords.com/audio/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 ADMIN_MEDIA_PREFIX = '/static/admin/'
-STATIC_URL = 'http://dev.kirami.webfactional.com/static/'
-STATIC_ROOT = '/home/kirami/webapps/static_dev/'
+STATIC_URL = 'http://kirami.webfactional.com/static/'
+STATIC_ROOT = '/home/kirami/webapps/static/'
 IMAGES_ROOT = STATIC_ROOT + "audio/images/"
 IMAGES_URL = STATIC_URL + "audio/images"
 
@@ -116,10 +115,10 @@ MEDIA_ROOT = IMAGES_ROOT
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.webfaction.com'
-EMAIL_HOST_USER = 'kirami'
-EMAIL_HOST_PASSWORD = 'lfn1k1taWF'
-DEFAULT_FROM_EMAIL = 'kirami@kirami.webfactional.com'
-SERVER_EMAIL = 'kirami@kirami.webfactional.com'
+EMAIL_HOST_USER = 'haamail'
+EMAIL_HOST_PASSWORD = 'victor6'
+DEFAULT_FROM_EMAIL = 'webmaster@thoseoldrecords.com'
+SERVER_EMAIL = 'webmaster@thoseoldrecords.com'
 EMAIL_PORT = 587
 
 CA_TAX = 0.0975
@@ -150,7 +149,7 @@ LOGGING = {
         'file': {
         'level': 'INFO',
         'class': 'logging.FileHandler',
-        'filename': '/home/kirami/webapps/dev/hawthorn/logs/debug.log',
+        'filename': '/home/kirami/webapps/hawthorn/hawthorn/logs/debug.log',
         'formatter': 'verbose'
         },
     },
@@ -166,3 +165,4 @@ LOGGING = {
         },
     }
 }
+

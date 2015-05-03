@@ -396,7 +396,7 @@ def printLabels(request, auctionId, labelType=None):
 #send email after importing user from csv
 def importUserEmail(request):
 	data = {}
-
+	"""
 	if request.method == 'POST':
 		messages = []
 		emailList = []
@@ -430,7 +430,7 @@ def importUserEmail(request):
 		except Exception as e:
 			logger.error("error sending new user emails: %s" % e)
 			return HttpResponse(json.dumps({"success":False, "data": data}), content_type="application/json")
-
+	"""
 	return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
 
 @staff_member_required
@@ -448,6 +448,7 @@ def importUserCSV(request):
 	data = {}
 	i=0
 	errors={}
+	"""
 	with open("/home/kirami/webapps/dev/hawthorn/HAA-addresses-fixed.csv") as f:
 		reader = csv.reader(f)
 		for row in reader:
@@ -577,7 +578,7 @@ def importUserCSV(request):
 			i=i+1
 	
 	logger.error("These users had issues: %s" % errors)
-	
+	"""
 	return errors
 
 @staff_member_required
