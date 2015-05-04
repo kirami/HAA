@@ -13,7 +13,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(__file__))) 
 
-LOGIN_REDIRECT_URL = "/audio/accounts/profile"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -88,8 +88,6 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'audio', 'templates'),
 )
 
-
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_URL = "http://kirami.webfactional.com/audio/"
 
