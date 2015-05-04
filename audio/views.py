@@ -424,12 +424,18 @@ def profile(request):
 
 @login_required
 def userInfo(request):
-	
+	logger.info("in user info")
 	if request.user.is_authenticated():
+		email = request.user.email
 
 		if request.method == 'POST':
 			form = UserForm(request.POST, instance=request.user)
 			if form.is_valid():
+				if email != form.cleaned_data["email"]:
+					up = UserProfile.objects.get(user = request.user)
+					
+					up.verified = False
+					up.save()
 				new_user = form.save()
 				return render(request, "userInfo.html", {'form': form, "success":True})
 		else:
