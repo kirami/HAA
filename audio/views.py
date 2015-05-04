@@ -433,8 +433,9 @@ def userInfo(request):
 			if form.is_valid():
 				if email != form.cleaned_data["email"]:
 					up = UserProfile.objects.get(user = request.user)
-					
+					confirmation_code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(33))
 					up.verified = False
+					up.confirmation_code = confirmation_code
 					up.save()
 				new_user = form.save()
 				return render(request, "userInfo.html", {'form': form, "success":True})
