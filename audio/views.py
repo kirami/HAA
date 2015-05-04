@@ -424,7 +424,7 @@ def userInfo(request):
 			form = UserForm(request.POST, instance=request.user)
 			if form.is_valid():
 				new_user = form.save()
-				return render(request, "userInfo.html", {'form': form,})
+				return render(request, "userInfo.html", {'form': form, "success":True})
 		else:
 			form = UserForm(instance=request.user)
 		return render(request, "userInfo.html", {'form': form,})
