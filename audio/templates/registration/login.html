@@ -6,24 +6,6 @@
     <p class="successError">Sorry, that's not a valid username or password</p>
   {% endif %}
 
-<<<<<<< HEAD
-<div>Please note that your login information is <b>case sensitive</b></div><br>
-  <form action="" method="post">
-  {% csrf_token %}
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
-    <br>
-    <input type="submit" value="login" />
-    {%if next%}
-    <input type="hidden" name="next" value="{{ next }}" />
-    {%else%}
-    <input type="hidden" name="next" value="/audio/accounts/profile" />
-    {%endif%}
-  </form>
-=======
 <div>Please note that your login information is <b>case sensitive</b>.</div><br>
   <div>
     <form action="" method="post">
@@ -46,7 +28,9 @@
   <div style="margin-top:20px;">If you know your password and want to change it, login first and go to Account -> View Login Info and hit the change password link.</div>
   
   <div style="margin-top:10px;">Forgot your password?  <a href="/audio/accounts/resetPassword">Reset it here</a>.  We will send you a temporary password and you can follow the instructions above to change it to your choice.</div>
->>>>>>> master
+
+  <div style="margin-top:20px;">You can also view the <a target="_blank" href="https://www.youtube.com/watch?v=0r-9nbb9Ems">video tutorial</a> on how to change/reset your password</div>
+
 
   </div>
 
