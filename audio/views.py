@@ -15,6 +15,7 @@ from audio.forms import ContactForm, BidSubmitForm, UserCreateForm, UserForm
 from audio.models import Address, Item, Bid, Auction, UserProfile, Invoice, Category, ItemType
 
 from datetime import datetime, date  
+from django.conf import settings
 from audio.utils import *
 from audio.mail import *
 
@@ -257,7 +258,7 @@ def register(request):
 def send_registration_confirmation(user):
 	p = UserProfile.objects.get(user=user)
 	emailData={}
-	emailData["url"] = "http://thoseoldrecords.com/audio/accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
+	emailData["url"] = settings.EMAIL_URL+"accounts/confirm/" + str(p.confirmation_code) + "/" + user.username
 	emailData["user"]=user
 	msg = getEmailMessage(user.email,"Welcome to Hawthorn's Antique Audio!",{"data":emailData}, "verifyEmail")
 	sendEmail(msg)
@@ -279,11 +280,11 @@ def resetPassword(request):
 	data = {}
 	if request.POST:
 		try:
-			emailAddress = request.POST.get("email")
-			users = User.objects.filter(email = emailAddress)
+			username = request.POST.get("username")
+			users = User.objects.filter(username = username)
 			if len(users) < 1:
-				data["errorMsg"]="That email hasn't been registered with us."
-				logger.error("tried to reset unregistered account: %s" % emailAddress)
+				data["errorMsg"]="That username hasn't been registered with us."
+				logger.error("tried to reset unregistered account: %s" % username)
 				return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))	
 			user = users[0]
 			password = User.objects.make_random_password()
@@ -306,23 +307,29 @@ def resetPassword(request):
 	return render_to_response('resetPassword.html', {"data":data}, context_instance=RequestContext(request))					
 
 def confirm(request, confirmation_code, username):
-	users = UserProfile.objects.filter(user__username=username)
-	user = User.objects.get(username = username)
-	profile = None
 	data = {}
-	if len(users)> 0:
-		profile = users[0]
+	try:
+		users = UserProfile.objects.filter(user__username=username)
+		user = User.objects.get(username = username)
+		profile = None
 		
-		if profile.confirmation_code == confirmation_code:
-			profile.verified = True
-			profile.save()
-			#auth_login(request,user)
-			verified = profile.verified
-		else:
-			data["errorMsg"] = "The information you provided is not correct."
-
+		if len(users)> 0:
+			profile = users[0]
+			
+			if profile.confirmation_code == confirmation_code:
+				profile.verified = True
+				profile.save()
+				#auth_login(request,user)
+				verified = profile.verified
+			else:
+				data["errorMsg"] = "The information you provided is not correct."
+		data["user"] = user
 	
-	data["user"] = user
+
+	except Exception as e:
+		logger.error("error in confirm %s" % e)
+		data["errorMsg"] = "We could not verify your account, please contact us."
+		return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
 	return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
 
 @login_required
