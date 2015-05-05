@@ -13,85 +13,77 @@
 <link rel="icon" type="image/png" href="/static/audio/images/site/favicon.ico">
 <body  class="bodyClass" style="background-image: url('/static/audio/images/site/grayBackground.jpg') !important;">
 
-<!--
-<center><img style="margin-bottom:30px" src="http://www.thoseoldrecords.com/hmv.gif"></center>-->
 
-<div >
-	<div id="header" style="background-image: url('/static/audio/images/site/white-background.png');">
+<div id="container">
+	<div class="header2"  style="background-image: url('/static/audio/images/site/white-background.png');">
 		<!--img src="https://www.anaplan.com/wp-content/uploads/2013/10/anaplan_normal1.png">-->
 
-
-		<div class="headerLeft">
-			<a href="/"><div>
-				<img src="/static/audio/images/site/phono.gif" width="50px;">
-				<img alt="Hawthorn's Antique Audio" src="/static/audio/images/site/haa.gif" width="375px">	
-			</div><div id="homeTxt">Home</div></a>
-			<div class="clear"></div>
-		</div>
- 
-
-
-		<div style="margin: 0 auto; float:right; ">
-			{% if user.is_authenticated %}
-				<div class="headerLink" >Hello {{user.first_name}}!</div>
-				<div class="headerLink" >
-					<a  href="/audio/accounts/logout" id="logoutLink">Logout</a>
-				</div>	
-				<div class="headerLink"  >
-					<a  href="/audio/accounts/profile" id='accountLink'>Account</a>	
-				</div>
-				<div class="headerLink" >
-					<a  href="/audio/catalog" id='catalogLink'>Catalog</a>	
-				</div>
-				
-				
-				<!--
-				<button class="button" onclick="javascript:window.location.href = '/audio/accounts/logout'">Logout</button>			
-				<button class="button" onclick="javascript:window.location.href = '/audio/accounts/profile'">Account</button>
-				<button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>-->
-			{% else %}
-				<div class="headerLink" >
-					<a  href="/audio/accounts/login" id="loginLink">Log In</a>
-				</div>	
-				<div class="headerLink"  >
-					<a  href="/audio/accounts/register" id="registerLink">Register</a>	
-				</div>
-				<div class="headerLink" >
-					<a  href="/audio/catalog" id="catalogLink">Catalog</a>	
-				</div>
-			  <!--
-			  <button class="button" onclick="javascript:window.location.href = '/audio/accounts/login'">Log in</button>
-			  <button class="button" onclick="javascript:window.location.href = '/audio/accounts/register'">Register</button>
-			  <button class="button" onclick="javascript:window.location.href = '/audio/catalog'">Catalog</button>
-			  -->
-			{% endif %}
-		</div>
-	</div>
-	<div style="clear:both"></div>
-	<div id="content">
-	{%block headerMenu%}
-	{%endblock%}
-
-		<div id="main">
-		{% block content %}
-
-
-
-
-		{% endblock %}
-
-			<div class="clear"></div>
-		</div>
-		{%block footer%}
-		<div id="footer" style="background-image: url('/static/audio/images/site/white-background.png');">
-			<div id="footerInner">
-				<div style="padding-top:15px;">Need help?  Contact us at <a href="mailto:webmaster@thoseolrecords.com">webmaster@thoseoldrecords.com</a></div>	
+		<div id="header">
+			<div class="headerLeft">
+				<a href="/"><div>
+					<img src="/static/audio/images/site/phono.gif" width="50px;">
+					<img alt="Hawthorn's Antique Audio" src="/static/audio/images/site/haa.gif" width="375px">	
+				</div><div id="homeTxt">Home</div></a>
+				<div class="clear"></div>
 			</div>
-			
+			<div style="margin: 0 auto; float:right; ">
+				{% if user.is_authenticated %}
+					<div class="headerLink" >Hello {{user.first_name}}!</div>
+					<div class="headerLink" >
+						<a  href="/audio/accounts/logout" id="logoutLink">Logout</a>
+					</div>	
+					<div class="headerLink"  >
+						<a  href="/audio/accounts/profile" id='accountLink'>Account</a>	
+					</div>
+					<div class="headerLink" >
+						<a  href="/audio/catalog" id='catalogLink'>Catalog</a>	
+					</div>
+
+				{% else %}
+					<div class="headerLink" >
+						<a  href="/audio/accounts/login" id="loginLink">Log In</a>
+					</div>	
+					<div class="headerLink"  >
+						<a  href="/audio/accounts/register" id="registerLink">Register</a>	
+					</div>
+					<div class="headerLink" >
+						<a  href="/audio/catalog" id="catalogLink">Catalog</a>	
+					</div>
+
+				{% endif %}
+			</div>
 		</div>
-		{%endblock%}
 	</div>
-	<div class="clear"></div>
+	
+	<div class="row">
+		<div class="content">
+		{%block headerMenu%}
+		{%endblock%}
+
+			<div id="main">
+				{% block content %}
+				
+
+				{% endblock %}
+
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+
+		</div>
+	</div>
+	
+	{%block footer%}
+
+
+
+	<div class="footer" style="background-image: url('/static/audio/images/site/white-background.png');">
+		<div id="footerInner">
+			<div style="padding-top:15px;">Need help?  Contact us at <a href="mailto:webmaster@thoseolrecords.com">webmaster@thoseoldrecords.com</a></div>	
+		</div>
+		
+	</div>
+	{%endblock%}
 
 </div>
 
