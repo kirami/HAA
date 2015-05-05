@@ -273,3 +273,7 @@ overflow: auto;
    cursor: pointer;
 }
 
+#loginForm label{
+   width:80px !important;
+}
+
