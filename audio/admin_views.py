@@ -600,6 +600,8 @@ def createUser(request):
 
 			up = UserProfile.objects.get(user = user)
 			up.verified = True
+			#confirmation_code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(33))
+            #profile.confirmation_code = confirmation_code
 			up.save()
 			
 			#create address object for them.
@@ -1074,7 +1076,7 @@ def invoices(request, auctionId):
 
 def notExcluded(up, emailOnly=False):
 	if emailOnly:
-		return not up.quiet and not up.deadbeat and up.email_only
+		return not up.quiet and not up.deadbeat and up.email_only and up.verified
 	else:	
 		return not up.quiet and not up.deadbeat
 
