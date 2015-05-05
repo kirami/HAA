@@ -114,6 +114,7 @@ LOGIN_URL = "/audio/accounts/login/"
 
 MEDIA_ROOT = IMAGES_ROOT
 
+EMAIL_URL = "http://dev.kirami.webfactional.com/audio/"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.webfaction.com'
 EMAIL_HOST_USER = 'kirami'
