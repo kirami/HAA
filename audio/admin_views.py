@@ -400,7 +400,7 @@ def printLabels(request, auctionId, labelType=None):
 #send email after importing user from csv
 def importUserEmail(request):
 	data = {}
-
+	"""
 	if request.method == 'POST':
 		messages = []
 		emailList = []
@@ -434,7 +434,7 @@ def importUserEmail(request):
 		except Exception as e:
 			logger.error("error sending new user emails: %s" % e)
 			return HttpResponse(json.dumps({"success":False, "data": data}), content_type="application/json")
-
+	"""
 	return HttpResponse(json.dumps({"success":True, "data": data}), content_type="application/json")
 
 @staff_member_required
@@ -452,6 +452,7 @@ def importUserCSV(request):
 	data = {}
 	i=0
 	errors={}
+	"""
 	with open("/home/kirami/webapps/dev/hawthorn/HAA-addresses-fixed.csv") as f:
 		reader = csv.reader(f)
 		for row in reader:
@@ -581,7 +582,7 @@ def importUserCSV(request):
 			i=i+1
 	
 	logger.error("These users had issues: %s" % errors)
-	
+	"""
 	return errors
 
 @staff_member_required
@@ -603,6 +604,8 @@ def createUser(request):
 
 			up = UserProfile.objects.get(user = user)
 			up.verified = True
+			#confirmation_code = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(33))
+            #profile.confirmation_code = confirmation_code
 			up.save()
 			
 			#create address object for them.
@@ -1077,7 +1080,7 @@ def invoices(request, auctionId):
 
 def notExcluded(up, emailOnly=False):
 	if emailOnly:
-		return not up.quiet and not up.deadbeat and up.email_only
+		return not up.quiet and not up.deadbeat and up.email_only and up.verified
 	else:	
 		return not up.quiet and not up.deadbeat
 
@@ -1410,6 +1413,7 @@ def getRunningBidTotal(request, auctionId):
 	currentItemId = 0
 	index = 0
 	total = 0
+	items = []
 	#logger.error("bids: %s" % bids)
 	for bid in bids:
 		if currentItemId != bid.item_id:
@@ -1425,9 +1429,11 @@ def getRunningBidTotal(request, auctionId):
 
 		if index < quantity:
 			total = total + bid.amount
+			items.append(bid)
 			#logger.error("bid: %s total: %s"  % (bid.amount, total))
 		
 		index = index + 1
+	data["bids"]=items
 	data["total"] = total
 	return render_to_response('admin/audio/runningTotal.html', {"data":data}, context_instance=RequestContext(request))	
 

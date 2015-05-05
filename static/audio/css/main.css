@@ -22,6 +22,16 @@ body{
    float: right;
 }
 
+.headerLeft a:hover, .headerLeft a:focus{
+   color: white;
+}
+
+
+.subMenuBox{
+   float:left;
+   color:white;
+}
+
 .clickable{
    cursor: pointer;
 }
@@ -74,7 +84,7 @@ overflow: auto;
 #header{
    padding-top:20px;
    padding-right:20px;
-   height:75px;
+   height:85px;
    padding-bottom:15px;
 
 }
@@ -271,5 +281,30 @@ overflow: auto;
 }
 .rulesHeaderItem a{
    cursor: pointer;
+}
+
+#loginForm label{
+   width:80px !important;
+}
+
+
+#homeTxt{
+   width:50px;
+   margin-left:60px;
+   color:#428bca !important;
+
+}
+
+#homeTxt:hover{
+   color:#428bca !important;
+}
+
+#footer{
+   height:75px;
+
+}
+
+#footerInner{
+   max-width:1000px; margin: 0 auto;
 }
 
