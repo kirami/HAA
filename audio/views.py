@@ -424,7 +424,7 @@ def profile(request):
 
 @login_required
 def userInfo(request):
-	logger.info("in user info")
+	#logger.info("in user info")
 	if request.user.is_authenticated():
 		email = request.user.email
 
