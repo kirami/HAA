@@ -55,6 +55,8 @@ urlpatterns = patterns('',
     url(r'^rules/$',  TemplateView.as_view(template_name='rules.html')),
     url(r'^conditionCodes/$',  TemplateView.as_view(template_name='conditionCodes.html')),
     url(r'^labelAbbreviations/$',  TemplateView.as_view(template_name='labelAbbreviations.html')),
+    
+    url(r'^accounts/confirm/(?P<confirmation_code>\w+)/(?P<username>\w+)$', views.confirm, name='confirm'),
     url(r'^accounts/confirm/(?P<confirmation_code>\w+)/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', views.confirm, name='confirm'),
 
 )
