@@ -10,7 +10,7 @@
 <script src="{{ STATIC_URL }}audio/js/esimakin-twbs-pagination-fbdd6fc/jquery.twbsPagination.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 <input type="hidden" id="auctionId" name="auctionId" value="{{auctionId}}">
-
+<link rel="icon" type="image/png" href="/static/audio/images/site/favicon.ico">
 <body  class="bodyClass" style="background-image: url('/static/audio/images/site/grayBackground.jpg') !important;">
 
 <!--
@@ -25,7 +25,8 @@
 			<a href="/"><div>
 				<img src="/static/audio/images/site/phono.gif" width="50px;">
 				<img alt="Hawthorn's Antique Audio" src="/static/audio/images/site/haa.gif" width="375px">	
-			</div></a>
+			</div><div id="homeTxt">Home</div></a>
+			<div class="clear"></div>
 		</div>
  
 
@@ -78,10 +79,20 @@
 
 
 		{% endblock %}
+
+			<div class="clear"></div>
 		</div>
-		<div class="clear"></div>
+		{%block footer%}
+		<div id="footer" style="background-image: url('/static/audio/images/site/white-background.png');">
+			<div id="footerInner">
+				<div style="padding-top:15px;">Need help?  Contact us at <a href="mailto:webmaster@thoseolrecords.com">webmaster@thoseoldrecords.com</a></div>	
+			</div>
+			
+		</div>
+		{%endblock%}
 	</div>
 	<div class="clear"></div>
+
 </div>
 
 </body>
