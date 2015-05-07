@@ -9,8 +9,12 @@
 
   <p class="header" style="text-align:center">Welcome, {{ user.first_name }}. Thanks for logging in.</p>
 {%if data.addressMsg%}<div style="margin-bottom:10px; text-align:center" class="successError">We don't have your address information.  You cannot bid without this, please fill it out <a href="../contact">here</a>.</div><div class="clear"></div> {%endif%}
+  {%if data.needEmail%}
+  <div class="successError" style="text-align:center">We do not have your email on file, please fill it out <a href="/audio/accounts/userInfo">here</a> so we can send you a verification email.</div>
+  {%else%}
   {%if data.needVerified%}
   <div class="successError" style="margin-bottom:10px">You must verify your email to bid.  Please check your email.  Click <a href="/audio/accounts/verifyEmail/">here</a> to send another verification email.</div>
+  {%endif%}
   {%endif%}
   <div id="profileList">
   <div style="height:50px;"><a href="../contact" class="">View Contact Info</a></div>
