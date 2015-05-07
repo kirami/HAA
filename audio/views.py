@@ -265,9 +265,13 @@ def send_registration_confirmation(user):
 
 
 def verifyEmail(request):
+	data = {}
 	if(request.user.is_authenticated()):
+		if not request.user.email:
+			data["needEmail"] = True
+			return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
+		
 		send_registration_confirmation(request.user)
-		data = {}
 		data["user"] = request.user
 		data["resent"]=True
 		#logger.info("resent")
@@ -417,6 +421,7 @@ def profile(request):
 		shipping = Address.objects.filter(upShipping__user=request.user)
 		billing = Address.objects.filter(upBilling__user=request.user)
 		profile = UserProfile.objects.get(user=request.user)
+		data["needEmail"] = not request.user.email 
 		data["needVerified"]= not profile.verified
 		if len(shipping) < 1 or len(billing) < 1:
 			data["addressMsg"]=True
@@ -437,6 +442,7 @@ def userInfo(request):
 					up.verified = False
 					up.confirmation_code = confirmation_code
 					up.save()
+					send_registration_confirmation(request.user)
 				new_user = form.save()
 				return render(request, "userInfo.html", {'form': form, "success":True})
 		else:

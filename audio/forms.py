@@ -32,10 +32,12 @@ class ItemForm(ModelForm):
         model = Item
 
 class UserForm(ModelForm):
+    email = EmailField(required=True)
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email']
-
+       
 
 class UserCreateForm(UserCreationForm):
     email = EmailField(required=True)

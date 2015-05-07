@@ -2,7 +2,9 @@
 
 
 {% block content %}
-
+	{%if data.needEmail%}
+	<div class="successError" style="text-align:center">We do not have your email on file, please fill it out <a href="/audio/accounts/userInfo">here</a> so we can send you a verification email.</div>
+{%else%}
 	{%if data.resent%}
 		<div class="successMsg" style="text-align:center">We have resent you a confirmation email.</div>
 	{%else%}
@@ -14,6 +16,7 @@
 	{%endif%}
 {%endif%}
 
+{%endif%}
 
 
 {% endblock %}
