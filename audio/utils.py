@@ -92,6 +92,14 @@ def isSecondChance():
 
 #user utils
 
+def itemSearch(items, search):
+	return items.filter(Q(name__icontains=search) | Q(label__name__icontains=search) \
+				| Q(artist__icontains=search) | Q(record_number__icontains=search) | \
+				Q(name_two__icontains=search)  | Q(label__abbreviation__icontains=search)  \
+				| Q(category__name__icontains=search) | Q(category__description__icontains=search) \
+				| Q(notes__icontains=search) | Q(notes_two__icontains=search) \
+				| Q(artist_two__icontains=search) | Q(record_number_two__icontains=search)) 
+
 def usersWithoutAddress():
 	return User.objects.filter(address=None)
 
