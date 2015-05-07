@@ -442,6 +442,7 @@ def userInfo(request):
 					up.verified = False
 					up.confirmation_code = confirmation_code
 					up.save()
+					send_registration_confirmation(request.user)
 				new_user = form.save()
 				return render(request, "userInfo.html", {'form': form, "success":True})
 		else:
