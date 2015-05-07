@@ -14,6 +14,9 @@ logger = logging.getLogger(__name__)
 
 def sendEmail(msg):
 	try:
+		if not settings.ALLOW_EMAIL:
+			logger.info("sending email is set to disallow")
+			return
 		msg.send()
 	except Exception as e:
 		logger.error("send email error: %s" % e)
@@ -21,6 +24,10 @@ def sendEmail(msg):
 
 def sendBulkEmail(messages):
 	try:
+		if not settings.ALLOW_EMAIL:
+			logger.info("sending email is set to disallow")
+			return
+
 		connection = mail.get_connection()   # Use default email connection
 		connection.send_messages(messages)
 	except Exception as e:

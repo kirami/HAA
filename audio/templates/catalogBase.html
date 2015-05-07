@@ -70,6 +70,18 @@
 
 	<div class="clear"></div>
 </div>
+<<<<<<< Updated upstream
+=======
+{%if data.search and not data.noResults%}
+<div style="font-size:16px;"><b>Showing resuts for search: "{{data.search}}"</b></div>
+<div><a href="/audio/catalog">clear search...</a></div>
+{%endif%}
+{%if data.noResults%}
+<div style="font-size:16px;"><b>We did not find any results for search: "{{data.search}}"</b></div>
+<div><a href="/audio/catalog">clear search...</a></div>
+
+{%endif%}
+>>>>>>> Stashed changes
 <hr style="border:1px solid black">
 
 {%endblock%}
@@ -136,7 +148,7 @@
 		        startPage:{{number}},
 		        onPageClick: function (event, page) {
 		        	
-		        	window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}"
+		        	window.location="?page="+page+"{%if category%}&category={{category.id}}{%endif%}{%if sort%}&sort={{sort}}{%endif%}{%if data.search%}&search={{data.search}}{%endif%}"
 		        }
 		    });
 

@@ -82,7 +82,7 @@ class ItemType(models.Model):
         
 class Item(models.Model):
 	#TODO fix requireds
-	label = models.ForeignKey(Label, null = True, blank=True)
+	label = models.ForeignKey(Label, null = True, blank=True, related_name="itemLabel")
 	artist = models.CharField(max_length=400, null = True, blank = True)
 	artist_two = models.CharField(max_length=400, null = True, blank = True)
 	name = models.CharField(max_length=400, default="")
