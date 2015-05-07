@@ -9,7 +9,6 @@ from django.contrib.auth.views import login
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext, loader
 from django.core.mail import send_mail
-from django.db.models import Q
 
 from audio.forms import ContactForm, BidSubmitForm, UserCreateForm, UserForm
 
@@ -266,9 +265,13 @@ def send_registration_confirmation(user):
 
 
 def verifyEmail(request):
+	data = {}
 	if(request.user.is_authenticated()):
+		if not request.user.email:
+			data["needEmail"] = True
+			return render_to_response('verified.html', {"data":data}, context_instance=RequestContext(request))
+		
 		send_registration_confirmation(request.user)
-		data = {}
 		data["user"] = request.user
 		data["resent"]=True
 		#logger.info("resent")
@@ -418,6 +421,7 @@ def profile(request):
 		shipping = Address.objects.filter(upShipping__user=request.user)
 		billing = Address.objects.filter(upBilling__user=request.user)
 		profile = UserProfile.objects.get(user=request.user)
+		data["needEmail"] = not request.user.email 
 		data["needVerified"]= not profile.verified
 		if len(shipping) < 1 or len(billing) < 1:
 			data["addressMsg"]=True
@@ -556,8 +560,6 @@ def catalogByCategory(request, order, auctionId = None):
 	itemType = None
 	firstLibraryKey = None
 	sortGet = "lotAsc"
-	search = request.GET.get("search", None)
-	data["search"]=search
 	
 	if order == "-lot_id":
 		sortGet = "lotDesc"
@@ -569,13 +571,6 @@ def catalogByCategory(request, order, auctionId = None):
 		
 		
 		items = Item.objects.filter(auction=currentAuction).order_by(order)
-		if search:
-
-			items = items.filter(Q(name__icontains=search) | Q(label__name__icontains=search) \
-				| Q(artist__icontains=search) | Q(record_number__icontains=search) | \
-				Q(name_two__icontains=search)  \
-				| Q(artist_two__icontains=search) | Q(record_number_two__icontains=search)) 
-
 
 		if jumpLotId:
 
@@ -619,6 +614,9 @@ def catalogByCategory(request, order, auctionId = None):
 			else:
 				ordered[int(item.category.order_number)].append(item)
 
+		#logger.error("after loop %s" % ordered)
+		
+		
 		
 		od = collections.OrderedDict(sorted(ordered.items()))
 		#logger.error("after first sort %s" % od)
@@ -626,10 +624,27 @@ def catalogByCategory(request, order, auctionId = None):
 			items = od.items()  # list(od.items()) in Python3
 			items.reverse()
 			od = collections.OrderedDict(items)
+			#od = items
+			#logger.error("after reverse %s" % od)
 
+
+
+		
 		ordered = od
 
-
+		'''
+		i = 0
+		for category in categories:
+			objs = Item.objects.filter(auction = currentAuction, category = category).order_by(order)
+			
+			
+			ordered[i]= {}
+			ordered[i]["items"] = []
+			ordered[i]["items"].append(objs)
+			ordered[i]["category"] = category
+			i = i+1
+		'''
+		
 		#logger.error(ordered)
 		bids = []
 		if(request.user.is_authenticated()):
@@ -672,9 +687,6 @@ def catalog(request, auctionId = None):
 		logger.error("bad page")
 
 	category = request.GET.get("category", None)
-	search = request.GET.get("search", None)
-	data["search"]=search
-	logger.info("search: %s" % search)
 	order = request.GET.get("sort", 'lot_id')
 	sortGet= order
 	currentAuctionId = None
@@ -751,11 +763,6 @@ def catalog(request, auctionId = None):
 		else:
 			items = Item.objects.filter(auction = currentAuction).order_by(order)
 		
-		if search:
-			items = items.filter(Q(name__icontains=search) | Q(label__name__icontains=search) \
-				| Q(artist__icontains=search) | Q(record_number__icontains=search) | \
-				Q(name_two__icontains=search)  \
-				| Q(artist_two__icontains=search) | Q(record_number_two__icontains=search)) 
 		total = math.ceil(float(len(items))/perPage)
 		bids = []
 		#logger.error("cat total: %s" % total)
