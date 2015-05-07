@@ -113,7 +113,7 @@ IMAGES_URL = STATIC_URL + "audio/images"
 LOGIN_URL = "/audio/accounts/login/"
 
 MEDIA_ROOT = IMAGES_ROOT
-
+ALLOW_EMAIL = False
 EMAIL_URL = "http://dev.kirami.webfactional.com/audio/"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.webfaction.com'
