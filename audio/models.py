@@ -98,7 +98,7 @@ class Item(models.Model):
 	condition = models.CharField(max_length=100, default="")
 	defect = models.CharField(max_length=100, default="", null = True, blank=True)
 	quantity = models.IntegerField(default = 1)
-	auction = models.ForeignKey(Auction)
+	auction = models.ForeignKey(Auction, related_name="itemAuction")
 	thumbnail = models.FileField(upload_to='items/', null = True, blank=True)
 	image = models.FileField(upload_to='items/', null = True, blank=True)
 	prefix = models.CharField(max_length=600, null = True, blank = True)

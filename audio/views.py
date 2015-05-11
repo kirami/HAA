@@ -561,6 +561,9 @@ def catalogByCategory(request, order, auctionId = None):
 	itemType = None
 	firstLibraryKey = None
 	sortGet = "lotAsc"
+	#search = request.GET.get("search", None)
+	search = None
+	data["search"]=search
 	
 	if order == "-lot_id":
 		sortGet = "lotDesc"
@@ -572,6 +575,10 @@ def catalogByCategory(request, order, auctionId = None):
 		
 		
 		items = Item.objects.filter(auction=currentAuction).order_by(order)
+		if search:
+			items = itemSearch(items, search)
+			if len(items) < 1:
+				data["noResults"] = True
 
 		if jumpLotId:
 
@@ -586,11 +593,6 @@ def catalogByCategory(request, order, auctionId = None):
 		items = items[perPage*(page-1):(perPage*page)]
 		#logger.error(items)
 
-		'''if order == "-lot_id":
-			catSort = "-order_number"
-		else:
-			catSort = "order_number"
-		'''
 		catSort = "order_number"
 
 		if itemType:
@@ -691,30 +693,31 @@ def catalog(request, auctionId = None):
 	order = request.GET.get("sort", 'lot_id')
 	sortGet= order
 	currentAuctionId = None
+	#search = request.GET.get("search", None)
+	search = None
+	data["search"]=search
 
 	if not currentAuction:
 		return redirect("noAuction")
 
 		currentAuctionId = currentAuction.id
 	try:
-		#logger.info("1")
+		
 		#if after close but in 2nd chance
 		if isSecondChance() or isBetweenSegments():
-			logger.info("2")
-			
+
 			#only allow winners to bid (so only add on to won shipments)
-			logger.info("user: %s" % request.user)
+			#logger.info("user: %s" % request.user)
 			if request.user.is_authenticated():
 				bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
 				logger.info("bids")
 				if len(bids) < 1:
-					logger.info("3")
+					
 					return redirect("noAuction")
 			else:	
 				return redirect("noAuction")
 			
 			if isBetweenSegments():
-				logger.info("4")
 				return render_to_response('inBetween.html', data, context_instance=RequestContext(request))	
 			return redirect("flatFeeCatalog")
 	except Exception as e:
@@ -763,6 +766,11 @@ def catalog(request, auctionId = None):
 				items = Item.objects.filter(auction = currentAuction, category = category).order_by(order)
 		else:
 			items = Item.objects.filter(auction = currentAuction).order_by(order)
+		
+		if search:
+			items = itemSearch(items, search).order_by(order)
+			if len(items) < 1:
+				data["noResults"] = True
 		
 		total = math.ceil(float(len(items))/perPage)
 		bids = []
