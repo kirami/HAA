@@ -310,6 +310,11 @@ def addItem(request):
 
 	if request.method == 'POST':
 		try:
+
+			auction = request.POST.get("auction", 1)
+			if not auction:
+				auction = 1
+			
 			auctionObj = Auction.objects.get(pk=auction)
 			if auctionObj.flat_locked:
 				logger.error("Auction %s is locked" % auction)
@@ -336,6 +341,7 @@ def addItem(request):
 			
 		except Exception as e:
 			logger.error("error creating item: %s" % e)
+			data["form"] = form
 			return render_to_response('admin/audio/addItem.html', {"data":data, "success": False}, context_instance=RequestContext(request))
 			
 	data["form"] = form
@@ -1534,21 +1540,6 @@ def runReport(request, auctionId):
 @staff_member_required
 def test(request):
 
-	"""
-	date = datetime(2015, 4, 15, 0, 0, 0)
-	profiles = UserProfile.objects.filter(user__last_login__lt=date)
-	for profile in profiles:
-		
-		#profile.user.username = profile.user.first_name + profile.user.last_name 
-		#profile.email_only = False
-		if "@" not in profile.user.username:
-			profile.verified = False
-		profile.user.set_password(profile.user.username + str(profile.id))
-		profile.user.save()
-		profile.save()
-	return HttpResponse(json.dumps({"success":True, "users":str(list(profiles))}), content_type="application/json")
-	
-		"""
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 

@@ -30,6 +30,27 @@ class InvoiceForm(ModelForm):
 class ItemForm(ModelForm):
     class Meta:
         model = Item
+        fields=[
+            'lot_id',
+            'label',
+            'record_number',
+            'record_number_two',
+            'name',
+            'artist',
+            'notes',
+            'name_two',
+            'artist_two',
+            'notes_two',
+            'condition',
+            'defect',
+            'min_bid',
+            'quantity',
+            'category',
+            'item_type',
+            'auction',
+            'image',
+            'thumbnail',
+            'prefix']
 
 class UserForm(ModelForm):
     email = EmailField(required=True)
