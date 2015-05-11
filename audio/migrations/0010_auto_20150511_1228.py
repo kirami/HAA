@@ -13,8 +13,14 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='item',
+            name='auction',
+            field=models.ForeignKey(to='audio.Auction', related_name='itemAuction'),
+            preserve_default=True,
+        ),
+        migrations.AlterField(
+            model_name='item',
             name='label',
-            field=models.ForeignKey(null=True, blank=True, to='audio.Label', related_name='itemLabel'),
+            field=models.ForeignKey(to='audio.Label', related_name='itemLabel', blank=True, null=True),
             preserve_default=True,
         ),
     ]
