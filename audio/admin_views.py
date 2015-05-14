@@ -1435,6 +1435,7 @@ def getRunningBidTotal(request, auctionId):
 	total = 0
 	items = []
 	#logger.error("bids: %s" % bids)
+	data["numBids"] = len(bids)
 	for bid in bids:
 		if currentItemId != bid.item_id:
 			#reset
