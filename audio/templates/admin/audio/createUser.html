@@ -16,7 +16,7 @@
 <form action="" method="post">
     {% csrf_token %}
       {{ data.form.as_p }}
-      <div><span style="margin-right:10px;">Send user an email?</span><input type="checkbox" name="sendEmail" checked="true"></div>
+      <div><span style="margin-right:10px;">Send user an email?</span><input type="checkbox" name="sendEmail" ></div>
       <div><input type="submit" value="Create User"></div>
       
  </form>

@@ -50,7 +50,7 @@ td h1, td h2, td p { font-size: 12px; }
     <td><span style="font-size:14px; font-weight:bold;margin-right:10px;">{{item.lot_id}}</span>a:{{data.auction.id}} <br>
     {{item.label.name}} {%if item.record_number%}{{item.record_number}}{%endif%}<br>
     {{item.condition}} {{item.defect}}<br>
-    <span style="max-width:200px;">{{item.notes}}</span>
+
     </td>
 
     {% ifequal forloop.counter0|modulo:3 0 %}

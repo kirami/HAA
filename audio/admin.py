@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib import admin
 from django.http import HttpResponse
 from django import forms
+from audio.forms import ItemAdminForm
 
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import ugettext_lazy as _
@@ -83,7 +84,12 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ['name', 'lot_id']
     list_filter = ( 'item_type', "auction",)
     save_on_top = True
-    ordering = ("lot_id",)
+    ordering = ("lot_id", "label__name")
+    form = ItemAdminForm
+
+    #def changelist_view(self, request, extra_context=None):
+    #    logger.error("request %s" % request)
+    #    return super(ItemAdmin, self).changelist_view(request, extra_context=extra_context)
 
 class PrintedCatalogAdmin(admin.ModelAdmin):
 
@@ -108,12 +114,30 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = ('deadbeat', 'email_only', 'quiet', 'pdf_list',)
     #list_filter("deadbeat", )
 
+class AddressAdmin(admin.ModelAdmin):
+    search_fields = ['upBilling__user__email', 'upShipping__user__email', \
+    'upBilling__user__username', 'upShipping__user__username', 'upBilling__user__first_name', 'upBilling__user__last_name' , \
+    'upShipping__user__first_name', 'upShipping__user__last_name']
+    
+    list_display = ("id","get_author",  )
+    def get_author(self, obj):
+        ups = UserProfile.objects.filter(shipping_address = obj.id)
+        #logger.error("user: %s" % ups[0].user)
+        if len(ups) > 0:
+            return "%s" % ups[0].user
+        else:
+            return None
+    get_author.short_description = 'User'
+
+class LabelAdmin(admin.ModelAdmin):
+    search_fields = ['name', "abbreviation"]
+
 admin.site.register(Auction)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Bid, BidAdmin)
-admin.site.register(Address)
-admin.site.register(Label)
+admin.site.register(Address, AddressAdmin)
+admin.site.register(Label, LabelAdmin)
 admin.site.register(ItemType)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Payment)

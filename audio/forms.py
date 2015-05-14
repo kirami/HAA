@@ -16,18 +16,49 @@ logger = logging.getLogger(__name__)
 
 class ItemPrePopulateForm(Form):
     auction = ModelChoiceField(Auction.objects.all().order_by("-id"))
+     
     category = ModelChoiceField(Category.objects.all())
-    label =  ModelChoiceField(Label.objects.all())
+    label =  ModelChoiceField(Label.objects.all().order_by("name"))
     item_type =  ModelChoiceField(ItemType.objects.all())
     min_bid = DecimalField(label='Minumum Bid', initial=2.00)
     beginning_lot_id = IntegerField(label="Starting lot id", required=False)
+
+    def __init__(self, auctionId = None, *args, **kwargs):
+        super(ItemPrePopulateForm, self).__init__(*args, **kwargs)
+        #TODO non deadbeat users etc
+        if auctionId:
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(auction_id=auctionId)
+            #self.fields['auction'] = Auction.objects.get(id = auctionId)
 
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
         fields = ['invoiced_amount', 'second_chance_invoice_amount', 'tax', 'second_chance_tax', 'discount', 'discount_percent']
 
+#wrapper for item form in admin to order and filter
+class ItemAdminForm(ModelForm):
+    class Meta:
+        model = Item
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', False)
+
+        super(ItemAdminForm, self).__init__(*args, **kwargs)   
+        if instance.auction:
+            self.fields['category'].queryset = Category.objects.filter(auction = instance.auction).order_by('name')
+        else:
+            self.fields['category'].queryset = Category.objects.order_by('name')
 class ItemForm(ModelForm):
+   
+    def __init__(self, *args, **kwargs):
+        auctionId = kwargs.pop('auctionId',False)
+        super(ItemForm, self).__init__(*args, **kwargs)
+        
+        #TODO non deadbeat users etc
+        if auctionId:
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(auction_id=auctionId)
+        self.fields['label'].queryset = self.fields['label'].queryset.order_by("name")
+    
     class Meta:
         model = Item
         fields=[

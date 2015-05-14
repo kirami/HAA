@@ -61,14 +61,19 @@ def testEmail(request):
 
 
 @staff_member_required
-def printRecordLabels(request, auctionId, startingIndex = None):
+def printRecordLabels(request, auctionId, startingIndex = None, endIndex = None):
 
 	data = {}
 	data["auction"] = Auction.objects.get(pk = auctionId)
+	items = Item.objects.filter(auction = auctionId).order_by("lot_id") 
+
 	if startingIndex:
-		data["items"] = Item.objects.filter(auction = auctionId, lot_id__gte = startingIndex).order_by("lot_id")  
-	else:
-		data["items"] = Item.objects.filter(auction = auctionId).order_by("lot_id")  
+		items = items.filter(lot_id__gte = startingIndex).order_by("lot_id")  
+	if endIndex:
+		items = items.filter(lot_id__lte = endIndex).order_by("lot_id")
+		
+	data["items"] =  items
+
 
 	return render_to_response('admin/audio/printRecordLabels.html', {"data":data}, context_instance=RequestContext(request))
 
@@ -280,7 +285,12 @@ def setDiscount(request, invoiceId):
 @staff_member_required
 def addItemPrepop(request):
 	data = {}
-	data["form"] = ItemPrePopulateForm()
+	initData = {}
+	auction = request.GET.get('auction', None)
+	if auction:
+		initData["auction"] = Auction.objects.get(pk = auction)
+	
+	data["form"] = ItemPrePopulateForm(initial = initData, auctionId = auction)
 	return render_to_response('admin/audio/addItemEntry.html', {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required
@@ -306,7 +316,7 @@ def addItem(request):
 			lastLotId = lotId
 			lotId = lotId + 1
 	initData = {"auction":auction, "label":label, "min_bid": min_bid, "category": category, "artist": artist, "lot_id" : lotId, "name":name, "condition":condition, "item_type":item_type}
-	form = ItemForm(initial = initData)
+	form = ItemForm(initial = initData, auctionId = auction)
 
 	if request.method == 'POST':
 		try:
@@ -336,12 +346,13 @@ def addItem(request):
 			
 			
 			data["form"] = ItemForm(initial = initData)
-			logger.error("lotId: %s  last_lot_id: %s" % (lotId, lastLotId))
+			#logger.error("lotId: %s  last_lot_id: %s" % (lotId, lastLotId))
 			return render_to_response('admin/audio/addItem.html', {"data":data, "success": True, "lastLotId":lastLotId, "nextLotId":lotId}, context_instance=RequestContext(request))
 			
 		except Exception as e:
 			logger.error("error creating item: %s" % e)
 			data["form"] = form
+			data["errorMsg"] = str(e)
 			return render_to_response('admin/audio/addItem.html', {"data":data, "success": False}, context_instance=RequestContext(request))
 			
 	data["form"] = form
@@ -350,6 +361,7 @@ def addItem(request):
 @staff_member_required
 def printLetters(request, template, auctionId=None):
 	data = {}
+	"""
 	#profiles = UserProfile.objects.filter(quiet=False, user__is_staff=False, email_only=False, deadbeat=False).order_by("user__last_name")
 	num = [1092, 1110, 1144, 1125, 1153, 1136, 1198, 1199, 1207, 1181, 1182, 1234, 1244, 1242, 1233, 1214, 1232, 1228, 1213, 1273, 1267, 1320, 1334, 1380, 1372, 1368, 1364, 1355, 1412, 1406, 1415, 1421, 1433, 1397, 1403, 1413, 1470, 1481, 1479, 1474, 1447, 1464, 1525, 1520, 1492, 1537, 1557, 1568, 1567, 1555, 1605, 1613, 1599, 1626, 1647, 1661, 1641, 1638, 1692, 1669, 1686, 1697, 1713, 1744, 1743, 1774, 1789, 1759, 1821, 1804, 1798, 1877, 1862, 1857, 1875, 1876, 1866, 1914, 1910, 1893, 1895, 1905, 1968, 1970, 1940, 1952, 2010, 2003, 2006, 1994, 1992, 1999, 2043, 2032, 2041, 2092, 2073, 2089, 2064, 2077, 2114, 2149, 2122, 2150, 2130, 2154, 1634]
 	profiles = UserProfile.objects.filter(user__in=set(num)).order_by("user__last_name")
@@ -366,12 +378,14 @@ def printLetters(request, template, auctionId=None):
 
 	
 	data["profiles"] = updated
+	"""
 	return render_to_response('admin/audio/coverLetter.html', {"data":data, "success": False}, context_instance=RequestContext(request))
 
 
 @staff_member_required
 def printLabels(request, auctionId, labelType=None):
 	data = {}
+	profiles = {}
 	if labelType:
 		if labelType == "NonActive":
 			users, addresses = getNonActiveUsers(auctionId)
