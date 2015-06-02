@@ -13,6 +13,14 @@
 <script type="text/javascript">
 $( document ).ready(function() {
 
+	$("#id_label").after('<a onclick="return showAddAnotherPopup(this);" id="add_id_label" class="add-another" href="/admin/audio/label/add/?_to_field=id"> <img width="10" height="10" alt="Add Another" src="http://dev.kirami.webfactional.com/static/admin/img/icon_addlink.gif"></a>')
+
+	$("#id_category").after('<a onclick="return showAddAnotherPopup(this);" id="add_id_category" class="add-another" href="/admin/audio/category/add/?_to_field=id"> <img width="10" height="10" alt="Add Another" src="http://dev.kirami.webfactional.com/static/admin/img/icon_addlink.gif"></a>')
+
+	$("#id_auction").change(function(){
+		window.location =  "/admin/addItemUrl/?auction=" + $(this).val()
+	})
+
 	$("#addItemURL").submit(function(e){
 		first = true
 		url = "/admin/addItem/?"

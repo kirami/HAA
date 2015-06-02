@@ -2,7 +2,8 @@
  
 
 {%block content%}
-{{data.path}}
+
+
 {%if success%}
 	<div style="color:green; font-size:18px">Item successfully created.</div>
 
@@ -28,8 +29,12 @@
 
 <script type="text/javascript">
 $( document ).ready(function() {
-	console.log($("#id_lot_id"))
-   $("#id_lot_id").parent().prepend($("#lotMessage"))
+	
+  $("#id_label").after('<a onclick="return showAddAnotherPopup(this);" id="add_id_label" class="add-another" href="/admin/audio/label/add/?_to_field=id"> <img width="10" height="10" alt="Add Another" src="http://dev.kirami.webfactional.com/static/admin/img/icon_addlink.gif"></a>')
+
+  $("#id_category").after('<a onclick="return showAddAnotherPopup(this);" id="add_id_category" class="add-another" href="/admin/audio/category/add/?_to_field=id"> <img width="10" height="10" alt="Add Another" src="http://dev.kirami.webfactional.com/static/admin/img/icon_addlink.gif"></a>')
+
+  $("#id_lot_id").parent().prepend($("#lotMessage"))
 })
 
 </script>

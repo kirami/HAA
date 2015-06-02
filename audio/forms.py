@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, \
-                 EmailField, DateTimeField, IntegerField, ChoiceField, FileField
+                 EmailField, DateTimeField, IntegerField, ChoiceField, FileField, BooleanField
 from django.contrib.auth.forms import UserCreationForm
 from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction, Category, Label, ItemType
 from audio.utils import *
@@ -16,18 +16,51 @@ logger = logging.getLogger(__name__)
 
 class ItemPrePopulateForm(Form):
     auction = ModelChoiceField(Auction.objects.all().order_by("-id"))
+     
     category = ModelChoiceField(Category.objects.all())
-    label =  ModelChoiceField(Label.objects.all())
+    label =  ModelChoiceField(Label.objects.all().order_by("name"))
     item_type =  ModelChoiceField(ItemType.objects.all())
     min_bid = DecimalField(label='Minumum Bid', initial=2.00)
     beginning_lot_id = IntegerField(label="Starting lot id", required=False)
+
+    def __init__(self, auctionId = None, *args, **kwargs):
+        super(ItemPrePopulateForm, self).__init__(*args, **kwargs)
+        #TODO non deadbeat users etc
+        if auctionId:
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(auction_id=auctionId)
+            #self.fields['auction'] = Auction.objects.get(id = auctionId)
 
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
         fields = ['invoiced_amount', 'second_chance_invoice_amount', 'tax', 'second_chance_tax', 'discount', 'discount_percent']
 
+#wrapper for item form in admin to order and filter
+class ItemAdminForm(ModelForm):
+    class Meta:
+        model = Item
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', False)
+
+        super(ItemAdminForm, self).__init__(*args, **kwargs)   
+        if instance.auction:
+            self.fields['category'].queryset = Category.objects.filter(auction = instance.auction).order_by('name')
+        else:
+            self.fields['category'].queryset = Category.objects.order_by('name')
+
+            
 class ItemForm(ModelForm):
+   
+    def __init__(self, *args, **kwargs):
+        auctionId = kwargs.pop('auctionId',False)
+        super(ItemForm, self).__init__(*args, **kwargs)
+        
+        #TODO non deadbeat users etc
+        if auctionId:
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(auction_id=auctionId)
+        self.fields['label'].queryset = self.fields['label'].queryset.order_by("name")
+    
     class Meta:
         model = Item
         fields=[
@@ -62,6 +95,14 @@ class UserForm(ModelForm):
 
 class UserCreateForm(UserCreationForm):
     email = EmailField(required=True)
+    pdf_list = BooleanField()
+    courtesy_list = BooleanField()
+    deadbeat = BooleanField()
+    email_only = BooleanField()
+    quiet = BooleanField()
+    ebay = BooleanField()
+    #notes = models.CharField(max_length=200, null = True, blank=True)
+    verified = BooleanField()
 
     class Meta:
         model = User
@@ -75,6 +116,10 @@ class UserCreateForm(UserCreationForm):
             profile = UserProfile.objects.create(user = new_user)
         return new_user
 
+class UserProfileForm(ModelForm):
+
+    class Meta:
+        model = UserProfile
 
 class AdminBidForm(ModelForm):
     
@@ -87,6 +132,7 @@ class AdminBidForm(ModelForm):
             self.fields['date'] = DateTimeField(label="Date", initial=datetime.now())
         
         self.fields['amount'] = DecimalField(label='amount', initial=0.00)
+        self.fields['user'].queryset = User.objects.order_by('username')
 
         
     class Meta:
@@ -109,9 +155,8 @@ class AdminBidForm(ModelForm):
         invoices = Invoice.objects.filter(auction = auctionId, user = self.cleaned_data["user"])
         
         user = self.cleaned_data["user"]
-        addresses = Address.objects.filter(user = user)
-
-        if len(addresses) < 1:
+        up = UserProfile.objects.get(user = user)
+        if not up.billing_address or not up.shipping_address:
             raise ValidationError(('This user has no address')) 
         
         if invoices:

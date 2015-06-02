@@ -12,9 +12,24 @@
    width:250px;
 }	
 
-</style>
-<div style="font-size:16px;">Total so far for auction <b>{{data.auction.name}}</b>: ${{data.total}} for {{data.bids|length}} items.</div>
+.rt, .rtb{
+	width:100px;
+	float: left;
+}
 
+.rtb{font-weight: bold;}
+
+</style>
+<div style="font-size:16px;">Total so far for auction <b>{{data.auction.name}}</b>: 
+<div style="margin-top:10px;"> 
+<div class="rtb">Amount:</div><div class="rt"> ${{data.total}}</div>
+<br><div class="rtb" >Bids:</div> <div class="rt"> {{data.numBids}}</div>
+<br><div class="rtb">Items Sold:</div><div class="rt"> {{data.bids|length}}</div>
+<br><div class="rtb">Last Bid:</div><div class="rt"> {{data.lastBid.date|date:"m/d/y"}}</div>
+</div>
+</div>
+
+<div class="clear"></div>
 
 <div style="margin-top:15px;" class="runningTotal">
 	<div>These are the current max bids:</div>
