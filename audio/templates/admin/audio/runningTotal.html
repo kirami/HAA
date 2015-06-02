@@ -24,7 +24,10 @@
 <div style="margin-top:10px;"> 
 <div class="rtb">Amount:</div><div class="rt"> ${{data.total}}</div>
 <br><div class="rtb" >Bids:</div> <div class="rt"> {{data.numBids}}</div>
-<br><div class="rtb">Items sold:</div><div class="rt"> {{data.bids|length}}</div>
+
+<br><div class="rtb">Items Sold:</div><div class="rt"> {{data.bids|length}}</div>
+<br><div class="rtb">Last Bid:</div><div class="rt"> {{data.lastBid.date|date:"m/d/y"}}</div>
+
 </div>
 </div>
 

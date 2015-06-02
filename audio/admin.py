@@ -58,7 +58,7 @@ class ConditionAdmin(admin.ModelAdmin):
 class BidAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'item', 'amount', 'winner', )
-    search_fields = ['user__email', 'item__lot_id', 'item__name', 'item__artist']
+    search_fields = ['user__email', 'item__lot_id', 'item__name', 'item__artist', 'user__username', 'user__last_name']
     list_filter = ('item__auction', 'winner',)
 
     raw_id_fields = ("item",)

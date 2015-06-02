@@ -14,7 +14,7 @@ from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, \
-UserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm
+UserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm, UserProfileForm
 
 from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile, Category, Label, Condition
 from audio.utils import *
@@ -614,6 +614,7 @@ def createUser(request):
 		
 		form = UserCreateForm(request.POST)
 
+
 		if form.is_valid():
 			user = form.save()
 			#user = User.objects.get(email="")
@@ -663,7 +664,7 @@ def createUser(request):
 	else:
 		logger.error("not post")
 
-	
+	data["profileForm"] = UserProfileForm()
 	data["form"] = UserCreateForm()
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
@@ -1454,6 +1455,7 @@ def getRunningBidTotal(request, auctionId):
 			#logger.error("bid: %s total: %s"  % (bid.amount, total))
 		
 		index = index + 1
+	data["lastBid"] = Bid.objects.filter(item__auction=auctionId).order_by("date")[0]
 	data["bids"]=items
 	data["total"] = total
 	return render_to_response('admin/audio/runningTotal.html', {"data":data}, context_instance=RequestContext(request))	

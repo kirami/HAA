@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Form, MultipleChoiceField, DecimalField, ModelChoiceField, CharField, \
-                 EmailField, DateTimeField, IntegerField, ChoiceField, FileField
+                 EmailField, DateTimeField, IntegerField, ChoiceField, FileField, BooleanField
 from django.contrib.auth.forms import UserCreationForm
 from audio.models import Address, Bid, Item, Consignment, Consignor, UserProfile, User, Auction, Category, Label, ItemType
 from audio.utils import *
@@ -48,6 +48,7 @@ class ItemAdminForm(ModelForm):
             self.fields['category'].queryset = Category.objects.filter(auction = instance.auction).order_by('name')
         else:
             self.fields['category'].queryset = Category.objects.order_by('name')
+
 class ItemForm(ModelForm):
    
     def __init__(self, *args, **kwargs):
@@ -93,6 +94,14 @@ class UserForm(ModelForm):
 
 class UserCreateForm(UserCreationForm):
     email = EmailField(required=True)
+    pdf_list = BooleanField()
+    courtesy_list = BooleanField()
+    deadbeat = BooleanField()
+    email_only = BooleanField()
+    quiet = BooleanField()
+    ebay = BooleanField()
+    #notes = models.CharField(max_length=200, null = True, blank=True)
+    verified = BooleanField()
 
     class Meta:
         model = User
@@ -106,6 +115,10 @@ class UserCreateForm(UserCreationForm):
             profile = UserProfile.objects.create(user = new_user)
         return new_user
 
+class UserProfileForm(ModelForm):
+
+    class Meta:
+        model = UserProfile
 
 class AdminBidForm(ModelForm):
     
@@ -118,6 +131,7 @@ class AdminBidForm(ModelForm):
             self.fields['date'] = DateTimeField(label="Date", initial=datetime.now())
         
         self.fields['amount'] = DecimalField(label='amount', initial=0.00)
+        self.fields['user'].queryset = User.objects.order_by('username')
 
         
     class Meta:
@@ -140,9 +154,8 @@ class AdminBidForm(ModelForm):
         invoices = Invoice.objects.filter(auction = auctionId, user = self.cleaned_data["user"])
         
         user = self.cleaned_data["user"]
-        addresses = Address.objects.filter(user = user)
-
-        if len(addresses) < 1:
+        up = UserProfile.objects.get(user = user)
+        if not up.billing_address or not up.shipping_address:
             raise ValidationError(('This user has no address')) 
         
         if invoices:
