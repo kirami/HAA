@@ -18,6 +18,10 @@
 <Div>For this auction, ending time was: {{data.auction.end_date}}</Div>
 <form action="" method="post">
     {% csrf_token %}
+
+    {%if data.link%}
+    <div style="color:red; font-size:18px">You can change the existing bid <a href="{{data.link}}" target="_blank">here</a></div>
+    {%endif%}
       {{ data.form.as_p }}
       <input type="submit" value="Submit Bid">
   </form>

@@ -864,9 +864,16 @@ def createBid(request, auctionId):
 		form = AdminBidForm(auctionId, request.POST)
 		if form.is_valid():
 			form.save(auctionId = auctionId)
-			data["form"] = form
+			data["form"] = AdminBidForm(auctionId = auctionId)
 			return render_to_response('admin/audio/createBid.html', {"data":data, "success": True}, context_instance=RequestContext(request))
 		else:
+			
+			errors = form.errors.as_data()
+			if errors.get("item"):
+				for error in errors["item"]:
+					if error.code=="duplicate":
+						data["link"] = "/admin/audio/bid/" + str(error.params["bid"])
+				
 			data["form"] = form
 			return render_to_response('admin/audio/createBid.html', {"data":data, "error": True}, context_instance=RequestContext(request))
 				
@@ -1493,15 +1500,22 @@ def markWinners(auctionId):
 def winners(request, auctionId):
 	data = {}
 	winners = getAlphaWinners(auctionId)
+	winnerInfo = []
 	for winner in winners:
 		try:
+			info = {}
 			#logger.error("winner: " + winner)
+			info["user"] = winner
 			address = Address.objects.get(upShipping__user = winner.id)
-			winner["zipcode"] = address.zipcode
+			
+			info["zipcode"] = address.zipcode
+			info["country"] = address.country
+			info["pc"] = address.postal_code
+			winnerInfo.append(info)
 		except:
 			pass
-	
-	data["winningBids"] = winners
+	#logger.error("winners %s" % winners)
+	data["winningBids"] = winnerInfo
 	getHeaderData(data, auctionId)
 	
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))

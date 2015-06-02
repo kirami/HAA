@@ -138,13 +138,24 @@ class AdminBidForm(ModelForm):
         model = Bid
         exclude = ('invoice',)
 
+    def clean_item(self):
+        
+        item = self.cleaned_data["item"]
+        bids = Bid.objects.filter(user=self.data["user"], item=item)
+        if len(bids)> 0:
+            bid = bids[0]
+            raise ValidationError(('User has already bid on item: ' + str(item)),code='duplicate',params={'bid': bid.id})     
+        return item
+
     def clean_amount(self):
         amount = self.data['amount']
-        item = self.cleaned_data["item"]
+        item = self.cleaned_data.get("item")
         
-        if self.cleaned_data["amount"] < item.min_bid:
+        if item and self.cleaned_data["amount"] < item.min_bid:
             raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
         return amount
+
+    
 
     def save(self,  auctionId, commit=True):
 
