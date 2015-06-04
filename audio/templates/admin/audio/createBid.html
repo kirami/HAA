@@ -26,6 +26,12 @@
       <input type="submit" value="Submit Bid">
   </form>
 
+<script type="text/javascript">
+	$(document).ready(function(){
 
+		 $("#id_user").after('<a onclick="return showRelatedObjectLookupPopup(this);" id="lookup_id_user" class="related-lookup" href="/admin/auth/user/?_to_field=id"> <img width="16" height="16" alt="Lookup" src="http://dev.kirami.webfactional.com/static/admin/img/selector-search.gif"></a>')
+
+	})
+</script>
 
 {%endblock%}

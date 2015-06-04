@@ -132,6 +132,7 @@ class AdminBidForm(ModelForm):
         
         self.fields['amount'] = DecimalField(label='amount', initial=0.00)
         self.fields['user'].queryset = User.objects.order_by('username')
+        self.fields['item'].queryset = Item.objects.order_by('lot_id')
 
         
     class Meta:
