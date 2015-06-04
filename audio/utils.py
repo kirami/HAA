@@ -250,9 +250,9 @@ def resetWinners(auctionId):
 
 def getBidItems(auctionId, orderByName = False):
 	if orderByName:
-		return Item.objects.filter(bidItem__isnull=False, auction=auctionId).order_by("name").distinct()
+		return Item.objects.filter(bidItem__isnull=False, auction=auctionId).order_by("name")
 	else:
-		return Item.objects.filter(bidItem__isnull=False, auction=auctionId).distinct()
+		return Item.objects.filter(bidItem__isnull=False, auction=auctionId)
 
 #get winning flat bids after blind auction end date
 def getWinningFlatBids(auctionId, date, userId = None, onlyNonInvoiced = False):
@@ -689,7 +689,10 @@ def getHeaderData(data, auctionId):
 	data ["preDiscount"] = sums["sum"]
 	data["today"] = date.today()
 	if len(sums) > 0:
-		data["total"] = sums["sum"]	- data["discount"]
+		if data["discount"]:
+			data["total"] = sums["sum"]	- data["discount"]
+		else:
+			data["total"] = sums["sum"]	
 	else:
 		data["total"] = 0
 	return data
