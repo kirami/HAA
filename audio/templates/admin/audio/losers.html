@@ -17,6 +17,8 @@
 <div id="loserEmail-confirm" title="Please Confirm">Are you sure you want to email Loser letters to all these users for auction {{data.auction.name}}?</div>
 
 <button id='loserEmailButton'>Email ALL Loser letters</button>
+<button id="printLL" onclick="javascript:window.open('/admin/printLoserLetters/{{data.auction.id}}')">Print USPS Loser Letters</button>
+<button  onclick="javascript:window.open('/admin/printLabels/{{data.auction.id}}/loserUSPS')">Print USPS loser Shipping Labels</button>
 <div id="reminderMsg"></div>
 
 <div id="reportDiv" class="reportTable">

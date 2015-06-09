@@ -22,8 +22,9 @@ def sendEmail(msg):
 		logger.error("send email error: %s" % e)
 
 
-def sendBulkEmail(messages):
+def sendBulkEmail(messages, emailType=None):
 	try:
+		logger.info("Sending %s emails of type: %s" % (len(messages), emailType))
 		if not settings.ALLOW_EMAIL:
 			logger.info("sending email is set to disallow")
 			return

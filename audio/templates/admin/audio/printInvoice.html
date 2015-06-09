@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}audio/css/admin.css" />
-
+<title>{{data.title}}</title>
 
 {% endblock %}
 
@@ -56,7 +56,7 @@
 		<div>Here is your updated invoice.  If you've already sent us a payment please send us any remaining balance.</div>
 	{%endif%}
 
-	<div>CONGRATULATIONS: Here are your winning bids from out auction.  Payment in full in U.S. Dollars is due upon receipt of this invoice.  Domestic shipping is by USPS Media Mail; Priority Mail overseas.  Please allow 3 to 4 weeks for packaging and delivery.  Our unsold items list has been included, but you can also look at and bid on these items online at www.thoseoldrecords.com/catalog</div>
+	<div>CONGRATULATIONS: Here are your winning bids from our auction.  Payment in full in U.S. Dollars is due upon receipt of this invoice.  Domestic shipping is by USPS Media Mail; Priority Mail overseas.  Please allow 3 to 4 weeks for packaging and delivery.  Our unsold items list has been included, but you can also look at and bid on these items online at www.thoseoldrecords.com/audio/catalog</div>
 
 	<div>To pay by Visa or Mastercard, please sign below and return this form.  Thanks!</div>
 
@@ -81,9 +81,9 @@
 		{%for winner in value.info.wonItems%}
 			<div class="maxBidItem">{{winner.item.lot_id}}</div>
 			<div class="maxBidItem">{{winner.item.name}}</div>
-			<div class="maxBidItem">{{winner.item.artist}}</div>
+			<div class="maxBidItem">{%if winner.item.artist%}{{winner.item.artist}}{%else%}&nbsp;{%endif%}</div>
 			<div class="maxBidItem">${{winner.amount}}</div>
-			<div class="clear"></div>
+			<div class="clear" style="clear:both"></div>
 		{%endfor%}
 		<div style="clear:both; padding-top:15px;">
 			<hr >
@@ -105,11 +105,42 @@
 		</div>
 
 	</div>
-
+<br><br>
+<div>If you would like to receive notifications through email instead, please review your account settings at: www.thoseoldrecords.com/audio/accounts/settings/</div>
 
 </div>
 
 <span style="page-break-before: always;"> </span>
+{%if value.notWon%}
+<div >{{value.user.first_name}} {{value.user.last_name}},</div><br>
+<div>Here are the winning bids for the items you were interested in but did not win:</div><br>
+<div id="reportDiv" class="reportTable">
+	<div style="float:left; width:75px;">Lot ID:</div>
+	<div style="float:left; width:75px;">Label:</div>
+	<div style="float:left; width:75px;">Name:</div>
+	<div style="float:left; width:175px;">Winning Bid:</div>
+
+	<div class="clear" style="clear:both"></div>
+	
+
+	<br><br>	
+	{%for item in value.notWon%}
+		<div style="float:left; width:75px;">{{item.item.lot_id}}</div>
+		<div style="float:left; width:75px;">{{item.item.label.name}}</div>
+		<div style="float:left; width:75px;">{{item.item.name}}</div>
+		<div style="float:left; width:175px;">${{item.amount}}</div>
+		<div style="clear:both"></div>
+	{%endfor%}
+
+</div>
+
+<span style="page-break-before: always;"> </span>
+{%endif%}
 {%endfor%}
+
+
+
+<br><br>
+Thank you for participating!
 
 {%endblock%}

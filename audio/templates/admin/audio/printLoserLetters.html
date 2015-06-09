@@ -1,6 +1,9 @@
-{% extends "email/baseEmail.html" %}
+{% extends "admin/audio/baseLetter.html" %}
+ 
 
-{%block content%}
+
+{%block letter%}
+<div>Hello {{info.profile.user.first_name}},</div><br>
 <div>
 	We're sorry, you didn't win any items in auction: {{data.auction.name}}.
 </div>
@@ -11,25 +14,26 @@
 	<div style="float:left; width:75px;">Lot ID:</div>
 	<div style="float:left; width:75px;">Label:</div>
 	<div style="float:left; width:75px;">Name:</div>
-	<div style="float:left; width:75px;">Winning Bid:</div>
+	<div style="float:left; width:175px;">Winning Bid:</div>
 
 	<div class="clear" style="clear:both"></div>
 	
 
-	<br><br>	
-	{%for item in data.winningBids%}
+	<br>	
+	{%for item in info.winningBids%}
 		<div style="float:left; width:75px;">{{item.item.lot_id}}</div>
 		<div style="float:left; width:75px;">{{item.item.label.name}}</div>
 		<div style="float:left; width:75px;">{{item.item.name}}</div>
-		<div style="float:left; width:75px;">${{item.amount}}</div>
+		<div style="float:left; width:175px;">${{item.amount}}</div>
 		<div style="clear:both"></div>
 	{%endfor%}
 
 </div>
-
-
+<br><br>
+<div>If you would like to receive notifications through email instead, please review your account settings at: www.thoseoldrecords.com/audio/accounts/settings/</div>
 <br><br>
 <div>Thank you for participating!</div>
-
-<div></div>
+<span style="page-break-before: always;"> </span>
 {%endblock%}
+
+

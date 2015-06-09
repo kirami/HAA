@@ -1,1 +1,68 @@
-text
+
+ 
+
+{%block content%}
+{%if data.profile.billing_address.country == "USA" %}
+{{data.profile.user.first_name}} {{data.profile.user.last_name}}
+{{data.profile.billing_address.address_one}}
+{%if data.profile.billing_address.address_two%}{{data.profile.billing_address.address_two}}
+{%endif%}{{data.profile.billing_address.city}} {{data.profile.billing_address.state}}, {{data.profile.billing_address.zipcode}}
+		
+{%else%}
+{{data.profile.user.first_name}} {{data.profile.user.last_name}}
+{{data.profile.billing_address.address_one}}
+{%if data.profile.billing_address.address_two%}{{data.profile.billing_address.address_two}}
+{%endif%}{%if data.profile.billing_address.address_three%}{{data.profile.billing_address.address_three}}
+{%endif%}{{data.profile.billing_address.city}} {%if data.profile.billing_address.province%}{{data.profile.billing_address.province}}{%endif%} {{data.profile.billing_address.postal_code}}
+{{data.profile.billing_address.country}}
+
+{%endif%}
+
+{%if data.isFlat%}
+Updated invoice for Hawthorn's Antique Audio Auction: {{data.auction.name}}
+
+{%else%}
+CONGRATULATIONS: Here are your winning bids from our auction.  Payment in full in U.S. Dollars is due upon receipt of this invoice.  Domestic shipping is by USPS Media Mail; Priority Mail overseas.  Please allow 3 to 4 weeks for packaging and delivery.  Our unsold items list has been included, but you can also look at and bid on these items online at www.thoseoldrecords.com/audio/catalog
+
+If you plan on bidding on Set Sale items, either through mail or online, please wait to send payment until you receive an updated invoice.
+
+{%endif%}
+
+Lot Id:		Item name:		Amount bid:
+
+	
+{%for winner in data.info.wonItems%}
+{{winner.item.lot_id}}		{{winner.item.name}}	${{winner.amount}}
+{%endfor%}
+
+Subtotal:
+${{data.info.sum}}
+{%if data.discount != 0%}
+Discount:
+${{data.discount}}
+{%endif%}
+Shipping: ${{data.shippingTotal}}
+{%if data.invoice.tax%}
+CA State Tax: ${{data.taxTotal}}
+{%endif%}
+{%if data.previousBalance%}
+Previous balance (as of {{data.balanceDate}}): ${{data.previousBalance}}
+{%endif%}
+---------------------------
+Total: ${{data.orderTotal}}
+
+{%if data.notWon%}
+
+Here are the winning bids for the items you were interested in but did not win:
+
+Lot ID:		Label:		Name:		Winning Bid:
+
+{%for item in data.notWon%}
+{{item.item.lot_id}}	{{item.item.label.name}}	{{item.item.name}}	${{item.amount}}
+{%endfor%}
+
+{%endif%}
+
+Thank you for your business!
+
+{%endblock%}

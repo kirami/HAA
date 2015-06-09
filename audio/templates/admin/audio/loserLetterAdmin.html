@@ -3,17 +3,21 @@
 
 {%block content%}
 
-<div>Email Admin Auction: {{data.auctionId}}</div>
-<br><br>
+<div style="font-size:18px;">Loser Letters for Auction: {{data.auction}}</div>
 
 <div id="msg"></div>
-<div><button id="sendLoserLetter">Send all loser letters</button></div>
+
+<div id="msg"></div>
+<div style="margin-top:20px;">Loser Letter Emails:</div>
+<div><button id="sendLoserLetter">Send all loser letter emails</button></div>
+<div style="margin-top:20px;">Printing Loser Letters for USPS:</div>
+<div><button id="printLL" onclick="javascript:window.location.href = '/admin/printLoserLetters/{{data.auction.id}}'">Print all loser letters that are not emailed</button></div>
+<div>
 
 
-<div id="sendLoserLetter-confirm" title="Please Confirm">Are you sure you want email all loser letters auction <span id="auctionIdSpan"></span>?</div>
+<div id="sendLoserLetter-confirm" title="Please Confirm">Are you sure you want email all loser letters for auction <span id="auctionIdSpan"></span>?</div>
 
 
-<input type="hidden" id="auctionId" name="auctionId" value="{{data.auction.id}}">
 
 <script type="text/javascript">
 	
