@@ -35,7 +35,7 @@ $( document ).ready(function() {
 
 				$.ajax({
 					type: "POST",
-					url: "/admin/sendLoserLetters/"+ $("#auctionId").val() + "/",
+					url: "/admin/sendLoserLetters/{{data.auction.id}}/",
 					success: function(data) {
 						if(data.success){
 

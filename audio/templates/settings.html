@@ -6,6 +6,9 @@
 {%if data.success%}
 <div class="successMsg">You've successfully updated your settings.</div>
 {%endif%}
+{%if data.error%}
+<div class="successError">{{data.errorMsg}}</div>
+{%endif%}
 <div style="font-weight:bold; font-size:26px; margin-bottom:10px;">Settings:</div>
 <form action="" method="POST">
   {% csrf_token %}

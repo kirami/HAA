@@ -92,7 +92,7 @@ class UserForm(ModelForm):
         fields = ['first_name', 'last_name', 'username', 'email']
        
 
-class UserCreateForm(UserCreationForm):
+class AdminUserCreateForm(UserCreationForm):
     email = EmailField(required=True)
     pdf_list = BooleanField()
     courtesy_list = BooleanField()
@@ -102,6 +102,22 @@ class UserCreateForm(UserCreationForm):
     ebay = BooleanField()
     #notes = models.CharField(max_length=200, null = True, blank=True)
     verified = BooleanField()
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "first_name", "last_name", "password1", "password2")
+
+    def save(self, commit=True):
+        new_user = super(UserCreateForm, self).save(commit=False)
+        new_user.email = self.cleaned_data["email"]
+        if commit:
+            new_user.save()
+            profile = UserProfile.objects.create(user = new_user)
+        return new_user
+
+class UserCreateForm(UserCreationForm):
+    email = EmailField(required=True)
+
 
     class Meta:
         model = User

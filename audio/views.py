@@ -145,6 +145,19 @@ def accountSettings(request):
 			noPC = request.POST.get("noPCBox", None)
 			snailMail = request.POST.get("snailMailBox", None)
 
+			if not up.user.email and not snailMail:
+				logger.info("trying to email only without email")
+				data["error"] = True
+				data["errorMsg"]= "You must have an email address on file to uncheck option 1."
+				return render_to_response('settings.html', {"data":data}, context_instance=RequestContext(request))
+
+			if not up.user.email and noPC:
+				logger.info("trying to pdf list without email")
+				data["error"] = True
+				data["errorMsg"]= "You must have an email address on file to check option 2."
+				return render_to_response('settings.html', {"data":data}, context_instance=RequestContext(request))
+
+
 			up.quiet = True if quiet else False
 			up.pdf_list = True if noPC else False
 			up.email_only = False if snailMail else True

@@ -14,7 +14,7 @@ from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, \
-UserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm, UserProfileForm
+UserCreateForm, AdminUserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm, UserProfileForm
 
 from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile, Category, Label, Condition
 from audio.utils import *
@@ -420,7 +420,7 @@ def printLabels(request, auctionId, labelType=None):
 				winners = getAlphaWinners(auctionId)
 			for winner in winners:
 				up = UserProfile.objects.get(user = winner)
-				if notExcluded(up, checkEmailOnly = False) and up.email_only == False:
+				if not okToEmail(up):
 					profileArr.append(up)
 		if labelType == "loserUSPS":
 			data["title"] = "Loser USPS"
@@ -429,7 +429,7 @@ def printLabels(request, auctionId, labelType=None):
 			printOnly = []
 			
 			for loser in losers:
-				if notExcluded(loser, checkEmailOnly = False) and loser.email_only==False:
+				if not okToEmail(loser):
 					profileArr.append(loser)
 
 		if len(profileArr) > 0:
@@ -640,7 +640,7 @@ def createUser(request):
 	#logger.error(request)
 	if request.method == 'POST':
 		
-		form = UserCreateForm(request.POST)
+		form = AdminUserCreateForm(request.POST)
 
 
 		if form.is_valid():
@@ -693,7 +693,7 @@ def createUser(request):
 		logger.error("not post")
 
 	data["profileForm"] = UserProfileForm()
-	data["form"] = UserCreateForm()
+	data["form"] = AdminUserCreateForm()
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -1055,7 +1055,7 @@ def endFlatAuction(request, auctionId, userId = None):
 				
 				invoice.second_chance_invoice_amount = invoicedAmount
 				#shipping
-				invoice.second_chance_invoice_date = datetime.now()
+				#invoice.second_chance_invoice_date = datetime.now()
 				address = Address.objects.get(upShipping__user_id = winnerId)
 				tax = None
 				if address.state == "CA":
@@ -1147,11 +1147,11 @@ def loserLetters(request, auctionId):
 	return render_to_response('admin/audio/loserLetterAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
 
-def notExcluded(up, checkEmailOnly=False):
-	if checkEmailOnly:
-		return not up.quiet and not up.deadbeat and up.email_only and up.verified
-	else:	
-		return not up.quiet and not up.deadbeat
+def okToEmail(up):
+	return not up.quiet and not up.deadbeat and up.email_only and up.verified
+
+def isDND(up):
+	return up.quiet or up.deadbeat
 
 @staff_member_required
 def printLoserLetters(request, auctionId):
@@ -1164,7 +1164,7 @@ def printLoserLetters(request, auctionId):
 	#logger.error("losers:")
 	for loser in losers:
 		
-		if not notExcluded(loser, checkEmailOnly = True):
+		if not okToEmail(loser):
 			info = {}
 			info["winningBids"] = getWinningBidsFromLosers(auctionId, loser.user.id)
 			info["profile"] = loser
@@ -1192,22 +1192,34 @@ def sendLoserLetters(request, auctionId):
 		return HttpResponse(json.dumps({"success":False, "msg":"This auction has not been locked."}), content_type="application/json")
 	
 	data["auction"] = auction
+	
 	#logger.error("losers:")
 	for loser in losers:
 
 		data["winningBids"] = getWinningBidsFromLosers(auctionId, loser.user.id)
 		data["profile"] = loser
-		if notExcluded(loser, checkEmailOnly = True):
+		if okToEmail(loser):
+			try:
+				f = forms.EmailField()
+				f.clean(loser.user.email)
+			except:
+				logger.error("bad email address in send loser letter: %s for user:%s" % (loser.user.email, loser.user.username))
+				#make sure to skip the rest on a bad email address
+				continue
+			
 			if settings.EMAIL_DEBUG:
 				if i < 1:
-					logger.error("in testing email")
+					logger.info("in testing email")
+					#msg1 = getEmailMessage("bad","Hawthorn Antique Audio Auction results",{"data":data}, template, False)
+					
 					msg = getEmailMessage(settings.TEST_EMAIL,"Hawthorn Antique Audio Auction results",{"data":data}, template, False)
-					emails.append(loser.user.email)
+					emails.append(settings.TEST_EMAIL)
+					#messages.append(msg1)
 					messages.append(msg)
 			else:
 				msg = getEmailMessage(loser.user.email,"Hawthorn Antique Audio Auction results",{"data":data}, template, False)
 				emails.append(loser.user.email)
-			messages.append(msg)
+				messages.append(msg)
 			
 			i = i + 1
 	
@@ -1265,7 +1277,7 @@ def printInvoices(request, auctionId, userId = None):
 			for winner in winners:
 				up = UserProfile.objects.get(user = winner.id)
 				#logger.error("name: %s" % up.user.last_name)
-				if (filter and notExcluded(up, checkEmailOnly = False) and up.email_only == False) or not filter:
+				if (filter and not okToEmail(up)) or not filter:
 					data["invoices"][i] = getInvoiceData(auctionId, winner.id)
 					data["invoices"][i]["profile"] = up
 					data["invoices"][i]["notWon"] = getWinningBidsFromLosers(auctionId, winner.id)
@@ -1325,11 +1337,19 @@ def sendInvoices(request, auctionId = None, userId = None):
 	emails = []
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner.id)
-		if notExcluded(profile, checkEmailOnly=True):
+		if okToEmail(profile):
 			#logger.error("winner: %s" % winner.id)
 			
 			data = getInvoiceData(auctionId, winner.id)
 			
+			try:
+				f = forms.EmailField()
+				f.clean(winner.email)
+			except:
+				logger.error("bad email address in send invoices: %s for user:%s" % (winner.email, winner.username))
+				#make sure to skip the rest on a bad email address
+				continue
+
 			#logger.error("userId %s" % userId)
 			if userId:
 				if data["invoice"].second_chance_invoice_amount > 0:
@@ -1344,7 +1364,6 @@ def sendInvoices(request, auctionId = None, userId = None):
 					data["invoice"].invoice_date = datetime.now()
 			data["profile"] = profile
 			data["notWon"] = getWinningBidsFromLosers(auctionId, winner.id)
-			#msg = getEmailMessage("kirajmd@gmail.com",subject, {"data":data}, "invoice", False)
 			
 			if settings.EMAIL_DEBUG:
 				if i < 1:
@@ -1400,7 +1419,7 @@ def sendReminder(request):
 			messages.append(msg)
 				
 		if template :
-			sendBulkEmail(messages, "Reminder")
+			#sendBulkEmail(messages, "Reminder")
 			return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")

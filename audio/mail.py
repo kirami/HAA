@@ -30,7 +30,9 @@ def sendBulkEmail(messages, emailType=None):
 			return
 
 		connection = mail.get_connection()   # Use default email connection
-		connection.send_messages(messages)
+		res = connection.send_messages(messages)
+		logger.info("mails sent: %s" % res)
+		connection.close()
 	except Exception as e:
 		logger.error("send bulk email error: %s" % e)
 
@@ -47,6 +49,8 @@ def getEmailMessage(to, subject, data, template, record = False):
 	html_content = htmly.render(d)
 	msg = EmailMultiAlternatives(subject, text_content, "Hawthorn's Antique Audio <"+from_email+">", [to])
 	msg.attach_alternative(html_content, "text/html")
+	#msg = (subject, text_content, "Hawthorn's Antique Audio <"+from_email+">", [to])
+	
 
 	if record:
 		pdf = open('/srv/hawthorn/files/RosevilleRecord.pdf', 'rb')
