@@ -18,6 +18,7 @@
 
 	<br><br>	
 	{%for item in data.winners%}
+	<div class="tableInfoItem">
 		<div class="maxBidItem">{{item.item.lot_id}}</div>
 		<div class="maxBidItem">{{item.item.label.name}}</div>
 		<div class="maxBidItem">{{item.item.name}}</div>
@@ -25,6 +26,7 @@
 		<div class="maxBidItem">${{item.amount}}</div>
 
 		<div class="clear"></div>
+		</div>
 	{%endfor%}
 
 	<hr>
