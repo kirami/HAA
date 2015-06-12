@@ -962,14 +962,12 @@ def endSSAuction(request, auctionId, userId = None):
 
 @login_required
 def endFlatAuction(request, auctionId, userId = None):
-	logger.error("user %s" % request.user)
+	#logger.error("user %s" % request.user)
 	if userId:
 		logger.error("userId:%s logged in:%s" %(userId, request.user.id))
 		if int(userId) != int(request.user.id) and not request.user.is_staff:
 			logger.error("Tried to end Flat Auction with bad user: %s" % request.user)
 			return HttpResponse(json.dumps({"success":False, "msg":"Something went wrong.  Please contanct us."}), content_type="application/json")
-
-
 
 	
 	data = {}
@@ -1019,11 +1017,11 @@ def endFlatAuction(request, auctionId, userId = None):
 				
 				invoice.second_chance_invoice_amount = invoicedAmount
 				#shipping
-				invoice.second_chance_invoice_date = datetime.now()
+				#invoice.second_chance_invoice_date = datetime.now()
 				address = Address.objects.get(upShipping__user_id = winnerId)
 				tax = None
 				if address.state == "CA":
-					tax = float(invoicedAmount) * .0975
+					tax = float(invoicedAmount) * settings.CA_TAX
 					invoice.second_chance_tax = tax
 
 				invoice.save()
@@ -1032,14 +1030,15 @@ def endFlatAuction(request, auctionId, userId = None):
 		auction.save()
 
 	if userId and email:
+		logger.error("sending ended email")
 		data["invoice"]=invoice
 		data["user"] = User.objects.get(pk=userId)
 		msg = getEmailMessage(settings.DEFAULT_FROM_EMAIL ,"User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)
 		msg.send()	
-
-	if int(userId) == int(request.user.id):
-		logger.error("sending invoice")
-		sendInvoices(request, auction.id, userId)
+	#don't send, what about shipping?
+	#if int(userId) == int(request.user.id):
+		#logger.error("sending invoice")
+	#	sendInvoices(request, auction.id, userId)
 
 	
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")

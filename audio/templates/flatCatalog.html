@@ -5,14 +5,12 @@
 {%block top%}
 
 <div id="endAuction-confirm" title="Please Confirm">Are you sure you want to end your auction?  You will no longer be able to create/edit/delete bids without contacting us directly.</div>
-<div id="itemPopup" title="Item Info"></div>
+
 
 <div style="margin-bottom:15px;">
 	
 	<div class="sideDiv" style="display:block; width:30%">
 		<img src="/static/audio/images/site/hmv.gif" width="275px">
-		
-		
 	</div>
 	
 	<div style="text-align:center; float:left; margin:0 auto; width:39%">
@@ -21,7 +19,7 @@
 
 		<div class="" style="font-weight:bold; font-size:26px;
 		">
-			<div>The blind auction has ended.<br>These items were not sold:</div> 
+			<div>The blind auction has ended.<br>These items were not sold:<br>Closes {{data.auction.second_chance_end_date|date:"M d, Y" }}</div> 
 
 		</div>
 
@@ -40,7 +38,7 @@
 				<div>View current <a href="/audio/accounts/bids">Set Sale bids</a>.</div>
 			</li>
 			<li>
-				<div>Each item costs ${{auction.flat_bid_amount}} unless otherwise marked.</div>
+				<div>Each item's price is displayed on its 'Enter Bid' button.</div>
 			</li>
 			
 			<li>
@@ -67,6 +65,7 @@
 	{%for item in catItems%}
 		{% include "innerCatalog.html" %}
 	{%endfor%}
+
 	{% endblock %}
 	
 

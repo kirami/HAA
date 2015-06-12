@@ -237,9 +237,9 @@ def getLosers(auctionId):
 	
 
 #returns ALL items in db with no bids ever.
-def getNoBidItems(auctionId, orderByName = False):
-	if orderByName:
-		return Item.objects.filter(bidItem=None, auction=auctionId).order_by("name")
+def getNoBidItems(auctionId, orderBy=None):
+	if orderBy:
+		return Item.objects.filter(bidItem=None, auction=auctionId).order_by(orderBy)
 	else:
 		return Item.objects.filter(bidItem=None, auction=auctionId)
 	

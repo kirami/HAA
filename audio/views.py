@@ -459,6 +459,28 @@ def flatFeeCatalog(request):
 	data = {}
 	data["auction"]=auction
 	data["flat"] = True
+	order = request.GET.get("sort", 'lot_id')
+	sortGet = order
+	if order == "nameAsc":
+		order = "name"
+
+	elif order == "nameDesc":
+		order = "-name"
+
+	elif order == "artistAsc":
+		order = "artist"
+
+	elif order == "artistDesc":
+		order = "-artist"
+	elif order == "lotDesc":
+		order = "-lot_id"
+		sortGet = "lotDesc"
+	else:
+		order="lot_id"
+		sortGet = "lotAsc"
+
+
+
 	
 	success = False
 	if request.GET.get("success"):
@@ -485,12 +507,13 @@ def flatFeeCatalog(request):
 			if isBetweenSegments():
 				return render_to_response('inBetween.html', data, context_instance=RequestContext(request))	
 
-			items = getNoBidItems(auction.id)
+			items = getNoBidItems(auction.id, orderBy = order)
+			
 		except Exception as e:
 			logger.error("error in catalog")
 			logger.error(e)
 		
-		return render_to_response('flatCatalog.html', {"loggedIn": True,"data":data,"catItems":items, "auctionId":auction.id, "success":success, "total":1 ,"number":1 , "flat":True}, context_instance=RequestContext(request))
+		return render_to_response('flatCatalog.html', {"loggedIn": True,"data":data,"catItems":items, "auctionId":auction.id, "success":success, "total":1 ,"number":1 , "flat":True, "sort":sortGet}, context_instance=RequestContext(request))
 	return redirect("profile")
 
 
@@ -534,7 +557,7 @@ def noAuction(request):
 def catalogByCategory(request, order, auctionId = None):
 	data = {}
 	currentAuction = getCurrentAuction()
-
+	logger.error("in cat")
 	if request.user and request.user.is_staff and auctionId:
 		currentAuction = Auction.objects.get(pk = auctionId)
 	
@@ -669,11 +692,14 @@ def catalog(request, auctionId = None):
 	msg = ""
 	data = {}
 	now =  date.today()
-	
+	viewMode = None
 	currentAuction = getCurrentAuction()
 
 	if request.user and request.user.is_staff and auctionId:
 		currentAuction = Auction.objects.get(pk = auctionId)
+		viewMode = request.GET.get("mode", None)
+
+	logger.error("viewmode %s" % viewMode)
 	#why???
 	#if not request.user or (not request.user.is_staff and auctionId):
 	#	return redirect("catalog")
@@ -704,7 +730,7 @@ def catalog(request, auctionId = None):
 	try:
 		
 		#if after close but in 2nd chance
-		if isSecondChance() or isBetweenSegments():
+		if (isSecondChance() or isBetweenSegments()) and (not viewMode or viewMode=="setSale"):
 
 			#only allow winners to bid (so only add on to won shipments)
 			#logger.info("user: %s" % request.user)
@@ -808,7 +834,7 @@ def submitBid(request):
 		data = request.POST
 		bidAmount = data.get("bidAmount")
 
-		if not bidAmount:
+		if not bidAmount and not isSecondChance():
 			return HttpResponse(json.dumps({"success":False, "msg":"You must enter a bid amount."}), content_type="application/json")	
 
 		try:
