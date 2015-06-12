@@ -42,3 +42,8 @@
 	color:red;
 	font-size:18px;
 }
+
+#reportTableDiv: nth-child(even) {
+    background: #CCC;
+    padding-top: 10px;
+}

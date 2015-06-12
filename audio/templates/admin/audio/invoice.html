@@ -7,8 +7,10 @@
 
  <div id="invoiceEmail-confirm" title="Please Confirm">Are you sure you want to email this invoice to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>
 
-<button id='invoiceEmailButton'>Email Invoice to {{data.user.first_name}} {{data.user.last_name}}</button>
+<button id='invoiceEmailButton'>Email Invoice to {{data.user.first_name}} {{data.user.last_name}}</button><br>
+<button onclick="window.open('/admin/printInvoices/{{data.auction.id}}/{{data.user.id}}')">Print this Invoice</button><br>
 <button onclick="window.open('/admin/audio/payment/add/?invoice={{data.invoice.id}}&user={{data.user.id}}')">Add Payment to this Invoice</button>
+
 <div id="consignorIdEmailMsg"></div>
 
 <div id="invoiceReminder-confirm" title="Please Confirm">Are you sure you want to email a reminder to {{data.user.first_name}} {{data.user.last_name}} for auction {{data.auction.name}}?</div>

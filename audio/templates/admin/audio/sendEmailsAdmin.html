@@ -6,13 +6,14 @@
 <div>Email Admin Auction: {{data.auctionId}}</div>
 <br><br>
 
+<div id="msg"></div>
 <div><button id="sendLoserLetter">Send all loser letters</button></div>
 
 
 <div id="sendLoserLetter-confirm" title="Please Confirm">Are you sure you want email all loser letters auction <span id="auctionIdSpan"></span>?</div>
 
 
-<input type="hidden" id="auctionId" name="auctionId" value="{{data.auctionId}}">
+<input type="hidden" id="auctionId" name="auctionId" value="{{data.auction.id}}">
 
 <script type="text/javascript">
 	
@@ -37,6 +38,7 @@ $( document ).ready(function() {
 							$("#msg").css("color","green")
 							$("#msg").text("You've successfully emailed all loser letters")
 						}else{
+							$("#msg").css("color","red")
 							$("#msg").text("Something went wrong, loser letters were not sent: "  + data.msg)
 			        	
 						}

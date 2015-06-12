@@ -14,7 +14,7 @@ from django.template import RequestContext, loader
 from django.core.mail import send_mail
 
 from audio.forms import ContactForm, BidSubmitForm, BulkConsignment, AdminBidForm, \
-UserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm, UserProfileForm
+UserCreateForm, AdminUserCreateForm, ItemForm, ItemPrePopulateForm, InvoiceForm, UserProfileForm
 
 from audio.models import Address, Item, Bid, Invoice, Payment, Auction, Consignor, UserProfile, Category, Label, Condition
 from audio.utils import *
@@ -169,7 +169,7 @@ def sendWinningBidReport(request):
 		logger.error("user ids without email: %s" % noEmailList)
 		data["emailList"] =  emailList
 		data["problemEmails"] = noEmailList
-		sendBulkEmail(messages)
+		sendBulkEmail(messages, "Winning Bid Report")
 	except Exception as e:
 		logger.error("error sending new user emails: %s" % e)
 		return HttpResponse(json.dumps({"success":False, "data": data}), content_type="application/json")
@@ -386,6 +386,13 @@ def printLetters(request, template, auctionId=None):
 def printLabels(request, auctionId, labelType=None):
 	data = {}
 	profiles = {}
+	data["auction"] = Auction.objects.get(pk=auctionId)
+	data["flat"] = request.GET.get("flat", False)
+	
+	data["today"]=date.today()
+	profileArr = []
+
+		
 	if labelType:
 		if labelType == "NonActive":
 			users, addresses = getNonActiveUsers(auctionId)
@@ -405,9 +412,30 @@ def printLabels(request, auctionId, labelType=None):
 			num = [1092, 1110, 1144, 1125, 1153, 1136, 1198, 1199, 1207, 1181, 1182, 1234, 1244, 1242, 1233, 1214, 1232, 1228, 1213, 1273, 1267, 1320, 1334, 1380, 1372, 1368, 1364, 1355, 1412, 1406, 1415, 1421, 1433, 1397, 1403, 1413, 1470, 1481, 1479, 1474, 1447, 1464, 1525, 1520, 1492, 1537, 1557, 1568, 1567, 1555, 1605, 1613, 1599, 1626, 1647, 1661, 1641, 1638, 1692, 1669, 1686, 1697, 1713, 1744, 1743, 1774, 1789, 1759, 1821, 1804, 1798, 1877, 1862, 1857, 1875, 1876, 1866, 1914, 1910, 1893, 1895, 1905, 1968, 1970, 1940, 1952, 2010, 2003, 2006, 1994, 1992, 1999, 2043, 2032, 2041, 2092, 2073, 2089, 2064, 2077, 2114, 2149, 2122, 2150, 2130, 2154, 1634]
 			profiles = UserProfile.objects.filter(user__in=set(num)).order_by("user__last_name")
 	
+		if labelType=="invoiceUSPS":
+			data["title"] = "Invoice USPS"
+			if data["flat"]:
+				winners = getWinningFlatBids(auctionId, date=data["auction"].end_date, userId = userId)
+			else:
+				winners = getAlphaWinners(auctionId)
+			for winner in winners:
+				up = UserProfile.objects.get(user = winner)
+				if not okToEmail(up):
+					profileArr.append(up)
+		if labelType == "loserUSPS":
+			data["title"] = "Loser USPS"
 
+			losers = getLosers(auctionId)
+			printOnly = []
+			
+			for loser in losers:
+				if not okToEmail(loser):
+					profileArr.append(loser)
 
-		data["profiles"] = profiles	
+		if len(profileArr) > 0:
+			data["profiles"]= profileArr
+		else:
+			data["profiles"] = profiles
 	else:
 		users, addresses = getNonActiveUsers(auctionId)
 		data["profiles"] = profiles
@@ -612,7 +640,7 @@ def createUser(request):
 	#logger.error(request)
 	if request.method == 'POST':
 		
-		form = UserCreateForm(request.POST)
+		form = AdminUserCreateForm(request.POST)
 
 
 		if form.is_valid():
@@ -665,7 +693,7 @@ def createUser(request):
 		logger.error("not post")
 
 	data["profileForm"] = UserProfileForm()
-	data["form"] = UserCreateForm()
+	data["form"] = AdminUserCreateForm()
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
 
@@ -854,6 +882,7 @@ def markShipped(request, auctionId):
 @staff_member_required
 def emailAdmin(request, auctionId):
 	data = {}
+	data["auction"]= Auction.objects.get(pk=auctionId)
 	return render_to_response('admin/audio/sendEmailsAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required
@@ -864,9 +893,16 @@ def createBid(request, auctionId):
 		form = AdminBidForm(auctionId, request.POST)
 		if form.is_valid():
 			form.save(auctionId = auctionId)
-			data["form"] = form
+			data["form"] = AdminBidForm(auctionId = auctionId)
 			return render_to_response('admin/audio/createBid.html', {"data":data, "success": True}, context_instance=RequestContext(request))
 		else:
+			
+			errors = form.errors.as_data()
+			if errors.get("item"):
+				for error in errors["item"]:
+					if error.code=="duplicate":
+						data["link"] = "/admin/audio/bid/" + str(error.params["bid"])
+				
 			data["form"] = form
 			return render_to_response('admin/audio/createBid.html', {"data":data, "error": True}, context_instance=RequestContext(request))
 				
@@ -1098,12 +1134,44 @@ def invoices(request, auctionId):
 		data["auction"] = auctions[0]
 	return render_to_response('admin/audio/invoiceAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
-def notExcluded(up, emailOnly=False):
-	if emailOnly:
-		return not up.quiet and not up.deadbeat and up.email_only and up.verified
-	else:	
-		return not up.quiet and not up.deadbeat
+@staff_member_required
+def loserLetters(request, auctionId):
+	data = {}
+	auctions = Auction.objects.filter(pk=auctionId)
+	if len(auctions) < 1:
+		data["error"]=True
+		data["errorMsg"] = "Auction #"+auctionId+" doens't exist"
+	else:
+		data["auction"] = auctions[0]
+	return render_to_response('admin/audio/loserLetterAdmin.html', {"data":data}, context_instance=RequestContext(request))
 
+
+def okToEmail(up):
+	return not up.quiet and not up.deadbeat and up.email_only and up.verified
+
+def isDND(up):
+	return up.quiet or up.deadbeat
+
+@staff_member_required
+def printLoserLetters(request, auctionId):
+	losers = getLosers(auctionId)
+
+	data = {}
+	auction = Auction.objects.get(pk = auctionId)
+	printOnly = []
+	data["auction"] = auction
+	#logger.error("losers:")
+	for loser in losers:
+		
+		if not okToEmail(loser):
+			info = {}
+			info["winningBids"] = getWinningBidsFromLosers(auctionId, loser.user.id)
+			info["profile"] = loser
+			printOnly.append(info)
+		
+			
+	data["profiles"] = printOnly
+	return render_to_response("admin/audio/printLoserLetters.html", {"data":data}, context_instance=RequestContext(request))
 
 
 @staff_member_required
@@ -1112,19 +1180,52 @@ def sendLoserLetters(request, auctionId):
 	messages = []
 	template = "loserLetter"
 	data = {}
-	data["auction"] = Auction.objects.get(pk = auctionId)
+	auction = Auction.objects.get(pk = auctionId)
+	emails = []
+	msg = None
+	
+	#debug stuff
+	i = 0
+
+	if not auction.blind_locked:
+		return HttpResponse(json.dumps({"success":False, "msg":"This auction has not been locked."}), content_type="application/json")
+	
+	data["auction"] = auction
+	
 	#logger.error("losers:")
 	for loser in losers:
 
-		data["winningBids"] = getWinningBidsFromLosers(auctionId, user.id)
+		data["winningBids"] = getWinningBidsFromLosers(auctionId, loser.user.id)
 		data["profile"] = loser
-		if notExcluded(loser, emailOnly = True):
-			msg = getEmailMessage(user.email,"Hawthorn Antique Audio Auction results",{"data":data}, template, False)
-			messages.append(msg)
-
+		if okToEmail(loser):
+			try:
+				f = forms.EmailField()
+				f.clean(loser.user.email)
+			except:
+				logger.error("bad email address in send loser letter: %s for user:%s" % (loser.user.email, loser.user.username))
+				#make sure to skip the rest on a bad email address
+				continue
+			
+			if settings.EMAIL_DEBUG:
+				if i < 1:
+					logger.info("in testing email")
+					#msg1 = getEmailMessage("bad","Hawthorn Antique Audio Auction results",{"data":data}, template, False)
+					
+					msg = getEmailMessage(settings.TEST_EMAIL,"Hawthorn Antique Audio Auction results",{"data":data}, template, False)
+					emails.append(settings.TEST_EMAIL)
+					#messages.append(msg1)
+					messages.append(msg)
+			else:
+				msg = getEmailMessage(loser.user.email,"Hawthorn Antique Audio Auction results",{"data":data}, template, False)
+				emails.append(loser.user.email)
+				messages.append(msg)
+			
+			i = i + 1
+	
 	if template :
-		logger.error("sending msgs ")
-		sendBulkEmail(messages)
+		#logger.error("sending msgs ")
+		logger.info("sending loser letters to: %s" % emails)
+		sendBulkEmail(messages, "Loser Letters")
 		return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 	
@@ -1152,6 +1253,7 @@ def printInvoices(request, auctionId, userId = None):
 		data["auction"] = Auction.objects.get(pk=auctionId)
 		data["flat"] = request.GET.get("flat", False)
 		data["invoices"] = {}
+		data["today"]=date.today()
 		if userId != None:
 			data["invoices"][str(userId)] = getInvoiceData(auctionId, userId)
 			data["invoices"][str(userId)]["profile"] = UserProfile.objects.get(user = userId)
@@ -1162,34 +1264,39 @@ def printInvoices(request, auctionId, userId = None):
 			else:
 				invoice.invoice_date = datetime.now()
 		else:
-			if filter:
-				if data["flat"]:
-					winners = getWinningFlatBids(auctionId, date=data["auction"].end_date, userId = userId)
-				else:
-					winners = getAlphaWinners(auctionId, True)
-	
+			
+			if data["flat"]:
+				winners = getWinningFlatBids(auctionId, date=data["auction"].end_date, userId = userId)
 			else:
-				if data["flat"]:
-					winners = getWinningFlatBids(auctionId, date=data["auction"].end_date, userId = userId)
-				else:
-					winners = getAlphaWinners(auctionId)
+				winners = getAlphaWinners(auctionId)
+
 
 			#logger.error("winners: %s"  % winners)
+			i = 0
 			for winner in winners:
-				data["invoices"][str(winner.id)] = getInvoiceData(auctionId, winner.id)
-				data["invoices"][str(winner.id)]["profile"] = UserProfile.objects.get(user = winner.id)
-				#save invoice date
-				invoice = data["invoices"][str(winner.id)]["invoice"]
-				if data["flat"]:
-					invoice.second_chance_invoice_date = datetime.now()
-				else:
-					invoice.invoice_date = datetime.now()
-		
+				up = UserProfile.objects.get(user = winner.id)
+				#logger.error("name: %s" % up.user.last_name)
+				if (filter and not okToEmail(up)) or not filter:
+					data["invoices"][i] = getInvoiceData(auctionId, winner.id)
+					data["invoices"][i]["profile"] = up
+					data["invoices"][i]["notWon"] = getWinningBidsFromLosers(auctionId, winner.id)
+					#save invoice date
+					invoice = data["invoices"][i]["invoice"]
+					if data["flat"]:
+						invoice.second_chance_invoice_date = datetime.now()
+					else:
+						invoice.invoice_date = datetime.now()
+					i = i + 1
+			
+			if not filter:
+				data["title"] = "All Invoices"
+			else:
+				data["title"] = "("+str(i)+") USPS Invoices"
 		getHeaderData(data, auctionId)
 		
 
 	except Exception as e:
-		logger.error("Error in printInvoices: %e" % e)	
+		logger.error("Error in printInvoices: %s" % e)	
 	return render_to_response("admin/audio/printInvoice.html", {"data":data}, context_instance=RequestContext(request))
 
 @login_required
@@ -1199,7 +1306,8 @@ def sendInvoices(request, auctionId = None, userId = None):
 	if not userId:
 		userId = request.POST.get("userId", None)
 	auction = Auction.objects.get(id = auctionId)
-	
+
+
 	winners = {}
 	messages = []
 	data = {}
@@ -1224,13 +1332,23 @@ def sendInvoices(request, auctionId = None, userId = None):
 
 
 	data["isFlat"] = isFlat
-
+	i = 0
+	emails = []
 	for winner in winners:
 		profile = UserProfile.objects.get(user_id = winner.id)
-		if profile and profile.email_only:
+		if okToEmail(profile):
 			#logger.error("winner: %s" % winner.id)
 			
 			data = getInvoiceData(auctionId, winner.id)
+			
+			try:
+				f = forms.EmailField()
+				f.clean(winner.email)
+			except:
+				logger.error("bad email address in send invoices: %s for user:%s" % (winner.email, winner.username))
+				#make sure to skip the rest on a bad email address
+				continue
+
 			#logger.error("userId %s" % userId)
 			if userId:
 				if data["invoice"].second_chance_invoice_amount > 0:
@@ -1243,12 +1361,23 @@ def sendInvoices(request, auctionId = None, userId = None):
 					data["invoice"].second_chance_invoice_date = datetime.now()
 				else:
 					data["invoice"].invoice_date = datetime.now()
-
-			msg = getEmailMessage(data["user"].email,subject, {"data":data}, "invoice", False)
-			messages.append(msg)
+			data["profile"] = profile
+			data["notWon"] = getWinningBidsFromLosers(auctionId, winner.id)
+			
+			if settings.EMAIL_DEBUG:
+				if i < 1:
+					logger.error("in testing email")
+					msg = getEmailMessage(settings.TEST_EMAIL,subject, {"data":data}, "invoice", False)
+					#emails.append(loser.user.email)
+					messages.append(msg)
+			else:
+				msg = getEmailMessage(data["user"].email,subject, {"data":data}, "invoice", False)
+				emails.append(data["user"].email)
+				messages.append(msg)
+			i = i + 1
 				
-
-	sendBulkEmail(messages)
+	logger.info("sending invoice email to: %s" % emails)
+	sendBulkEmail(messages, "Invoice")
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 
@@ -1289,7 +1418,7 @@ def sendReminder(request):
 			messages.append(msg)
 				
 		if template :
-			sendBulkEmail(messages)
+			#sendBulkEmail(messages, "Reminder")
 			return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 
 	return HttpResponse(json.dumps({"success":True}), content_type="application/json")
@@ -1370,7 +1499,7 @@ def consignorReport(request, auctionId, template = None):
 				messages.append(msg)
 
 
-			sendBulkEmail(messages)
+			sendBulkEmail(messages, "Consignor Report")
 			return HttpResponse(json.dumps({"success":True,"msg":"sent bulk emails"}), content_type="application/json")
 	except Exception as e:
 		logger.error("consignorReport error: %s" % e)		
@@ -1492,15 +1621,23 @@ def markWinners(auctionId):
 def winners(request, auctionId):
 	data = {}
 	winners = getAlphaWinners(auctionId)
+	winnerInfo = []
 	for winner in winners:
 		try:
+			info = {}
 			#logger.error("winner: " + winner)
+			info["user"] = winner
 			address = Address.objects.get(upShipping__user = winner.id)
-			winner["zipcode"] = address.zipcode
+			
+			info["zipcode"] = address.zipcode
+			info["country"] = address.country
+			info["pc"] = address.postal_code
+			info["up"] = UserProfile.objects.get(user = winner.id)
+			winnerInfo.append(info)
 		except:
 			pass
-	
-	data["winningBids"] = winners
+	#logger.error("winners %s" % winners)
+	data["winningBids"] = winnerInfo
 	getHeaderData(data, auctionId)
 	
 	return render_to_response('admin/audio/winners.html', {"data":data}, context_instance=RequestContext(request))

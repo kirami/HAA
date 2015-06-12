@@ -1,1 +1,21 @@
-Sorry
+
+
+{%block content%}
+
+We're sorry, you didn't win any items in auction: {{data.auction.name}}.
+
+
+
+Here are the winning bids for the items you were interested in:
+
+	Lot ID:		Label:		Name:		Winning Bid:
+
+	{%for item in data.winningBids%}
+	{{item.item.lot_id}}		{{item.item.label.name}}		{{item.item.name}}	${{item.amount}}
+	
+	{%endfor%}
+	
+
+Thank you for participating!
+
+{%endblock%}

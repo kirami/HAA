@@ -689,7 +689,10 @@ def getHeaderData(data, auctionId):
 	data ["preDiscount"] = sums["sum"]
 	data["today"] = date.today()
 	if len(sums) > 0:
-		data["total"] = sums["sum"]	- data["discount"]
+		if data["discount"]:
+			data["total"] = sums["sum"]	- data["discount"]
+		else:
+			data["total"] = sums["sum"]	
 	else:
 		data["total"] = 0
 	return data

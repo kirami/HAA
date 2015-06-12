@@ -31,7 +31,7 @@
 				<div class="maxBidItem">{{winner.item.label.name}}</div>
 				<div class="maxBidItem">{%if winner.item.record_number%}{{winner.item.record_number}}{%else%}&nbsp;{%endif%}</div>
 				<div class="maxBidItem">{{winner.item.name}}</div>
-				<div class="maxBidItem">{{winner.item.artist}}</div>
+				<div class="maxBidItem">{%if winner.item.artist%}{{winner.item.artist}}{%else%}&nbsp;{%endif%}</div>
 				<div class="maxBidItem">{{winner.amount}}</div>
 				<div class="clear"></div>
 			{%endfor%}

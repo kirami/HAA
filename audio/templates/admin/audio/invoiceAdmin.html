@@ -11,11 +11,18 @@
 <div style="margin-top:20px;">Invoice Emails:</div>
 <div><button id="emailInvoices">Send all invoice emails</button></div>
 <div style="margin-top:20px;">Printing Blind Auction Invoices:</div>
-<div><button id="printInvoices" onclick="javascript:window.location.href = '/admin/printInvoices/{{data.auction.id}}/?filter=true'">Print all invoices that are not emailed</button></div>
-<div><button id="printInvoices" onclick="javascript:window.location.href = '/admin/printInvoices/{{data.auction.id}}'">Print all invoices, both emailed and not</button></div>
+<div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}/?filter=true')">Print all invoices that are not emailed</button></div>
+<div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}')">Print all invoices, both emailed and not</button></div>
+
+<div style="margin-top:20px;">Printing USPS Shipping Labels for invoices:</div>
+<div><button id="printInvoices" onclick="javascript:window.open( '/admin/printLabels/{{data.auction.id}}/invoiceUSPS/')">Print shipping labels for invoices to be mailed</button></div>
+
+
+
+
 <div style="margin-top:20px;">Printing Set Sale (updated) invoices</div>
-<div><button id="printInvoices" onclick="javascript:window.location.href = '/admin/printInvoices/{{data.auction.id}}/?flat=true&filtered=true'">Print all SET SALE <b>updated</b> invoices that are not emailed</button></div>
-<div><button id="printInvoices" onclick="javascript:window.location.href = '/admin/printInvoices/{{data.auction.id}}/?flat=true'">Print all SET SALE <b>updated</b> invoices, both emailed and not</button></div>
+<div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}/?flat=true&filtered=true')">Print all SET SALE <b>updated</b> invoices that are not emailed</button></div>
+<div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}/?flat=true')">Print all SET SALE <b>updated</b> invoices, both emailed and not</button></div>
 
 
 <div id="emailInvoices-confirm" title="Please Confirm">Are you sure you want email all invoices for auction <span id="auctionIdSpan"></span>?</div>

@@ -2,23 +2,42 @@
  
 
 {%block info%}
+
+
+
 <div>These people bid won an item:</div>
 
 <div id="reportDiv" class="reportTable">
 	<div class="maxBidItem">ID:</div>
 	<div class="maxBidItem">Last Name:</div>
 	<div class="maxBidItem">First Name:</div>
-	<div class="maxBidItem">Zip Code:</div>
+	<div class="maxBidItem">Zip Code / Postal Code:</div>
+	<div class="maxBidItem">Country</div>
+	<div class="maxBidItem">USPS?</div>
 	<div class="clear"></div>
 	<br><br>
-	
-{%for winner in data.winningBids%} 
-	<div class="maxBidItem"><a href="/admin/getInvoices/{{data.auctionId}}/{{winner.id}}/" target="_blank">{{winner.id}}</a></div>
-	<div class="maxBidItem">{{winner.last_name}}</div>	
-	<div class="maxBidItem">{{winner.first_name}}</div>	
-	<div class="maxBidItem">{{winner.zipcode}}</div>
+<div id="reportTableDiv">	
+{%for winner in data.winningBids%}
+<div class="tableInfoItem">
+	<div class="maxBidItem"><a href="/admin/getInvoices/{{data.auctionId}}/{{winner.user.id}}/" target="_blank">{{winner.user.id}}</a></div>
+	<div class="maxBidItem">{{winner.user.last_name}}</div>	
+	<div class="maxBidItem">{{winner.user.first_name}}</div>	
+	{%if winner.zipcode%}
+		<div class="maxBidItem">{{winner.zipcode}}</div>
+	{%else%}
+		<div class="maxBidItem">{{winner.pc}}</div>
+	{%endif%}
+
+	{%ifequal winner.country 'USA' %}
+		<div class="maxBidItem">&nbsp;</div>
+	{%else%}
+		<div class="maxBidItem">{{winner.country}}</div>
+	{%endifequal%}
+	<div class="maxBidItem">{%if not winner.up.email_only%}True{%endif%}</div>
 	<div class="clear"></div>
+	</div>
 {%endfor%}
+</div>
 
 </div>
 

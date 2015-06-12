@@ -49,7 +49,6 @@ class ItemAdminForm(ModelForm):
         else:
             self.fields['category'].queryset = Category.objects.order_by('name')
 
-            
 class ItemForm(ModelForm):
    
     def __init__(self, *args, **kwargs):
@@ -93,7 +92,7 @@ class UserForm(ModelForm):
         fields = ['first_name', 'last_name', 'username', 'email']
        
 
-class UserCreateForm(UserCreationForm):
+class AdminUserCreateForm(UserCreationForm):
     email = EmailField(required=True)
     pdf_list = BooleanField()
     courtesy_list = BooleanField()
@@ -103,6 +102,22 @@ class UserCreateForm(UserCreationForm):
     ebay = BooleanField()
     #notes = models.CharField(max_length=200, null = True, blank=True)
     verified = BooleanField()
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "first_name", "last_name", "password1", "password2")
+
+    def save(self, commit=True):
+        new_user = super(UserCreateForm, self).save(commit=False)
+        new_user.email = self.cleaned_data["email"]
+        if commit:
+            new_user.save()
+            profile = UserProfile.objects.create(user = new_user)
+        return new_user
+
+class UserCreateForm(UserCreationForm):
+    email = EmailField(required=True)
+
 
     class Meta:
         model = User
@@ -133,19 +148,31 @@ class AdminBidForm(ModelForm):
         
         self.fields['amount'] = DecimalField(label='amount', initial=0.00)
         self.fields['user'].queryset = User.objects.order_by('username')
+        self.fields['item'].queryset = Item.objects.order_by('lot_id')
 
         
     class Meta:
         model = Bid
         exclude = ('invoice',)
 
+    def clean_item(self):
+        
+        item = self.cleaned_data["item"]
+        bids = Bid.objects.filter(user=self.data["user"], item=item)
+        if len(bids)> 0:
+            bid = bids[0]
+            raise ValidationError(('User has already bid on item: ' + str(item)),code='duplicate',params={'bid': bid.id})     
+        return item
+
     def clean_amount(self):
         amount = self.data['amount']
-        item = self.cleaned_data["item"]
+        item = self.cleaned_data.get("item")
         
-        if self.cleaned_data["amount"] < item.min_bid:
+        if item and self.cleaned_data["amount"] < item.min_bid:
             raise ValidationError(('Min bid for this item is: $' + str(item.min_bid))) 
         return amount
+
+    
 
     def save(self,  auctionId, commit=True):
 

@@ -40,15 +40,24 @@ class InvoiceFilter(SimpleListFilter):
             return queryset.filter(shipped_date = None)
         if self.value() == 'Not Null':
             return queryset.filter(shipped_date__isnull = False)
-"""
 
-class CustomConsignmentModelForm(forms.ModelForm):
-    class Meta:
-        model = Consignment
-    def __init__(self, *args, **kwargs):
-        super(CustomConsignmentModelForm, self).__init__(*args, **kwargs)
-        self.fields['item'].queryset = Item.objects.filter(consignedItem=None)
-"""
+
+class ItemFilter(SimpleListFilter):
+    title="No Bids"
+    parameter_name = 'bidItem'
+
+    def lookups(self, request, model_admin):
+     return (
+                ('Null', _('No bids')),
+                ('Not Null', _('Has bids')),
+            )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'Null':
+            return queryset.filter(bidItem = None)
+        if self.value() == 'Not Null':
+            return queryset.filter(bidItem__isnull = False).distinct()
+
         
 
 class ConditionAdmin(admin.ModelAdmin):
@@ -82,10 +91,12 @@ class ItemAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'lot_id', 'auction')
     search_fields = ['name', 'lot_id']
-    list_filter = ( 'item_type', "auction",)
+    list_filter = ( 'item_type', "auction", ItemFilter)
     save_on_top = True
     ordering = ("lot_id", "label__name")
     form = ItemAdminForm
+
+
 
     #def changelist_view(self, request, extra_context=None):
     #    logger.error("request %s" % request)
