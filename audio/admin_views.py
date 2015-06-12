@@ -200,7 +200,7 @@ def filterAdminIndex(request):
 
 	if data["invoice"]:
 		
-		data["invoices"] = Invoice.objects.filter(auction = auctionId)
+		data["invoices"] = Invoice.objects.filter(auction = auctionId).order_by("user__username")
 		#logger.error(data["invoices"])
 
 	if request.method == 'POST':
@@ -1258,6 +1258,9 @@ def printInvoices(request, auctionId, userId = None):
 		if userId != None:
 			data["invoices"][str(userId)] = getInvoiceData(auctionId, userId)
 			data["invoices"][str(userId)]["profile"] = UserProfile.objects.get(user = userId)
+			#data["invoices"][i]["profile"] = up
+			data["invoices"][str(userId)]["notWon"] = getWinningBidsFromLosers(auctionId, userId)
+					
 			#save invoice date as today
 			invoice = data["invoices"][str(winner.id)]["invoice"]
 			if data["flat"]:
