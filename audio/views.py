@@ -712,7 +712,7 @@ def catalog(request, auctionId = None):
 		currentAuction = Auction.objects.get(pk = auctionId)
 		viewMode = request.GET.get("mode", None)
 
-	logger.error("viewmode %s" % viewMode)
+	#logger.error("viewmode %s" % viewMode)
 	#why???
 	#if not request.user or (not request.user.is_staff and auctionId):
 	#	return redirect("catalog")

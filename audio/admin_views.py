@@ -1000,7 +1000,7 @@ def endSSAuction(request, auctionId, userId = None):
 def endFlatAuction(request, auctionId, userId = None):
 	#logger.error("user %s" % request.user)
 	if userId:
-		logger.error("userId:%s logged in:%s" %(userId, request.user.id))
+		#logger.error("userId:%s logged in:%s" %(userId, request.user.id))
 		if int(userId) != int(request.user.id) and not request.user.is_staff:
 			logger.error("Tried to end Flat Auction with bad user: %s" % request.user)
 			return HttpResponse(json.dumps({"success":False, "msg":"Something went wrong.  Please contanct us."}), content_type="application/json")
@@ -1066,11 +1066,12 @@ def endFlatAuction(request, auctionId, userId = None):
 		auction.save()
 
 	if userId and email:
-		logger.error("sending ended email")
+		#logger.error("sending ended email")
 		data["invoice"]=invoice
 		data["user"] = User.objects.get(pk=userId)
 		msg = getEmailMessage(settings.DEFAULT_FROM_EMAIL ,"User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)
 		msg.send()	
+		#logger.error("sent")
 	#don't send, what about shipping?
 	#if int(userId) == int(request.user.id):
 		#logger.error("sending invoice")
