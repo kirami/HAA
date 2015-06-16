@@ -492,8 +492,12 @@ def flatFeeCatalog(request, auctionId = None):
 		order="lot_id"
 		sortGet = "lotAsc"
 	viewMode = None
-	if request.user and request.user.is_staff and auctionId:
-		currentAuction = Auction.objects.get(pk = auctionId)
+	if request.user and request.user.is_authenticated() and request.user.is_staff and auctionId:
+		auctions = Auction.objects.filter(pk = auctionId)
+		if len(auctions) < 1:
+			logger.error("bad auction ID requested for view mode")
+			return redirect("noAuction")
+		currentAuction = auctions[0]
 		viewMode = "setSale"
 
 	#logger.error("set sale view")
@@ -574,8 +578,12 @@ def catalogByCategory(request, order, auctionId = None):
 	data = {}
 	currentAuction = getCurrentAuction()
 	#logger.error("in cat")
-	if request.user and request.user.is_staff and auctionId:
-		currentAuction = Auction.objects.get(pk = auctionId)
+	if request.user and request.user.is_authenticated() and request.user.is_staff and auctionId:
+		auctions = Auction.objects.filter(pk = auctionId)
+		if len(auctions) < 1:
+			logger.error("bad auction ID requested for view mode")
+
+		currentAuction = auctions[0]
 	
 	#if not request.user or (not request.user.is_staff and auctionId):
 	#	return redirect("catalog")
@@ -711,9 +719,13 @@ def catalog(request, auctionId = None):
 	viewMode = None
 	currentAuction = getCurrentAuction()
 
-	if request.user and request.user.is_staff and auctionId:
-		currentAuction = Auction.objects.get(pk = auctionId)
-		viewMode = request.GET.get("mode", None)
+	if request.user and request.user.is_authenticated() and request.user.is_staff and auctionId:
+		auctions = Auction.objects.filter(pk = auctionId)
+		if len(auctions) < 1:
+			logger.error("bad auction ID requested for view mode")
+			return redirect("noAuction")
+		currentAuction = auctions[0]
+		viewMode = "blind"
 
 	#logger.error("viewmode %s" % viewMode)
 	#why???
@@ -746,7 +758,7 @@ def catalog(request, auctionId = None):
 	try:
 		
 		#if after close but in 2nd chance
-		if (isSecondChance() or isBetweenSegments()) and (not viewMode or viewMode=="setSale"):
+		if (isSecondChance() or isBetweenSegments()):
 
 			#only allow winners to bid (so only add on to won shipments)
 			#logger.info("user: %s" % request.user)
@@ -754,14 +766,14 @@ def catalog(request, auctionId = None):
 				bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
 				#logger.info("bids2 %s" % viewMode)
 
-				if len(bids) < 1 and not viewMode:
+				if len(bids) < 1:
 					#logger.info("redir")
 					return redirect("noAuction")
 			else:	
 				#logger.info("redir2")
 				return redirect("noAuction")
 			
-			if isBetweenSegments() and not viewMode:
+			if isBetweenSegments():
 				return render_to_response('inBetween.html', data, context_instance=RequestContext(request))	
 			return redirect("flatFeeCatalog")
 	except Exception as e:
