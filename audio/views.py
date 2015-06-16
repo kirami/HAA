@@ -496,7 +496,7 @@ def flatFeeCatalog(request, auctionId = None):
 		currentAuction = Auction.objects.get(pk = auctionId)
 		viewMode = "setSale"
 
-	logger.error("set sale view")
+	#logger.error("set sale view")
 	
 	success = False
 	if request.GET.get("success"):
@@ -573,7 +573,7 @@ def noAuction(request):
 def catalogByCategory(request, order, auctionId = None):
 	data = {}
 	currentAuction = getCurrentAuction()
-	logger.error("in cat")
+	#logger.error("in cat")
 	if request.user and request.user.is_staff and auctionId:
 		currentAuction = Auction.objects.get(pk = auctionId)
 	
@@ -592,7 +592,7 @@ def catalogByCategory(request, order, auctionId = None):
 	try:
 		page = int(request.GET.get("page", 1))
 	except:
-		logger.error("bad page")
+		logger.error("bad page number requested")
 
 	category = request.GET.get("category", None)
 	ordered = {}
@@ -729,7 +729,7 @@ def catalog(request, auctionId = None):
 	try:
 		page = int(request.GET.get("page", 1))
 	except:
-		logger.error("bad page")
+		logger.error("bad page number requested")
 
 	category = request.GET.get("category", None)
 	order = request.GET.get("sort", 'lot_id')
