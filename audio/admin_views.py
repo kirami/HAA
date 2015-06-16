@@ -1248,7 +1248,8 @@ def getInvoices(request, auctionId, userId = None, printIt = None):
 def printInvoices(request, auctionId, userId = None):
 	
 	try:
-		filter = request.GET.get("filter", False)
+		uspsOnly = request.GET.get("uspsOnly", False)
+		emailOnly = request.GET.get("emailOnly", False)
 		data = {}
 		
 		data["auction"] = Auction.objects.get(pk=auctionId)
@@ -1279,23 +1280,27 @@ def printInvoices(request, auctionId, userId = None):
 			i = 0
 			for winner in winners:
 				up = UserProfile.objects.get(user = winner.id)
-				#logger.error("name: %s" % up.user.last_name)
-				if (filter and not okToEmail(up)) or not filter:
+
+				if (uspsOnly and not okToEmail(up)) or (emailOnly and okToEmail(up)) or (not uspsOnly and not emailOnly):
 					data["invoices"][i] = getInvoiceData(auctionId, winner.id)
 					data["invoices"][i]["profile"] = up
 					data["invoices"][i]["notWon"] = getWinningBidsFromLosers(auctionId, winner.id)
 					#save invoice date
 					invoice = data["invoices"][i]["invoice"]
+					'''
 					if data["flat"]:
 						invoice.second_chance_invoice_date = datetime.now()
 					else:
 						invoice.invoice_date = datetime.now()
+					'''
 					i = i + 1
 			
-			if not filter:
+			if not uspsOnly and not emailOnly:
 				data["title"] = "All Invoices"
-			else:
+			elif uspsOnly:
 				data["title"] = "("+str(i)+") USPS Invoices"
+			elif emailOnly:
+				data["title"] = "("+str(i)+") Emailed Invoices"
 		getHeaderData(data, auctionId)
 		
 
@@ -1303,7 +1308,7 @@ def printInvoices(request, auctionId, userId = None):
 		logger.error("Error in printInvoices: %s" % e)	
 	return render_to_response("admin/audio/printInvoice.html", {"data":data}, context_instance=RequestContext(request))
 
-@login_required
+@staff_member_required
 def sendInvoices(request, auctionId = None, userId = None):
 	if not auctionId:
 		auctionId = request.POST.get("auctionId")

@@ -13,6 +13,8 @@
 <div style="margin-top:20px;">Printing Loser Letters for USPS:</div>
 <div><button id="printLL" onclick="javascript:window.location.href = '/admin/printLoserLetters/{{data.auction.id}}'">Print all loser letters that are not emailed</button></div>
 <div>
+<div style="margin-top:20px;">Printing USPS Shipping Labels for loser letters:</div>
+<div><button id="printInvoices" onclick="javascript:window.open( '/admin/printLabels/{{data.auction.id}}/loserUSPS/')">Print shipping labels for invoices to be mailed</button></div>
 
 
 <div id="sendLoserLetter-confirm" title="Please Confirm">Are you sure you want email all loser letters for auction <span id="auctionIdSpan"></span>?</div>

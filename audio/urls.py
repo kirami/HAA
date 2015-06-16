@@ -49,7 +49,7 @@ urlpatterns = patterns('',
     url(r'^catalog/setPrice', views.flatFeeCatalog, name='flatFeeCatalog'),
     url(r'^catalog/itemInfo/(?P<itemId>\d+)/$', views.itemInfo, name='itemInfo'),
     url(r'^catalog/view/(?P<auctionId>\d+)/$', views.catalog, name='catalog'),
-
+    url(r'^catalog/viewSetSale/(?P<auctionId>\d+)/$', views.flatFeeCatalog, name='flatFeeCatalog'),
     url(r'^catalog/$', views.catalog, name='catalog'),
     url(r'^test', views.test, name='test'),
     url(r'^tom/$',  TemplateView.as_view(template_name='tom.html')),

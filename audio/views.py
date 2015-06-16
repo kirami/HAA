@@ -466,7 +466,7 @@ def userInfo(request):
 
 
 @login_required
-def flatFeeCatalog(request):
+def flatFeeCatalog(request, auctionId = None):
 	items = None
 	auction = getCurrentAuction()
 	data = {}
@@ -491,9 +491,12 @@ def flatFeeCatalog(request):
 	else:
 		order="lot_id"
 		sortGet = "lotAsc"
+	viewMode = None
+	if request.user and request.user.is_staff and auctionId:
+		currentAuction = Auction.objects.get(pk = auctionId)
+		viewMode = "setSale"
 
-
-
+	logger.error("set sale view")
 	
 	success = False
 	if request.GET.get("success"):
@@ -510,11 +513,11 @@ def flatFeeCatalog(request):
 			#if user ended their auction and got an invoice
 			if len(invoices) > 0:
 				invoice = invoices[0]
-				if invoice.second_chance_invoice_amount > 0:
+				if invoice.second_chance_invoice_amount > 0 and not viewMode:
 					return redirect("noAuction")
 				
 			bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
-			if len(bids) < 1:	
+			if len(bids) < 1 and not viewMode:	
 				return redirect("noAuction")
 			
 			if isBetweenSegments():
@@ -749,14 +752,16 @@ def catalog(request, auctionId = None):
 			#logger.info("user: %s" % request.user)
 			if request.user.is_authenticated():
 				bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
-				logger.info("bids")
-				if len(bids) < 1:
-					
+				#logger.info("bids2 %s" % viewMode)
+
+				if len(bids) < 1 and not viewMode:
+					#logger.info("redir")
 					return redirect("noAuction")
 			else:	
+				#logger.info("redir2")
 				return redirect("noAuction")
 			
-			if isBetweenSegments():
+			if isBetweenSegments() and not viewMode:
 				return render_to_response('inBetween.html', data, context_instance=RequestContext(request))	
 			return redirect("flatFeeCatalog")
 	except Exception as e:

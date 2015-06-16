@@ -10,15 +10,19 @@
 <div id="msg"></div>
 <div style="margin-top:20px;">Invoice Emails:</div>
 <div><button id="emailInvoices">Send all invoice emails</button></div>
+
+
+
 <div style="margin-top:20px;">Printing Blind Auction Invoices:</div>
-<div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}/?filter=true')">Print all invoices that are not emailed</button></div>
+<div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}/?uspsOnly=true')">Print all invoices that are not emailed</button></div>
+<div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}?emailOnly=true')">Print all invoices that are emailed</button></div>
 <div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}')">Print all invoices, both emailed and not</button></div>
 
 <div style="margin-top:20px;">Printing USPS Shipping Labels for invoices:</div>
 <div><button id="printInvoices" onclick="javascript:window.open( '/admin/printLabels/{{data.auction.id}}/invoiceUSPS/')">Print shipping labels for invoices to be mailed</button></div>
 
-
-
+<div style="margin-top:20px;">Save date of sent invoices:</div>
+<div><button id="invoiceDate">Save invoice date for USPS invoices</button></div>
 
 <div style="margin-top:20px;">Printing Set Sale (updated) invoices</div>
 <div><button id="printInvoices" onclick="javascript:window.open('/admin/printInvoices/{{data.auction.id}}/?flat=true&filtered=true')">Print all SET SALE <b>updated</b> invoices that are not emailed</button></div>

@@ -261,3 +261,11 @@ label {
    margin-top: 50px;
    color: red;
 }
+
+#regForm label{
+    width:100px;
+}
+
+.quickLook{
+    cursor: pointer;
+}
