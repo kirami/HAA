@@ -8,6 +8,7 @@
 <div id="reportDiv" class="reportTable">
 	<div class="maxBidItem">Lot ID:</div>
 	<div class="maxBidItem">Label:</div>
+	<div class="maxBidItem">Record Number:</div>
 	<div class="maxBidItem">Name:</div>
 	<div class="maxBidItem">Artist:</div>
 
@@ -18,6 +19,7 @@
 	{%for item in data.unsoldItems%}
 	<div class="tableInfoItem">
 		<div class="maxBidItem">{{item.lot_id}}</div>
+		<div class="maxBidItem">{%if item.record_number%} {{item.record_number}}{%else%}&nbsp{%endif%} </div>
 		<div class="maxBidItem">{{item.label.name}}</div>
 		<div class="maxBidItem">{{item.name}}</div>
 		<div class="maxBidItem">{{item.artist}}</div>

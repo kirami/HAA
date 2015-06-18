@@ -7,11 +7,20 @@
 
 <div>Invoices Auction: {{data.auctionId}}</div>
 <input type="hidden" value="{{data.auctionId}}" name="auctionId" id="auctionId"> 
+
+{%if data.errorMsg%}
+<div class="successError">{{data.errorMsg}}</div>
+{%endif%}
+
 <div id="invoices">
+
 {%for key,value in data.invoices.items%} 
 
+
 	<div id="invoiceDiv_{{key}}" class="invoiceDivs" style="display:none">
-		<div>Invoice for user: <a href="/admin/audio/invoice/{{key}}" target="_blank">{{value.bids.wonItems.0.user}}</a></div>
+	<input type="hidden" name="input_{{key}}" id="input_{{key}}" value="{{value.id}}">
+		<div>Invoice for {{value.bids.wonItems.0.user.first_name}} {{value.bids.wonItems.0.user.last_name}}		
+		<br>User: <a href="/admin/audio/invoice/{{value.id}}" target="_blank">{{value.bids.wonItems.0.user}}</a></div>
 		{%if data.filtered == False%}
 		<div>Take me to only invoices with no shipping entered yet <a href="/admin/shippingByInvoice/{{data.auctionId}}/filtered/">here</a></div>
 		{%else%}
@@ -40,15 +49,42 @@
 			{%endfor%}
 		</div>
 		<br><br>
+		<div id="invoice_{{value.id}}_msg"></div>
+
+		{%if data.flat%}
+		<div>We charged an initially shipping of: <b>${{value.shipping}}</b></div>
+		<br><br>
+		<div>These items were added on during set sale:</div>
+		<div id="reportDiv" class="reportTable">
+				<div class="maxBidItem maxBidItemTitle">Lot ID:</div>
+				<div class="maxBidItem maxBidItemTitle">Name:</div>
+				<div class="maxBidItem maxBidItemTitle">Winning Bid:</div>
+				<div class="clear"></div>
+			{%for winner in value.flatBids.wonItems%}
+				<div class="maxBidItem">{{winner.item.lot_id}}</div>
+				<div class="maxBidItem">{{winner.item.name}}</div>
+				<div class="maxBidItem">{{winner.amount}}</div>
+				<div class="clear"></div>
+			{%endfor%}
+		</div>
+		<br><br>
 		<div id="invoice_{{key}}_msg"></div>
-		<div>Shipping Country: {{value.country}}</div>
-		<input type="text" value="{{value.shipping}}" id="invoiceShipping_{{key}}">
+		<div>What ADDITIONAL shipping charges would you like to add?</div>
+		<input type="text" class="shippingVal" value="{{value.shipping}}" id="invoiceShipping_{{key}}">
 		<input type="submit" value="Save Shipping" id="submit_{{key}}">
+
+		{%else%}
+		<div>Shipping Country: {{value.country}}</div>
+		<input type="text" class="shippingVal" value="{{value.shipping}}" id="invoiceShipping_{{key}}">
+		<input type="submit" value="Save Shipping" id="submit_{{key}}">
+		{%endif%}
 
 	</div>
 {%endfor%}
 	<div>
 	<br><br>   
+	
+<!--
 	<div>#<span id="indexNum"></span> out of <span id="outOfNum"></span></div>
 		<input type="button" id="btnLeft" value="&lt;&lt; Back" disabled="true" />
 		<input type="button" id="btnRight" value="Next &gt;&gt;" />
@@ -57,85 +93,62 @@
 		<input type="text" id="jumpTo" value="">
 		
 	</div>
-     
+   -->
+		<div class="clear"></div>
+		<div>
+			<ul id="pagination" class="pagination-sm" style=""></ul>
+			
+			<ul class="pagination-sm pagination" style="">
+				<li class="page" style="float:left"><input type="text" id="jumpTo" style="width:40px; height:27px; margin-left:7px; border:1px solid #ddd; color:#999" value="#"></li>
+				<li class="page"><a id="jumpToLink" style="font-size: 12px; padding: 5px 10px; margin-left:5px; border-bottom-right-radius: 3px; border-top-right-radius: 3px;color:#428bca; background:white; border:1px solid #ddd; cursor:pointer">Jump to invoice</a></li>
+				
+			</ul>
+		</div>
 </div>
+<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
 
-
+<script src="{{ STATIC_URL }}audio/js/esimakin-twbs-pagination-fbdd6fc/jquery.twbsPagination.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 $( document ).ready(function() {
-
-	index = 0;
-	invoiceDivs = $(".invoiceDivs");
-	if(invoiceDivs){
-		if (invoiceDivs.length ==1){
-			$("#btnLeft").attr("disabled",true)
-			$("#btnRight").attr("disabled",true)
-		}
-		$(invoiceDivs[0]).css("display","block");
-		
-		$("#outOfNum").text(invoiceDivs.length)
-		
-		$("#indexNum").text(index+1)
-		
-	}else{
-		$("#btnLeft").attr("disabled",true)
-		$("#btnRight").attr("disabled",true)
-	}
 	
 
-	$("#jumpToBtn").click(function(){
+	$("#jumpTo").focus(function(){
+			$("#jumpTo").val("")			
+		})
 
+	$(".shippingVal").focus(function(){
+		
+			$(this).val("")
+		
+	})
+
+	 $('#pagination').twbsPagination({
+        totalPages: {{data.total}},
+        startPage:{{data.startPage}},
+        visiblePages:3,
+        onPageClick: function (event, page) {
+        	$(".invoiceDivs").css("display","none");
+			$("#invoiceDiv_"+page).css("display","block");
+        }
+    });
+
+	 $("#jumpToLink").click(function(){
 		val = $("#jumpTo").val()
-		if (invoiceDivs.length ==1)
-			return;
-
-		if (invoiceDivs && val <= invoiceDivs.length){
-			$(invoiceDivs[index]).css("display","none");
-			index = val;
-			$("#btnLeft").click();
-		}
-
+		window.location.href="/admin/shippingByInvoice/{{data.auctionId}}/?location="+val
 	})
 
-	$("#btnLeft").click(function(){
-		
-		if(index == 1 )
-			$(this).attr("disabled",true)
-		else{
-			$(this).attr("disabled",false)
-		}
-
-		if(index !=0)
-			$("#btnRight").attr("disabled",false)
-
-		$(invoiceDivs[index]).css("display","none");
-		index--;	
-		$(invoiceDivs[index]).css("display","block");
-		$("#indexNum").text(index+1)
-
-	})
-
-	$("#btnRight").click(function(){
-		
-		if(index == invoiceDivs.length-2)
-			$(this).attr("disabled",true)
-		else{
-			$(this).attr("disabled",false)
-		}
-		
-		$(invoiceDivs[index]).css("display","none");
-		index++;	
-		$(invoiceDivs[index]).css("display","block");		
-		$("#btnLeft").attr("disabled",false)
-		$("#indexNum").text(index+1)
-
-	})
+	$("#invoiceDiv_"+{{data.startPage}}).css("display","block");
 
 	$('#invoices input[type="submit"]').click(function (data) {
 
-		invoiceId = $(this).attr("id").substring(7);
-		shipping = $("#invoiceShipping_"+invoiceId).val();
+		flat = {%if data.flat%}true{%else%}false{%endif%}
+
+		id = $(this).attr("id").substring(7);
+		invoiceId = $("#input_" + id).val()
+	
+		
+		shipping = $("#invoiceShipping_"+id).val();
 
 		var csrftoken = getCookie('csrftoken');
 		ajaxSetup(csrftoken);
@@ -143,16 +156,23 @@ $( document ).ready(function() {
 		$.ajax({
 			type: "POST",
 			url: "/admin/shippingByInvoice/"+ $("#auctionId").val() + "/",
-			data:{"invoiceId":invoiceId, "shippingAmount": shipping},
+			data:{"invoiceId":invoiceId, "shippingAmount": shipping, "iLocation" : id, "flat":flat},
 			success: function(data) {
 				if(data.success){
-					$("#invoice_"+data.invoiceId+"_msg").removeClass("errorMsg")
-					$("#invoice_"+data.invoiceId+"_msg").addClass("successMsg")
-					$("#invoice_"+data.invoiceId+"_msg").text("Shipping successfully saved")
+					loc = data.iLocation + 1
+					if( $(".next").hasClass("disabled") ){
+						$("#invoice_"+data.invoiceId+"_msg").removeClass("errorMsg")
+						$("#invoice_"+data.invoiceId+"_msg").addClass("successMsg")
+						$("#invoice_"+data.invoiceId+"_msg").text("Shipping was successfully saved.")
+					}
+					
+					else
+						$(".next a").click()
+					//window.location.href="/admin/shippingByInvoice/{{data.auctionId}}/?location="+ loc
 				}else{
 					$("#invoice_"+data.invoiceId+"_msg").removeClass("successMsg")
 					$("#invoice_"+data.invoiceId+"_msg").addClass("errorMsg")
-					$("#invoice_"+data.invoiceId+"_msg").text("Shipping successfully saved")
+					$("#invoice_"+data.invoiceId+"_msg").text("There was a problem saving this invoice")
 	        	
 				}
 

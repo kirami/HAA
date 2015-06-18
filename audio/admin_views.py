@@ -247,16 +247,22 @@ def adjustLotIds(request, auctionId):
 
 @staff_member_required
 def itemPrintOut(request, auctionId):
+	setSale = request.GET.get("setSale", False)
 	data ={}
-	cats = Category.objects.filter(itemCategory__auction = auctionId).distinct()
+
+	cats = Category.objects.filter(itemCategory__auction = auctionId).distinct().order_by("order_number")
+	i = 0
 	for cat in cats:
-		items = Item.objects.filter(auction = auctionId, category = cat).order_by("lot_id")
-		
-		if cat in data:
-			data[cat.name] =  items
+		if setSale:
+			items = Item.objects.filter(auction = auctionId, category = cat, bidItem = None).order_by("lot_id")
 		else:
-			data[cat.name] =  {}
-			data[cat.name] =  items
+			items = Item.objects.filter(auction = auctionId, category = cat).order_by("lot_id")
+		
+		if cat in data and len(items) > 0:
+			data[cat.order_number] =  items
+		elif len(items) > 0:
+			data[cat.order_number] =  {}
+			data[cat.order_number] =  items
 	return render_to_response('admin/audio/itemPrintOut.html', {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required
@@ -696,7 +702,7 @@ def createUser(request):
 	data["form"] = AdminUserCreateForm()
 	return render_to_response('admin/audio/createUser.html', {"data":data}, context_instance=RequestContext(request))
 
-
+"""
 @staff_member_required
 def shippingByInvoiceFlat(request, auctionId):
 	data = {}
@@ -719,18 +725,16 @@ def shippingByInvoiceFlat(request, auctionId):
 
 		return HttpResponse(json.dumps({"success":True, "invoiceId":invoiceId}), content_type="application/json")
 
-
-
 	for winner in winners:
 		
 		winnersFlatSum = getWinnerFlatSum(auctionId, userId = winner.id, date=auction.end_date)
-		logger.error(winnersFlatSum)
+		#logger.error(winnersFlatSum)
 		#if bought flat items
 		if winnersFlatSum["sum"] != 0:
 			winnersSum = getWinnerSum(auctionId, userId = winner.id, date=auction.end_date)
 
 			invoices = Invoice.objects.filter(auction = auctionId, user_id = winner.id)
-			logger.error(invoices)
+			#logger.error(invoices)
 			if len(invoices) > 0:
 				invoice = invoices[0]
 				
@@ -741,7 +745,7 @@ def shippingByInvoiceFlat(request, auctionId):
 				data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
 
 	return render_to_response('admin/audio/shippingByInvoiceFlat.html', {"data":data}, context_instance=RequestContext(request))
-
+"""
 @staff_member_required
 def shippingByInvoiceFiltered(request, auctionId):
 	return shippingByInvoice(request, auctionId, True)
@@ -751,7 +755,21 @@ def shippingByInvoice(request, auctionId, filter=None):
 	
 	data = {}
 	data["auctionId"] = auctionId
-	auction = getCurrentAuction()
+	#?
+	#auction = getCurrentAuction()
+	auctions = Auction.objects.filter(pk=auctionId)
+	if len(auctions) < 1:
+		data["errorMsg"] = ("Auction #%s doesn't exist" % auctionId)
+		return render_to_response('admin/audio/shippingByInvoice.html', {"data":data}, context_instance=RequestContext(request))
+	else:
+		auction = auctions[0]
+
+
+	data["startPage"] = request.GET.get("location",1)
+	flat = request.GET.get("flat", False)
+	data["flat"] = flat
+	winnersSum = None
+	winnersFlatSum = None
 	if filter:
 		data["filtered"]=True
 	else:
@@ -761,15 +779,21 @@ def shippingByInvoice(request, auctionId, filter=None):
 		d = request.POST
 		invoiceId = d.get("invoiceId")
 		shipping = d.get("shippingAmount")
+		flatPost = d.get("flat", False)
+		iLocation = d.get("iLocation")
 		#logger.error("shipping: %s , invoice: %s" % (shipping, invoiceId))
 		try:
 			invoice = Invoice.objects.get(id = invoiceId)
-			invoice.shipping = shipping
+			if not flatPost:
+				invoice.shipping = shipping
+			else:
+				invoice.second_chance_shipping = shipping
 			invoice.save()
-		except:
+		except Exception as e:
+			logger.error("shipping by invoice save error: %s" % e)
 			return HttpResponse(json.dumps({"success":False, "invoiceId":invoiceId}), content_type="application/json")
 
-		return HttpResponse(json.dumps({"success":True, "invoiceId":invoiceId}), content_type="application/json")
+		return HttpResponse(json.dumps({"success":True, "invoiceId":invoiceId, "iLocation":int(iLocation)}), content_type="application/json")
 
 
 	data["invoices"] = {}
@@ -777,10 +801,11 @@ def shippingByInvoice(request, auctionId, filter=None):
 	
 
 	firstInvoice = None
-
+	i = 1
 	for winner in winners:
 		address = None
 		addresses = Address.objects.filter(upShipping__user = winner.id)
+		#todo show error
 		if len(addresses)  < 1:
 			logger.error("shippingByInvoice() user %s doesn't have an address on file" % winner.id)
 		else:
@@ -794,18 +819,31 @@ def shippingByInvoice(request, auctionId, filter=None):
 		
 		if len(invoices) > 0:
 			invoice = invoices[0]
-			
-			winnersSum = getWinnerSum(auctionId, userId = winner.id)
-			data["invoices"][str(invoice.id)] = {}
-			data["invoices"][str(invoice.id)]["bids"] = winnersSum
-			data["invoices"][str(invoice.id)]["shipping"] = invoice.shipping 
-			data["invoices"][str(invoice.id)]["shipping_two"] = invoice.second_chance_shipping
+			if not flat:
+				winnersSum = getWinnerSum(auctionId, userId = winner.id)
+			else:
+				winnersFlatSum = getWinnerFlatSum(auctionId, userId = winner.id, date=auction.end_date)
+
+				if winnersFlatSum["sum"] != 0:
+					winnersSum = getWinnerSum(auctionId, userId = winner.id, date=auction.end_date)
+				else:
+					continue
+			data["invoices"][str(i)] = {}
+			data["invoices"][str(i)]["id"] = invoice.id 
+			data["invoices"][str(i)]["bids"] = winnersSum
+			data["invoices"][str(i)]["flatBids"] = winnersFlatSum
+
+			data["invoices"][str(i)]["shipping"] = invoice.shipping 
+			data["invoices"][str(i)]["shipping_two"] = invoice.second_chance_shipping
 			if address:
-				data["invoices"][str(invoice.id)]["country"] = address.country
+				data["invoices"][str(i)]["country"] = address.country
 			
 			if firstInvoice != None:
-				firstInvoice = invoice.id
+				firstInvoice = 1
+			i = i + 1
 	data["firstInvoice"] = firstInvoice
+	data["total"] = len(data["invoices"])
+	
 	return render_to_response('admin/audio/shippingByInvoice.html', {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required
@@ -1041,8 +1079,11 @@ def endFlatAuction(request, auctionId, userId = None):
 		invoices = Invoice.objects.filter(auction=auction, user = winnerId)
 		#if no invoice from blind auction, create
 		if len(invoices)<1:
-			return HttpResponse(json.dumps({"success":False, "msg":"This winner has no invoice, only auction winners should be able to win set sale items."}), content_type="application/json")
-			
+			if request.user.is_staff:
+				return HttpResponse(json.dumps({"success":False, "msg":"User: %s has no invoice, only auction winners should be able to win set sale items." % winner.user.username}), content_type="application/json")
+			else:
+				logger.error("User %s tried to end flat auction with no invoice" % request.user.username)
+				return HttpResponse(json.dumps({"success":False, "msg":"Something went wrong, please contanct us at webmaster@thoseoldrecords.com"}), content_type="application/json")	
 		else:
 			invoice = invoices[0]
 			
@@ -1061,17 +1102,22 @@ def endFlatAuction(request, auctionId, userId = None):
 					invoice.second_chance_tax = tax
 
 				invoice.save()
+			#logger.error("saving invoice to bid # %s" % winner.id)
+			winner.invoice = invoice
+			winner.save()
+			#logger.error("now bid # %s" % winner.invoice)
+	
 	if userId == None:			
 		auction.flat_locked = True
 		auction.save()
 
 	if userId and email:
-		#logger.error("sending ended email")
+		logger.error("sending ended email")
 		data["invoice"]=invoice
 		data["user"] = User.objects.get(pk=userId)
-		msg = getEmailMessage(settings.DEFAULT_FROM_EMAIL ,"User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)
+		msg = getEmailMessage("webmaster@thoseoldrecords.com","User ended Set Sale Auction",{"data":data}, "endSetSaleAuction", False)				
 		msg.send()	
-		#logger.error("sent")
+
 	#don't send, what about shipping?
 	#if int(userId) == int(request.user.id):
 		#logger.error("sending invoice")
@@ -1572,6 +1618,7 @@ def getRunningBidTotal(request, auctionId):
 	index = 0
 	total = 0
 	items = []
+	flatBids = []
 	#logger.error("bids: %s" % bids)
 	data["numBids"] = len(bids)
 	for bid in bids:
@@ -1588,12 +1635,17 @@ def getRunningBidTotal(request, auctionId):
 
 		if index < quantity:
 			total = total + bid.amount
-			items.append(bid)
+			if bid.date > data["auction"].end_date:
+				flatBids.append(bid)
+			else:
+				items.append(bid)
+
 			#logger.error("bid: %s total: %s"  % (bid.amount, total))
 		
 		index = index + 1
-	data["lastBid"] = Bid.objects.filter(item__auction=auctionId).order_by("date")[0]
+	data["lastBid"] = Bid.objects.filter(item__auction=auctionId).order_by("-date")[0]
 	data["bids"]=items
+	data["flatBids"]=flatBids
 	data["total"] = total
 	return render_to_response('admin/audio/runningTotal.html', {"data":data}, context_instance=RequestContext(request))	
 
@@ -1667,6 +1719,7 @@ def wonItems(request, auctionId):
 def unsoldItems(request, auctionId):
 	data = {}
 	getHeaderData(data, auctionId)
+	data["unsoldItems"]=data["unsoldItems"].order_by("lot_id")
 	return render_to_response('admin/audio/unsoldItems.html', {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required

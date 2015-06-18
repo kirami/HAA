@@ -27,7 +27,8 @@
 
 <br><div class="rtb">Items Sold:</div><div class="rt"> {{data.bids|length}}</div>
 <br><div class="rtb">Last Bid:</div><div class="rt"> {{data.lastBid.date|date:"m/d/y"}}</div>
-
+<div class="clear"></div>
+<div style="margin-top:5px;">Jump to <a href="#setSaleBids">Set Sale bids</a></div>
 </div>
 </div>
 
@@ -56,5 +57,22 @@
 	</div>
 	<div class="clear"></div>
 	{%endfor%}
+
+	<div style="margin-top:25px;"></div>
+	<hr style="background-color:#000">
+	<div id="setSaleBids" style="margin-top:15px;">Current Set Sale bids:</div>
+	{%if data.flatBids%}
+		{%for bid in data.flatBids%}
+		<div>
+			<ul>
+				<li>{{bid.item.lot_id}}</li>
+				<li>{{bid.item.name}}</li> 
+				<li>${{bid.amount}}</li> 
+				<li>{{bid.user.first_name}} {{bid.user.last_name}}</li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+		{%endfor%}
+	{%endif%}
 </div>
 {%endblock%}

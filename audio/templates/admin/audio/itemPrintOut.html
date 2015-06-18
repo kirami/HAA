@@ -6,10 +6,10 @@
 
 {%for key, value in data.items%}
 <div style="margin-bottom:10px;">
-	<div>{{key}}</div>
+	<div>{{value.0.category.name}}</div>
 	{%for item in value%}
 	<div class="itemLeft">{{item.lot_id}}</div>
-	<div class="itemLeft">{{item.label}}</div> 
+	<div class="itemLeft">{{item.label.abbreviation}}</div> 
 	<div class="itemLeft">{%if item.record_number%} {{item.record_number}}{%else%}&nbsp{%endif%} </div>
 	<div class="itemLeft" style="width:200px">{{item.name}} 
 		{%if item.name_two%}<br>{{item.name_two}}{%endif%} 
