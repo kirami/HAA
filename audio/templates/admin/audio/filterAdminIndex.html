@@ -38,6 +38,10 @@
 <div>Show only set sale shipping?<input type="checkbox" name="isFlat" id = "isFlat"></div>
 {%endif%}
 
+{%ifequal data.nextPage  'itemPrintOut'%}
+<div>Show only set sale items?<input type="checkbox" name="setSale" id = "setSale"></div>
+{%endifequal%}
+
 <button onclick="goTo()">Go</button>
 
 
@@ -50,6 +54,7 @@ function goTo(){
 	page = "{{data.nextPage}}"
 	url = "/admin/"+page
 	used = false
+
 
 
 	if(page=="setDiscount"){
@@ -72,10 +77,18 @@ function goTo(){
 		return
 	}
 
-	if(page="shippingByInvoice"){
+	if(page=="shippingByInvoice"){
 		url+="/" + auction
 		if($("#isFlat").is(':checked'))
-			url+="/flatOnly" 
+			url+="/?flat=true" 
+		window.open(url)
+		return
+	}
+
+	if(page=="itemPrintOut"){
+		url+="/" + auction
+		if($("#setSale").is(':checked'))
+			url+="/?setSale=true" 
 		window.open(url)
 		return
 	}

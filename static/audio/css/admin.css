@@ -47,3 +47,8 @@
     background: #CCC;
     padding-top: 10px;
 }
+
+.tableInfoItem:nth-child(odd) {
+
+    background-color: #ddd;
+}

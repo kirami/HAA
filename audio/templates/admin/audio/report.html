@@ -15,12 +15,15 @@
 	<br><br>
 	
 {%for winner in data.winners%}
+<div class="tableInfoItem">
 	<div class="maxBidItem">{{winner.item.lot_id}}</div>
 	<div class="maxBidItem">{{winner.item.name}}</div>
-	<div class="maxBidItem" style="width:200px;">{{winner.user.email}}</div>
+	<div class="maxBidItem" style="width:200px;">{%if winner.user.email%}{{winner.user.email}}{%else%}&nbsp;{%endif%}</div>
 	<div class="maxBidItem">${{winner.amount}}</div>
-	<div class="maxBidItem">${{winner.discount}}</div>
+	<div class="maxBidItem">{%if winner.discount%}${{winner.discount}}{%endif%}</div>
+	
 	<div class="clear"></div>
+	</div>
 {%endfor%}
 
 </div>

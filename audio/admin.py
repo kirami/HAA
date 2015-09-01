@@ -66,8 +66,8 @@ class ConditionAdmin(admin.ModelAdmin):
 
 class BidAdmin(admin.ModelAdmin):
 
-    list_display = ('user', 'item', 'amount', 'winner', )
-    search_fields = ['user__email', 'item__lot_id', 'item__name', 'item__artist', 'user__username', 'user__last_name']
+    list_display = ('user', 'item', 'amount', 'winner', 'date',)
+    search_fields = ['user__email', 'item__lot_id', 'item__name', 'item__artist', 'user__username', 'user__last_name', 'date']
     list_filter = ('item__auction', 'winner',)
 
     raw_id_fields = ("item",)
@@ -83,7 +83,7 @@ class BidAdmin(admin.ModelAdmin):
 
 class InvoiceAdmin(admin.ModelAdmin):
 
-    list_display = ('user', 'auction',)
+    list_display = ('user', 'auction', 'invoice_date',)
     search_fields = ['user__email', 'user__first_name', 'user__last_name', 'user__username']
     list_filter = ('auction', 'on_hold', InvoiceFilter)
     

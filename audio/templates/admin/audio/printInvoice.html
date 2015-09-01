@@ -56,23 +56,28 @@
 		<div>Here is your updated invoice.  If you've already sent us a payment please send us any remaining balance.</div>
 	{%endif%}
 
-	<div>CONGRATULATIONS: Here are your winning bids from our auction.  Payment in full in U.S. Dollars is due upon receipt of this invoice.  Domestic shipping is by USPS Media Mail; Priority Mail overseas.  Please allow 3 to 4 weeks for packaging and delivery.  Our unsold items list has been included, but you can also look at and bid on these items online at www.thoseoldrecords.com/audio/catalog</div>
-
-	<div>To pay by Visa or Mastercard, please sign below and return this form.  Thanks!</div>
+	<div>CONGRATULATIONS: Here are your winning bids from our auction.  Payment in full in U.S. Dollars is due upon receipt of this invoice.  Domestic shipping is by USPS Media Mail; Priority Mail overseas.  Please allow 3 to 4 weeks for packaging and delivery.  Our unsold items list has been included, but you can also look at and bid on these items online at www.thoseoldrecords.com/audio/catalog</div><br><div>If you plan on bidding on Set Sale items, either through mail or online, please wait to send payment until you receive an updated invoice.</div>
+<br>
+	<div>To pay by Visa, Mastercard or Paypal, please fill out the information below and return this form.  Thanks!</div>
 
 	<div style="margin-top:15px; margin-bottom:25px;">
-		<div style="margin-bottom:10px;">
-			<div style="float:left; margin-right:15px">Card No. _________________________________</div> <div style="float:left; margin-right:15px;">Expiration date _______________________</div><div style="float:left">Paypal Address: _______________________</div>
+		<div style="margin-bottom:10px; margin-top:30px;">
+			<div style="float:left; margin-right:15px;">Card No. _________________________________</div> <div style="float:left; margin-right:15px;">Expiration date _______________________</div>
 		</div>
 		<div style="clear:both"></div>
-		<div style="float:left; margin-right:15px">Visa or MC  _________</div> <div style="float:left; margin-right:15px">3 Digit Code (on back) _________</div><div>Signature ________________________</div>
+		<div style="margin-top:30px;">
+			<div style="float:left; margin-right:15px">Visa or MC  _________</div> 
+			<div style="float:left; margin-right:15px">3 Digit Code (on back) _________</div>
+			<div>Signature ________________________</div>
+		</div>
+		<div style="float:left;margin-top:30px;">Paypal Address: _______________________</div>
 		<div style="clear:both"></div>
 	</div>
 
 	<div id="reportDiv" class="reportTable">
 		<div class="maxBidItem" style="font-weight:bold">Lot Id:</div>
 
-		<div class="maxBidItem" style="font-weight:bold">Item name:</div>
+		<div class="maxBidItem" style="font-weight:bold">Item title:</div>
 		<div class="maxBidItem" style="font-weight:bold">Item artist:</div>
 		<div class="maxBidItem" style="font-weight:bold">Amount bid:</div>
 		<div class="clear"></div>
@@ -110,14 +115,18 @@
 
 </div>
 
+<br><br>
+Thank you for participating!
+
 <span style="page-break-before: always;"> </span>
-{%if value.notWon%}
+
+{%if value.notWon and not data.excludeNotWon%}
 <div >{{value.user.first_name}} {{value.user.last_name}},</div><br>
-<div>Here are the winning bids for the items you were interested in but did not win:</div><br>
-<div id="reportDiv" class="reportTable">
+<div>Here are the winning bids for the items you bid on, but did not win:</div><br>
+<div id="reportDiv" class="reportTable" style="font-weight:bold">
 	<div style="float:left; width:75px;">Lot ID:</div>
-	<div style="float:left; width:75px;">Label:</div>
-	<div style="float:left; width:75px;">Name:</div>
+	<div style="float:left; width:125px;">Label:</div>
+	<div style="float:left; width:200px; margin-right:10px">Title:</div>
 	<div style="float:left; width:175px;">Winning Bid:</div>
 
 	<div class="clear" style="clear:both"></div>
@@ -125,22 +134,25 @@
 
 	<br><br>	
 	{%for item in value.notWon%}
+	<div style="font-weight:normal">
 		<div style="float:left; width:75px;">{{item.item.lot_id}}</div>
-		<div style="float:left; width:75px;">{{item.item.label.name}}</div>
-		<div style="float:left; width:75px;">{{item.item.name}}</div>
+		<div style="float:left; width:125px;">{{item.item.label.abbreviation}}</div>
+		<div style="float:left; width:200px; margin-right:10px">{{item.item.name}}</div>
 		<div style="float:left; width:175px;">${{item.amount}}</div>
 		<div style="clear:both"></div>
+		</div>
 	{%endfor%}
 
 </div>
 
 <span style="page-break-before: always;"> </span>
+
 {%endif%}
+
 {%endfor%}
 
 
 
-<br><br>
-Thank you for participating!
+
 
 {%endblock%}

@@ -31,12 +31,14 @@
 
 	<br><br>	
 	{%for lostBid in data.losers%}
+	<div class="tableInfoItem">
 		<div class="maxBidItem">{{lostBid.user.id}}</div>
 		<div class="maxBidItem">{{lostBid.user.last_name}}</div>
 		<div class="maxBidItem">{{lostBid.user.first_name}}</div>
 		<div class="maxBidItem">{{lostBid.user.email}}</div>
 
 		<div class="clear"></div>
+		</div>
 	{%endfor%}
 
 </div>

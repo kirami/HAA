@@ -219,7 +219,7 @@ label {
 #footerInner {
     max-width: 1000px;
     margin: 0 auto;
-    height: 75px;
+    height: 100px;
     text-align: left;
 }
 .return {
@@ -260,4 +260,12 @@ label {
    font-size: 20px;
    margin-top: 50px;
    color: red;
+}
+
+#regForm label{
+    width:100px;
+}
+
+.quickLook{
+    cursor: pointer;
 }

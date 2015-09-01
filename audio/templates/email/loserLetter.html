@@ -1,28 +1,29 @@
 {% extends "email/baseEmail.html" %}
 
 {%block content%}
+<div>Hello {{data.profile.user.first_name}},</div><br>
 <div>
-	We're sorry, you didn't win any items in auction: {{data.auction.name}}.
+	We're sorry, but you didn't win any records in our recent auction.  Here are the winning bids for the items you bid on.  Thanks for your bids, and better luck next time!
 </div>
-
-
-<div>Here are the winning bids for the items you were interested in:</div><br>
-<div id="reportDiv" class="reportTable">
+<br>
+<div id="reportDiv" class="reportTable" style="font-weight:bold">
 	<div style="float:left; width:75px;">Lot ID:</div>
-	<div style="float:left; width:75px;">Label:</div>
-	<div style="float:left; width:75px;">Name:</div>
-	<div style="float:left; width:75px;">Winning Bid:</div>
+	<div style="float:left; width:125px;">Label:</div>
+	<div style="float:left; width:200px; margin-right:10px">Title:</div>
+	<div style="float:left; width:175px;">Winning Bid:</div>
 
 	<div class="clear" style="clear:both"></div>
 	
 
 	<br><br>	
 	{%for item in data.winningBids%}
+	<div style="font-weight:normal">
 		<div style="float:left; width:75px;">{{item.item.lot_id}}</div>
-		<div style="float:left; width:75px;">{{item.item.label.name}}</div>
-		<div style="float:left; width:75px;">{{item.item.name}}</div>
-		<div style="float:left; width:75px;">${{item.amount}}</div>
+		<div style="float:left; width:125px;">{{item.item.label.abbreviation}}</div>
+		<div style="float:left; width:200px; margin-right:10px">{{item.item.name}}</div>
+		<div style="float:left; width:175px;">${{item.amount}}</div>
 		<div style="clear:both"></div>
+		</div>
 	{%endfor%}
 
 </div>

@@ -466,7 +466,7 @@ def userInfo(request):
 
 
 @login_required
-def flatFeeCatalog(request):
+def flatFeeCatalog(request, auctionId = None):
 	items = None
 	auction = getCurrentAuction()
 	data = {}
@@ -491,9 +491,16 @@ def flatFeeCatalog(request):
 	else:
 		order="lot_id"
 		sortGet = "lotAsc"
+	viewMode = None
+	if request.user and request.user.is_authenticated() and request.user.is_staff and auctionId:
+		auctions = Auction.objects.filter(pk = auctionId)
+		if len(auctions) < 1:
+			logger.error("bad auction ID requested for view mode")
+			return redirect("noAuction")
+		currentAuction = auctions[0]
+		viewMode = "setSale"
 
-
-
+	#logger.error("set sale view")
 	
 	success = False
 	if request.GET.get("success"):
@@ -510,11 +517,11 @@ def flatFeeCatalog(request):
 			#if user ended their auction and got an invoice
 			if len(invoices) > 0:
 				invoice = invoices[0]
-				if invoice.second_chance_invoice_amount > 0:
+				if invoice.second_chance_invoice_amount > 0 and not viewMode:
 					return redirect("noAuction")
 				
 			bids = Bid.objects.filter(user=request.user, item__auction=auction, winner=True)
-			if len(bids) < 1:	
+			if len(bids) < 1 and not viewMode:	
 				return redirect("noAuction")
 			
 			if isBetweenSegments():
@@ -570,9 +577,13 @@ def noAuction(request):
 def catalogByCategory(request, order, auctionId = None):
 	data = {}
 	currentAuction = getCurrentAuction()
-	logger.error("in cat")
-	if request.user and request.user.is_staff and auctionId:
-		currentAuction = Auction.objects.get(pk = auctionId)
+	#logger.error("in cat")
+	if request.user and request.user.is_authenticated() and request.user.is_staff and auctionId:
+		auctions = Auction.objects.filter(pk = auctionId)
+		if len(auctions) < 1:
+			logger.error("bad auction ID requested for view mode")
+
+		currentAuction = auctions[0]
 	
 	#if not request.user or (not request.user.is_staff and auctionId):
 	#	return redirect("catalog")
@@ -589,7 +600,7 @@ def catalogByCategory(request, order, auctionId = None):
 	try:
 		page = int(request.GET.get("page", 1))
 	except:
-		logger.error("bad page")
+		logger.error("bad page number requested")
 
 	category = request.GET.get("category", None)
 	ordered = {}
@@ -708,11 +719,15 @@ def catalog(request, auctionId = None):
 	viewMode = None
 	currentAuction = getCurrentAuction()
 
-	if request.user and request.user.is_staff and auctionId:
-		currentAuction = Auction.objects.get(pk = auctionId)
-		viewMode = request.GET.get("mode", None)
+	if request.user and request.user.is_authenticated() and request.user.is_staff and auctionId:
+		auctions = Auction.objects.filter(pk = auctionId)
+		if len(auctions) < 1:
+			logger.error("bad auction ID requested for view mode")
+			return redirect("noAuction")
+		currentAuction = auctions[0]
+		viewMode = "blind"
 
-	logger.error("viewmode %s" % viewMode)
+	#logger.error("viewmode %s" % viewMode)
 	#why???
 	#if not request.user or (not request.user.is_staff and auctionId):
 	#	return redirect("catalog")
@@ -726,7 +741,7 @@ def catalog(request, auctionId = None):
 	try:
 		page = int(request.GET.get("page", 1))
 	except:
-		logger.error("bad page")
+		logger.error("bad page number requested")
 
 	category = request.GET.get("category", None)
 	order = request.GET.get("sort", 'lot_id')
@@ -743,17 +758,19 @@ def catalog(request, auctionId = None):
 	try:
 		
 		#if after close but in 2nd chance
-		if (isSecondChance() or isBetweenSegments()) and (not viewMode or viewMode=="setSale"):
+		if (isSecondChance() or isBetweenSegments()):
 
 			#only allow winners to bid (so only add on to won shipments)
 			#logger.info("user: %s" % request.user)
 			if request.user.is_authenticated():
 				bids = Bid.objects.filter(user=request.user, item__auction=currentAuction, winner=True)
-				logger.info("bids")
+				#logger.info("bids2 %s" % viewMode)
+
 				if len(bids) < 1:
-					
+					#logger.info("redir")
 					return redirect("noAuction")
 			else:	
+				#logger.info("redir2")
 				return redirect("noAuction")
 			
 			if isBetweenSegments():
@@ -840,12 +857,13 @@ def catalog(request, auctionId = None):
 
 @login_required
 def submitBid(request):
+	data = {}
 	if(request.user.is_authenticated()):
 		auction = getCurrentAuction()
 		currentAuctionId = auction.id
 		now = date.today()
-		data = request.POST
-		bidAmount = data.get("bidAmount")
+		postData = request.POST
+		bidAmount = postData.get("bidAmount")
 
 		if not bidAmount and not isSecondChance():
 			return HttpResponse(json.dumps({"success":False, "msg":"You must enter a bid amount."}), content_type="application/json")	
@@ -866,7 +884,8 @@ def submitBid(request):
 				return HttpResponse(json.dumps({"success":False, "msg":"You're set to not receive any contact from us.  To bid please go to your settings and uncheck 'Hold all Contact' "}), content_type="application/json")	
 
 				
-			itemId = data.get("itemId")
+			itemId = postData.get("itemId")
+			data["itemId"] = itemId
 
 			item = Item.objects.get(id = itemId)
 
@@ -885,7 +904,7 @@ def submitBid(request):
 
 			
 			if Decimal(bidAmount) < item.min_bid:
-				return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	
+				return HttpResponse(json.dumps({"success":False, "msg":"You must meet the $%s minimum bid." % item.min_bid, "data":data}), content_type="application/json")	
 
 
 			instances = Bid.objects.filter(user=request.user, item_id=itemId)
@@ -894,12 +913,16 @@ def submitBid(request):
 				if isSecondChance():
 					bidObj.winner = True
 					bidObj.save()
+				data["amount"] = bidObj.amount
 			else:
 				instance = instances[0]	
 				instance.amount = bidAmount
 				if isSecondChance():
 					instance.winner = True
 				instance.save()
+				#logger.error(Decimal(instance.amount))
+				data["amount"] = "%0.2f" % Decimal(instance.amount)
+				
 		
 		except Exception as e:
 			logger.error("error submitting bid")
@@ -907,7 +930,7 @@ def submitBid(request):
 			return HttpResponse(json.dumps({"success":False, "msg":"Illegal action."}), content_type="application/json")	
 
 
-	return HttpResponse(json.dumps({"success":True}), content_type="application/json")	
+	return HttpResponse(json.dumps({"success":True, "data":data}), content_type="application/json")	
 	
 @login_required
 def deleteBid(request):

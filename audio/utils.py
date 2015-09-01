@@ -250,9 +250,9 @@ def resetWinners(auctionId):
 
 def getBidItems(auctionId, orderByName = False):
 	if orderByName:
-		return Item.objects.filter(bidItem__isnull=False, auction=auctionId).order_by("name")
+		return Item.objects.filter(bidItem__isnull=False, auction=auctionId).order_by("name").distinct()
 	else:
-		return Item.objects.filter(bidItem__isnull=False, auction=auctionId)
+		return Item.objects.filter(bidItem__isnull=False, auction=auctionId).distinct()
 
 #get winning flat bids after blind auction end date
 def getWinningFlatBids(auctionId, date, userId = None, onlyNonInvoiced = False):
