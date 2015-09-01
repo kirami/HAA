@@ -1296,6 +1296,7 @@ def getInvoices(request, auctionId, userId = None, printIt = None):
 def printInvoices(request, auctionId, userId = None):
 	
 	try:
+<<<<<<< HEAD
 		excludeNotWon = request.GET.get("excludeNotWon", False )
 		bookkeeping = request.GET.get("bookkeeping", False )
 	
@@ -1303,6 +1304,8 @@ def printInvoices(request, auctionId, userId = None):
 		if bookkeeping:
 			template = "admin/audio/bookKeepingInvoice.html"
 
+=======
+>>>>>>> d41ffc630945b9b5f53543ce5cfc986a686d113e
 		uspsOnly = request.GET.get("uspsOnly", False)
 		emailOnly = request.GET.get("emailOnly", False)
 		data = {}
