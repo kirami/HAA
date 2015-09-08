@@ -119,7 +119,8 @@
 Thank you for participating!
 
 <span style="page-break-before: always;"> </span>
-{%if value.notWon%}
+
+{%if value.notWon and not data.excludeNotWon%}
 <div >{{value.user.first_name}} {{value.user.last_name}},</div><br>
 <div>Here are the winning bids for the items you bid on, but did not win:</div><br>
 <div id="reportDiv" class="reportTable" style="font-weight:bold">

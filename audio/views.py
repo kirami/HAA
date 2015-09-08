@@ -857,12 +857,13 @@ def catalog(request, auctionId = None):
 
 @login_required
 def submitBid(request):
+	data = {}
 	if(request.user.is_authenticated()):
 		auction = getCurrentAuction()
 		currentAuctionId = auction.id
 		now = date.today()
-		data = request.POST
-		bidAmount = data.get("bidAmount")
+		postData = request.POST
+		bidAmount = postData.get("bidAmount")
 
 		if not bidAmount and not isSecondChance():
 			return HttpResponse(json.dumps({"success":False, "msg":"You must enter a bid amount."}), content_type="application/json")	
@@ -883,7 +884,8 @@ def submitBid(request):
 				return HttpResponse(json.dumps({"success":False, "msg":"You're set to not receive any contact from us.  To bid please go to your settings and uncheck 'Hold all Contact' "}), content_type="application/json")	
 
 				
-			itemId = data.get("itemId")
+			itemId = postData.get("itemId")
+			data["itemId"] = itemId
 
 			item = Item.objects.get(id = itemId)
 
@@ -902,7 +904,7 @@ def submitBid(request):
 
 			
 			if Decimal(bidAmount) < item.min_bid:
-				return HttpResponse(json.dumps({"success":False, "msg":"You must meet the minimum bid."}), content_type="application/json")	
+				return HttpResponse(json.dumps({"success":False, "msg":"You must meet the $%s minimum bid." % item.min_bid, "data":data}), content_type="application/json")	
 
 
 			instances = Bid.objects.filter(user=request.user, item_id=itemId)
@@ -911,12 +913,16 @@ def submitBid(request):
 				if isSecondChance():
 					bidObj.winner = True
 					bidObj.save()
+				data["amount"] = bidObj.amount
 			else:
 				instance = instances[0]	
 				instance.amount = bidAmount
 				if isSecondChance():
 					instance.winner = True
 				instance.save()
+				#logger.error(Decimal(instance.amount))
+				data["amount"] = "%0.2f" % Decimal(instance.amount)
+				
 		
 		except Exception as e:
 			logger.error("error submitting bid")
@@ -924,7 +930,7 @@ def submitBid(request):
 			return HttpResponse(json.dumps({"success":False, "msg":"Illegal action."}), content_type="application/json")	
 
 
-	return HttpResponse(json.dumps({"success":True}), content_type="application/json")	
+	return HttpResponse(json.dumps({"success":True, "data":data}), content_type="application/json")	
 	
 @login_required
 def deleteBid(request):

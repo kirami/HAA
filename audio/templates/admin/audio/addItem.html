@@ -21,7 +21,20 @@
 
 <form action="" method="post" id="item_form">
     {% csrf_token %}
-      {{ data.form.as_p }}
+      
+
+      {% for field in data.form %}
+      {%if forloop.first%}<div style="float:left">{%endif%}
+      {%ifequal field.auto_id "id_condition"%}</div><div style="float:left; margin-left:100px">{%endifequal%}
+<div>
+  
+
+  {{ field.errors }}
+  {{ field.label_tag }} {{ field }}
+</div>
+
+{% endfor %}
+</div>
       <input type="submit" value="Create Item">
 
       {%if lastLotId%}<div style="color:red; font-size:18px" id="lotMessage">Last lot id saved was: {{lastLotId}}, prepopulating next to: {{nextLotId}}</div>{%endif%}
@@ -34,9 +47,19 @@ $( document ).ready(function() {
 
   $("#id_category").after('<a onclick="return showAddAnotherPopup(this);" id="add_id_category" class="add-another" href="/admin/audio/category/add/?_to_field=id"> <img width="10" height="10" alt="Add Another" src="http://dev.kirami.webfactional.com/static/admin/img/icon_addlink.gif"></a>')
 
+  //$("#id_condition").parent().before("<div style='float:left'>")
+  //$("#id_thumbnail").parent().after("</div>")
+
   $("#id_lot_id").parent().prepend($("#lotMessage"))
+  $("#id_lot_id").focus()
+
+  
 })
 
 </script>
+
+<style type="text/css">
+  
+</style>
 
 {%endblock%}

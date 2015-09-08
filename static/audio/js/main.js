@@ -1,4 +1,57 @@
 
+num = 34940302 + ""
+max = null
+for(i=num.length-1; i >= 0; i--){
+	j = 0
+	if (num == 2) 
+		return 2 or 0002 if accepted
+
+	if (num.charAt(i) % 2 == 0 )
+		continue;
+
+	if(num.charAt(i) == 5 and num!=5)
+		continue
+
+	for(j;j>i;j++)
+	{	toCheck = parseInt(num.substring(j,i))
+		if(num.charAt(i) == 5 and toCheck !=5)
+			continue
+		if toCheck is prime and max == null || (max.length < i-j+1):
+			max = substring(j,i)
+			break;
+	}
+
+
+}
+return max
+
+	
+
+function isPrime(n, i){
+    if(n%i==0 && n!=2 && n!=i){
+      return(0);
+    } else {
+       if (i < Math.sqrt(n)) {
+            return( isPrime(n,i+1) );
+        } else
+         return 1;
+    }
+}
+
+
+a = []
+function recPrime(n,i){
+//if isPrime add
+console.log("n is " + n)
+	if(n.length == 1){
+		return
+	}
+	else{
+		return recPrime(n.substring(0,n.length-1))
+	}
+
+	
+};
 
 
 function catalogClick(e){
@@ -113,11 +166,12 @@ function submitBid(itemId){
 			if(data.success){
 				result = $.urlParam('success')
 				
+
 				if(result)
 					window.location.reload()			 
 				else{
 					split = window.location.href.split("?")
-					console.log(split)
+					
 					if (split.length>1)
 						window.location+="&success=true";
 					else

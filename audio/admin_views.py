@@ -1280,12 +1280,14 @@ def sendLoserLetters(request, auctionId):
 
 @staff_member_required
 def getInvoices(request, auctionId, userId = None, printIt = None):
+	excludeNotWon = request.GET.get("excludeNotWon", False )
 	invoiceTemplate = "admin/audio/printInvoice.html" if printIt else "admin/audio/invoice.html"
 	try:
 		data = {}
 		if userId != None:
 			data = getInvoiceData(auctionId, userId)
 			getHeaderData(data, auctionId)
+			data["excludeNotWon"] = excludeNotWon
 	except Exception as e:
 		logger.error("Error in getInvoices: %s" % e)	
 	return render_to_response(invoiceTemplate, {"data":data}, context_instance=RequestContext(request))
@@ -1294,10 +1296,17 @@ def getInvoices(request, auctionId, userId = None, printIt = None):
 def printInvoices(request, auctionId, userId = None):
 	
 	try:
+		excludeNotWon = request.GET.get("excludeNotWon", False )
+		bookkeeping = request.GET.get("bookkeeping", False )
+	
+		template = "admin/audio/printInvoice.html"
+		if bookkeeping:
+			template = "admin/audio/bookKeepingInvoice.html"
+
 		uspsOnly = request.GET.get("uspsOnly", False)
 		emailOnly = request.GET.get("emailOnly", False)
 		data = {}
-		
+		data["excludeNotWon"] = excludeNotWon
 		data["auction"] = Auction.objects.get(pk=auctionId)
 		data["flat"] = request.GET.get("flat", False)
 		data["invoices"] = {}
@@ -1352,7 +1361,7 @@ def printInvoices(request, auctionId, userId = None):
 
 	except Exception as e:
 		logger.error("Error in printInvoices: %s" % e)	
-	return render_to_response("admin/audio/printInvoice.html", {"data":data}, context_instance=RequestContext(request))
+	return render_to_response(template, {"data":data}, context_instance=RequestContext(request))
 
 @staff_member_required
 def sendInvoices(request, auctionId = None, userId = None):

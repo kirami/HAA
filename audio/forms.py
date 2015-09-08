@@ -59,11 +59,15 @@ class ItemForm(ModelForm):
         if auctionId:
             self.fields['category'].queryset = self.fields['category'].queryset.filter(auction_id=auctionId)
         self.fields['label'].queryset = self.fields['label'].queryset.order_by("name")
+        self.fields['prefix'].label = "Sub-heading"
+        self.fields['name'].label = "Title"
+        self.fields['category'].label = "Heading (category)"
     
     class Meta:
         model = Item
         fields=[
             'lot_id',
+            'prefix',
             'label',
             'record_number',
             'record_number_two',
@@ -81,8 +85,8 @@ class ItemForm(ModelForm):
             'item_type',
             'auction',
             'image',
-            'thumbnail',
-            'prefix']
+            'thumbnail'
+            ]
 
 class UserForm(ModelForm):
     email = EmailField(required=True)
